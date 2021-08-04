@@ -1,13 +1,13 @@
 import React from "react";
 
-import {continents} from "./server/data.js";
+import {continents} from "../../server/data";
 
 import TreeView from "devextreme-react/tree-view";
 import TabPanel from "devextreme-react/tab-panel";
 
-import "./App.css";
+import "./TestDevEx.css";
 
-class App extends React.Component {
+class TestDevEx extends React.Component {
   constructor(props) {
     super(props);
 
@@ -137,4 +137,4 @@ function renderPanelItem(city) {
   );
 }
 
-export default App;
+export default TestDevEx;
