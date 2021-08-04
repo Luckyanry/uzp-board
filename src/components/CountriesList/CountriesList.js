@@ -11,6 +11,7 @@ import {
   Editing,
   Grouping,
   Summary,
+  RequiredRule,
   StringLengthRule,
   GroupItem,
   TotalItem,
@@ -59,6 +60,10 @@ class CountriesList extends React.Component {
           allowUpdating={true}
         />
         <Grouping autoExpandAll={false} />
+
+        <Column dataField="OrderDate" dataType="date">
+          <RequiredRule message="The OrderDate field is required." />
+        </Column>
 
         <Column dataField="ShipCountry">
           <StringLengthRule
