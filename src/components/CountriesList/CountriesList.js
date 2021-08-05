@@ -1,88 +1,70 @@
 import React from "react";
 
 import "devextreme/data/odata/store";
-import {
-  Column,
-  DataGrid,
-  FilterRow,
-  HeaderFilter,
-  GroupPanel,
-  Scrolling,
-  Editing,
-  Grouping,
-  Summary,
-  RequiredRule,
-  StringLengthRule,
-  GroupItem,
-  TotalItem,
-  ValueFormat,
-} from "devextreme-react/data-grid";
+import DataGrid, {Column, Paging, Pager} from "devextreme-react/data-grid";
+import CustomStore from "devextreme/data/custom_store";
+import "whatwg-fetch";
 
-import {createStore} from "devextreme-aspnet-data-nojquery";
-// import MasterDetailGrid from './MasterDetailGrid.js';
+function isNotEmpty(value) {
+  return value !== undefined && value !== null && value !== "";
+}
 
-// import classes from "./CountriesList.module.css";
+// const url = "http://10.0.10.71/actions.asp";
 
-const url = "https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi";
-
-const dataSource = createStore({
-  key: "OrderID",
-  loadUrl: `${url}/Orders`,
-  insertUrl: `${url}/InsertOrder`,
-  updateUrl: `${url}/UpdateOrder`,
-  deleteUrl: `${url}/DeleteOrder`,
-  onBeforeSend: (method, ajaxOptions) => {
-    ajaxOptions.xhrFields = {withCredentials: true};
+const store = new CustomStore({
+  key: "OrderNumber",
+  load: function (loadOptions) {
+    let params = "?";
+    [
+      "skip",
+      "take",
+      "requireTotalCount",
+      "requireGroupCount",
+      "sort",
+      "filter",
+      "totalSummary",
+      "group",
+      "groupSummary",
+    ].forEach(function (i) {
+      if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+        params += `${i}=${JSON.stringify(loadOptions[i])}&`;
+      }
+    });
+    params = params.slice(0, -1);
+    return fetch(
+      `https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders${params}`
+    )
+      .then((response) => {
+        if (response.ok) return response.json();
+        console.log(response.json());
+        throw new Error("Error fetching data");
+      })
+      .then(({data, totalCount, summary, groupCount}) => {
+        return {
+          data,
+          totalCount,
+          summary,
+          groupCount,
+        };
+      })
+      .catch((err) => {
+        throw new Error("Data Loading Error", err);
+      });
   },
 });
 
 class CountriesList extends React.Component {
   render() {
     return (
-      <DataGrid
-        dataSource={dataSource}
-        showBorders={true}
-        height={600}
-        remoteOperations={true}
-      >
-        {/* <MasterDetail
-          enabled={true}
-          component={MasterDetailGrid}
-        /> */}
-        <FilterRow visible={true} />
-        <HeaderFilter visible={true} />
-        <GroupPanel visible={true} />
-        <Scrolling mode="virtual" />
-        <Editing
-          mode="row"
-          allowAdding={true}
-          allowDeleting={true}
-          allowUpdating={true}
-        />
-        <Grouping autoExpandAll={false} />
-
-        <Column dataField="OrderDate" dataType="date">
-          <RequiredRule message="The OrderDate field is required." />
-        </Column>
-
-        <Column dataField="ShipCountry">
-          <StringLengthRule
-            max={15}
-            message="The field ShipCountry must be a string with a maximum length of 15."
-          />
-        </Column>
-
-        <Summary>
-          <TotalItem column="Freight" summaryType="sum">
-            <ValueFormat type="decimal" precision={2} />
-          </TotalItem>
-
-          <GroupItem column="Freight" summaryType="sum">
-            <ValueFormat type="decimal" precision={2} />
-          </GroupItem>
-
-          <GroupItem summaryType="count" />
-        </Summary>
+      <DataGrid dataSource={store} showBorders={true} remoteOperations={true}>
+        <Column dataField="OrderNumber" dataType="number" />
+        <Column dataField="OrderDate" dataType="date" />
+        <Column dataField="StoreCity" dataType="string" />
+        <Column dataField="StoreState" dataType="string" />
+        <Column dataField="Employee" dataType="string" />
+        <Column dataField="SaleAmount" dataType="number" format="currency" />
+        <Paging defaultPageSize={10} />
+        <Pager showPageSizeSelector={true} allowedPageSizes={[10, 20, 50]} />
       </DataGrid>
     );
   }

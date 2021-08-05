@@ -121,7 +121,8 @@
     "inferno-hydrate": "^7.4.8",
     "jszip": "^3.7.0",
     "luxon": "^2.0.1",
-    "rrule": "^2.6.8"
+    "rrule": "^2.6.8",
+    "whatwg-fetch": "2.0.4"
   },
   "jest": {
     "roots": [
