@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 import CountriesList from "../../components/CountriesList/CountriesList";
+// import Countries from "../../components/Countries/Countries";
 // import TestDevEx from "../../components/TestDevEx/TestDevEx";
 // import Button from "../../components/Buttons/Button";
 
@@ -12,6 +13,7 @@ export default class App extends Component {
       <div className={classes.appWrapper}>
         <h1 className={classes.appTitle}>Countries</h1>
         <CountriesList />
+        {/* <Countries /> */}
         {/* <TestDevEx /> */}
         {/* <Button /> */}
       </div>

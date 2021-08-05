@@ -72,7 +72,7 @@ class Countries extends React.Component {
           />
         </Column>
 
-        <Summary>
+        {/* <Summary>
           <TotalItem column="Freight" summaryType="sum">
             <ValueFormat type="decimal" precision={2} />
           </TotalItem>
@@ -82,7 +82,7 @@ class Countries extends React.Component {
           </GroupItem>
 
           <GroupItem summaryType="count" />
-        </Summary>
+        </Summary> */}
       </DataGrid>
     );
   }
