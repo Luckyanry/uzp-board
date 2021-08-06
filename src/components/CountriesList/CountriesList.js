@@ -65,10 +65,11 @@ function sendRequest(url, data = {}, method = "GET") {
     return fetch(`${url}&${params}`, {
       method,
       credentials: "include",
+      xhrFields: {withCredentials: true},
     })
       .then((response) => {
         if (response.ok) return response.json();
-        throw new Error("Request Data");
+        throw new Error("GET Request Data");
       })
       .then((data) => {
         if (Array.isArray(data)) {
@@ -84,7 +85,7 @@ function sendRequest(url, data = {}, method = "GET") {
               Error Number: ${data.VBErr.Number}, 
               Source: ${data.VBErr.Source}, 
               Hint: ${data.hint}
-              `
+            `
           );
         }
       })
@@ -101,25 +102,28 @@ function sendRequest(url, data = {}, method = "GET") {
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     },
     credentials: "include",
+    xhrFields: {withCredentials: true},
   })
     .then((response) => {
-      if (response.ok) {
-        return response
-          .text()
-          .then((text) => text && JSON.parse(text))
-          .catch((err) => {
-            throw new Error(err);
-          });
+      if (response.ok) return response.text();
+    })
+    .then((text) => {
+      let json = JSON.parse(text);
+
+      if (!json.hint) {
+        console.log("Success =>", json);
+        return text && JSON.parse(text);
       } else {
-        return response
-          .json()
-          .then((json) => {
-            console.log("json Err", json);
-            throw json;
-          })
-          .catch((err) => {
-            throw new Error(err);
-          });
+        console.log("Error =>", json);
+        throw new Error(
+          `
+            ScriptFile: ${json.ScriptFile},
+            Description: ${json.VBErr.Description}, 
+            Error Number: ${json.VBErr.Number}, 
+            Source: ${json.VBErr.Source}, 
+            Hint: ${json.hint}
+          `
+        );
       }
     })
     .catch((err) => {
@@ -163,3 +167,33 @@ class CountriesList extends React.Component {
 }
 
 export default CountriesList;
+
+// .then((response) => {
+//   if (response.ok) {
+//     if (Array.isArray(data)) {
+//       return response
+//         .text()
+//         .then((text) => text && JSON.parse(text))
+//         .catch((err) => {
+//           throw new Error(err);
+//         });
+//     } else {
+//       return response
+//         .json()
+//         .then((json) => {
+//           throw new Error(
+//             `
+//               ScriptFile: ${json.ScriptFile},
+//               Description: ${json.VBErr.Description},
+//               Error Number: ${json.VBErr.Number},
+//               Source: ${json.VBErr.Source},
+//               Hint: ${json.hint}
+//               `
+//           );
+//         })
+//         .catch((err) => {
+//           throw new Error(err);
+//         });
+//     }
+//   }
+// })
