@@ -7,6 +7,7 @@ import DataGrid, {
   Pager,
   Editing,
   FilterRow,
+  PatternRule,
 } from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
@@ -69,7 +70,6 @@ function sendRequest(url, data = {}, method = "GET") {
     })
       .then((response) => {
         if (response.ok) return response.json();
-        throw new Error("GET Request Data");
       })
       .then((data) => {
         if (Array.isArray(data)) {
@@ -111,10 +111,8 @@ function sendRequest(url, data = {}, method = "GET") {
       let json = JSON.parse(text);
 
       if (!json.hint) {
-        console.log("Success =>", json);
         return text && JSON.parse(text);
       } else {
-        console.log("Error =>", json);
         throw new Error(
           `
             ScriptFile: ${json.ScriptFile},
@@ -150,9 +148,28 @@ class CountriesList extends React.Component {
         />
 
         <Column dataField="short_name" dataType="string" />
-        <Column dataField="numeric" dataType="string" />
-        <Column dataField="alpha2code" dataType="string" />
-        <Column dataField="alpha3code" dataType="string" />
+        <Column dataField="numeric" dataType="string">
+          <PatternRule
+            message={"The 'Numeric' field must contain a maximum of 5 digits!"}
+            pattern={/^\d{5}$/i}
+          />
+        </Column>
+        <Column dataField="alpha2code" dataType="string">
+          <PatternRule
+            message={
+              "The 'Alpha 2code' field must contain a maximum of 2 characters in uppercase!"
+            }
+            pattern={/^[A-Z]{2}$/g}
+          />
+        </Column>
+        <Column dataField="alpha3code" dataType="string">
+          <PatternRule
+            message={
+              "The 'Alpha 3code' field must contain a maximum of 3 characters in uppercase!"
+            }
+            pattern={/^[A-Z]{3}$/g}
+          />
+        </Column>
         <Column dataField="short_name_eng" dataType="string" />
         <Column dataField="short_name_karlat" dataType="string" />
         <Column dataField="short_name_rus" dataType="string" />
@@ -167,33 +184,3 @@ class CountriesList extends React.Component {
 }
 
 export default CountriesList;
-
-// .then((response) => {
-//   if (response.ok) {
-//     if (Array.isArray(data)) {
-//       return response
-//         .text()
-//         .then((text) => text && JSON.parse(text))
-//         .catch((err) => {
-//           throw new Error(err);
-//         });
-//     } else {
-//       return response
-//         .json()
-//         .then((json) => {
-//           throw new Error(
-//             `
-//               ScriptFile: ${json.ScriptFile},
-//               Description: ${json.VBErr.Description},
-//               Error Number: ${json.VBErr.Number},
-//               Source: ${json.VBErr.Source},
-//               Hint: ${json.hint}
-//               `
-//           );
-//         })
-//         .catch((err) => {
-//           throw new Error(err);
-//         });
-//     }
-//   }
-// })
