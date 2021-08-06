@@ -7,7 +7,9 @@ import DataGrid, {
   Pager,
   Editing,
   FilterRow,
+  RequiredRule,
   PatternRule,
+  // AsyncRule,
 } from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
@@ -147,13 +149,17 @@ class CountriesList extends React.Component {
           allowUpdating={true}
         />
 
-        <Column dataField="short_name" dataType="string" />
+        <Column dataField="short_name" dataType="string">
+          <RequiredRule />
+        </Column>
+
         <Column dataField="numeric" dataType="string">
           <PatternRule
             message={"The 'Numeric' field must contain a maximum of 5 digits!"}
-            pattern={/^\d{5}$/i}
+            pattern={/^[0-9]{1,5}$/g}
           />
         </Column>
+
         <Column dataField="alpha2code" dataType="string">
           <PatternRule
             message={
@@ -162,6 +168,7 @@ class CountriesList extends React.Component {
             pattern={/^[A-Z]{2}$/g}
           />
         </Column>
+
         <Column dataField="alpha3code" dataType="string">
           <PatternRule
             message={
@@ -170,6 +177,7 @@ class CountriesList extends React.Component {
             pattern={/^[A-Z]{3}$/g}
           />
         </Column>
+
         <Column dataField="short_name_eng" dataType="string" />
         <Column dataField="short_name_karlat" dataType="string" />
         <Column dataField="short_name_rus" dataType="string" />
