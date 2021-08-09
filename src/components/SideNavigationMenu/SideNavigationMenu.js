@@ -76,7 +76,7 @@ export default function SideNavigationMenu(props) {
           items={items}
           keyExpr={"path"}
           selectionMode={"single"}
-          focusStateEnabled={false}
+          focusStateEnabled={true}
           expandEvent={"click"}
           onItemClick={selectedItemChanged}
           onContentReady={onMenuReady}

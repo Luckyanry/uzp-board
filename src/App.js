@@ -4,6 +4,7 @@ import LoadPanel from "devextreme-react/load-panel";
 
 import {NavigationProvider} from "./contexts/Navigation";
 import {AuthProvider, useAuth} from "./contexts/Auth";
+import {LocalizationProvider} from "./contexts/LocalizationContext";
 import {useScreenSizeClass} from "./utils/media-query";
 import Content from "./Content";
 import UnauthenticatedContent from "./UnauthenticatedContent";
@@ -13,7 +14,7 @@ import "./themes/generated/theme.base.css";
 import "./themes/generated/theme.additional.css";
 import "./dx-styles.scss";
 
-function AdminPanel() {
+function AppWrapper() {
   const {user, loading} = useAuth();
 
   if (loading) {
@@ -34,9 +35,11 @@ export default function App() {
     <Router>
       <AuthProvider>
         <NavigationProvider>
-          <div className={`app ${screenSizeClass}`}>
-            <AdminPanel />
-          </div>
+          <LocalizationProvider>
+            <div className={`app ${screenSizeClass}`}>
+              <AppWrapper />
+            </div>
+          </LocalizationProvider>
         </NavigationProvider>
       </AuthProvider>
     </Router>

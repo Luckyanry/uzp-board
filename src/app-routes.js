@@ -3,7 +3,7 @@ import {HomePage, CountriesPage, ProfilePage, AboutPage} from "./pages";
 
 const routes = [
   {
-    path: "/Countries",
+    path: "/countries",
     component: CountriesPage,
   },
   {

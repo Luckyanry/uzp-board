@@ -8,10 +8,10 @@ export const navigation = [
     text: "Directory",
     icon: "folder",
     items: [
-      // {
-      //   text: "Profile",
-      //   path: "/profile",
-      // },
+      {
+        text: "Profile",
+        path: "/profile",
+      },
       {
         text: "Countries",
         path: "/countries",

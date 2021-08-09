@@ -132,7 +132,7 @@ function sendRequest(url, data = {}, method = "GET") {
     });
 }
 
-export const CountriesPage = () => (
+export const CountriesPage = (props) => (
   <>
     <h2 className={"content-block"}>Countries</h2>
 
