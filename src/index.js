@@ -1,17 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import {BrowserRouter} from "react-router-dom";
 import {createStore, compose, applyMiddleware} from "redux";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 
+import "./polyfills";
 import reportWebVitals from "./reportWebVitals";
 
 import rootReducer from "./store/reducers/rootReducer";
-import App from "./containers/App/App";
+import App from "./App";
 
-import "devextreme/dist/css/dx.common.css";
-import "devextreme/dist/css/dx.light.css";
 import "./index.css";
 
 const composeEnhancers =
