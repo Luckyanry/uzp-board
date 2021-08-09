@@ -33,15 +33,15 @@ export default function App() {
 
   return (
     <Router>
-      <AuthProvider>
-        <NavigationProvider>
-          <LocalizationProvider>
+      <LocalizationProvider>
+        <AuthProvider>
+          <NavigationProvider>
             <div className={`app ${screenSizeClass}`}>
               <AppWrapper />
             </div>
-          </LocalizationProvider>
-        </NavigationProvider>
-      </AuthProvider>
+          </NavigationProvider>
+        </AuthProvider>
+      </LocalizationProvider>
     </Router>
   );
 }

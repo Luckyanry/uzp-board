@@ -1,33 +1,35 @@
-import React, {useMemo} from "react";
+import React from "react";
 import {useHistory} from "react-router-dom";
+
 import ContextMenu, {Position} from "devextreme-react/context-menu";
 import List from "devextreme-react/list";
 import {useAuth} from "../../contexts/Auth";
+import {useLocalization} from "../../contexts/LocalizationContext";
+
 import "./UserPanel.scss";
 
 export default function UserPanel({menuMode}) {
   const {user, signOut} = useAuth();
+  const {formatMessage} = useLocalization();
+
   const history = useHistory();
 
   function navigateToProfile() {
     history.push("/profile");
   }
-  const menuItems = useMemo(
-    () => [
-      {
-        text: "Profile",
-        icon: "user",
-        onClick: navigateToProfile,
-      },
-      {
-        text: "Logout",
-        icon: "runner",
-        onClick: signOut,
-      },
-    ],
-    // eslint-disable-next-line
-    [signOut]
-  );
+
+  const menuItems = () => [
+    {
+      text: formatMessage("profile"),
+      icon: "user",
+      onClick: navigateToProfile,
+    },
+    {
+      text: formatMessage("logout"),
+      icon: "runner",
+      onClick: signOut,
+    },
+  ];
 
   return (
     <div className={"user-panel"}>
@@ -46,7 +48,7 @@ export default function UserPanel({menuMode}) {
 
       {menuMode === "context" && (
         <ContextMenu
-          items={menuItems}
+          items={menuItems()}
           target={".user-button"}
           showEvent={"dxclick"}
           width={210}
@@ -56,7 +58,7 @@ export default function UserPanel({menuMode}) {
         </ContextMenu>
       )}
       {menuMode === "list" && (
-        <List className={"dx-toolbar-menu-action"} items={menuItems} />
+        <List className={"dx-toolbar-menu-action"} items={menuItems()} />
       )}
     </div>
   );

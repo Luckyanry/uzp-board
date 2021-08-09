@@ -1,6 +1,9 @@
 import React, {useState} from "react";
-import "./ProfilePage.scss";
+
 import Form from "devextreme-react/form";
+import {useLocalization} from "../../contexts/LocalizationContext";
+
+import "./ProfilePage.scss";
 
 export const ProfilePage = () => {
   const [notes, setNotes] = useState(
@@ -19,9 +22,11 @@ export const ProfilePage = () => {
     Address: "4600 N Virginia Rd.",
   };
 
+  const {formatMessage} = useLocalization();
+
   return (
     <>
-      <h2 className={"content-block"}>Profile</h2>
+      <h2 className={"content-block"}>{formatMessage("profile")}</h2>
 
       <div className={"content-block dx-card responsive-paddings"}>
         <div className={"form-avatar"}>

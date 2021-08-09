@@ -1,3 +1,3 @@
 export const AppInfo = {
-  title: "UZP board",
+  title: "project_title",
 };

@@ -4,10 +4,13 @@ import {AppInfo} from "./app-info";
 import routes from "./app-routes";
 import {SideNavInnerToolbar as SideNavBarLayout} from "./layouts";
 import {Footer} from "./components";
+import {useLocalization} from "./contexts/LocalizationContext";
 
 export default function Content() {
+  const {formatMessage} = useLocalization();
+
   return (
-    <SideNavBarLayout title={AppInfo.title}>
+    <SideNavBarLayout title={formatMessage(AppInfo.title)}>
       <Switch>
         {routes.map(({path, component}) => (
           <Route exact key={path} path={path} component={component} />
@@ -15,10 +18,7 @@ export default function Content() {
         <Redirect to={"/home"} />
       </Switch>
       <Footer>
-        Copyright © 2011-{new Date().getFullYear()} {AppInfo.title} Inc.
-        <br />
-        All trademarks or registered trademarks are property of their respective
-        owners.
+        © {formatMessage(AppInfo.title)} Inc., {new Date().getFullYear()}
       </Footer>
     </SideNavBarLayout>
   );

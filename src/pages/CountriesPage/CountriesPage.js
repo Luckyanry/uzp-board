@@ -1,4 +1,5 @@
 import React from "react";
+
 import "devextreme/data/odata/store";
 import DataGrid, {
   Column,
@@ -11,6 +12,7 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
+import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./CountriesPage.scss";
 
@@ -132,66 +134,106 @@ function sendRequest(url, data = {}, method = "GET") {
     });
 }
 
-export const CountriesPage = (props) => (
-  <>
-    <h2 className={"content-block"}>Countries</h2>
+export const CountriesPage = () => {
+  const {formatMessage} = useLocalization();
 
-    <DataGrid
-      dataSource={store}
-      showBorders={true}
-      repaintChangesOnly={true}
-      remoteOperations={false}
-      focusedRowEnabled={true}
-      // defaultFocusedRowIndex={0}
-      columnAutoWidth={true}
-      columnHidingEnabled={true}
-    >
-      <FilterRow visible={true} />
+  return (
+    <>
+      <h2 className={"content-block"}>{formatMessage("countries")}</h2>
 
-      <Editing
-        mode="row"
-        allowAdding={true}
-        allowDeleting={true}
-        allowUpdating={true}
-      />
+      <DataGrid
+        dataSource={store}
+        showBorders={true}
+        repaintChangesOnly={true}
+        remoteOperations={false}
+        focusedRowEnabled={true}
+        // defaultFocusedRowIndex={0}
+        columnAutoWidth={true}
+        columnHidingEnabled={false}
+      >
+        <FilterRow visible={true} />
 
-      <Column dataField="short_name" dataType="string">
-        <RequiredRule />
-      </Column>
-
-      <Column dataField="numeric" dataType="string">
-        <PatternRule
-          message={"The 'Numeric' field must contain a maximum of 5 digits!"}
-          pattern={/^[0-9]{1,5}$/g}
+        <Editing
+          mode="row"
+          allowAdding={true}
+          allowDeleting={true}
+          allowUpdating={true}
         />
-      </Column>
 
-      <Column dataField="alpha2code" dataType="string">
-        <PatternRule
-          message={
-            "The 'Alpha 2code' field must contain a maximum of 2 characters in uppercase!"
-          }
-          pattern={/^[A-Z]{2}$/g}
+        <Column
+          dataField="short_name"
+          dataType="string"
+          caption={formatMessage("short_name")}
+        >
+          <RequiredRule />
+        </Column>
+
+        <Column
+          dataField="numeric"
+          dataType="string"
+          caption={formatMessage("numeric")}
+        >
+          <PatternRule
+            message={"The 'Numeric' field must contain a maximum of 5 digits!"}
+            pattern={/^[0-9]{1,5}$/g}
+          />
+        </Column>
+
+        <Column
+          dataField="alpha2code"
+          dataType="string"
+          caption={formatMessage("alpha2code")}
+        >
+          <PatternRule
+            message={
+              "The 'Alpha 2code' field must contain a maximum of 2 characters in uppercase!"
+            }
+            pattern={/^[A-Z]{2}$/g}
+          />
+        </Column>
+
+        <Column
+          dataField="alpha3code"
+          dataType="string"
+          caption={formatMessage("alpha3code")}
+        >
+          <PatternRule
+            message={
+              "The 'Alpha 3code' field must contain a maximum of 3 characters in uppercase!"
+            }
+            pattern={/^[A-Z]{3}$/g}
+          />
+        </Column>
+
+        <Column
+          dataField="short_name_eng"
+          dataType="string"
+          caption={formatMessage("short_name_eng")}
         />
-      </Column>
-
-      <Column dataField="alpha3code" dataType="string">
-        <PatternRule
-          message={
-            "The 'Alpha 3code' field must contain a maximum of 3 characters in uppercase!"
-          }
-          pattern={/^[A-Z]{3}$/g}
+        <Column
+          dataField="short_name_karlat"
+          dataType="string"
+          caption={formatMessage("short_name_karlat")}
         />
-      </Column>
+        <Column
+          dataField="short_name_rus"
+          dataType="string"
+          caption={formatMessage("short_name_rus")}
+        />
+        <Column
+          dataField="short_name_uzcyr"
+          dataType="string"
+          caption={formatMessage("short_name_uzcyr")}
+        />
+        <Column
+          dataField="short_name_uzlat"
+          dataType="string"
+          caption={formatMessage("short_name_uzlat")}
+        />
 
-      <Column dataField="short_name_eng" dataType="string" />
-      <Column dataField="short_name_karlat" dataType="string" />
-      <Column dataField="short_name_rus" dataType="string" />
-      <Column dataField="short_name_uzcyr" dataType="string" />
-      <Column dataField="short_name_uzlat" dataType="string" />
-
-      <Paging defaultPageSize={10} />
-      <Pager showPageSizeSelector={true} allowedPageSizes={[10, 20, 50]} />
-    </DataGrid>
-  </>
-);
+        <Paging defaultPageSize={10} />
+        <Pager showPageSizeSelector={true} allowedPageSizes={[10, 20, 50]} />
+      </DataGrid>
+    </>
+  );
+};

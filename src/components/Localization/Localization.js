@@ -9,11 +9,10 @@ const selectBoxInputAttr = {id: "selectInput"};
 
 const Localization = () => {
   const {lang, locales, changeLocale, formatMessage} = useLocalization();
-  console.log(`Localization state`, lang);
 
   return (
     <div className="option">
-      <label htmlFor="selectInput">{formatMessage("Language")}</label>
+      <label htmlFor="selectInput">{formatMessage("language")}</label>
       &nbsp;
       <SelectBox
         items={locales}
