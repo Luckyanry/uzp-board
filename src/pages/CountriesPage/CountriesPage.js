@@ -10,144 +10,96 @@ import DataGrid, {
   RequiredRule,
   PatternRule,
 } from "devextreme-react/data-grid";
-import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {countriesStore} from "../../api/countries-fetch";
 
 import "./CountriesPage.scss";
 
-const url = "http://10.0.10.71";
-const baseParams = "/actions.asp?sp=Countries&db=hbdb";
-
-const store = new CustomStore({
-  key: "id",
-  load: () =>
-    sendRequest(`${url}${baseParams}`, {
-      operation: "load",
-      schema: "get",
-    }),
-  insert: (values) =>
-    sendRequest(
-      `${url}${baseParams}`,
-      {
-        operation: "insert",
-        schema: "ins",
-        values: JSON.stringify(values),
-      },
-      "POST"
-    ),
-  update: (key, values) =>
-    sendRequest(
-      `${url}${baseParams}`,
-      {
-        operation: "update",
-        schema: "upd",
-        "@id": key,
-        values: JSON.stringify(values),
-      },
-      "POST"
-    ),
-  remove: (key) =>
-    sendRequest(
-      `${url}${baseParams}`,
-      {
-        operation: "insert",
-        schema: "del",
-        "@id": key,
-      },
-      "POST"
-    ),
-});
-
-function sendRequest(url, data = {}, method = "GET") {
-  const params = Object.keys(data)
-    .map((key) => {
-      return `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
-    })
-    .join("&");
-
-  if (method === "GET") {
-    return fetch(`${url}&${params}`, {
-      method,
-      credentials: "include",
-      xhrFields: {withCredentials: true},
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data)) {
-          return {
-            data,
-            totalCount: data.length,
-          };
-        } else {
-          throw new Error(
-            `
-              ScriptFile: ${data.ScriptFile},
-              Description: ${data.VBErr.Description}, 
-              Error Number: ${data.VBErr.Number}, 
-              Source: ${data.VBErr.Source}, 
-              Hint: ${data.hint}
-            `
-          );
-        }
-      })
-      .catch((err) => {
-        console.error("GET Response Data", err);
-        throw new Error(err);
-      });
-  }
-
-  return fetch(url, {
-    method,
-    body: params,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    },
-    credentials: "include",
-    xhrFields: {withCredentials: true},
-  })
-    .then((response) => {
-      if (response.ok) return response.text();
-    })
-    .then((text) => {
-      let json = JSON.parse(text);
-
-      if (!json.hint) {
-        return text && JSON.parse(text);
-      } else {
-        throw new Error(
-          `
-            ScriptFile: ${json.ScriptFile},
-            Description: ${json.VBErr.Description}, 
-            Error Number: ${json.VBErr.Number}, 
-            Source: ${json.VBErr.Source}, 
-            Hint: ${json.hint}
-          `
-        );
-      }
-    })
-    .catch((err) => {
-      console.error("POST Response Data", err);
-      throw new Error(err);
-    });
-}
+const colmnsTitlesArr = [
+  "short_name_eng",
+  "short_name_karlat",
+  "short_name_rus",
+  "short_name_uzcyr",
+  "short_name_uzlat",
+];
 
 export const CountriesPage = () => {
   const {formatMessage} = useLocalization();
+
+  // const customizeText = (columnValue) => {
+  //   if (/^ *$/.test(columnValue.value) && columnValue.value.length > 0) {
+  //     console.log("empty string", columnValue);
+
+  //     const emptyString = {
+  //       ...columnValue,
+  //       value: null,
+  //     };
+
+  //     console.log("new", emptyString.value);
+
+  //     return emptyString.value;
+  //   }
+
+  //   console.log(`value:`, columnValue);
+  //   return columnValue.value;
+  // };
+
+  const columnsMarkup = colmnsTitlesArr
+    .map((columnTitle) => {
+      return `
+    <Column
+      dataField={${columnTitle}}
+      caption={${formatMessage(columnTitle)}}
+      alignment="left"
+      ${
+        columnTitle === "numeric" ||
+        columnTitle === "alpha2code" ||
+        columnTitle === "alpha3code"
+          ? `width={100}`
+          : null
+      }
+    >
+      ${
+        columnTitle === "numeric"
+          ? `<PatternRule
+              message={${formatMessage("numeric_err_message")}}
+              pattern={new RegExp("^[0-9]{0,4}$")}
+            />`
+          : null
+      }
+      ${
+        columnTitle === "alpha2code"
+          ? `<PatternRule
+              message={${formatMessage("alpha2code_err_message")}}
+              pattern={new RegExp("^[A-Z]{2}$")}
+            />`
+          : null
+      }
+      ${
+        columnTitle === "alpha3code"
+          ? `<PatternRule
+              message={${formatMessage("alpha3code_err_message")}}
+              pattern={new RegExp("^[A-Z]{3}$")}
+            />`
+          : null
+      }
+      ${columnTitle === "short_name_eng" ? `<RequiredRule />` : null}
+    </Column>
+    `;
+    })
+    .forEach((markup) => console.log(markup));
 
   return (
     <>
       <h2 className={"content-block"}>{formatMessage("countries")}</h2>
 
       <DataGrid
-        dataSource={store}
+        dataSource={countriesStore}
         showBorders={true}
         repaintChangesOnly={true}
         remoteOperations={false}
         focusedRowEnabled={true}
-        // defaultFocusedRowIndex={0}
         columnAutoWidth={true}
         columnHidingEnabled={false}
       >
@@ -160,74 +112,69 @@ export const CountriesPage = () => {
           allowUpdating={true}
         />
 
-        <Column
-          dataField="short_name"
-          dataType="string"
-          caption={formatMessage("short_name")}
-        >
+        <Column dataField="short_name" caption={formatMessage("short_name")}>
           <RequiredRule />
         </Column>
 
         <Column
           dataField="numeric"
-          dataType="string"
           caption={formatMessage("numeric")}
+          alignment="left"
+          width={100}
         >
           <PatternRule
-            message={"The 'Numeric' field must contain a maximum of 5 digits!"}
-            pattern={/^[0-9]{1,5}$/g}
+            message={formatMessage("numeric_err_message")}
+            pattern={new RegExp("^[0-9]{0,4}$", "m")}
           />
         </Column>
 
         <Column
           dataField="alpha2code"
-          dataType="string"
           caption={formatMessage("alpha2code")}
+          width={100}
         >
+          <RequiredRule />
           <PatternRule
-            message={
-              "The 'Alpha 2code' field must contain a maximum of 2 characters in uppercase!"
-            }
-            pattern={/^[A-Z]{2}$/g}
+            message={formatMessage("alpha2code_err_message")}
+            pattern={new RegExp("^[A-Z]{2}$")}
           />
         </Column>
 
         <Column
           dataField="alpha3code"
-          dataType="string"
           caption={formatMessage("alpha3code")}
+          width={100}
         >
           <PatternRule
-            message={
-              "The 'Alpha 3code' field must contain a maximum of 3 characters in uppercase!"
-            }
-            pattern={/^[A-Z]{3}$/g}
+            message={formatMessage("alpha3code_err_message")}
+            pattern={new RegExp("^[A-Z]{3}$")}
           />
+          <RequiredRule />
         </Column>
+
+        {/* columnsMarkup */}
 
         <Column
           dataField="short_name_eng"
-          dataType="string"
           caption={formatMessage("short_name_eng")}
-        />
+        >
+          <RequiredRule />
+        </Column>
+
         <Column
           dataField="short_name_karlat"
-          dataType="string"
           caption={formatMessage("short_name_karlat")}
         />
         <Column
           dataField="short_name_rus"
-          dataType="string"
           caption={formatMessage("short_name_rus")}
         />
         <Column
           dataField="short_name_uzcyr"
-          dataType="string"
           caption={formatMessage("short_name_uzcyr")}
         />
         <Column
           dataField="short_name_uzlat"
-          dataType="string"
           caption={formatMessage("short_name_uzlat")}
         />
 

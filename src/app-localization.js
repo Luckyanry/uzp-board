@@ -21,8 +21,14 @@ const dictionary = {
     countries: "Countries",
     short_name: "Country name",
     numeric: "Numeric",
+    numeric_err_message:
+      "The 'Numeric' field must contain a maximum of 4 digits!",
     alpha2code: "Alpha 2 code",
+    alpha2code_err_message:
+      "The 'Alpha 2code' field must contain 2 characters in uppercase!",
     alpha3code: "Alpha 3 code",
+    alpha3code_err_message:
+      "The 'Alpha 3code' field must contain 3 characters in uppercase!",
     short_name_eng: "English country name",
     short_name_karlat: "Karakalpak latin country name",
     short_name_rus: "Russian country name",
@@ -44,8 +50,13 @@ const dictionary = {
     countries: "Страны",
     short_name: "Название страны",
     numeric: "Нумерация",
+    numeric_err_message: "Поле 'Нумерация' должно содержать максимум 4 цифры!",
     alpha2code: "Альфа-код 2",
+    alpha2code_err_message:
+      "Поле 'Альфа-код 2' должно содержать 2 буквы в верхнем регистре!",
     alpha3code: "Альфа-код 3",
+    alpha3code_err_message:
+      "Поле 'Альфа-код 3' должно содержать 3 буквы в верхнем регистре!",
     short_name_eng: "Английское название",
     short_name_karlat: "Каракалпакское название - латынь",
     short_name_rus: "Русское название",
