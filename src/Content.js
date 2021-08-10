@@ -2,7 +2,8 @@ import React from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
 import {AppInfo} from "./app-info";
 import routes from "./app-routes";
-import {SideNavInnerToolbar as SideNavBarLayout} from "./layouts";
+// import {SideNavInnerToolbar as SideNavBarLayout} from "./layouts";
+import {SideNavOuterToolbar as SideNavBarLayout} from "./layouts";
 import {Footer} from "./components";
 import {useLocalization} from "./contexts/LocalizationContext";
 
