@@ -1,25 +1,24 @@
 import React, {useState} from "react";
 
-import Form from "devextreme-react/form";
+import Form, {SimpleItem, Label, Item} from "devextreme-react/form";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./ProfilePage.scss";
 
 export const ProfilePage = () => {
-  const [notes, setNotes] = useState(
-    "User1 is a CPA and has been our controller since 2008. She loves to interact with staff so if you`ve not met her, be certain to say hi.\r\n\r\nSandra has 2 daughters both of whom are accomplished gymnasts."
-  );
+  const [notes, setNotes] = useState("Ivan has been our designer since 2010.");
+
   const employee = {
-    ID: 7,
-    FirstName: "User1",
-    LastName: "Test",
+    ID: 87,
+    FirstName: "Ivan",
+    LastName: "Pupkin",
     Prefix: "Mr.",
-    Position: "Controller",
+    Position: "Designer",
     Picture: "images/employees/07.png",
     BirthDate: new Date("1974/11/15"),
-    HireDate: new Date("2005/05/11"),
+    HireDate: new Date("2010/05/11"),
     Notes: notes,
-    Address: "4600 N Virginia Rd.",
+    Address: "04112, Kyiv, Ukraine",
   };
 
   const {formatMessage} = useLocalization();
@@ -47,7 +46,33 @@ export const ProfilePage = () => {
           }
           labelLocation={"top"}
           colCountByScreen={colCountByScreen}
-        />
+        >
+          <SimpleItem dataField="ID" isRequired={true} />
+          <SimpleItem dataField="FirstName" isRequired={true}>
+            <Label text={formatMessage("FirstName")} />
+          </SimpleItem>
+          <SimpleItem dataField="LastName" isRequired={true}>
+            <Label text={formatMessage("LastName")} />
+          </SimpleItem>
+          <SimpleItem dataField="Prefix">
+            <Label text={formatMessage("Prefix")} />
+          </SimpleItem>
+          <SimpleItem dataField="Position">
+            <Label text={formatMessage("Position")} />
+          </SimpleItem>
+          <SimpleItem dataField="BirthDate" isRequired={true}>
+            <Label text={formatMessage("BirthDate")} />
+          </SimpleItem>
+          <SimpleItem dataField="HireDate" isRequired={true}>
+            <Label text={formatMessage("HireDate")} />
+          </SimpleItem>
+          <SimpleItem dataField="Address" isRequired={true}>
+            <Label text={formatMessage("Address")} />
+          </SimpleItem>
+          <Item dataField="Notes">
+            <Label text={formatMessage("Notes")} />
+          </Item>
+        </Form>
       </div>
     </>
   );

@@ -38,6 +38,15 @@ const dictionary = {
     about: "About",
     about_page_desc: "About us information...",
     logout: "Logout",
+
+    FirstName: "FirstName",
+    LastName: "LastName",
+    Prefix: "Prefix",
+    Position: "Position",
+    BirthDate: "BirthDate",
+    HireDate: "HireDate",
+    Notes: "Notes",
+    Address: "Address",
   },
   ru: {
     project_title: "ЕАИС",
@@ -66,6 +75,15 @@ const dictionary = {
     about: "Информация",
     about_page_desc: "Информация о нас...",
     logout: "Выход",
+
+    FirstName: "Имя",
+    LastName: "Фамилия",
+    Prefix: "Обращение",
+    Position: "Должность",
+    BirthDate: "Дата рождения",
+    HireDate: "Дата приема на работу",
+    Notes: "Заметки",
+    Address: "Адрес",
   },
 };
 
