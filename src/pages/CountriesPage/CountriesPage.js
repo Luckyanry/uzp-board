@@ -9,6 +9,7 @@ import DataGrid, {
   FilterRow,
   RequiredRule,
   PatternRule,
+  SearchPanel,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {countriesStore} from "../../api/countries-fetch";
@@ -31,6 +32,7 @@ export const CountriesPage = () => {
         columnAutoWidth={true}
         columnHidingEnabled={false}
       >
+        <SearchPanel visible={true} />
         <FilterRow visible={true} />
 
         <Editing
@@ -104,8 +106,14 @@ export const CountriesPage = () => {
           caption={formatMessage("short_name_uzlat")}
         />
 
-        <Paging defaultPageSize={10} enabled={true} />
-        <Pager showPageSizeSelector={true} allowedPageSizes={[10, 20, 50]} />
+        <Paging defaultPageSize={10} />
+        <Pager
+          showPageSizeSelector={true}
+          showNavigationButtons={true}
+          showInfo={true}
+          visible={true}
+          allowedPageSizes={[10, 20, 50]}
+        />
       </DataGrid>
     </>
   );

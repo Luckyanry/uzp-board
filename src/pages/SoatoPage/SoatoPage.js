@@ -8,6 +8,7 @@ import TreeList, {
   RequiredRule,
   Paging,
   Pager,
+  Scrolling,
 } from "devextreme-react/tree-list";
 
 import {soatoData} from "../../api/soato-fetch";
@@ -27,12 +28,21 @@ export const SoatoPage = () => {
       parentIdExpr="pid"
       defaultExpandedRowKeys={[1, 2]}
       showRowLines={true}
-      // showBorders={true}
       columnAutoWidth={true}
       wordWrapEnabled={true}
     >
       <SearchPanel visible={true} />
       <HeaderFilter visible={true} />
+      <Scrolling mode="standard" />
+
+      <Paging defaultPageSize={10} enabled={true} />
+      <Pager
+        showPageSizeSelector={true}
+        showInfo={true}
+        showNavigationButtons={true}
+        allowedPageSizes={[10, 20, 50]}
+        visible={true}
+      />
 
       <Editing
         mode="row"
@@ -50,9 +60,6 @@ export const SoatoPage = () => {
       </Column>
 
       <Column dataField="code" caption={formatMessage("code")} />
-
-      <Paging defaultPageSize={10} enabled={true} />
-      <Pager showPageSizeSelector={true} allowedPageSizes={[10, 20, 50]} />
     </TreeList>
   );
 };

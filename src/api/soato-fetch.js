@@ -71,7 +71,6 @@ function sendRequest(url, data = {}, method = "GET") {
       })
       .then((data) => {
         if (Array.isArray(data)) {
-          console.log("then((data): ", data);
           return {
             data,
             totalCount: data.length,
@@ -80,9 +79,9 @@ function sendRequest(url, data = {}, method = "GET") {
           throw new Error(
             `
               ScriptFile: ${data.ScriptFile},
-              Description: ${data.VBErr.Description}, 
-              Error Number: ${data.VBErr.Number}, 
-              Source: ${data.VBErr.Source}, 
+              Description: ${data.VBErr.Description},
+              Error Number: ${data.VBErr.Number},
+              Source: ${data.VBErr.Source},
               Hint: ${data.hint}
             `
           );
@@ -131,6 +130,3 @@ function sendRequest(url, data = {}, method = "GET") {
 }
 
 export {soatoData, soatoLookData};
-
-console.log("soatoData", soatoData);
-console.log("soatoLookData", soatoLookData);
