@@ -35,6 +35,8 @@ const dictionary = {
     short_name_uzcyr: "Uzbek cyrillic country name",
     short_name_uzlat: "Uzbek latin country name",
 
+    soato: "SOATO",
+
     about: "About",
     about_page_desc: "About us information...",
     logout: "Logout",
@@ -71,6 +73,8 @@ const dictionary = {
     short_name_rus: "Русское название",
     short_name_uzcyr: "Узбекское название - кириллица",
     short_name_uzlat: "Узбекское название - латынь",
+
+    soato: "COATO",
 
     about: "Информация",
     about_page_desc: "Информация о нас...",

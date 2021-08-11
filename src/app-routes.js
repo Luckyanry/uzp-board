@@ -1,18 +1,28 @@
 import {withNavigationWatcher} from "./contexts/Navigation";
-import {HomePage, CountriesPage, ProfilePage, AboutPage} from "./pages";
+import {
+  HomePage,
+  CountriesPage,
+  ProfilePage,
+  AboutPage,
+  SoatoPage,
+} from "./pages";
 
 const routes = [
   {
-    path: "/countries",
-    component: CountriesPage,
+    path: "/home",
+    component: HomePage,
   },
   {
     path: "/profile",
     component: ProfilePage,
   },
   {
-    path: "/home",
-    component: HomePage,
+    path: "/countries",
+    component: CountriesPage,
+  },
+  {
+    path: "/soato",
+    component: SoatoPage,
   },
   {
     path: "/about",

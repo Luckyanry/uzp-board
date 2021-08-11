@@ -1,20 +1,18 @@
 import CustomStore from "devextreme/data/custom_store";
 
 const url = "http://10.0.10.71";
-const baseParams = "/actions.asp?sp=Countries&db=hbdb";
+const baseParams = "/actions.asp?sp=Soato&db=hbdb&operation=do";
 
-const countriesStore = new CustomStore({
+const soatoData = new CustomStore({
   key: "id",
   load: () =>
     sendRequest(`${url}${baseParams}`, {
-      operation: "load",
       schema: "get",
     }),
   insert: (values) =>
     sendRequest(
       `${url}${baseParams}`,
       {
-        operation: "insert",
         schema: "ins",
         values: JSON.stringify(values),
       },
@@ -24,7 +22,6 @@ const countriesStore = new CustomStore({
     sendRequest(
       `${url}${baseParams}`,
       {
-        operation: "update",
         schema: "upd",
         "@id": key,
         values: JSON.stringify(values),
@@ -35,9 +32,21 @@ const countriesStore = new CustomStore({
     sendRequest(
       `${url}${baseParams}`,
       {
-        operation: "insert",
         schema: "del",
         "@id": key,
+      },
+      "POST"
+    ),
+});
+
+const soatoLookData = new CustomStore({
+  key: "pid",
+  insert: (values) =>
+    sendRequest(
+      `${url}${baseParams}`,
+      {
+        schema: "look",
+        values: JSON.stringify(values),
       },
       "POST"
     ),
@@ -49,6 +58,7 @@ function sendRequest(url, data = {}, method = "GET") {
       return `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
     })
     .join("&");
+  console.log("params", params);
 
   if (method === "GET") {
     return fetch(`${url}&${params}`, {
@@ -97,6 +107,7 @@ function sendRequest(url, data = {}, method = "GET") {
     })
     .then((text) => {
       let json = JSON.parse(text);
+      console.log("fetchJSON", json);
 
       if (!json.hint) {
         return text && JSON.parse(text);
@@ -118,4 +129,7 @@ function sendRequest(url, data = {}, method = "GET") {
     });
 }
 
-export {countriesStore};
+export {soatoData, soatoLookData};
+
+console.log("soatoData", soatoData);
+console.log("soatoLookData", soatoLookData);
