@@ -36,6 +36,8 @@ const dictionary = {
     short_name_uzlat: "Uzbek latin country name",
 
     soato: "SOATO",
+    territory_name_rus: "Territory name",
+    code: "Region code",
 
     about: "About",
     about_page_desc: "About us information...",
@@ -75,6 +77,8 @@ const dictionary = {
     short_name_uzlat: "Узбекское название - латынь",
 
     soato: "COATO",
+    territory_name_rus: "Административно-территориальное название",
+    code: "Код региона",
 
     about: "Информация",
     about_page_desc: "Информация о нас...",

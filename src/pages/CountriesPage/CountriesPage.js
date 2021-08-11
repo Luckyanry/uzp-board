@@ -10,7 +10,6 @@ import DataGrid, {
   RequiredRule,
   PatternRule,
 } from "devextreme-react/data-grid";
-import "whatwg-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {countriesStore} from "../../api/countries-fetch";
 
@@ -25,7 +24,7 @@ export const CountriesPage = () => {
 
       <DataGrid
         dataSource={countriesStore}
-        showBorders={true}
+        // showBorders={true}
         repaintChangesOnly={true}
         remoteOperations={false}
         focusedRowEnabled={true}
@@ -105,7 +104,7 @@ export const CountriesPage = () => {
           caption={formatMessage("short_name_uzlat")}
         />
 
-        <Paging defaultPageSize={10} />
+        <Paging defaultPageSize={10} enabled={true} />
         <Pager showPageSizeSelector={true} allowedPageSizes={[10, 20, 50]} />
       </DataGrid>
     </>

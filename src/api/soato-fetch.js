@@ -40,7 +40,7 @@ const soatoData = new CustomStore({
 });
 
 const soatoLookData = new CustomStore({
-  key: "pid",
+  key: "id",
   insert: (values) =>
     sendRequest(
       `${url}${baseParams}`,
@@ -71,6 +71,7 @@ function sendRequest(url, data = {}, method = "GET") {
       })
       .then((data) => {
         if (Array.isArray(data)) {
+          console.log("then((data): ", data);
           return {
             data,
             totalCount: data.length,
