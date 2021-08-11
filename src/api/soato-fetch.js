@@ -1,4 +1,5 @@
 import CustomStore from "devextreme/data/custom_store";
+import "whatwg-fetch";
 
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?sp=Soato&db=hbdb&operation=do";
@@ -58,7 +59,6 @@ function sendRequest(url, data = {}, method = "GET") {
       return `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
     })
     .join("&");
-  console.log("params", params);
 
   if (method === "GET") {
     return fetch(`${url}&${params}`, {

@@ -36,7 +36,7 @@ export const CountriesPage = () => {
         <FilterRow visible={true} />
 
         <Editing
-          mode="row"
+          mode="form"
           allowAdding={true}
           allowDeleting={true}
           allowUpdating={true}

@@ -1,4 +1,5 @@
 import CustomStore from "devextreme/data/custom_store";
+import "whatwg-fetch";
 
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?sp=Countries&db=hbdb";

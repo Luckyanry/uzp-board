@@ -11,7 +11,7 @@ import TreeList, {
   Scrolling,
   FilterRow,
 } from "devextreme-react/tree-list";
-// import Button from "devextreme-react/button";
+import Button from "devextreme-react/button";
 
 import {soatoData} from "../../api/soato-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -19,17 +19,28 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import "./SoatoPage.scss";
 
 export const SoatoPage = () => {
-  // const [toggler, setToggler] = useState(false);
+  const [toggler, setToggler] = useState(false);
 
   const {formatMessage} = useLocalization();
 
-  // function clickHandler() {
-  //   setToggler((toggler) => !toggler);
-  // }
+  function clickHandler() {
+    setToggler((toggler) => !toggler);
+
+    if (toggler) {
+      window.location.reload();
+    }
+  }
 
   return (
-    <>
-      {/* <Button icon="check" type="success" text="Done" onClick={clickHandler} /> */}
+    <div className="soato-page-wrapper">
+      <h2 className={"content-block"}>{formatMessage("soato")}</h2>
+      <Button
+        className="btn"
+        icon="hierarchy"
+        stylingMode="outlined"
+        text={formatMessage("expand")}
+        onClick={clickHandler}
+      />
 
       <TreeList
         dataSource={soatoData}
@@ -40,14 +51,13 @@ export const SoatoPage = () => {
         showRowLines={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
-        autoExpandAll={true}
+        autoExpandAll={toggler}
         focusedRowEnabled={true}
       >
         <SearchPanel visible={true} />
         <HeaderFilter visible={true} allowSearch={true} />
         <FilterRow visible={true} />
         <Scrolling mode="standard" />
-
         <Paging defaultPageSize={15} enabled={true} />
         <Pager
           showPageSizeSelector={true}
@@ -56,14 +66,12 @@ export const SoatoPage = () => {
           allowedPageSizes={[15, 30, 100]}
           visible={true}
         />
-
         <Editing
-          mode="row"
+          mode="form"
           allowAdding={true}
           allowUpdating={true}
           allowDeleting={true}
         />
-
         <Column
           dataField="territory_name_rus"
           caption={formatMessage("territory_name_rus")}
@@ -71,9 +79,10 @@ export const SoatoPage = () => {
         >
           <RequiredRule />
         </Column>
-
-        <Column dataField="code" caption={formatMessage("code")} />
+        <Column dataField="code" caption={formatMessage("code")}>
+          <RequiredRule />
+        </Column>
       </TreeList>
-    </>
+    </div>
   );
 };

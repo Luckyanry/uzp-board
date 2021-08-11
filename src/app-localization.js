@@ -38,6 +38,7 @@ const dictionary = {
     soato: "SOATO",
     territory_name_rus: "Territory name",
     code: "Region code",
+    expand: "Expand all rows",
 
     about: "About",
     about_page_desc: "About us information...",
@@ -79,6 +80,7 @@ const dictionary = {
     soato: "COATO",
     territory_name_rus: "Административно-территориальное название",
     code: "Код региона",
+    expand: "Развернуть все строки",
 
     about: "Информация",
     about_page_desc: "Информация о нас...",
