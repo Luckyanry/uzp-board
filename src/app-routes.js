@@ -5,6 +5,7 @@ import {
   ProfilePage,
   AboutPage,
   SoatoPage,
+  SooguPage,
 } from "./pages";
 
 const routes = [
@@ -23,6 +24,10 @@ const routes = [
   {
     path: "/soato",
     component: SoatoPage,
+  },
+  {
+    path: "/soogu",
+    component: SooguPage,
   },
   {
     path: "/about",

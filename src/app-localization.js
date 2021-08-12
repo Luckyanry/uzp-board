@@ -44,6 +44,15 @@ const dictionary = {
     about_page_desc: "About us information...",
     logout: "Logout",
 
+    soogu: "SOOGU",
+    codeSogu: "Code Sogu",
+    codeSogu_numeric_err_message:
+      "The 'Code Sogu' field must contain from 4 to 5 digits!",
+    codeOKPO: "Code OKPO",
+    codeOKPO_numeric_err_message:
+      "The 'Code OKPO' field must contain a maximum of 8 digits!",
+    name_rus: "Name of the organization",
+
     FirstName: "FirstName",
     LastName: "LastName",
     Prefix: "Prefix",
@@ -81,6 +90,15 @@ const dictionary = {
     territory_name_rus: "Административно-территориальное название",
     code: "Код региона",
     expand: "Развернуть все строки",
+
+    soogu: "СООГУ",
+    codeSogu: "Код СОГУ",
+    codeSogu_numeric_err_message:
+      "Поле 'Код СОГУ' должно содержать от 4 до 5 цифр!",
+    codeOKPO: "Код ОКПО",
+    codeOKPO_numeric_err_message:
+      "Поле 'Код ОКПО' должно содержать максимум 8 цифры!",
+    name_rus: "Название организации",
 
     about: "Информация",
     about_page_desc: "Информация о нас...",

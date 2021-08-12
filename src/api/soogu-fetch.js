@@ -2,9 +2,9 @@ import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 
 const url = "http://10.0.10.71";
-const baseParams = "/actions.asp?sp=Soato&db=hbdb&operation=do";
+const baseParams = "/actions.asp?sp=Soogu&db=hbdb&operation=do";
 
-const soatoData = new CustomStore({
+const sooguData = new CustomStore({
   key: "id",
   load: () =>
     sendRequest(`${url}${baseParams}`, {
@@ -35,19 +35,6 @@ const soatoData = new CustomStore({
       {
         schema: "del",
         "@id": key,
-      },
-      "POST"
-    ),
-});
-
-const soatoLookData = new CustomStore({
-  key: "id",
-  insert: (values) =>
-    sendRequest(
-      `${url}${baseParams}`,
-      {
-        schema: "look",
-        values: JSON.stringify(values),
       },
       "POST"
     ),
@@ -128,4 +115,4 @@ function sendRequest(url, data = {}, method = "GET") {
     });
 }
 
-export {soatoData, soatoLookData};
+export {sooguData};

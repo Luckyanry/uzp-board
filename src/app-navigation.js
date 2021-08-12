@@ -25,6 +25,10 @@ export const AppNavigation = () => {
           text: formatMessage("soato"),
           path: "/soato",
         },
+        {
+          text: formatMessage("soogu"),
+          path: "/soogu",
+        },
       ],
     },
     {

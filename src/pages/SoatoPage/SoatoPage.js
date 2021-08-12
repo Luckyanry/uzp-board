@@ -34,6 +34,7 @@ export const SoatoPage = () => {
   return (
     <div className="soato-page-wrapper">
       <h2 className={"content-block"}>{formatMessage("soato")}</h2>
+
       <Button
         className="btn"
         icon="hierarchy"
@@ -54,10 +55,11 @@ export const SoatoPage = () => {
         autoExpandAll={toggler}
         focusedRowEnabled={true}
       >
+        <Scrolling mode="standard" />
         <SearchPanel visible={true} />
         <HeaderFilter visible={true} allowSearch={true} />
         <FilterRow visible={true} />
-        <Scrolling mode="standard" />
+
         <Paging defaultPageSize={15} enabled={true} />
         <Pager
           showPageSizeSelector={true}
@@ -66,12 +68,14 @@ export const SoatoPage = () => {
           allowedPageSizes={[15, 30, 100]}
           visible={true}
         />
+
         <Editing
           mode="form"
           allowAdding={true}
           allowUpdating={true}
           allowDeleting={true}
         />
+
         <Column
           dataField="territory_name_rus"
           caption={formatMessage("territory_name_rus")}
@@ -79,6 +83,7 @@ export const SoatoPage = () => {
         >
           <RequiredRule />
         </Column>
+
         <Column dataField="code" caption={formatMessage("code")}>
           <RequiredRule />
         </Column>
