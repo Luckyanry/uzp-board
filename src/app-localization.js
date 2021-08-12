@@ -53,14 +53,16 @@ const dictionary = {
       "The 'Code OKPO' field must contain a maximum of 8 digits!",
     name_rus: "Name of the organization",
 
-    FirstName: "FirstName",
-    LastName: "LastName",
+    FirstName: "First Name",
+    LastName: "Last Name",
     Prefix: "Prefix",
     Position: "Position",
-    BirthDate: "BirthDate",
-    HireDate: "HireDate",
+    BirthDate: "Birth date",
+    HireDate: "Hire date",
     Notes: "Notes",
     Address: "Address",
+
+    new_row: "Add a new row",
   },
   ru: {
     project_title: "ЕАИС",
@@ -86,19 +88,24 @@ const dictionary = {
     short_name_uzcyr: "Узбекское название - кириллица",
     short_name_uzlat: "Узбекское название - латынь",
 
-    soato: "COATO",
+    soato: "СОАТО",
+    soato_title:
+      "Справочник 'Система обозначений административно-территориальных единиц' (СОАТО)",
     territory_name_rus: "Административно-территориальное название",
     code: "Код региона",
     expand: "Развернуть все строки",
 
     soogu: "СООГУ",
-    codeSogu: "Код СОГУ",
+    soogu_title:
+      "Справочник 'Система обозначений органов государственного и хозяйственного управления' (СООГУ)",
+    codeSogu: "Код СООГУ",
     codeSogu_numeric_err_message:
-      "Поле 'Код СОГУ' должно содержать от 4 до 5 цифр!",
+      "Поле 'Код СООГУ' должно содержать от 4 до 5 цифр!",
     codeOKPO: "Код ОКПО",
     codeOKPO_numeric_err_message:
       "Поле 'Код ОКПО' должно содержать максимум 8 цифры!",
-    name_rus: "Название организации",
+    name_rus:
+      "Наименование органа государственного и хозяйственного управления (РУ)",
 
     about: "Информация",
     about_page_desc: "Информация о нас...",
@@ -112,6 +119,8 @@ const dictionary = {
     HireDate: "Дата приема на работу",
     Notes: "Заметки",
     Address: "Адрес",
+
+    new_row: "Сосдать новое поле",
   },
 };
 

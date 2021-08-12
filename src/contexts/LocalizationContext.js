@@ -40,7 +40,7 @@ const LocalizationProvider = ({children}) => {
 
 function getLocale() {
   const locale = sessionStorage.getItem("locale");
-  return locale != null ? locale : "en";
+  return locale != null ? locale : "ru";
 }
 
 function setLocale(locale) {

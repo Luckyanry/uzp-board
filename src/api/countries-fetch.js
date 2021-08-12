@@ -5,7 +5,7 @@ const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?sp=Countries&db=hbdb";
 
 const countriesStore = new CustomStore({
-  key: "id",
+  key: "guid",
   load: () =>
     sendRequest(`${url}${baseParams}`, {
       operation: "load",

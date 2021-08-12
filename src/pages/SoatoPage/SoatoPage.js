@@ -23,6 +23,13 @@ export const SoatoPage = () => {
 
   const {formatMessage} = useLocalization();
 
+  const popupOptions = {
+    title: "Add a new row",
+    showTitle: true,
+    width: 900,
+    height: 400,
+  };
+
   function clickHandler() {
     setToggler((toggler) => !toggler);
 
@@ -33,7 +40,7 @@ export const SoatoPage = () => {
 
   return (
     <div className="soato-page-wrapper">
-      <h2 className={"content-block"}>{formatMessage("soato")}</h2>
+      <h2 className={"content-block"}>{formatMessage("soato_title")}</h2>
 
       <Button
         className="btn"
@@ -70,7 +77,8 @@ export const SoatoPage = () => {
         />
 
         <Editing
-          mode="form"
+          mode="popup"
+          popup={popupOptions}
           allowAdding={true}
           allowUpdating={true}
           allowDeleting={true}
