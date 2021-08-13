@@ -14,24 +14,26 @@ import DataGrid, {
   Lookup,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {sooguData} from "../../api/soogu-fetch";
+// import {sooguData} from "../../api/soogu-fetch";
+import {fetchData} from "../../api/pages-fetch";
 
 import "./SooguPage.scss";
 
 export const SooguPage = () => {
   const {formatMessage} = useLocalization();
+  const sooguData = fetchData(window.location.hash);
 
-  const statusesData = ["Активен", "Отключена"];
+  const statusesData = ["Active", "Deactivated"];
 
-  function initNewRow(e) {
-    console.log(`e`, e);
-    e.data.status = "Активен";
-    e.data.created_date = new Date();
-    e.data.changed_date = new Date();
-  }
+  // function initNewRow(e) {
+  //   console.log(`e`, e);
+  //   e.data.status = "Активен";
+  //   e.data.created_date = new Date();
+  //   e.data.changed_date = new Date();
+  // }
 
   const popupOptions = {
-    title: "Add a new row",
+    title: formatMessage("new_row"),
     showTitle: true,
     width: 900,
     height: 500,
@@ -49,7 +51,7 @@ export const SooguPage = () => {
         focusedRowEnabled={true}
         columnAutoWidth={true}
         columnHidingEnabled={false}
-        onInitNewRow={initNewRow}
+        // onInitNewRow={initNewRow}
       >
         <SearchPanel visible={true} />
         <FilterRow visible={true} />
@@ -87,6 +89,7 @@ export const SooguPage = () => {
           />
         </Column>
 
+        {/* <Column dataField="status" caption={formatMessage("status")}> */}
         <Column dataField="status" caption="Status">
           <Lookup dataSource={statusesData} />
           <RequiredRule />
@@ -99,6 +102,7 @@ export const SooguPage = () => {
           showInfo={true}
           visible={true}
           allowedPageSizes={[10, 20, 50]}
+          showAllItem={true}
         />
       </DataGrid>
     </>

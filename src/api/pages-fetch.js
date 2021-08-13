@@ -4,8 +4,7 @@ import "whatwg-fetch";
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?db=hbdb&operation=do";
 
-export const sooguData = (pageRequest) => {
-  console.log("pageRequest", pageRequest);
+export const fetchData = (pageRequest) => {
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "#/soogu":
@@ -19,15 +18,17 @@ export const sooguData = (pageRequest) => {
     }
   };
 
+  const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
+
   return new CustomStore({
     key: "id",
     load: () =>
-      sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
+      sendRequest(finalUrl, {
         schema: "get",
       }),
     insert: (values) =>
       sendRequest(
-        `${url}${baseParams}`,
+        finalUrl,
         {
           schema: "ins",
           values: statusStringToBoolean(values),
@@ -36,7 +37,7 @@ export const sooguData = (pageRequest) => {
       ),
     update: (key, values) =>
       sendRequest(
-        `${url}${baseParams}`,
+        finalUrl,
         {
           schema: "upd",
           "@id": key,
@@ -46,7 +47,7 @@ export const sooguData = (pageRequest) => {
       ),
     remove: (key) =>
       sendRequest(
-        `${url}${baseParams}`,
+        finalUrl,
         {
           schema: "del",
           "@id": key,
@@ -84,7 +85,6 @@ async function sendRequest(url, data = {}, method = "GET") {
       const response = await fetch(`${url}&${params}`, getOptions);
 
       if (response.ok) {
-        console.log("json", response);
         return response
           .json()
           .then((data) => responseData(data))
@@ -100,7 +100,6 @@ async function sendRequest(url, data = {}, method = "GET") {
   try {
     const response = await fetch(url, postOptions);
     if (response.ok) {
-      console.log("text", response);
       return response
         .text()
         .then((data) => responseData(data))
@@ -123,7 +122,6 @@ function statusStringToBoolean(values) {
     };
   }
 
-  console.log(`newStatus => `, newStatus);
   return JSON.stringify(newStatus);
 }
 
@@ -145,7 +143,6 @@ function statusBooleanToString(data) {
 function responseData(data) {
   if (Array.isArray(data)) {
     const newData = statusBooleanToString(data);
-    console.log(`newData => `, newData);
 
     return {
       data: newData,
@@ -166,5 +163,3 @@ function responseData(data) {
     );
   }
 }
-
-// export {sooguData};

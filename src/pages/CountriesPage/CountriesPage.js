@@ -12,19 +12,28 @@ import DataGrid, {
   SearchPanel,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {countriesStore} from "../../api/countries-fetch";
+// import {countriesStore} from "../../api/countries-fetch";
+import {fetchData} from "../../api/pages-fetch";
 
 import "./CountriesPage.scss";
 
 export const CountriesPage = () => {
   const {formatMessage} = useLocalization();
+  const countriesData = fetchData(window.location.hash);
+
+  const popupConfig = {
+    title: formatMessage("new_row"),
+    showTitle: true,
+    width: 900,
+    height: 700,
+  };
 
   return (
     <>
       <h2 className={"content-block"}>{formatMessage("countries")}</h2>
 
       <DataGrid
-        dataSource={countriesStore}
+        dataSource={countriesData}
         // showBorders={true}
         repaintChangesOnly={true}
         remoteOperations={false}
@@ -36,7 +45,8 @@ export const CountriesPage = () => {
         <FilterRow visible={true} />
 
         <Editing
-          mode="form"
+          mode="popup"
+          popup={popupConfig}
           allowAdding={true}
           allowDeleting={true}
           allowUpdating={true}

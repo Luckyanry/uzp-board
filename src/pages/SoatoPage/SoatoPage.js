@@ -10,10 +10,12 @@ import TreeList, {
   Pager,
   Scrolling,
   FilterRow,
+  Lookup,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
-import {soatoData} from "../../api/soato-fetch";
+// import {soatoData} from "../../api/soato-fetch";
+import {fetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./SoatoPage.scss";
@@ -22,9 +24,12 @@ export const SoatoPage = () => {
   const [toggler, setToggler] = useState(false);
 
   const {formatMessage} = useLocalization();
+  const soatoData = fetchData(window.location.hash);
 
-  const popupOptions = {
-    title: "Add a new row",
+  const statusesData = ["Active", "Deactivated"];
+
+  const popupOpt = {
+    title: formatMessage("new_row"),
     showTitle: true,
     width: 900,
     height: 400,
@@ -78,7 +83,7 @@ export const SoatoPage = () => {
 
         <Editing
           mode="popup"
-          popup={popupOptions}
+          popup={popupOpt}
           allowAdding={true}
           allowUpdating={true}
           allowDeleting={true}
@@ -92,7 +97,18 @@ export const SoatoPage = () => {
           <RequiredRule />
         </Column>
 
+        {/* <Column
+          dataField="territory_name_eng"
+          caption="Eng name"
+          minWidth={250}
+        /> */}
+
         <Column dataField="code" caption={formatMessage("code")}>
+          <RequiredRule />
+        </Column>
+
+        <Column dataField="status" caption="Status">
+          <Lookup dataSource={statusesData} />
           <RequiredRule />
         </Column>
       </TreeList>

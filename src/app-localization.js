@@ -13,10 +13,21 @@ const dictionary = {
   en: {
     project_title: "UZP",
     language: "Language",
+
     home: "Home",
     home_page_desc: "Home page description...",
     directory: "Directory",
+
     profile: "Profile",
+    FirstName: "First Name",
+    LastName: "Last Name",
+    Prefix: "Prefix",
+    Position: "Position",
+    BirthDate: "Birth date",
+    HireDate: "Hire date",
+    Notes: "Notes",
+    Address: "Address",
+    logout: "Logout",
 
     countries: "Countries",
     short_name: "Country name",
@@ -40,10 +51,6 @@ const dictionary = {
     code: "Region code",
     expand: "Expand all rows",
 
-    about: "About",
-    about_page_desc: "About us information...",
-    logout: "Logout",
-
     soogu: "SOOGU",
     codeSogu: "Code Sogu",
     codeSogu_numeric_err_message:
@@ -53,24 +60,32 @@ const dictionary = {
       "The 'Code OKPO' field must contain a maximum of 8 digits!",
     name_rus: "Name of the organization",
 
-    FirstName: "First Name",
-    LastName: "Last Name",
-    Prefix: "Prefix",
-    Position: "Position",
-    BirthDate: "Birth date",
-    HireDate: "Hire date",
-    Notes: "Notes",
-    Address: "Address",
+    about: "About",
+    about_page_desc: "About us information...",
+
+    status_true: "Active",
+    status_false: "Deactivated",
 
     new_row: "Add a new row",
   },
   ru: {
     project_title: "ЕАИС",
     language: "Язык",
+
     home: "Главная",
     home_page_desc: "Описание главной страницы...",
     directory: "Справочник",
+
     profile: "Профиль",
+    FirstName: "Имя",
+    LastName: "Фамилия",
+    Prefix: "Обращение",
+    Position: "Должность",
+    BirthDate: "Дата рождения",
+    HireDate: "Дата приема на работу",
+    Notes: "Заметки",
+    Address: "Адрес",
+    logout: "Выход",
 
     countries: "Страны",
     short_name: "Название страны",
@@ -109,18 +124,11 @@ const dictionary = {
 
     about: "Информация",
     about_page_desc: "Информация о нас...",
-    logout: "Выход",
 
-    FirstName: "Имя",
-    LastName: "Фамилия",
-    Prefix: "Обращение",
-    Position: "Должность",
-    BirthDate: "Дата рождения",
-    HireDate: "Дата приема на работу",
-    Notes: "Заметки",
-    Address: "Адрес",
+    status_true: "Активен",
+    status_false: "Отключен",
 
-    new_row: "Сосдать новое поле",
+    new_row: "Создать новое поле",
   },
 };
 
