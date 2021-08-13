@@ -40,6 +40,7 @@ export const CountriesPage = () => {
         columnAutoWidth={true}
         columnHidingEnabled={true}
         allowColumnResizing={true}
+        hoverStateEnabled={true}
       >
         <SearchPanel visible={true} />
         <FilterRow visible={true} />

@@ -56,6 +56,7 @@ export const SooguPage = () => {
         columnHidingEnabled={false}
         allowColumnResizing={true}
         showColumnLines={true}
+        hoverStateEnabled={true}
         // onInitNewRow={initNewRow}
       >
         <SearchPanel visible={true} />

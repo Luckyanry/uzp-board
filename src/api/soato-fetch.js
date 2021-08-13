@@ -42,12 +42,12 @@ const soatoData = new CustomStore({
 
 const soatoLookData = new CustomStore({
   key: "id",
-  insert: (values) =>
+  load: () =>
     sendRequest(
       `${url}${baseParams}`,
       {
         schema: "look",
-        values: JSON.stringify(values),
+        // values: JSON.stringify(values),
       },
       "POST"
     ),

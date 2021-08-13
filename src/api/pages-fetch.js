@@ -1,6 +1,7 @@
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 import {useLocalization} from "../contexts/LocalizationContext";
+// import DataSource from "devextreme/data/data_source";
 
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?db=hbdb&operation=do";
@@ -23,7 +24,7 @@ export const FetchData = (pageRequest) => {
 
   const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
 
-  return new CustomStore({
+  const soatoFetchData = new CustomStore({
     key: "id",
     load: () =>
       sendRequest(finalUrl, {
@@ -57,6 +58,15 @@ export const FetchData = (pageRequest) => {
         },
         "POST"
       ),
+  });
+
+  const soatoLookData = new CustomStore({
+    key: "id",
+    load: () =>
+      sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
+        schema: "look",
+        // values: JSON.stringify(values),
+      }),
   });
 
   async function sendRequest(url, data = {}, method = "GET") {
@@ -147,7 +157,7 @@ export const FetchData = (pageRequest) => {
   function responseData(data) {
     if (Array.isArray(data)) {
       const newData = statusBooleanToString(data);
-
+      // console.log("soatoLookData =>", newData);
       return {
         data: newData,
         totalCount: newData.length,
@@ -167,4 +177,6 @@ export const FetchData = (pageRequest) => {
       );
     }
   }
+
+  return {soatoFetchData, soatoLookData};
 };
