@@ -47,9 +47,19 @@ const dictionary = {
     short_name_uzlat: "Uzbek latin country name",
 
     soato: "SOATO",
-    territory_name_rus: "Territory name",
     code: "Region code",
     expand: "Expand all rows",
+    as_child_of: "As child of",
+    territory_name_rus: "Territory name rus",
+    territory_name_eng: "Territory name eng",
+    territory_name_uzlat: "Territory name uzbek latin",
+    territory_name_uzcyr: "Territory name uzbek cyrillic",
+    territory_name_karlat: "Territory name karakalpak latin",
+    admin_centre_rus: "Administrative center name russsian",
+    admin_centre_eng: "Administrative center name english",
+    admin_centre_uzlat: "Administrative center name uzbek latin",
+    admin_centre_uzcyr: "Administrative center name uzbek cyrillic",
+    admin_centre_karlat: "Administrative center name karakalpak",
 
     soogu: "SOOGU",
     codeSogu: "Code Sogu",
@@ -59,12 +69,17 @@ const dictionary = {
     codeOKPO_numeric_err_message:
       "The 'Code OKPO' field must contain a maximum of 8 digits!",
     name_rus: "Name of the organization",
+    name_uzcyr: "Uzbek cyrillic name",
+    name_uzlat: "Uzbek latin name",
+    name_karlat: "Karakalpak latin name",
+    name_eng: "Uzbek latin name",
 
     about: "About",
     about_page_desc: "About us information...",
 
-    status_true: "Active",
-    status_false: "Deactivated",
+    status: "Status",
+    Active: "Active",
+    Deactivated: "Deactivated",
 
     new_row: "Add a new row",
   },
@@ -106,9 +121,19 @@ const dictionary = {
     soato: "СОАТО",
     soato_title:
       "Справочник 'Система обозначений административно-территориальных единиц' (СОАТО)",
-    territory_name_rus: "Административно-территориальное название",
     code: "Код региона",
     expand: "Развернуть все строки",
+    as_child_of: "Подчиняется",
+    territory_name_rus: "Территориальное название",
+    territory_name_eng: "Территориальное название eng",
+    territory_name_uzlat: "Территориальное name uzbek latin",
+    territory_name_uzcyr: "Территориальное name uzbek cyrillic",
+    territory_name_karlat: "Территориальное name karakalpak latin",
+    admin_centre_rus: "Административный центр russsian",
+    admin_centre_eng: "Административный центр english",
+    admin_centre_uzlat: "Административный центр uzbek latin",
+    admin_centre_uzcyr: "Административный центр uzbek cyrillic",
+    admin_centre_karlat: "Административный центр karakalpak",
 
     soogu: "СООГУ",
     soogu_title:
@@ -121,12 +146,17 @@ const dictionary = {
       "Поле 'Код ОКПО' должно содержать максимум 8 цифры!",
     name_rus:
       "Наименование органа государственного и хозяйственного управления (РУ)",
+    name_uzcyr: "Давлат ва хўжалик бошқарув идоралари номи",
+    name_uzlat: "Узбекское название - латынь",
+    name_karlat: "Каракалпакское название - латынь",
+    name_eng: "Английское название",
 
     about: "Информация",
     about_page_desc: "Информация о нас...",
 
-    status_true: "Активен",
-    status_false: "Отключен",
+    status: "Статус",
+    Active: "Активен",
+    Deactivated: "Отключен",
 
     new_row: "Создать новое поле",
   },

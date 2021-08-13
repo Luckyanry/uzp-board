@@ -1,10 +1,13 @@
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
+import {useLocalization} from "../contexts/LocalizationContext";
 
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?db=hbdb&operation=do";
 
-export const fetchData = (pageRequest) => {
+export const FetchData = (pageRequest) => {
+  const {formatMessage} = useLocalization();
+
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "#/soogu":
@@ -55,38 +58,52 @@ export const fetchData = (pageRequest) => {
         "POST"
       ),
   });
-};
 
-async function sendRequest(url, data = {}, method = "GET") {
-  const params = Object.keys(data)
-    .map((key) => {
-      return `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
-    })
-    .join("&");
+  async function sendRequest(url, data = {}, method = "GET") {
+    const params = Object.keys(data)
+      .map((key) => {
+        return `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+      })
+      .join("&");
 
-  const getOptions = {
-    method,
-    credentials: "include",
-    xhrFields: {withCredentials: true},
-  };
+    const getOptions = {
+      method,
+      credentials: "include",
+      xhrFields: {withCredentials: true},
+    };
 
-  const postOptions = {
-    method,
-    body: params,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    },
-    credentials: "include",
-    xhrFields: {withCredentials: true},
-  };
+    const postOptions = {
+      method,
+      body: params,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+      credentials: "include",
+      xhrFields: {withCredentials: true},
+    };
 
-  if (method === "GET") {
+    if (method === "GET") {
+      try {
+        const response = await fetch(`${url}&${params}`, getOptions);
+
+        if (response.ok) {
+          return response
+            .json()
+            .then((data) => responseData(data))
+            .catch((err) => {
+              throw err;
+            });
+        }
+      } catch (err) {
+        throw err;
+      }
+    }
+
     try {
-      const response = await fetch(`${url}&${params}`, getOptions);
-
+      const response = await fetch(url, postOptions);
       if (response.ok) {
         return response
-          .json()
+          .text()
           .then((data) => responseData(data))
           .catch((err) => {
             throw err;
@@ -97,69 +114,57 @@ async function sendRequest(url, data = {}, method = "GET") {
     }
   }
 
-  try {
-    const response = await fetch(url, postOptions);
-    if (response.ok) {
-      return response
-        .text()
-        .then((data) => responseData(data))
-        .catch((err) => {
-          throw err;
-        });
-    }
-  } catch (err) {
-    throw err;
-  }
-}
+  function statusStringToBoolean(values) {
+    let newStatus = values;
 
-function statusStringToBoolean(values) {
-  let newStatus = values;
-
-  if (values.status) {
-    newStatus = {
-      ...values,
-      status: values.status === "Active" ? true : false,
-    };
-  }
-
-  return JSON.stringify(newStatus);
-}
-
-function statusBooleanToString(data) {
-  return data.map((item) => {
-    if (typeof item.status === "boolean") {
-      const changeStatus = {
-        ...item,
-        status: item.status ? "Active" : "Deactivated",
+    if (values.status) {
+      newStatus = {
+        ...values,
+        status: values.status === formatMessage("Active") ? true : false,
       };
-
-      return changeStatus;
     }
 
-    return item;
-  });
-}
-
-function responseData(data) {
-  if (Array.isArray(data)) {
-    const newData = statusBooleanToString(data);
-
-    return {
-      data: newData,
-      totalCount: newData.length,
-    };
+    return JSON.stringify(newStatus);
   }
-  if (!JSON.parse(data).hint) {
-    return data && JSON.parse(data);
-  } else {
-    throw new Error(
-      `
+
+  function statusBooleanToString(data) {
+    return data.map((item) => {
+      if (typeof item.status === "boolean") {
+        const changeStatus = {
+          ...item,
+          status: item.status
+            ? formatMessage("Active")
+            : formatMessage("Deactivated"),
+        };
+
+        return changeStatus;
+      }
+
+      return item;
+    });
+  }
+
+  function responseData(data) {
+    if (Array.isArray(data)) {
+      const newData = statusBooleanToString(data);
+
+      return {
+        data: newData,
+        totalCount: newData.length,
+      };
+    }
+    if (!JSON.parse(data).hint) {
+      return data && JSON.parse(data);
+    } else {
+      throw new Error(
+        `
         ScriptFile: ${data.ScriptFile},
         Description: ${data.VBErr.Description},
         Error Number: ${data.VBErr.Number},
         Source: ${data.VBErr.Source},
         Hint: ${data.hint}
       `
-    );
+      );
+    }
   }
-}
+};

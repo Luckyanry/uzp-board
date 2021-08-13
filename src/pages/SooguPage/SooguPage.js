@@ -14,16 +14,19 @@ import DataGrid, {
   Lookup,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
-// import {sooguData} from "../../api/soogu-fetch";
-import {fetchData} from "../../api/pages-fetch";
+import {FetchData} from "../../api/pages-fetch";
 
 import "./SooguPage.scss";
 
 export const SooguPage = () => {
   const {formatMessage} = useLocalization();
-  const sooguData = fetchData(window.location.hash);
+  const sooguData = FetchData(window.location.hash);
 
-  const statusesData = ["Active", "Deactivated"];
+  const defaultStatus = ["Active", "Deactivated"];
+  const statusesLang = defaultStatus.map((statusLang) => {
+    const statusLanguage = formatMessage(statusLang);
+    return statusLanguage;
+  });
 
   // function initNewRow(e) {
   //   console.log(`e`, e);
@@ -35,8 +38,8 @@ export const SooguPage = () => {
   const popupOptions = {
     title: formatMessage("new_row"),
     showTitle: true,
-    width: 900,
-    height: 500,
+    width: 1000,
+    height: 600,
   };
 
   return (
@@ -51,6 +54,8 @@ export const SooguPage = () => {
         focusedRowEnabled={true}
         columnAutoWidth={true}
         columnHidingEnabled={false}
+        allowColumnResizing={true}
+        showColumnLines={true}
         // onInitNewRow={initNewRow}
       >
         <SearchPanel visible={true} />
@@ -65,7 +70,11 @@ export const SooguPage = () => {
           allowUpdating={true}
         />
 
-        <Column dataField="name_rus" caption={formatMessage("name_rus")}>
+        <Column
+          dataField="name_rus"
+          caption={formatMessage("name_rus")}
+          width="resize"
+        >
           <RequiredRule />
         </Column>
 
@@ -89,11 +98,31 @@ export const SooguPage = () => {
           />
         </Column>
 
-        {/* <Column dataField="status" caption={formatMessage("status")}> */}
-        <Column dataField="status" caption="Status">
-          <Lookup dataSource={statusesData} />
+        <Column dataField="status" caption={formatMessage("status")}>
           <RequiredRule />
+          <Lookup dataSource={statusesLang} />
         </Column>
+
+        <Column
+          dataField="name_uzcyr"
+          caption={formatMessage("name_uzcyr")}
+          visible={false}
+        />
+        <Column
+          dataField="name_uzlat"
+          caption={formatMessage("name_uzlat")}
+          visible={false}
+        />
+        <Column
+          dataField="name_karlat"
+          caption={formatMessage("name_karlat")}
+          visible={false}
+        />
+        <Column
+          dataField="name_eng"
+          caption={formatMessage("name_eng")}
+          visible={false}
+        />
 
         <Paging defaultPageSize={10} />
         <Pager
@@ -101,7 +130,7 @@ export const SooguPage = () => {
           showNavigationButtons={true}
           showInfo={true}
           visible={true}
-          allowedPageSizes={[10, 20, 50]}
+          allowedPageSizes={[10, 20, 50, 100, "all"]}
           showAllItem={true}
         />
       </DataGrid>

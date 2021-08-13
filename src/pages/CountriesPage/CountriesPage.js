@@ -12,14 +12,13 @@ import DataGrid, {
   SearchPanel,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
-// import {countriesStore} from "../../api/countries-fetch";
-import {fetchData} from "../../api/pages-fetch";
+import {FetchData} from "../../api/pages-fetch";
 
 import "./CountriesPage.scss";
 
 export const CountriesPage = () => {
   const {formatMessage} = useLocalization();
-  const countriesData = fetchData(window.location.hash);
+  const countriesData = FetchData(window.location.hash);
 
   const popupConfig = {
     title: formatMessage("new_row"),
@@ -39,7 +38,8 @@ export const CountriesPage = () => {
         remoteOperations={false}
         focusedRowEnabled={true}
         columnAutoWidth={true}
-        columnHidingEnabled={false}
+        columnHidingEnabled={true}
+        allowColumnResizing={true}
       >
         <SearchPanel visible={true} />
         <FilterRow visible={true} />
@@ -122,7 +122,8 @@ export const CountriesPage = () => {
           showNavigationButtons={true}
           showInfo={true}
           visible={true}
-          allowedPageSizes={[10, 20, 50]}
+          allowedPageSizes={[10, 20, 50, 100, "all"]}
+          showAllItem={true}
         />
       </DataGrid>
     </>
