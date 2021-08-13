@@ -24,7 +24,7 @@ export const FetchData = (pageRequest) => {
 
   const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
 
-  const soatoFetchData = new CustomStore({
+  const fetchData = new CustomStore({
     key: "id",
     load: () =>
       sendRequest(finalUrl, {
@@ -60,7 +60,7 @@ export const FetchData = (pageRequest) => {
       ),
   });
 
-  const soatoLookData = new CustomStore({
+  const lookData = new CustomStore({
     key: "id",
     load: () =>
       sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
@@ -178,5 +178,5 @@ export const FetchData = (pageRequest) => {
     }
   }
 
-  return {soatoFetchData, soatoLookData};
+  return {fetchData, lookData};
 };

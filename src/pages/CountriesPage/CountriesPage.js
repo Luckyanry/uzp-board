@@ -18,7 +18,7 @@ import "./CountriesPage.scss";
 
 export const CountriesPage = () => {
   const {formatMessage} = useLocalization();
-  const countriesData = FetchData(window.location.hash);
+  const countriesData = FetchData(window.location.hash).fetchData;
 
   const popupConfig = {
     title: formatMessage("new_row"),

@@ -20,7 +20,7 @@ import "./SooguPage.scss";
 
 export const SooguPage = () => {
   const {formatMessage} = useLocalization();
-  const sooguData = FetchData(window.location.hash);
+  const sooguData = FetchData(window.location.hash).fetchData;
 
   const defaultStatus = ["Active", "Deactivated"];
   const statusesLang = defaultStatus.map((statusLang) => {
@@ -58,6 +58,7 @@ export const SooguPage = () => {
         showColumnLines={true}
         hoverStateEnabled={true}
         // onInitNewRow={initNewRow}
+        wordWrapEnabled={true}
       >
         <SearchPanel visible={true} />
         <FilterRow visible={true} />
