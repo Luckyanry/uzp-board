@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react";
 
 import {locale, loadMessages, formatMessage} from "devextreme/localization";
 import * as ruMessages from "devextreme/localization/messages/ru.json";
+// import * as enMessages from "devextreme/localization/messages/en.json";
 
 import {getLocales, getDictionary} from "../app-localization";
 
@@ -18,7 +19,7 @@ const LocalizationProvider = ({children}) => {
   function changeLocale(e) {
     setLang(e.value);
     setLocale(e.value);
-    // window.location.reload();
+    document.location.reload();
   }
 
   return (
@@ -49,6 +50,7 @@ function setLocale(locale) {
 
 function initMessages() {
   loadMessages(ruMessages);
+  // loadMessages(enMessages);
   loadMessages(getDictionary());
 }
 

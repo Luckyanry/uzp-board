@@ -4,3 +4,6 @@ export {CountriesPage} from "./CountriesPage/CountriesPage";
 export {AboutPage} from "./AboutPage/AboutPage";
 export {SoatoPage} from "./SoatoPage/SoatoPage";
 export {SooguPage} from "./SooguPage/SooguPage";
+export {KfsPage} from "./KfsPage/KfsPage";
+export {KopfPage} from "./KopfPage/KopfPage";
+export {CsdpPage} from "./CsdpPage/CsdpPage";

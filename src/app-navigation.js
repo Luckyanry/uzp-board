@@ -10,13 +10,14 @@ export const AppNavigation = () => {
       icon: "home",
     },
     {
+      text: formatMessage("profile"),
+      path: "/profile",
+      icon: "user",
+    },
+    {
       text: formatMessage("directory"),
-      icon: "folder",
+      icon: "mediumiconslayout",
       items: [
-        {
-          text: formatMessage("profile"),
-          path: "/profile",
-        },
         {
           text: formatMessage("countries"),
           path: "/countries",
@@ -28,6 +29,24 @@ export const AppNavigation = () => {
         {
           text: formatMessage("soogu"),
           path: "/soogu",
+        },
+        {
+          text: formatMessage("csdp"),
+          path: "/csdp",
+        },
+      ],
+    },
+    {
+      text: formatMessage("opf_title"),
+      icon: "product",
+      items: [
+        {
+          text: formatMessage("kfs"),
+          path: "/kfs",
+        },
+        {
+          text: formatMessage("kopf"),
+          path: "/kopf",
         },
       ],
     },

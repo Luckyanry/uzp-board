@@ -77,6 +77,10 @@ export default function SideNavigationMenu(props) {
           onItemClick={selectedItemChanged}
           onContentReady={onMenuReady}
           width={"100%"}
+          wordWrapEnabled={true}
+          rowAlternationEnabled={false}
+          // columnAutoWidth={true}
+          virtualModeEnabled={true}
         />
       </div>
     </div>

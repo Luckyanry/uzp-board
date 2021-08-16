@@ -11,14 +11,20 @@ export const FetchData = (pageRequest) => {
 
   const pageRequestParams = () => {
     switch (pageRequest) {
-      case "#/soogu":
+      case "/soogu":
         return "&sp=Soogu";
-      case "#/soato":
+      case "/soato":
         return "&sp=Soato";
-      case "#/countries":
+      case "/countries":
         return "&sp=Countries";
+      case "/kopf":
+        return "&sp=Kopf";
+      case "/kfs":
+        return "&sp=KFS";
+      case "/csdp":
+        return "&sp=Csdp";
       default:
-        return "#/home";
+        return "/home";
     }
   };
 
@@ -58,6 +64,10 @@ export const FetchData = (pageRequest) => {
         },
         "POST"
       ),
+    onBeforeSend: function (method, ajaxOptions) {
+      ajaxOptions.credentials = "include";
+      ajaxOptions.xhrFields = {withCredentials: true};
+    },
   });
 
   const lookData = new CustomStore({
@@ -65,7 +75,6 @@ export const FetchData = (pageRequest) => {
     load: () =>
       sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
         schema: "look",
-        // values: JSON.stringify(values),
       }),
   });
 
@@ -97,7 +106,7 @@ export const FetchData = (pageRequest) => {
         const response = await fetch(`${url}&${params}`, getOptions);
 
         if (response.ok) {
-          return response
+          return await response
             .json()
             .then((data) => responseData(data))
             .catch((err) => {
@@ -112,7 +121,7 @@ export const FetchData = (pageRequest) => {
     try {
       const response = await fetch(url, postOptions);
       if (response.ok) {
-        return response
+        return await response
           .text()
           .then((data) => responseData(data))
           .catch((err) => {
@@ -157,7 +166,7 @@ export const FetchData = (pageRequest) => {
   function responseData(data) {
     if (Array.isArray(data)) {
       const newData = statusBooleanToString(data);
-      // console.log("soatoLookData =>", newData);
+      // console.log("lookData =>", newData);
       return {
         data: newData,
         totalCount: newData.length,

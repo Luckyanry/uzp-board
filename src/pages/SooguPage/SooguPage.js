@@ -18,9 +18,9 @@ import {FetchData} from "../../api/pages-fetch";
 
 import "./SooguPage.scss";
 
-export const SooguPage = () => {
+export const SooguPage = ({location: {pathname}}) => {
   const {formatMessage} = useLocalization();
-  const sooguData = FetchData(window.location.hash).fetchData;
+  const sooguData = FetchData(pathname).fetchData;
 
   const defaultStatus = ["Active", "Deactivated"];
   const statusesLang = defaultStatus.map((statusLang) => {
@@ -80,7 +80,28 @@ export const SooguPage = () => {
           <RequiredRule />
         </Column>
 
-        <Column dataField="CodeSogu" caption={formatMessage("codeSogu")}>
+        <Column
+          dataField="name_uzcyr"
+          caption={formatMessage("name_uzcyr")}
+          visible={false}
+        />
+        <Column
+          dataField="name_uzlat"
+          caption={formatMessage("name_uzlat")}
+          visible={false}
+        />
+        <Column
+          dataField="name_karlat"
+          caption={formatMessage("name_karlat")}
+          visible={false}
+        />
+        <Column
+          dataField="name_eng"
+          caption={formatMessage("name_eng")}
+          visible={false}
+        />
+
+        <Column dataField="CodeSogu" caption={formatMessage("code_sogu")}>
           <RequiredRule />
           <PatternRule
             message={formatMessage("codeSogu_numeric_err_message")}
@@ -104,27 +125,6 @@ export const SooguPage = () => {
           <RequiredRule />
           <Lookup dataSource={statusesLang} />
         </Column>
-
-        <Column
-          dataField="name_uzcyr"
-          caption={formatMessage("name_uzcyr")}
-          visible={false}
-        />
-        <Column
-          dataField="name_uzlat"
-          caption={formatMessage("name_uzlat")}
-          visible={false}
-        />
-        <Column
-          dataField="name_karlat"
-          caption={formatMessage("name_karlat")}
-          visible={false}
-        />
-        <Column
-          dataField="name_eng"
-          caption={formatMessage("name_eng")}
-          visible={false}
-        />
 
         <Paging defaultPageSize={10} />
         <Pager

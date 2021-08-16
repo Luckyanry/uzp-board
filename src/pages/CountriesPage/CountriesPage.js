@@ -16,9 +16,9 @@ import {FetchData} from "../../api/pages-fetch";
 
 import "./CountriesPage.scss";
 
-export const CountriesPage = () => {
+export const CountriesPage = ({location: {pathname}}) => {
   const {formatMessage} = useLocalization();
-  const countriesData = FetchData(window.location.hash).fetchData;
+  const countriesData = FetchData(pathname).fetchData;
 
   const popupConfig = {
     title: formatMessage("new_row"),
@@ -51,6 +51,13 @@ export const CountriesPage = () => {
           allowAdding={true}
           allowDeleting={true}
           allowUpdating={true}
+        />
+
+        <Column
+          dataField="id"
+          caption={"ID"}
+          alignment="left"
+          disabled={true}
         />
 
         <Column dataField="short_name" caption={formatMessage("short_name")}>
@@ -94,20 +101,11 @@ export const CountriesPage = () => {
         </Column>
 
         <Column
-          dataField="short_name_eng"
-          caption={formatMessage("short_name_eng")}
+          dataField="short_name_rus"
+          caption={formatMessage("short_name_rus")}
         >
           <RequiredRule />
         </Column>
-
-        <Column
-          dataField="short_name_karlat"
-          caption={formatMessage("short_name_karlat")}
-        />
-        <Column
-          dataField="short_name_rus"
-          caption={formatMessage("short_name_rus")}
-        />
         <Column
           dataField="short_name_uzcyr"
           caption={formatMessage("short_name_uzcyr")}
@@ -116,6 +114,16 @@ export const CountriesPage = () => {
           dataField="short_name_uzlat"
           caption={formatMessage("short_name_uzlat")}
         />
+        <Column
+          dataField="short_name_karlat"
+          caption={formatMessage("short_name_karlat")}
+        />
+        <Column
+          dataField="short_name_eng"
+          caption={formatMessage("short_name_eng")}
+        >
+          <RequiredRule />
+        </Column>
 
         <Paging defaultPageSize={10} />
         <Pager

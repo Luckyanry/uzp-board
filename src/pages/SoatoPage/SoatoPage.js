@@ -11,154 +11,28 @@ import TreeList, {
   Scrolling,
   FilterRow,
   Lookup,
+  // Button as TreeListButton,
 } from "devextreme-react/tree-list";
 // import {Lookup, DropDownOptions} from "devextreme-react/lookup";
 import Button from "devextreme-react/button";
 
-// import {soatoData} from "../../api/soato-fetch";
 import {FetchData} from "../../api/pages-fetch";
-// import {soatoLookData} from "../../api/soato-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./SoatoPage.scss";
 
-// const employees = [
-//   {
-//     ID: 1,
-//     FirstName: "John",
-//     LastName: "Heart",
-//     Prefix: "Mr.",
-//     Position: "CEO",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/01.png",
-//     BirthDate: "1964/03/16",
-//     HireDate: "1995/01/15",
-//     Notes:
-//       "John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003.\r\n\r\nWhen not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.",
-//     Address: "351 S Hill St.",
-//   },
-//   {
-//     ID: 2,
-//     FirstName: "Olivia",
-//     LastName: "Peyton",
-//     Prefix: "Mrs.",
-//     Position: "Sales Assistant",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/09.png",
-//     BirthDate: "1981/06/03",
-//     HireDate: "2012/05/14",
-//     Notes:
-//       "Olivia loves to sell. She has been selling DevAV products since 2012. \r\n\r\nOlivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.",
-//     Address: "807 W Paseo Del Mar",
-//   },
-//   {
-//     ID: 3,
-//     FirstName: "Robert",
-//     LastName: "Reagan",
-//     Prefix: "Mr.",
-//     Position: "CMO",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/03.png",
-//     BirthDate: "1974/09/07",
-//     HireDate: "2002/11/08",
-//     Notes:
-//       "Robert was recently voted the CMO of the year by CMO Magazine. He is a proud member of the DevAV Management Team.\r\n\r\nRobert is a championship BBQ chef, so when you get the chance ask him for his secret recipe.",
-//     Address: "4 Westmoreland Pl.",
-//   },
-//   {
-//     ID: 4,
-//     FirstName: "Greta",
-//     LastName: "Sims",
-//     Prefix: "Ms.",
-//     Position: "HR Manager",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/04.png",
-//     BirthDate: "1977/11/22",
-//     HireDate: "1998/04/23",
-//     Notes:
-//       "Greta has been DevAV's HR Manager since 2003. She joined DevAV from Sonee Corp.\r\n\r\nGreta is currently training for the NYC marathon. Her best marathon time is 4 hours. Go Greta.",
-//     Address: "1700 S Grandview Dr.",
-//   },
-//   {
-//     ID: 5,
-//     FirstName: "Brett",
-//     LastName: "Wade",
-//     Prefix: "Mr.",
-//     Position: "IT Manager",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/05.png",
-//     BirthDate: "1968/12/01",
-//     HireDate: "2009/03/06",
-//     Notes:
-//       "Brett came to DevAv from Microsoft and has led our IT department since 2012.\r\n\r\nWhen he is not working hard for DevAV, he coaches Little League (he was a high school pitcher).",
-//     Address: "1120 Old Mill Rd.",
-//   },
-//   {
-//     ID: 6,
-//     FirstName: "Sandra",
-//     LastName: "Johnson",
-//     Prefix: "Mrs.",
-//     Position: "Controller",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png",
-//     BirthDate: "1974/11/15",
-//     HireDate: "2005/05/11",
-//     Notes:
-//       "Sandra is a CPA and has been our controller since 2008. She loves to interact with staff so if you've not met her, be certain to say hi.\r\n\r\nSandra has 2 daughters both of whom are accomplished gymnasts.",
-//     Address: "4600 N Virginia Rd.",
-//   },
-//   {
-//     ID: 7,
-//     FirstName: "Kevin",
-//     LastName: "Carter",
-//     Prefix: "Mr.",
-//     Position: "Shipping Manager",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/07.png",
-//     BirthDate: "1978/01/09",
-//     HireDate: "2009/08/11",
-//     Notes:
-//       "Kevin is our hard-working shipping manager and has been helping that department work like clockwork for 18 months.\r\n\r\nWhen not in the office, he is usually on the basketball court playing pick-up games.",
-//     Address: "424 N Main St.",
-//   },
-//   {
-//     ID: 8,
-//     FirstName: "Cynthia",
-//     LastName: "Stanwick",
-//     Prefix: "Ms.",
-//     Position: "HR Assistant",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/08.png",
-//     BirthDate: "1985/06/05",
-//     HireDate: "2008/03/24",
-//     Notes:
-//       "Cindy joined us in 2008 and has been in the HR department for 2 years. \r\n\r\nShe was recently awarded employee of the month. Way to go Cindy!",
-//     Address: "2211 Bonita Dr.",
-//   },
-//   {
-//     ID: 9,
-//     FirstName: "Kent",
-//     LastName: "Samuelson",
-//     Prefix: "Dr.",
-//     Position: "Ombudsman",
-//     Picture:
-//       "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/02.png",
-//     BirthDate: "1972/09/11",
-//     HireDate: "2009/04/22",
-//     Notes:
-//       "As our ombudsman, Kent is on the front-lines solving customer problems and helping our partners address issues out in the field.    He is a classically trained musician and is a member of the Chamber Orchestra.",
-//     Address: "12100 Mora Dr",
-//   },
-// ];
-
-export const SoatoPage = () => {
+export const SoatoPage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
-  const [lookupData, setLookupData] = useState(null);
+  const [lookDataState, setLookDataState] = useState(null);
+  // const [dataState, setDataState] = useState([]);
 
-  const {formatMessage} = useLocalization();
+  const {formatMessage, locale} = useLocalization();
 
-  const soatoFetchData = FetchData(window.location.hash).fetchData;
-  const soatoLookData = FetchData(window.location.hash).lookData;
+  locale();
+  // console.log("localization", locale(navigator.language));
+
+  const fetchData = FetchData(pathname).fetchData;
+  const lookData = FetchData(pathname).lookData;
 
   const defaultStatus = ["Active", "Deactivated"];
   const statusesLang = defaultStatus.map((statusLang) => {
@@ -181,18 +55,20 @@ export const SoatoPage = () => {
     }
   }
 
-  console.log(`soatoLookData => `, lookupData);
-  // console.log(`employees => `, employees);
-
   useEffect(() => {
-    soatoLookData
+    lookData
       ._loadFunc()
       .then((res) => res.data)
-      .then((arr) => setLookupData(arr));
+      .then((arr) => setLookDataState(arr));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(`lookDataState => `, lookDataState);
+  console.log(`fetchData => `, fetchData);
+  console.log(`lookData => `, lookData);
+
   return (
-    <div className="soato-page-wrapper">
+    <div className="page-wrapper">
       <h2 className={"content-block"}>{formatMessage("soato_title")}</h2>
 
       <Button
@@ -204,11 +80,11 @@ export const SoatoPage = () => {
       />
 
       <TreeList
-        dataSource={soatoFetchData}
+        dataSource={fetchData}
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
-        defaultExpandedRowKeys={[1, 2]}
+        // defaultExpandedRowKeys={[1, 2]}
         showRowLines={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
@@ -218,6 +94,7 @@ export const SoatoPage = () => {
         columnHidingEnabled={true}
         rowAlternationEnabled={false}
         hoverStateEnabled={true}
+        virtualModeEnabled={true}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />
@@ -232,6 +109,8 @@ export const SoatoPage = () => {
           allowDeleting={true}
         />
 
+        {/* <Column dataField="id" caption="ID" autoExpandAll={true} /> */}
+
         <Column
           dataField="territory_name_rus"
           caption={formatMessage("territory_name_rus")}
@@ -241,29 +120,8 @@ export const SoatoPage = () => {
         </Column>
 
         <Column
-          dataField="id"
-          caption={formatMessage("as_child_of")}
-          visible={false}
-        >
-          <Lookup
-            dataSource={soatoLookData}
-            valueExpr="id"
-            displayExpr="name"
-          />
-        </Column>
-
-        <Column dataField="code" caption={formatMessage("code")}>
-          <RequiredRule />
-        </Column>
-
-        <Column dataField="status" caption={formatMessage("status")}>
-          <Lookup dataSource={statusesLang} />
-          <RequiredRule />
-        </Column>
-
-        <Column
-          dataField="territory_name_eng"
-          caption={formatMessage("territory_name_eng")}
+          dataField="territory_name_uzcyr"
+          caption={formatMessage("territory_name_uzcyr")}
           visible={false}
         />
         <Column
@@ -272,28 +130,19 @@ export const SoatoPage = () => {
           visible={false}
         />
         <Column
-          dataField="territory_name_uzcyr"
-          caption={formatMessage("territory_name_uzcyr")}
-          visible={false}
-        />
-        <Column
           dataField="territory_name_karlat"
           caption={formatMessage("territory_name_karlat")}
           visible={false}
         />
         <Column
+          dataField="territory_name_eng"
+          caption={formatMessage("territory_name_eng")}
+          visible={false}
+        />
+
+        <Column
           dataField="admin_centre_rus"
           caption={formatMessage("admin_centre_rus")}
-          visible={false}
-        />
-        <Column
-          dataField="admin_centre_eng"
-          caption={formatMessage("admin_centre_eng")}
-          visible={false}
-        />
-        <Column
-          dataField="admin_centre_uzlat"
-          caption={formatMessage("admin_centre_uzlat")}
           visible={false}
         />
         <Column
@@ -302,10 +151,49 @@ export const SoatoPage = () => {
           visible={false}
         />
         <Column
+          dataField="admin_centre_uzlat"
+          caption={formatMessage("admin_centre_uzlat")}
+          visible={false}
+        />
+        <Column
           dataField="admin_centre_karlat"
           caption={formatMessage("admin_centre_karlat")}
           visible={false}
         />
+        <Column
+          dataField="admin_centre_eng"
+          caption={formatMessage("admin_centre_eng")}
+          visible={false}
+        />
+
+        <Column
+          dataField="pid"
+          caption={formatMessage("as_child_of")}
+          visible={false}
+          virtualModeEnabled={true}
+        >
+          <Lookup
+            dataSource={lookDataState}
+            valueExpr="pid"
+            displayExpr="name"
+            virtualModeEnabled={true}
+          />
+        </Column>
+
+        <Column dataField="code" caption={formatMessage("soato_code")}>
+          <RequiredRule />
+        </Column>
+
+        <Column dataField="status" caption={formatMessage("status")}>
+          <Lookup dataSource={statusesLang} />
+          <RequiredRule />
+        </Column>
+
+        {/* <Column type="buttons" width={110}>
+          <TreeListButton name="add" hint={formatMessage("add")} />
+          <TreeListButton name="edit" hint={formatMessage("edit")} />
+          <TreeListButton name="delete" hint={formatMessage("delete")} />
+        </Column> */}
 
         <Paging defaultPageSize={10} enabled={true} />
         <Pager
