@@ -85,6 +85,7 @@ export const KopfPage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         autoExpandAll={toggler}
         focusedRowEnabled={true}
+        showColumnLines={true}
         allowColumnResizing={true}
         columnHidingEnabled={true}
         rowAlternationEnabled={false}
@@ -131,7 +132,12 @@ export const KopfPage = ({location: {pathname}}) => {
           visible={false}
         />
 
-        <Column dataField="code" caption={formatMessage("kopf_code")}>
+        <Column
+          dataField="code"
+          caption={formatMessage("kopf_code")}
+          alignment="left"
+          width={120}
+        >
           <PatternRule
             message={formatMessage("code_err_message")}
             pattern={new RegExp("^[0-9]{3}$", "m")}
@@ -151,7 +157,12 @@ export const KopfPage = ({location: {pathname}}) => {
           />
         </Column>
 
-        <Column dataField="status" caption={formatMessage("status")}>
+        <Column
+          dataField="status"
+          caption={formatMessage("status")}
+          alignment="center"
+          width={120}
+        >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>

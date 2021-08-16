@@ -63,10 +63,6 @@ export const SoatoPage = ({location: {pathname}}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(`lookDataState => `, lookDataState);
-  console.log(`fetchData => `, fetchData);
-  console.log(`lookData => `, lookData);
-
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>{formatMessage("soato_title")}</h2>
@@ -84,13 +80,14 @@ export const SoatoPage = ({location: {pathname}}) => {
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
-        // defaultExpandedRowKeys={[1, 2]}
+        defaultExpandedRowKeys={[1, 2]}
         showRowLines={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
         autoExpandAll={toggler}
         focusedRowEnabled={true}
         allowColumnResizing={true}
+        showColumnLines={true}
         columnHidingEnabled={true}
         rowAlternationEnabled={false}
         hoverStateEnabled={true}
@@ -115,6 +112,7 @@ export const SoatoPage = ({location: {pathname}}) => {
           dataField="territory_name_rus"
           caption={formatMessage("territory_name_rus")}
           minWidth={250}
+          // width="resize"
         >
           <RequiredRule />
         </Column>
@@ -176,15 +174,24 @@ export const SoatoPage = ({location: {pathname}}) => {
             dataSource={lookDataState}
             valueExpr="id"
             displayExpr="name"
-            virtualModeEnabled={true}
           />
         </Column>
 
-        <Column dataField="code" caption={formatMessage("soato_code")}>
+        <Column
+          dataField="code"
+          caption={formatMessage("soato_code")}
+          alignment="left"
+          width={120}
+        >
           <RequiredRule />
         </Column>
 
-        <Column dataField="status" caption={formatMessage("status")}>
+        <Column
+          dataField="status"
+          caption={formatMessage("status")}
+          alignment="center"
+          width={120}
+        >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>

@@ -46,6 +46,7 @@ export const CountriesPage = ({location: {pathname}}) => {
         focusedRowEnabled={true}
         columnAutoWidth={true}
         columnHidingEnabled={true}
+        showColumnLines={true}
         allowColumnResizing={true}
         hoverStateEnabled={true}
       >
@@ -63,8 +64,9 @@ export const CountriesPage = ({location: {pathname}}) => {
         <Column
           dataField="id"
           caption={"ID"}
-          alignment="left"
+          alignment="center"
           disabled={true}
+          width={60}
         />
 
         <Column
@@ -103,7 +105,7 @@ export const CountriesPage = ({location: {pathname}}) => {
         <Column
           dataField="numeric"
           caption={formatMessage("numeric")}
-          alignment="left"
+          alignment="center"
           width={100}
           visible={false}
         >
@@ -116,7 +118,8 @@ export const CountriesPage = ({location: {pathname}}) => {
         <Column
           dataField="alpha2code"
           caption={formatMessage("alpha2code")}
-          width={100}
+          alignment="center"
+          width={80}
         >
           <RequiredRule />
           <PatternRule
@@ -128,7 +131,8 @@ export const CountriesPage = ({location: {pathname}}) => {
         <Column
           dataField="alpha3code"
           caption={formatMessage("alpha3code")}
-          width={100}
+          alignment="center"
+          width={80}
           visible={false}
         >
           <PatternRule
@@ -138,7 +142,12 @@ export const CountriesPage = ({location: {pathname}}) => {
           <RequiredRule />
         </Column>
 
-        <Column dataField="status" caption={formatMessage("status")}>
+        <Column
+          dataField="status"
+          caption={formatMessage("status")}
+          alignment="center"
+          width={120}
+        >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>

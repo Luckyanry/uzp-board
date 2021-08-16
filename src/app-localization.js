@@ -66,17 +66,17 @@ const dictionary = {
 
     soogu: "SOOGU",
     soogu_title: "(SOOGU)",
-    code_sogu: "Code Sogu",
-    codeSogu_numeric_err_message:
-      "The 'Code Sogu' field must contain from 4 to 5 digits!",
-    codeOKPO: "Code OKPO",
-    codeOKPO_numeric_err_message:
-      "The 'Code OKPO' field must contain a maximum of 8 digits!",
     name_rus: "Name (RU)",
     name_uzcyr: "Name (ЎЗ)",
     name_uzlat: "Name (O’Z)",
     name_karlat: "Name (UZ-Q)",
     name_eng: "Name (EN)",
+    code_sogu: "Code SOOGU",
+    codeSogu_numeric_err_message:
+      "The 'Code Sogu' field must contain from 4 to 5 digits!",
+    codeOKPO: "Code OKPO",
+    codeOKPO_numeric_err_message:
+      "The 'Code OKPO' field must contain a maximum of 8 digits!",
 
     kspd: "KSPD",
     kspd_title: "KSPD",
@@ -167,17 +167,17 @@ const dictionary = {
     soogu: "СООГУ",
     soogu_title:
       "Справочник 'Система обозначений органов государственного и хозяйственного управления' (СООГУ)",
+    name_rus: "Наименование (РУ)",
+    name_uzcyr: "Наименование (ЎЗ)",
+    name_uzlat: "Наименование (O’Z)",
+    name_karlat: "Наименование (UZ-Q)",
+    name_eng: "Наименование (EN)",
     code_sogu: "Код СООГУ",
     codeSogu_numeric_err_message:
       "Поле 'Код СООГУ' должно содержать от 4 до 5 цифр!",
     codeOKPO: "Код ОКПО",
     codeOKPO_numeric_err_message:
       "Поле 'Код ОКПО' должно содержать максимум 8 цифры!",
-    name_rus: "Наименование (РУ)",
-    name_uzcyr: "Наименование (ЎЗ)",
-    name_uzlat: "Наименование (O’Z)",
-    name_karlat: "Наименование (UZ-Q)",
-    name_eng: "Наименование (EN)",
     // name_rus:
     //   "Наименование органа государственного и хозяйственного управления",
     // name_uzcyr:

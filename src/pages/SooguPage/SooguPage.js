@@ -75,7 +75,7 @@ export const SooguPage = ({location: {pathname}}) => {
         <Column
           dataField="name_rus"
           caption={formatMessage("name_rus")}
-          width="resize"
+          // width="resize"
         >
           <RequiredRule />
         </Column>
@@ -101,7 +101,12 @@ export const SooguPage = ({location: {pathname}}) => {
           visible={false}
         />
 
-        <Column dataField="CodeSogu" caption={formatMessage("code_sogu")}>
+        <Column
+          dataField="CodeSogu"
+          caption={formatMessage("code_sogu")}
+          alignment="left"
+          width={120}
+        >
           <RequiredRule />
           <PatternRule
             message={formatMessage("codeSogu_numeric_err_message")}
@@ -113,6 +118,7 @@ export const SooguPage = ({location: {pathname}}) => {
           dataField="CodeOKPO"
           caption={formatMessage("codeOKPO")}
           alignment="left"
+          width={120}
         >
           <RequiredRule />
           <PatternRule
@@ -121,7 +127,12 @@ export const SooguPage = ({location: {pathname}}) => {
           />
         </Column>
 
-        <Column dataField="status" caption={formatMessage("status")}>
+        <Column
+          dataField="status"
+          caption={formatMessage("status")}
+          alignment="center"
+          width={120}
+        >
           <RequiredRule />
           <Lookup dataSource={statusesLang} />
         </Column>

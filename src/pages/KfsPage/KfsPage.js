@@ -85,6 +85,7 @@ export const KfsPage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         autoExpandAll={toggler}
         focusedRowEnabled={true}
+        showColumnLines={true}
         allowColumnResizing={true}
         columnHidingEnabled={true}
         rowAlternationEnabled={false}
@@ -105,33 +106,38 @@ export const KfsPage = ({location: {pathname}}) => {
 
         <Column
           dataField="name_rus"
-          caption={formatMessage("designation_rus")}
+          caption={formatMessage("name_rus")}
           minWidth={250}
         >
           <RequiredRule />
         </Column>
         <Column
           dataField="name_uzcyr"
-          caption={formatMessage("designation_uzcyr")}
+          caption={formatMessage("name_uzcyr")}
           visible={false}
         />
         <Column
           dataField="name_uzlat"
-          caption={formatMessage("designation_uzlat")}
+          caption={formatMessage("name_uzlat")}
           visible={false}
         />
         <Column
           dataField="name_karlat"
-          caption={formatMessage("designation_karlat")}
+          caption={formatMessage("name_karlat")}
           visible={false}
         />
         <Column
           dataField="name_eng"
-          caption={formatMessage("designation_eng")}
+          caption={formatMessage("name_eng")}
           visible={false}
         />
 
-        <Column dataField="KFSCode" caption={formatMessage("kfs_code")}>
+        <Column
+          dataField="KFSCode"
+          caption={formatMessage("kfs_code")}
+          alignment="left"
+          width={120}
+        >
           <PatternRule
             message={formatMessage("code_err_message")}
             pattern={new RegExp("^[0-9]{3}$", "m")}
@@ -146,12 +152,17 @@ export const KfsPage = ({location: {pathname}}) => {
         >
           <Lookup
             dataSource={lookDataState}
-            valueExpr="id"
             displayExpr="name"
+            valueExpr="id"
           />
         </Column>
 
-        <Column dataField="status" caption={formatMessage("status")}>
+        <Column
+          dataField="status"
+          caption={formatMessage("status")}
+          alignment="center"
+          width={120}
+        >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>
