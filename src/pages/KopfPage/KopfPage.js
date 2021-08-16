@@ -58,10 +58,6 @@ export const KopfPage = ({location: {pathname}}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(`lookDataState => `, lookDataState);
-  console.log(`fetchData => `, fetchData);
-  console.log(`lookData => `, lookData);
-
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>{formatMessage("kopf_title")}</h2>
@@ -79,7 +75,7 @@ export const KopfPage = ({location: {pathname}}) => {
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
-        defaultExpandedRowKeys={[1, 2]}
+        // defaultExpandedRowKeys={[1, 2]}
         showRowLines={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
