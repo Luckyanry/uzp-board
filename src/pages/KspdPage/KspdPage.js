@@ -6,7 +6,6 @@ import TreeList, {
   HeaderFilter,
   Editing,
   RequiredRule,
-  PatternRule,
   Paging,
   Pager,
   Scrolling,
@@ -133,10 +132,6 @@ export const KspdPage = ({location: {pathname}}) => {
         />
 
         <Column dataField="code" caption={formatMessage("kspd_code")}>
-          <PatternRule
-            message={formatMessage("code_err_message")}
-            pattern={new RegExp("^[0-9]{3}$", "m")}
-          />
           <RequiredRule />
         </Column>
 

@@ -10,6 +10,7 @@ import DataGrid, {
   RequiredRule,
   PatternRule,
   SearchPanel,
+  Lookup,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -19,6 +20,12 @@ import "./CountriesPage.scss";
 export const CountriesPage = ({location: {pathname}}) => {
   const {formatMessage} = useLocalization();
   const countriesData = FetchData(pathname).fetchData;
+
+  const defaultStatus = ["Active", "Deactivated"];
+  const statusesLang = defaultStatus.map((statusLang) => {
+    const statusLanguage = formatMessage(statusLang);
+    return statusLanguage;
+  });
 
   const popupConfig = {
     title: formatMessage("new_row"),
@@ -60,43 +67,11 @@ export const CountriesPage = ({location: {pathname}}) => {
           disabled={true}
         />
 
-        <Column dataField="short_name" caption={formatMessage("short_name")}>
-          <RequiredRule />
-        </Column>
-
         <Column
-          dataField="numeric"
-          caption={formatMessage("numeric")}
-          alignment="left"
-          width={100}
+          dataField="short_name"
+          caption={formatMessage("short_name")}
+          visible={false}
         >
-          <PatternRule
-            message={formatMessage("numeric_err_message")}
-            pattern={new RegExp("^[0-9]{0,4}$", "m")}
-          />
-        </Column>
-
-        <Column
-          dataField="alpha2code"
-          caption={formatMessage("alpha2code")}
-          width={100}
-        >
-          <RequiredRule />
-          <PatternRule
-            message={formatMessage("alpha2code_err_message")}
-            pattern={new RegExp("^[A-Z]{2}$")}
-          />
-        </Column>
-
-        <Column
-          dataField="alpha3code"
-          caption={formatMessage("alpha3code")}
-          width={100}
-        >
-          <PatternRule
-            message={formatMessage("alpha3code_err_message")}
-            pattern={new RegExp("^[A-Z]{3}$")}
-          />
           <RequiredRule />
         </Column>
 
@@ -122,6 +97,49 @@ export const CountriesPage = ({location: {pathname}}) => {
           dataField="short_name_eng"
           caption={formatMessage("short_name_eng")}
         >
+          <RequiredRule />
+        </Column>
+
+        <Column
+          dataField="numeric"
+          caption={formatMessage("numeric")}
+          alignment="left"
+          width={100}
+          visible={false}
+        >
+          <PatternRule
+            message={formatMessage("numeric_err_message")}
+            pattern={new RegExp("^[0-9]{0,4}$", "m")}
+          />
+        </Column>
+
+        <Column
+          dataField="alpha2code"
+          caption={formatMessage("alpha2code")}
+          width={100}
+        >
+          <RequiredRule />
+          <PatternRule
+            message={formatMessage("alpha2code_err_message")}
+            pattern={new RegExp("^[A-Z]{2}$")}
+          />
+        </Column>
+
+        <Column
+          dataField="alpha3code"
+          caption={formatMessage("alpha3code")}
+          width={100}
+          visible={false}
+        >
+          <PatternRule
+            message={formatMessage("alpha3code_err_message")}
+            pattern={new RegExp("^[A-Z]{3}$")}
+          />
+          <RequiredRule />
+        </Column>
+
+        <Column dataField="status" caption={formatMessage("status")}>
+          <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>
 
