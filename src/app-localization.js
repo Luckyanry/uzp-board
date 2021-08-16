@@ -78,8 +78,8 @@ const dictionary = {
     name_karlat: "Karakalpak latin name of the organization",
     name_eng: "Name of the organization",
 
-    csdp: "CSPD",
-    csdp_title: "CSPD",
+    kspd: "KSPD",
+    kspd_title: "KSPD",
     code_err_message: "The 'Code' field must contain 3 digits!",
 
     opf_title: "Org. and legal forms",
@@ -187,8 +187,8 @@ const dictionary = {
     name_eng:
       "Наименование органа государственного и хозяйственного управления (английское название)",
 
-    csdp: "КСДП",
-    csdp_title: "Классификатор состояния деятельности предприятия (КСДП)",
+    kspd: "КСДП",
+    kspd_title: "Классификатор состояния деятельности предприятия (КСДП)",
 
     opf_title: "Орг.-правовые формы",
 

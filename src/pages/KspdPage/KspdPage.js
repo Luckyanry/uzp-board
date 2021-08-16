@@ -19,9 +19,9 @@ import Button from "devextreme-react/button";
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
-import "./CsdpPage.scss";
+import "./KspdPage.scss";
 
-export const CsdpPage = ({location: {pathname}}) => {
+export const KspdPage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [lookDataState, setLookDataState] = useState(null);
 
@@ -65,7 +65,7 @@ export const CsdpPage = ({location: {pathname}}) => {
 
   return (
     <div className="page-wrapper">
-      <h2 className={"content-block"}>{formatMessage("csdp_title")}</h2>
+      <h2 className={"content-block"}>{formatMessage("kspd_title")}</h2>
 
       <Button
         className="btn"
@@ -132,7 +132,7 @@ export const CsdpPage = ({location: {pathname}}) => {
           visible={false}
         />
 
-        <Column dataField="CSDPCode" caption={formatMessage("csdp_code")}>
+        <Column dataField="KSPDCode" caption={formatMessage("kspd_code")}>
           <PatternRule
             message={formatMessage("code_err_message")}
             pattern={new RegExp("^[0-9]{3}$", "m")}
@@ -147,7 +147,7 @@ export const CsdpPage = ({location: {pathname}}) => {
         >
           <Lookup
             dataSource={lookDataState}
-            valueExpr="pid"
+            valueExpr="id"
             displayExpr="name"
           />
         </Column>

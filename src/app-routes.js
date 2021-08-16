@@ -8,7 +8,7 @@ import {
   SooguPage,
   KfsPage,
   KopfPage,
-  CsdpPage,
+  KspdPage,
 } from "./pages";
 
 const routes = [
@@ -41,8 +41,8 @@ const routes = [
     component: KopfPage,
   },
   {
-    path: "/csdp",
-    component: CsdpPage,
+    path: "/kspd",
+    component: KspdPage,
   },
   {
     path: "/about",

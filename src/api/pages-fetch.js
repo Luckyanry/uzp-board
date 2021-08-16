@@ -21,8 +21,8 @@ export const FetchData = (pageRequest) => {
         return "&sp=Kopf";
       case "/kfs":
         return "&sp=KFS";
-      case "/csdp":
-        return "&sp=Csdp";
+      case "/kspd":
+        return "&sp=Kspd";
       default:
         return "/home";
     }

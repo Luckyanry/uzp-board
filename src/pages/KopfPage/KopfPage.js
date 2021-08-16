@@ -146,7 +146,7 @@ export const KopfPage = ({location: {pathname}}) => {
         >
           <Lookup
             dataSource={lookDataState}
-            valueExpr="pid"
+            valueExpr="id"
             displayExpr="name"
           />
         </Column>

@@ -6,4 +6,4 @@ export {SoatoPage} from "./SoatoPage/SoatoPage";
 export {SooguPage} from "./SooguPage/SooguPage";
 export {KfsPage} from "./KfsPage/KfsPage";
 export {KopfPage} from "./KopfPage/KopfPage";
-export {CsdpPage} from "./CsdpPage/CsdpPage";
+export {KspdPage} from "./KspdPage/KspdPage";

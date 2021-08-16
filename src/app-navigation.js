@@ -31,8 +31,8 @@ export const AppNavigation = () => {
           path: "/soogu",
         },
         {
-          text: formatMessage("csdp"),
-          path: "/csdp",
+          text: formatMessage("kspd"),
+          path: "/kspd",
         },
       ],
     },
