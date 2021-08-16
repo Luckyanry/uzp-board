@@ -12,7 +12,7 @@ import TreeList, {
   Scrolling,
   FilterRow,
   Lookup,
-  // Button as TreeListButton,
+  Button as TreeListButton,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
@@ -26,6 +26,7 @@ export const KspdPage = ({location: {pathname}}) => {
   const [lookDataState, setLookDataState] = useState(null);
 
   const {formatMessage} = useLocalization();
+  const pageShortName = formatMessage("kspd");
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -37,7 +38,7 @@ export const KspdPage = ({location: {pathname}}) => {
   });
 
   const popupOpt = {
-    title: formatMessage("new_row"),
+    title: formatMessage("create_new_item", pageShortName),
     showTitle: true,
     width: 950,
     height: 780,
@@ -61,7 +62,9 @@ export const KspdPage = ({location: {pathname}}) => {
 
   return (
     <div className="page-wrapper">
-      <h2 className={"content-block"}>{formatMessage("kspd_title")}</h2>
+      <h2 className={"content-block"}>
+        {formatMessage("kspd_title", pageShortName)}
+      </h2>
 
       <Button
         className="btn"
@@ -102,6 +105,15 @@ export const KspdPage = ({location: {pathname}}) => {
         />
 
         <Column
+          dataField="id"
+          caption="ID"
+          alignment="center"
+          visible={false}
+          allowEditing={false}
+          width={80}
+        />
+
+        <Column
           dataField="name_rus"
           caption={formatMessage("name_rus")}
           minWidth={250}
@@ -131,13 +143,13 @@ export const KspdPage = ({location: {pathname}}) => {
 
         <Column
           dataField="code"
-          caption={formatMessage("kspd_code")}
+          caption={formatMessage("kspd_code", pageShortName)}
           alignment="left"
           width={120}
         >
           <PatternRule
-            message={formatMessage("code_err_numeric_message")}
-            pattern={new RegExp("^[0-9]$", "m")}
+            message={formatMessage("code_err_numeric_message", pageShortName)}
+            pattern={new RegExp("^[0-9]*$", "m")}
           />
           <RequiredRule />
         </Column>
@@ -162,6 +174,21 @@ export const KspdPage = ({location: {pathname}}) => {
         >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
+        </Column>
+
+        <Column type="buttons" width={110}>
+          <TreeListButton
+            name="add"
+            hint={formatMessage("add_new_item", pageShortName)}
+          />
+          <TreeListButton
+            name="edit"
+            hint={formatMessage("edit_new_item", pageShortName)}
+          />
+          <TreeListButton
+            name="delete"
+            hint={formatMessage("delete_new_item", pageShortName)}
+          />
         </Column>
 
         <Paging defaultPageSize={10} enabled={true} />

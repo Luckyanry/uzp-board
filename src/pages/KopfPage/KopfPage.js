@@ -12,6 +12,7 @@ import TreeList, {
   Scrolling,
   FilterRow,
   Lookup,
+  Button as TreeListButton,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
@@ -25,6 +26,7 @@ export const KopfPage = ({location: {pathname}}) => {
   const [lookDataState, setLookDataState] = useState(null);
 
   const {formatMessage} = useLocalization();
+  const pageShortName = formatMessage("kopf");
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -36,7 +38,7 @@ export const KopfPage = ({location: {pathname}}) => {
   });
 
   const popupOpt = {
-    title: formatMessage("new_row"),
+    title: formatMessage("create_new_item", pageShortName),
     showTitle: true,
     width: 950,
     height: 780,
@@ -101,6 +103,15 @@ export const KopfPage = ({location: {pathname}}) => {
         />
 
         <Column
+          dataField="id"
+          caption="ID"
+          alignment="center"
+          visible={false}
+          allowEditing={false}
+          width={80}
+        />
+
+        <Column
           dataField="name_rus"
           caption={formatMessage("name_rus")}
           minWidth={250}
@@ -130,12 +141,12 @@ export const KopfPage = ({location: {pathname}}) => {
 
         <Column
           dataField="code"
-          caption={formatMessage("kopf_code")}
+          caption={formatMessage("kopf_code", pageShortName)}
           alignment="left"
           width={120}
         >
           <PatternRule
-            message={formatMessage("code_err_message")}
+            message={formatMessage("code_err_message", pageShortName)}
             pattern={new RegExp("^[0-9]{3}$", "m")}
           />
           <RequiredRule />
@@ -161,6 +172,21 @@ export const KopfPage = ({location: {pathname}}) => {
         >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
+        </Column>
+
+        <Column type="buttons" width={110}>
+          <TreeListButton
+            name="add"
+            hint={formatMessage("add_new_item", pageShortName)}
+          />
+          <TreeListButton
+            name="edit"
+            hint={formatMessage("edit_new_item", pageShortName)}
+          />
+          <TreeListButton
+            name="delete"
+            hint={formatMessage("delete_new_item", pageShortName)}
+          />
         </Column>
 
         <Paging defaultPageSize={10} enabled={true} />

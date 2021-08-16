@@ -6,14 +6,14 @@ import TreeList, {
   HeaderFilter,
   Editing,
   RequiredRule,
+  PatternRule,
   Paging,
   Pager,
   Scrolling,
   FilterRow,
   Lookup,
-  // Button as TreeListButton,
+  Button as TreeListButton,
 } from "devextreme-react/tree-list";
-// import {Lookup, DropDownOptions} from "devextreme-react/lookup";
 import Button from "devextreme-react/button";
 
 import {FetchData} from "../../api/pages-fetch";
@@ -24,12 +24,9 @@ import "./SoatoPage.scss";
 export const SoatoPage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [lookDataState, setLookDataState] = useState(null);
-  // const [dataState, setDataState] = useState([]);
 
-  const {formatMessage, locale} = useLocalization();
-
-  locale();
-  // console.log("localization", locale(navigator.language));
+  const {formatMessage} = useLocalization();
+  const pageShortName = formatMessage("soato");
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -41,7 +38,7 @@ export const SoatoPage = ({location: {pathname}}) => {
   });
 
   const popupOpt = {
-    title: formatMessage("new_row"),
+    title: formatMessage("create_new_item", pageShortName),
     showTitle: true,
     width: 950,
     height: 780,
@@ -65,7 +62,9 @@ export const SoatoPage = ({location: {pathname}}) => {
 
   return (
     <div className="page-wrapper">
-      <h2 className={"content-block"}>{formatMessage("soato_title")}</h2>
+      <h2 className={"content-block"}>
+        {formatMessage("soato_title", pageShortName)}
+      </h2>
 
       <Button
         className="btn"
@@ -106,7 +105,14 @@ export const SoatoPage = ({location: {pathname}}) => {
           allowDeleting={true}
         />
 
-        {/* <Column dataField="id" caption="ID" autoExpandAll={true} /> */}
+        <Column
+          dataField="id"
+          caption="ID"
+          alignment="center"
+          visible={false}
+          allowEditing={false}
+          width={80}
+        />
 
         <Column
           dataField="territory_name_rus"
@@ -179,10 +185,14 @@ export const SoatoPage = ({location: {pathname}}) => {
 
         <Column
           dataField="code"
-          caption={formatMessage("soato_code")}
+          caption={formatMessage("soato_code", pageShortName)}
           alignment="left"
           width={120}
         >
+          <PatternRule
+            message={formatMessage("code_err_numeric_message", pageShortName)}
+            pattern={new RegExp("^[0-9]*$", "m")}
+          />
           <RequiredRule />
         </Column>
 
@@ -196,11 +206,20 @@ export const SoatoPage = ({location: {pathname}}) => {
           <RequiredRule />
         </Column>
 
-        {/* <Column type="buttons" width={110}>
-          <TreeListButton name="add" hint={formatMessage("add")} />
-          <TreeListButton name="edit" hint={formatMessage("edit")} />
-          <TreeListButton name="delete" hint={formatMessage("delete")} />
-        </Column> */}
+        <Column type="buttons" width={110}>
+          <TreeListButton
+            name="add"
+            hint={formatMessage("add_new_item", pageShortName)}
+          />
+          <TreeListButton
+            name="edit"
+            hint={formatMessage("edit_new_item", pageShortName)}
+          />
+          <TreeListButton
+            name="delete"
+            hint={formatMessage("delete_new_item", pageShortName)}
+          />
+        </Column>
 
         <Paging defaultPageSize={10} enabled={true} />
         <Pager

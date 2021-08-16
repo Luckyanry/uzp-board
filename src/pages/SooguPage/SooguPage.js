@@ -12,6 +12,8 @@ import DataGrid, {
   PatternRule,
   SearchPanel,
   Lookup,
+  Button,
+  FormItem,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -19,8 +21,11 @@ import {FetchData} from "../../api/pages-fetch";
 import "./SooguPage.scss";
 
 export const SooguPage = ({location: {pathname}}) => {
-  const {formatMessage} = useLocalization();
   const sooguData = FetchData(pathname).fetchData;
+
+  const {formatMessage} = useLocalization();
+  const pageShortName = formatMessage("soogu");
+  const titleOKPO = formatMessage("sogogu_okpo_title");
 
   const defaultStatus = ["Active", "Deactivated"];
   const statusesLang = defaultStatus.map((statusLang) => {
@@ -36,7 +41,7 @@ export const SooguPage = ({location: {pathname}}) => {
   // }
 
   const popupOptions = {
-    title: formatMessage("new_row"),
+    title: formatMessage("create_new_item", pageShortName),
     showTitle: true,
     width: 1000,
     height: 600,
@@ -44,7 +49,9 @@ export const SooguPage = ({location: {pathname}}) => {
 
   return (
     <>
-      <h2 className={"content-block"}>{formatMessage("soogu_title")}</h2>
+      <h2 className={"content-block"}>
+        {formatMessage("soogu_title", pageShortName)}
+      </h2>
 
       <DataGrid
         dataSource={sooguData}
@@ -71,6 +78,16 @@ export const SooguPage = ({location: {pathname}}) => {
           allowDeleting={true}
           allowUpdating={true}
         />
+
+        <Column
+          dataField="id"
+          caption="ID"
+          alignment="center"
+          disabled={true}
+          width={80}
+        >
+          <FormItem visible={false} />
+        </Column>
 
         <Column
           dataField="name_rus"
@@ -103,26 +120,29 @@ export const SooguPage = ({location: {pathname}}) => {
 
         <Column
           dataField="CodeSogu"
-          caption={formatMessage("code_sogu")}
+          caption={formatMessage("code_sogu", pageShortName)}
           alignment="left"
           width={120}
         >
           <RequiredRule />
           <PatternRule
-            message={formatMessage("codeSogu_numeric_err_message")}
+            message={formatMessage(
+              "codeSogu_numeric_err_message",
+              pageShortName
+            )}
             pattern={new RegExp("^[0-9]{4,5}$", "m")}
           />
         </Column>
 
         <Column
           dataField="CodeOKPO"
-          caption={formatMessage("codeOKPO")}
+          caption={formatMessage("codeOKPO", titleOKPO)}
           alignment="left"
           width={120}
         >
           <RequiredRule />
           <PatternRule
-            message={formatMessage("codeOKPO_numeric_err_message")}
+            message={formatMessage("codeOKPO_numeric_err_message", titleOKPO)}
             pattern={new RegExp("^[0-9]{0,8}$", "m")}
           />
         </Column>
@@ -135,6 +155,17 @@ export const SooguPage = ({location: {pathname}}) => {
         >
           <RequiredRule />
           <Lookup dataSource={statusesLang} />
+        </Column>
+
+        <Column type="buttons" width={110}>
+          <Button
+            name="edit"
+            hint={formatMessage("edit_new_item", pageShortName)}
+          />
+          <Button
+            name="delete"
+            hint={formatMessage("delete_new_item", pageShortName)}
+          />
         </Column>
 
         <Paging defaultPageSize={10} />

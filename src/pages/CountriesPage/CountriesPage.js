@@ -11,6 +11,8 @@ import DataGrid, {
   PatternRule,
   SearchPanel,
   Lookup,
+  Button,
+  FormItem,
 } from "devextreme-react/data-grid";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -18,8 +20,10 @@ import {FetchData} from "../../api/pages-fetch";
 import "./CountriesPage.scss";
 
 export const CountriesPage = ({location: {pathname}}) => {
-  const {formatMessage} = useLocalization();
   const countriesData = FetchData(pathname).fetchData;
+
+  const {formatMessage} = useLocalization();
+  const pageShortName = formatMessage("countries");
 
   const defaultStatus = ["Active", "Deactivated"];
   const statusesLang = defaultStatus.map((statusLang) => {
@@ -28,7 +32,7 @@ export const CountriesPage = ({location: {pathname}}) => {
   });
 
   const popupConfig = {
-    title: formatMessage("new_row"),
+    title: formatMessage("create_new_item", pageShortName),
     showTitle: true,
     width: 900,
     height: 700,
@@ -36,7 +40,7 @@ export const CountriesPage = ({location: {pathname}}) => {
 
   return (
     <>
-      <h2 className={"content-block"}>{formatMessage("countries")}</h2>
+      <h2 className={"content-block"}>{formatMessage("countries_title")}</h2>
 
       <DataGrid
         dataSource={countriesData}
@@ -63,11 +67,13 @@ export const CountriesPage = ({location: {pathname}}) => {
 
         <Column
           dataField="id"
-          caption={"ID"}
+          caption="ID"
           alignment="center"
           disabled={true}
           width={60}
-        />
+        >
+          <FormItem visible={false} />
+        </Column>
 
         <Column
           dataField="short_name"
@@ -103,19 +109,6 @@ export const CountriesPage = ({location: {pathname}}) => {
         </Column>
 
         <Column
-          dataField="numeric"
-          caption={formatMessage("numeric")}
-          alignment="center"
-          width={100}
-          visible={false}
-        >
-          <PatternRule
-            message={formatMessage("numeric_err_message")}
-            pattern={new RegExp("^[0-9]{0,4}$", "m")}
-          />
-        </Column>
-
-        <Column
           dataField="alpha2code"
           caption={formatMessage("alpha2code")}
           alignment="center"
@@ -133,13 +126,26 @@ export const CountriesPage = ({location: {pathname}}) => {
           caption={formatMessage("alpha3code")}
           alignment="center"
           width={80}
-          visible={false}
+          visible={true}
         >
           <PatternRule
             message={formatMessage("alpha3code_err_message")}
             pattern={new RegExp("^[A-Z]{3}$")}
           />
           <RequiredRule />
+        </Column>
+
+        <Column
+          dataField="numeric"
+          caption={formatMessage("numeric")}
+          alignment="center"
+          width={100}
+          visible={true}
+        >
+          <PatternRule
+            message={formatMessage("numeric_err_message")}
+            pattern={new RegExp("^[0-9]{0,4}$", "m")}
+          />
         </Column>
 
         <Column
@@ -150,6 +156,17 @@ export const CountriesPage = ({location: {pathname}}) => {
         >
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
+        </Column>
+
+        <Column type="buttons" width={110}>
+          <Button
+            name="edit"
+            hint={formatMessage("edit_new_item", pageShortName)}
+          />
+          <Button
+            name="delete"
+            hint={formatMessage("delete_new_item", pageShortName)}
+          />
         </Column>
 
         <Paging defaultPageSize={10} />
