@@ -6,6 +6,7 @@ import TreeList, {
   HeaderFilter,
   Editing,
   RequiredRule,
+  PatternRule,
   Paging,
   Pager,
   Scrolling,
@@ -134,6 +135,10 @@ export const KspdPage = ({location: {pathname}}) => {
           alignment="left"
           width={120}
         >
+          <PatternRule
+            message={formatMessage("code_err_numeric_message")}
+            pattern={new RegExp("^[0-9]$", "m")}
+          />
           <RequiredRule />
         </Column>
 
