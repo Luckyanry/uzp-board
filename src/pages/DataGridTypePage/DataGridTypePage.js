@@ -18,9 +18,9 @@ import DataGrid, {
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 
-import "./SooguPage.scss";
+import "./DataGridTypePage.scss";
 
-export const SooguPage = ({location: {pathname}}) => {
+export const DataGridTypePage = ({location: {pathname}}) => {
   const sooguData = FetchData(pathname).fetchData;
 
   const {formatMessage} = useLocalization();
@@ -41,8 +41,9 @@ export const SooguPage = ({location: {pathname}}) => {
   };
 
   function initNewRow(e) {
-    console.log(`e`, e);
     e.data.status = statusesLang[0];
+    // e.data.created_date = new Date();
+    // e.data.changed_date = new Date();
   }
 
   return (
@@ -62,8 +63,8 @@ export const SooguPage = ({location: {pathname}}) => {
         allowColumnResizing={true}
         showColumnLines={true}
         hoverStateEnabled={true}
-        wordWrapEnabled={true}
         onInitNewRow={initNewRow}
+        wordWrapEnabled={true}
       >
         <SearchPanel visible={true} />
         <FilterRow visible={true} />

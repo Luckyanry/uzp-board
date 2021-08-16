@@ -3,13 +3,17 @@ import {
   HomePage,
   CountriesPage,
   ProfilePage,
-  AboutPage,
   SoatoPage,
   SooguPage,
   KfsPage,
   KopfPage,
   KspdPage,
+  // DataGridTypePage,
+  // TreeListTypePage,
 } from "./pages";
+
+// const dataGridPagesPath = ["countries", "soogu"];
+// const treeListPagesPath = ["soato", "kspd", "kfs", "kopf"];
 
 const routes = [
   {
@@ -44,13 +48,21 @@ const routes = [
     path: "/kspd",
     component: KspdPage,
   },
-  {
-    path: "/about",
-    component: AboutPage,
-  },
+  // ...pathCreator(dataGridPagesPath, DataGridTypePage),
+  // ...pathCreator(treeListPagesPath, TreeListTypePage),
 ];
 
+// function pathCreator(pathTitle, component) {
+//   return pathTitle.map((item) => {
+//     return {
+//       path: `/${item}`,
+//       component,
+//     };
+//   });
+// }
+
 export default routes.map((route) => {
+  console.log(`route`, route);
   return {
     ...route,
     component: withNavigationWatcher(route.component),

@@ -97,9 +97,6 @@ const dictionary = {
     kopf_title: "Directory 'Organizational and Legal Forms'",
     kopf_code: "Code {0}",
 
-    about: "About",
-    about_page_desc: "About us information...",
-
     status: "Status",
     Active: "Active",
     Deactivated: "Deactivated",
@@ -195,9 +192,6 @@ const dictionary = {
     kopf: "КОПФ",
     kopf_title: "Справочник 'Организационно-правовые формы'",
     kopf_code: "Код {0}",
-
-    about: "Информация",
-    about_page_desc: "Информация о нас...",
 
     status: "Статус",
     Active: "Активен",

@@ -19,14 +19,14 @@ import Button from "devextreme-react/button";
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
-import "./SoatoPage.scss";
+import "./TreeListTypePage.scss";
 
-export const SoatoPage = ({location: {pathname}}) => {
+export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [lookDataState, setLookDataState] = useState(null);
 
   const {formatMessage} = useLocalization();
-  const pageShortName = formatMessage("soato");
+  const pageShortName = formatMessage("kopf");
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -45,9 +45,9 @@ export const SoatoPage = ({location: {pathname}}) => {
   };
 
   function initNewRow(e) {
-    console.log(`e`, e);
     e.data.status = statusesLang[0];
-    // e.data.pid = lookDataState;
+    // e.data.created_date = new Date();
+    // e.data.changed_date = new Date();
   }
 
   function clickHandler() {
@@ -68,10 +68,8 @@ export const SoatoPage = ({location: {pathname}}) => {
 
   return (
     <div className="page-wrapper">
-      <h2 className={"content-block"}>
-        {formatMessage("soato_title", pageShortName)}
-      </h2>
-
+      <h2 className={"content-block"}>{formatMessage("kopf_title")}</h2>
+      {console.log("return =>")}
       <Button
         className="btn"
         icon="hierarchy"
@@ -85,18 +83,17 @@ export const SoatoPage = ({location: {pathname}}) => {
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
-        defaultExpandedRowKeys={[1, 2]}
+        // defaultExpandedRowKeys={[1, 2]}
         showRowLines={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
         autoExpandAll={toggler}
         focusedRowEnabled={true}
-        allowColumnResizing={true}
         showColumnLines={true}
+        allowColumnResizing={true}
         columnHidingEnabled={true}
         rowAlternationEnabled={false}
         hoverStateEnabled={true}
-        virtualModeEnabled={true}
         onInitNewRow={initNewRow}
       >
         <Scrolling mode="standard" />
@@ -122,85 +119,56 @@ export const SoatoPage = ({location: {pathname}}) => {
         />
 
         <Column
-          dataField="territory_name_rus"
-          caption={formatMessage("territory_name_rus")}
+          dataField="name_rus"
+          caption={formatMessage("name_rus")}
           minWidth={250}
-          // width="resize"
         >
           <RequiredRule />
         </Column>
+        <Column
+          dataField="name_uzcyr"
+          caption={formatMessage("name_uzcyr")}
+          visible={false}
+        />
+        <Column
+          dataField="name_uzlat"
+          caption={formatMessage("name_uzlat")}
+          visible={false}
+        />
+        <Column
+          dataField="name_karlat"
+          caption={formatMessage("name_karlat")}
+          visible={false}
+        />
+        <Column
+          dataField="name_eng"
+          caption={formatMessage("name_eng")}
+          visible={false}
+        />
 
         <Column
-          dataField="territory_name_uzcyr"
-          caption={formatMessage("territory_name_uzcyr")}
-          visible={false}
-        />
-        <Column
-          dataField="territory_name_uzlat"
-          caption={formatMessage("territory_name_uzlat")}
-          visible={false}
-        />
-        <Column
-          dataField="territory_name_karlat"
-          caption={formatMessage("territory_name_karlat")}
-          visible={false}
-        />
-        <Column
-          dataField="territory_name_eng"
-          caption={formatMessage("territory_name_eng")}
-          visible={false}
-        />
-
-        <Column
-          dataField="admin_centre_rus"
-          caption={formatMessage("admin_centre_rus")}
-          visible={false}
-        />
-        <Column
-          dataField="admin_centre_uzcyr"
-          caption={formatMessage("admin_centre_uzcyr")}
-          visible={false}
-        />
-        <Column
-          dataField="admin_centre_uzlat"
-          caption={formatMessage("admin_centre_uzlat")}
-          visible={false}
-        />
-        <Column
-          dataField="admin_centre_karlat"
-          caption={formatMessage("admin_centre_karlat")}
-          visible={false}
-        />
-        <Column
-          dataField="admin_centre_eng"
-          caption={formatMessage("admin_centre_eng")}
-          visible={false}
-        />
+          dataField="code"
+          caption={formatMessage("kopf_code", pageShortName)}
+          alignment="left"
+          width={120}
+        >
+          <PatternRule
+            message={formatMessage("code_err_message", pageShortName)}
+            pattern={new RegExp("^[0-9]{3}$", "m")}
+          />
+          <RequiredRule />
+        </Column>
 
         <Column
           dataField="pid"
           caption={formatMessage("as_child_of")}
           visible={false}
-          virtualModeEnabled={true}
         >
           <Lookup
             dataSource={lookDataState}
             valueExpr="id"
             displayExpr="name"
           />
-        </Column>
-
-        <Column
-          dataField="code"
-          caption={formatMessage("soato_code", pageShortName)}
-          alignment="left"
-          width={120}
-        >
-          <PatternRule
-            message={formatMessage("code_err_numeric_message", pageShortName)}
-            pattern={new RegExp("^[0-9]*$", "m")}
-          />
-          <RequiredRule />
         </Column>
 
         <Column

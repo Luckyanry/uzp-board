@@ -3,6 +3,18 @@ import {useLocalization} from "./contexts/LocalizationContext";
 export const AppNavigation = () => {
   const {formatMessage} = useLocalization();
 
+  const firstFolder = ["countries", "soato", "soogu", "kspd"];
+  const secondFolder = ["kfs", "kopf"];
+
+  function pathCreator(pathTitle) {
+    return pathTitle.map((item) => {
+      return {
+        text: formatMessage(item),
+        path: `/${item}`,
+      };
+    });
+  }
+
   return [
     {
       text: formatMessage("home"),
@@ -17,43 +29,12 @@ export const AppNavigation = () => {
     {
       text: formatMessage("directory"),
       icon: "mediumiconslayout",
-      items: [
-        {
-          text: formatMessage("countries"),
-          path: "/countries",
-        },
-        {
-          text: formatMessage("soato"),
-          path: "/soato",
-        },
-        {
-          text: formatMessage("soogu"),
-          path: "/soogu",
-        },
-        {
-          text: formatMessage("kspd"),
-          path: "/kspd",
-        },
-      ],
+      items: pathCreator(firstFolder),
     },
     {
       text: formatMessage("opf_title"),
       icon: "product",
-      items: [
-        {
-          text: formatMessage("kfs"),
-          path: "/kfs",
-        },
-        {
-          text: formatMessage("kopf"),
-          path: "/kopf",
-        },
-      ],
-    },
-    {
-      text: formatMessage("about"),
-      path: "/about",
-      icon: "info",
+      items: pathCreator(secondFolder),
     },
   ];
 };
