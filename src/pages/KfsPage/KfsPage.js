@@ -131,7 +131,7 @@ export const KfsPage = ({location: {pathname}}) => {
           visible={false}
         />
 
-        <Column dataField="KFSCode" caption={formatMessage("ksf_code")}>
+        <Column dataField="KFSCode" caption={formatMessage("kfs_code")}>
           <PatternRule
             message={formatMessage("code_err_message")}
             pattern={new RegExp("^[0-9]{3}$", "m")}

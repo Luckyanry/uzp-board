@@ -80,6 +80,7 @@ const dictionary = {
 
     kspd: "KSPD",
     kspd_title: "KSPD",
+    kspd_code: "Code KSPD",
     code_err_message: "The 'Code' field must contain 3 digits!",
 
     opf_title: "Org. and legal forms",
@@ -189,6 +190,8 @@ const dictionary = {
 
     kspd: "КСДП",
     kspd_title: "Классификатор состояния деятельности предприятия (КСДП)",
+    kspd_code: "Код КСДП",
+    code_err_message: "Поле 'Код' должно содержать 3 цифры!",
 
     opf_title: "Орг.-правовые формы",
 

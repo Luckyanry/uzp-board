@@ -132,7 +132,7 @@ export const KspdPage = ({location: {pathname}}) => {
           visible={false}
         />
 
-        <Column dataField="KSPDCode" caption={formatMessage("kspd_code")}>
+        <Column dataField="code" caption={formatMessage("kspd_code")}>
           <PatternRule
             message={formatMessage("code_err_message")}
             pattern={new RegExp("^[0-9]{3}$", "m")}
