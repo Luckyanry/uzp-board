@@ -56,10 +56,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    lookData
-      ._loadFunc()
-      .then((res) => res.data)
-      .then((arr) => setLookDataState(arr));
+    pathnameToName === "shortDics" &&
+      lookData
+        ._loadFunc()
+        .then((res) => res.data)
+        .then((arr) => setLookDataState(arr));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -156,7 +157,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           caption: "alpha3code",
           width: 80,
           message: "alpha2code_err_message",
-          pattern: "^[A-Z]{2}$$",
+          pattern: "^[A-Z]{2}$",
           required: true,
         },
         {
@@ -202,6 +203,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
+  // function onEditorPreparing(e) {
+  //   console.log(`e =>`, e);
+  //   // if (e.parentType === "dataRow" && e.dataField === "CityID") {
+  //   //   e.editorOptions.disabled = typeof e.row.data.StateID !== "number";
+  //   // }
+  // }
+
   return (
     <>
       <h2 className={"content-block"}>
@@ -215,20 +223,30 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // rows
         focusedRowEnabled={true}
         // columns
+        showColumnLines={true}
+        columnMinWidth={60}
         columnAutoWidth={true}
         columnHidingEnabled={false}
         allowColumnResizing={true}
-        showColumnLines={true}
+        allowColumnReordering={true}
         // appearance
         hoverStateEnabled={true}
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
+        // onEditorPreparing={onEditorPreparing}
       >
         <Scrolling mode="standard" />
-        <SearchPanel visible={true} />
+        <SearchPanel visible={true} width={250} />
         {/* <HeaderFilter visible={true} allowSearch={true} /> */}
-        <ColumnChooser enabled={true} />
+        <ColumnChooser
+          enabled={true}
+          allowSearch={true}
+          width={300}
+          height={320}
+          title={formatMessage("colomn_chooser")}
+          emptyPanelText={formatMessage("colomn_chooser_empty_text")}
+        />
         <FilterRow visible={true} />
 
         <Editing

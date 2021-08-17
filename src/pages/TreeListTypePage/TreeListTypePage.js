@@ -121,6 +121,72 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
+  function customCodeMarkupRender() {
+    let murkupCollection = [];
+
+    if (pathnameToName === "kopf") {
+      const pageTitleCollection = [
+        {
+          dataField: "code",
+          width: 120,
+          message: "code_err_message",
+          pattern: "^[0-9]{3}$",
+          required: true,
+        },
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    } else if (pathnameToName === "soato" || pathnameToName === "kspd") {
+      const pageTitleCollection = [
+        {
+          dataField: "code",
+          width: 120,
+          message: "code_err_numeric_message",
+          pattern: "^[0-9]*$",
+          required: true,
+        },
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    } else if (pathnameToName === "kfs") {
+      const pageTitleCollection = [
+        {
+          dataField: "KFSCode",
+          width: 100,
+          message: "code_err_message",
+          pattern: "^[0-9]{3}$",
+          required: true,
+        },
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    }
+
+    return murkupCollection.map((item, idx) => {
+      const {dataField, width, message, pattern, required} = item;
+
+      return (
+        <Column
+          key={idx}
+          dataField={dataField}
+          caption={formatMessage(
+            `${pathnameToName}_code`,
+            localizedPageShortName
+          )}
+          alignment="left"
+          width={width}
+          visible={true}
+        >
+          <PatternRule
+            message={formatMessage(message, localizedPageShortName)}
+            pattern={new RegExp(pattern)}
+          />
+          {required && <RequiredRule />}
+        </Column>
+      );
+    });
+  }
+
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>
@@ -146,10 +212,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         focusedRowEnabled={true}
         rowAlternationEnabled={false}
         // columns
+        showColumnLines={true}
+        columnMinWidth={60}
         columnAutoWidth={true}
         columnHidingEnabled={true}
         allowColumnResizing={true}
-        showColumnLines={true}
+        allowColumnReordering={true}
         // appearance
         hoverStateEnabled={true}
         wordWrapEnabled={true}
@@ -161,7 +229,14 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />
         <HeaderFilter visible={true} allowSearch={true} />
-        <ColumnChooser enabled={true} />
+        <ColumnChooser
+          enabled={true}
+          allowSearch={true}
+          width={300}
+          height={365}
+          title={formatMessage("colomn_chooser")}
+          emptyPanelText={formatMessage("colomn_chooser_empty_text")}
+        />
         <FilterRow visible={true} />
 
         <Editing
@@ -178,67 +253,13 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           alignment="center"
           visible={false}
           allowEditing={false}
+          disabled={true}
           width={80}
         />
 
         {customMarkupRender()}
 
-        {pathnameToName === "kopf" && (
-          <Column
-            dataField="code"
-            caption={formatMessage("kopf_code", localizedPageShortName)}
-            alignment="left"
-            width={120}
-          >
-            <PatternRule
-              message={formatMessage(
-                "code_err_message",
-                localizedPageShortName
-              )}
-              pattern={new RegExp("^[0-9]{3}$", "m")}
-            />
-            <RequiredRule />
-          </Column>
-        )}
-
-        {(pathnameToName === "soato" || pathnameToName === "kspd") && (
-          <Column
-            dataField="code"
-            caption={formatMessage(
-              `${pathnameToName}_code`,
-              localizedPageShortName
-            )}
-            alignment="left"
-            width={120}
-          >
-            <PatternRule
-              message={formatMessage(
-                "code_err_numeric_message",
-                localizedPageShortName
-              )}
-              pattern={new RegExp("^[0-9]*$", "m")}
-            />
-            <RequiredRule />
-          </Column>
-        )}
-
-        {pathnameToName === "kfs" && (
-          <Column
-            dataField="KFSCode"
-            caption={formatMessage("kfs_code", localizedPageShortName)}
-            alignment="left"
-            width={100}
-          >
-            <PatternRule
-              message={formatMessage(
-                "code_err_message",
-                localizedPageShortName
-              )}
-              pattern={new RegExp("^[0-9]{3}$", "m")}
-            />
-            <RequiredRule />
-          </Column>
-        )}
+        {customCodeMarkupRender()}
 
         <Column
           dataField="pid"

@@ -103,6 +103,9 @@ const dictionary = {
     Active: "Active",
     Deactivated: "Deactivated",
 
+    colomn_chooser: "Column selection",
+    colomn_chooser_empty_text: "Drag a column header here to hide it",
+
     create_new_item: "Create new {0} item",
     add_new_item: "Add new {0} item",
     edit_new_item: "Edit {0} item",
@@ -199,6 +202,10 @@ const dictionary = {
     status: "Статус",
     Active: "Активен",
     Deactivated: "Отключен",
+
+    colomn_chooser: "Выбор столбцов",
+    colomn_chooser_empty_text:
+      "Перетащите сюда заголовок столбца, чтобы скрыть его",
 
     create_new_item: "Создать новую запись {0}",
     add_new_item: "Добавить новую запись {0}",
