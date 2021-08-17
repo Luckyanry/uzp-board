@@ -140,6 +140,18 @@ export const KfsPage = ({location: {pathname}}) => {
         />
 
         <Column
+          dataField="pid"
+          caption={formatMessage("as_child_of")}
+          visible={false}
+        >
+          <Lookup
+            dataSource={lookDataState}
+            displayExpr="name"
+            valueExpr="id"
+          />
+        </Column>
+
+        <Column
           dataField="KFSCode"
           caption={formatMessage("kfs_code", pageShortName)}
           alignment="left"
@@ -150,18 +162,6 @@ export const KfsPage = ({location: {pathname}}) => {
             pattern={new RegExp("^[0-9]{3}$", "m")}
           />
           <RequiredRule />
-        </Column>
-
-        <Column
-          dataField="pid"
-          caption={formatMessage("as_child_of")}
-          visible={false}
-        >
-          <Lookup
-            dataSource={lookDataState}
-            displayExpr="name"
-            valueExpr="id"
-          />
         </Column>
 
         <Column

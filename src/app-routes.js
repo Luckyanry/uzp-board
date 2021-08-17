@@ -3,11 +3,11 @@ import {
   HomePage,
   CountriesPage,
   ProfilePage,
-  SoatoPage,
+  // SoatoPage,
   SooguPage,
-  KfsPage,
+  // KfsPage,
   KopfPage,
-  KspdPage,
+  // KspdPage,
   // DataGridTypePage,
   // TreeListTypePage,
 } from "./pages";
@@ -28,26 +28,26 @@ const routes = [
     path: "/countries",
     component: CountriesPage,
   },
-  {
-    path: "/soato",
-    component: SoatoPage,
-  },
+  // {
+  //   path: "/soato",
+  //   component: SoatoPage,
+  // },
   {
     path: "/soogu",
     component: SooguPage,
   },
-  {
-    path: "/kfs",
-    component: KfsPage,
-  },
+  // {
+  //   path: "/kfs",
+  //   component: KfsPage,
+  // },
   {
     path: "/kopf",
     component: KopfPage,
   },
-  {
-    path: "/kspd",
-    component: KspdPage,
-  },
+  // {
+  //   path: "/kspd",
+  //   component: KspdPage,
+  // },
   // ...pathCreator(dataGridPagesPath, DataGridTypePage),
   // ...pathCreator(treeListPagesPath, TreeListTypePage),
 ];

@@ -21,7 +21,7 @@ import "./CountriesPage.scss";
 
 export const CountriesPage = ({location: {pathname}}) => {
   const countriesData = FetchData(pathname).fetchData;
-
+  console.log(`pathname`, pathname);
   const {formatMessage} = useLocalization();
   const pageShortName = formatMessage("countries");
 

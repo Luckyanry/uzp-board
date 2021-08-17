@@ -25,6 +25,9 @@ export const SoatoPage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [lookDataState, setLookDataState] = useState(null);
 
+  const pathnameToName = pathname.split("/")[1];
+  console.log(`pathnameToName`, pathnameToName);
+
   const {formatMessage} = useLocalization();
   const pageShortName = formatMessage("soato");
 

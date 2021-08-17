@@ -142,6 +142,18 @@ export const KspdPage = ({location: {pathname}}) => {
         />
 
         <Column
+          dataField="pid"
+          caption={formatMessage("as_child_of")}
+          visible={false}
+        >
+          <Lookup
+            dataSource={lookDataState}
+            valueExpr="id"
+            displayExpr="name"
+          />
+        </Column>
+
+        <Column
           dataField="code"
           caption={formatMessage("kspd_code", pageShortName)}
           alignment="left"
@@ -152,18 +164,6 @@ export const KspdPage = ({location: {pathname}}) => {
             pattern={new RegExp("^[0-9]*$", "m")}
           />
           <RequiredRule />
-        </Column>
-
-        <Column
-          dataField="pid"
-          caption={formatMessage("as_child_of")}
-          visible={false}
-        >
-          <Lookup
-            dataSource={lookDataState}
-            valueExpr="id"
-            displayExpr="name"
-          />
         </Column>
 
         <Column

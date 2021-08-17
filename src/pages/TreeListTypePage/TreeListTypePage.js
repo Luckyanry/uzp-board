@@ -12,6 +12,7 @@ import TreeList, {
   Scrolling,
   FilterRow,
   Lookup,
+  ColumnChooser,
   Button as TreeListButton,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
@@ -25,8 +26,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [lookDataState, setLookDataState] = useState(null);
 
+  const pathnameToName = pathname.split("/")[1];
+
   const {formatMessage} = useLocalization();
-  const pageShortName = formatMessage("kopf");
+  const pageShortName = formatMessage(pathnameToName);
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -68,8 +71,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   return (
     <div className="page-wrapper">
-      <h2 className={"content-block"}>{formatMessage("kopf_title")}</h2>
-      {console.log("return =>")}
+      <h2 className={"content-block"}>
+        {formatMessage(`${pathnameToName}_title`)}
+      </h2>
+
       <Button
         className="btn"
         icon="hierarchy"
@@ -100,6 +105,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         <SearchPanel visible={true} />
         <HeaderFilter visible={true} allowSearch={true} />
         <FilterRow visible={true} />
+        <ColumnChooser enabled={true} />
 
         <Editing
           mode="popup"
@@ -118,46 +124,54 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           width={80}
         />
 
-        <Column
-          dataField="name_rus"
-          caption={formatMessage("name_rus")}
-          minWidth={250}
-        >
-          <RequiredRule />
-        </Column>
-        <Column
-          dataField="name_uzcyr"
-          caption={formatMessage("name_uzcyr")}
-          visible={false}
-        />
-        <Column
-          dataField="name_uzlat"
-          caption={formatMessage("name_uzlat")}
-          visible={false}
-        />
-        <Column
-          dataField="name_karlat"
-          caption={formatMessage("name_karlat")}
-          visible={false}
-        />
-        <Column
-          dataField="name_eng"
-          caption={formatMessage("name_eng")}
-          visible={false}
-        />
+        {pathnameToName === "kopf" && (
+          <>
+            <Column
+              dataField="name_rus"
+              caption={formatMessage("name_rus")}
+              minWidth={250}
+            >
+              <RequiredRule />
+            </Column>
+            <Column
+              dataField="name_uzcyr"
+              caption={formatMessage("name_uzcyr")}
+              visible={false}
+            />
+            <Column
+              dataField="name_uzlat"
+              caption={formatMessage("name_uzlat")}
+              visible={false}
+            />
+            <Column
+              dataField="name_karlat"
+              caption={formatMessage("name_karlat")}
+              visible={false}
+            />
+            <Column
+              dataField="name_eng"
+              caption={formatMessage("name_eng")}
+              visible={false}
+            />
+          </>
+        )}
 
-        <Column
-          dataField="code"
-          caption={formatMessage("kopf_code", pageShortName)}
-          alignment="left"
-          width={120}
-        >
-          <PatternRule
-            message={formatMessage("code_err_message", pageShortName)}
-            pattern={new RegExp("^[0-9]{3}$", "m")}
-          />
-          <RequiredRule />
-        </Column>
+        {pathnameToName === "kopf" && (
+          <>
+            <Column
+              dataField="code"
+              caption={formatMessage("kopf_code", pageShortName)}
+              alignment="left"
+              width={120}
+            >
+              <PatternRule
+                message={formatMessage("code_err_message", pageShortName)}
+                pattern={new RegExp("^[0-9]{3}$", "m")}
+              />
+              <RequiredRule />
+            </Column>
+          </>
+        )}
 
         <Column
           dataField="pid"
