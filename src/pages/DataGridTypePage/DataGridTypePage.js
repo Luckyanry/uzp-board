@@ -24,6 +24,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
+  const [fetchDataState, setFetchDataState] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
 
   const fetchData = FetchData(pathname).fetchData;
@@ -56,6 +57,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
+    setFetchDataState(fetchData);
+
     pathnameToName === "shortDics" &&
       lookData
         ._loadFunc()
@@ -203,13 +206,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
-  // function onEditorPreparing(e) {
-  //   console.log(`e =>`, e);
-  //   // if (e.parentType === "dataRow" && e.dataField === "CityID") {
-  //   //   e.editorOptions.disabled = typeof e.row.data.StateID !== "number";
-  //   // }
-  // }
-
   return (
     <>
       <h2 className={"content-block"}>
@@ -217,7 +213,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       </h2>
 
       <DataGrid
-        dataSource={fetchData}
+        dataSource={fetchDataState}
         repaintChangesOnly={true}
         remoteOperations={false}
         // rows
@@ -234,7 +230,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
-        // onEditorPreparing={onEditorPreparing}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />

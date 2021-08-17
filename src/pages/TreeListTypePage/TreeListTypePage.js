@@ -24,6 +24,7 @@ import "./TreeListTypePage.scss";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
+  const [fetchDataState, setFetchDataState] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
 
   const fetchData = FetchData(pathname).fetchData;
@@ -47,10 +48,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
+    setFetchDataState(fetchData);
+
     lookData
       ._loadFunc()
       .then((res) => res.data)
-      .then((arr) => setLookDataState(arr));
+      .then((arr) => setLookDataState([...arr]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -187,6 +190,13 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
+  function onEditorPreparing(e) {
+    console.log(`e =>`, e);
+    // if (e.parentType === "dataRow" && e.dataField === "CityID") {
+    //   e.editorOptions.disabled = typeof e.row.data.StateID !== "number";
+    // }
+  }
+
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>
@@ -202,7 +212,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       />
 
       <TreeList
-        dataSource={fetchData}
+        dataSource={fetchDataState}
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
@@ -225,6 +235,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         // functions
         autoExpandAll={toggler}
         onInitNewRow={initNewRow}
+        onEditorPreparing={onEditorPreparing}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />

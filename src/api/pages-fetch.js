@@ -1,7 +1,6 @@
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 import {useLocalization} from "../contexts/LocalizationContext";
-// import DataSource from "devextreme/data/data_source";
 
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?db=hbdb&operation=do";
