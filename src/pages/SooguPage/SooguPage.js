@@ -122,7 +122,6 @@ export const SooguPage = ({location: {pathname}}) => {
           alignment="left"
           width={120}
         >
-          <RequiredRule />
           <PatternRule
             message={formatMessage(
               "codeSogu_numeric_err_message",
@@ -130,6 +129,7 @@ export const SooguPage = ({location: {pathname}}) => {
             )}
             pattern={new RegExp("^[0-9]{4,5}$", "m")}
           />
+          <RequiredRule />
         </Column>
 
         <Column

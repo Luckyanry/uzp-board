@@ -14,6 +14,7 @@ import DataGrid, {
   Button,
   FormItem,
 } from "devextreme-react/data-grid";
+
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 
@@ -21,7 +22,7 @@ import "./CountriesPage.scss";
 
 export const CountriesPage = ({location: {pathname}}) => {
   const countriesData = FetchData(pathname).fetchData;
-  console.log(`pathname`, pathname);
+
   const {formatMessage} = useLocalization();
   const pageShortName = formatMessage("countries");
 
@@ -40,7 +41,9 @@ export const CountriesPage = ({location: {pathname}}) => {
 
   return (
     <>
-      <h2 className={"content-block"}>{formatMessage("countries_title")}</h2>
+      <h2 className={"content-block"}>
+        {formatMessage("countries_title", pageShortName)}
+      </h2>
 
       <DataGrid
         dataSource={countriesData}

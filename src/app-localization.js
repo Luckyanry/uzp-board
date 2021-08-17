@@ -32,22 +32,22 @@ const dictionary = {
     // directory: "Individuals and legal entities",
 
     countries: "Countries",
-    countries_title: "Countries directory",
+    countries_title: "'{0}' directory",
     short_name: "Country name",
     short_name_rus: "Name (RU)",
     short_name_uzcyr: "Name (ЎЗ)",
     short_name_uzlat: "Name (O’Z)",
     short_name_karlat: "Name (UZ-Q)",
     short_name_eng: "Name (EN)",
-    numeric: "Numeric",
-    numeric_err_message:
-      "The 'Numeric' field must contain a maximum of 4 digits!",
     alpha2code: "Alpha2",
     alpha2code_err_message:
       "The 'Alpha2' field must contain 2 characters in uppercase!",
     alpha3code: "Alpha3",
     alpha3code_err_message:
       "The 'Alpha3' field must contain 3 characters in uppercase!",
+    numeric: "Numeric",
+    numeric_err_message:
+      "The 'Numeric' field must contain a maximum of 4 digits!",
 
     soato: "SOATO",
     soato_title:
@@ -74,13 +74,13 @@ const dictionary = {
     name_uzlat: "Name (O’Z)",
     name_karlat: "Name (UZ-Q)",
     name_eng: "Name (EN)",
-    code_sogu: "Code {0}",
+    code_soogu: "Code SOOGU",
     codeSogu_numeric_err_message:
-      "The 'Code {0}' field must contain from 4 to 5 digits!",
+      "The 'Code SOOGU' field must contain from 4 to 5 digits!",
     sogogu_okpo_title: "OKPO",
-    codeOKPO: "Code {0}",
+    codeOKPO: "Code OKPO",
     codeOKPO_numeric_err_message:
-      "The 'Code {0}' field must contain a maximum of 8 digits!",
+      "The 'Code OKPO' field must contain a maximum of 8 digits!",
 
     kspd: "KSPD",
     kspd_title: "{0}",
@@ -90,11 +90,11 @@ const dictionary = {
     // opf_title: "Organizational and legal forms",
 
     kfs: "KFS",
-    kfs_title: "Directory 'Forms of ownership'",
+    kfs_title: "Directory 'Forms of ownership' ({0})",
     kfs_code: "Code {0}",
 
     kopf: "KOPF",
-    kopf_title: "Directory 'Organizational and Legal Forms'",
+    kopf_title: "Directory 'Organizational and Legal Forms' ({0})",
     kopf_code: "Code {0}",
 
     status: "Status",
@@ -171,13 +171,12 @@ const dictionary = {
     name_uzlat: "Наименование (O’Z)",
     name_karlat: "Наименование (UZ-Q)",
     name_eng: "Наименование (EN)",
-    code_sogu: "Код {0}",
+    code_soogu: "Код СООГУ",
     codeSogu_numeric_err_message:
-      "Поле 'Код {0}' должно содержать от 4 до 5 цифр!",
-    sogogu_okpo_title: "ОКПО",
-    codeOKPO: "Код {0}",
+      "Поле 'Код СООГУ' должно содержать от 4 до 5 цифр!",
+    codeOKPO: "Код ОКПО",
     codeOKPO_numeric_err_message:
-      "Поле 'Код {0}' должно содержать максимум 8 цифры!",
+      "Поле 'Код ОКПО' должно содержать максимум 8 цифры!",
 
     kspd: "КСДП",
     kspd_title: "Классификатор состояния деятельности предприятия ({0})",

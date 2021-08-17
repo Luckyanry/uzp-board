@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from "react";
 
 import TreeList, {
-  Column,
   SearchPanel,
   HeaderFilter,
+  FilterRow,
+  Scrolling,
+  ColumnChooser,
   Editing,
+  Column,
   RequiredRule,
   PatternRule,
+  Lookup,
+  Button as TreeListButton,
   Paging,
   Pager,
-  Scrolling,
-  FilterRow,
-  Lookup,
-  ColumnChooser,
-  Button as TreeListButton,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
@@ -141,24 +141,28 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         keyExpr="id"
         parentIdExpr="pid"
         defaultExpandedRowKeys={[0, 1]}
+        // rows
         showRowLines={true}
-        columnAutoWidth={true}
-        wordWrapEnabled={true}
-        autoExpandAll={toggler}
         focusedRowEnabled={true}
+        rowAlternationEnabled={false}
+        // columns
+        columnAutoWidth={true}
+        columnHidingEnabled={true}
         allowColumnResizing={true}
         showColumnLines={true}
-        columnHidingEnabled={true}
-        rowAlternationEnabled={false}
+        // appearance
         hoverStateEnabled={true}
+        wordWrapEnabled={true}
         virtualModeEnabled={true}
+        // functions
+        autoExpandAll={toggler}
         onInitNewRow={initNewRow}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />
         <HeaderFilter visible={true} allowSearch={true} />
-        <FilterRow visible={true} />
         <ColumnChooser enabled={true} />
+        <FilterRow visible={true} />
 
         <Editing
           mode="popup"
