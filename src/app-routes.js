@@ -6,14 +6,14 @@ import {
   // SoatoPage,
   SooguPage,
   // KfsPage,
-  KopfPage,
+  // KopfPage,
   // KspdPage,
   // DataGridTypePage,
-  // TreeListTypePage,
+  TreeListTypePage,
 } from "./pages";
 
 // const dataGridPagesPath = ["countries", "soogu"];
-// const treeListPagesPath = ["soato", "kspd", "kfs", "kopf"];
+const treeListPagesPath = ["soato", "kspd", "kfs", "kopf"];
 
 const routes = [
   {
@@ -40,26 +40,26 @@ const routes = [
   //   path: "/kfs",
   //   component: KfsPage,
   // },
-  {
-    path: "/kopf",
-    component: KopfPage,
-  },
+  // {
+  //   path: "/kopf",
+  //   component: KopfPage,
+  // },
   // {
   //   path: "/kspd",
   //   component: KspdPage,
   // },
   // ...pathCreator(dataGridPagesPath, DataGridTypePage),
-  // ...pathCreator(treeListPagesPath, TreeListTypePage),
+  ...pathCreator(treeListPagesPath, TreeListTypePage),
 ];
 
-// function pathCreator(pathTitle, component) {
-//   return pathTitle.map((item) => {
-//     return {
-//       path: `/${item}`,
-//       component,
-//     };
-//   });
-// }
+function pathCreator(pathTitle, component) {
+  return pathTitle.map((item) => {
+    return {
+      path: `/${item}`,
+      component,
+    };
+  });
+}
 
 export default routes.map((route) => {
   console.log(`route`, route);

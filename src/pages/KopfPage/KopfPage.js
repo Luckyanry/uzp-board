@@ -26,11 +26,12 @@ export const KopfPage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [lookDataState, setLookDataState] = useState(null);
 
-  const pathnameToName = pathname.split("/")[1];
-  console.log(`pathnameToName`, pathnameToName);
-
   const {formatMessage} = useLocalization();
+  const pathnameToName = pathname.split("/")[1];
   const pageShortName = formatMessage(pathnameToName);
+
+  console.log(`pathnameToName`, pathnameToName);
+  console.log(`pageShortName`, pageShortName);
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -48,6 +49,14 @@ export const KopfPage = ({location: {pathname}}) => {
     height: 780,
   };
 
+  useEffect(() => {
+    lookData
+      ._loadFunc()
+      .then((res) => res.data)
+      .then((arr) => setLookDataState(arr));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function initNewRow(e) {
     e.data.status = statusesLang[0];
     // e.data.created_date = new Date();
@@ -62,23 +71,39 @@ export const KopfPage = ({location: {pathname}}) => {
     }
   }
 
-  useEffect(() => {
-    lookData
-      ._loadFunc()
-      .then((res) => res.data)
-      .then((arr) => setLookDataState(arr));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  function customMarkupRender() {
+    let columnsTitleCollection = [];
 
-  function markup() {
     if (pathnameToName === "kopf") {
-      return (
-        <PatternRule
-          message={formatMessage("code_err_message", pageShortName)}
-          pattern={new RegExp("^[0-9]{3}$", "m")}
+      const pageTitleCollection = [
+        "name_rus",
+        "name_uzcyr",
+        "name_uzlat",
+        "name_karlat",
+        "name_eng",
+      ];
+      columnsTitleCollection = [...pageTitleCollection];
+    }
+
+    return columnsTitleCollection.map((columnTitle, idx) => {
+      return columnTitle === "name_rus" ? (
+        <Column
+          dataField={columnTitle}
+          caption={formatMessage(columnTitle)}
+          minWidth={250}
+          key={idx}
+        >
+          <RequiredRule />
+        </Column>
+      ) : (
+        <Column
+          dataField={columnTitle}
+          caption={formatMessage(columnTitle)}
+          visible={false}
+          key={idx}
         />
       );
-    }
+    });
   }
 
   return (
@@ -135,55 +160,23 @@ export const KopfPage = ({location: {pathname}}) => {
           allowEditing={false}
           width={80}
         />
-        {pathnameToName === "kopf" && console.log("render...")}
-        {pathnameToName === "kopf" &&
-          `
-            <Column
-              dataField="name_rus"
-              caption={formatMessage("name_rus")}
-              minWidth={250}
-            >
-              <RequiredRule />
-            </Column>
-            <Column
-              dataField="name_uzcyr"
-              caption={formatMessage("name_uzcyr")}
-              visible={false}
-            />
-            <Column
-              dataField="name_uzlat"
-              caption={formatMessage("name_uzlat")}
-              visible={false}
-            />
-            <Column
-              dataField="name_karlat"
-              caption={formatMessage("name_karlat")}
-              visible={false}
-            />
-            <Column
-              dataField="name_eng"
-              caption={formatMessage("name_eng")}
-              visible={false}
-            />
-          `}
 
-        {pathnameToName === "kopf" &&
-          `
-            ${(
-              <Column
-                dataField="code"
-                caption={formatMessage("kopf_code", pageShortName)}
-                alignment="left"
-                width={120}
-              >
-                <PatternRule
-                  message={formatMessage("code_err_message", pageShortName)}
-                  pattern={new RegExp("^[0-9]{3}$", "m")}
-                />
-                <RequiredRule />
-              </Column>
-            )}
-          `}
+        {customMarkupRender()}
+
+        {pathnameToName === "kopf" && (
+          <Column
+            dataField="code"
+            caption={formatMessage("kopf_code", pageShortName)}
+            alignment="left"
+            width={120}
+          >
+            <PatternRule
+              message={formatMessage("code_err_message", pageShortName)}
+              pattern={new RegExp("^[0-9]{3}$", "m")}
+            />
+            <RequiredRule />
+          </Column>
+        )}
 
         <Column
           dataField="pid"

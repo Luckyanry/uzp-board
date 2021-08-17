@@ -27,6 +27,10 @@ export const KspdPage = ({location: {pathname}}) => {
 
   const {formatMessage} = useLocalization();
   const pageShortName = formatMessage("kspd");
+  const pathnameToName = pathname.split("/")[1];
+
+  console.log(`pathnameToName`, pathnameToName);
+  console.log(`pageShortName`, pageShortName);
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;

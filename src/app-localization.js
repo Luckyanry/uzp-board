@@ -130,7 +130,7 @@ const dictionary = {
     directory: "Физ. и юр. лица",
 
     countries: "Страны",
-    countries_title: "Справочник 'Стран'",
+    countries_title: "Справочник '{0}'",
     short_name: "Название страны",
     short_name_rus: "Наименование (РУ)",
     short_name_uzcyr: "Наименование (ЎЗ)",
@@ -186,11 +186,11 @@ const dictionary = {
     opf_title: "Орг.-правовые формы",
 
     kfs: "КФС",
-    kfs_title: "Справочник 'Формы собственности'",
+    kfs_title: "Справочник 'Формы собственности' ({0})",
     kfs_code: "Код {0}",
 
     kopf: "КОПФ",
-    kopf_title: "Справочник 'Организационно-правовые формы'",
+    kopf_title: "Справочник 'Организационно-правовые формы' ({0})",
     kopf_code: "Код {0}",
 
     status: "Статус",
