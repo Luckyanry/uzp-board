@@ -23,6 +23,8 @@ export const FetchData = (pageRequest) => {
         return "&sp=KFS";
       case "/kspd":
         return "&sp=Kspd";
+      case "/shortDics":
+        return "&sp=ShortDics";
       default:
         return "/home";
     }

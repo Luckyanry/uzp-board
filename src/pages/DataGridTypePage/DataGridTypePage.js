@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import "devextreme/data/odata/store";
 import DataGrid, {
@@ -18,13 +18,16 @@ import DataGrid, {
   Pager,
 } from "devextreme-react/data-grid";
 
-import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
+import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
+  const [lookDataState, setLookDataState] = useState(null);
+
   const fetchData = FetchData(pathname).fetchData;
+  const lookData = FetchData(pathname).lookData;
 
   const {formatMessage} = useLocalization();
   const pathnameToName = pathname.split("/")[1];
@@ -51,6 +54,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     ...popupGeneralOptions,
     height: 700,
   };
+
+  useEffect(() => {
+    lookData
+      ._loadFunc()
+      .then((res) => res.data)
+      .then((arr) => setLookDataState(arr));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function editingOption() {
     return pathnameToName === "soogu"
@@ -83,6 +94,17 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         {value: "short_name_uzlat", visible: true, required: false},
         {value: "short_name_karlat", visible: true, required: false},
         {value: "short_name_eng", visible: true, required: true},
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    } else if (pathnameToName === "shortDics") {
+      const pageTitleCollection = [
+        {value: "name", visible: true, required: true},
+        {value: "short_name_rus", visible: false, required: true},
+        {value: "short_name_uzcyr", visible: false, required: false},
+        {value: "short_name_uzlat", visible: false, required: false},
+        {value: "short_name_karlat", visible: false, required: false},
+        {value: "short_name_eng", visible: false, required: true},
       ];
 
       murkupCollection = [...pageTitleCollection];
@@ -231,15 +253,31 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
         {customCodeMarkupRender()}
 
-        <Column
-          dataField="status"
-          caption={formatMessage("status")}
-          alignment="center"
-          width={120}
-        >
-          <Lookup dataSource={statusesLang} />
-          <RequiredRule />
-        </Column>
+        {pathnameToName === "shortDics" && (
+          <Column
+            dataField="metaid"
+            caption={formatMessage("as_child_of")}
+            visible={false}
+          >
+            <Lookup
+              dataSource={lookDataState}
+              valueExpr="id"
+              displayExpr="className"
+            />
+          </Column>
+        )}
+
+        {pathnameToName !== "shortDics" && (
+          <Column
+            dataField="status"
+            caption={formatMessage("status")}
+            alignment="center"
+            width={120}
+          >
+            <Lookup dataSource={statusesLang} />
+            <RequiredRule />
+          </Column>
+        )}
 
         <Column type="buttons" width={110}>
           <Button

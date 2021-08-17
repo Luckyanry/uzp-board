@@ -3,8 +3,8 @@ import {useLocalization} from "./contexts/LocalizationContext";
 export const AppNavigation = () => {
   const {formatMessage} = useLocalization();
 
-  const firstFolder = ["countries", "soato", "soogu", "kspd"];
-  const secondFolder = ["kfs", "kopf"];
+  const directoryFolder = ["countries", "soato", "soogu", "kspd"];
+  const opfFolder = ["kfs", "kopf"];
 
   function pathCreator(pathTitle) {
     return pathTitle.map((item) => {
@@ -29,12 +29,17 @@ export const AppNavigation = () => {
     {
       text: formatMessage("directory"),
       icon: "mediumiconslayout",
-      items: pathCreator(firstFolder),
+      items: pathCreator(directoryFolder),
     },
     {
       text: formatMessage("opf_title"),
       icon: "product",
-      items: pathCreator(secondFolder),
+      items: pathCreator(opfFolder),
+    },
+    {
+      text: formatMessage("shortDics"),
+      path: "/shortDics",
+      icon: "tableproperties",
     },
   ];
 };
