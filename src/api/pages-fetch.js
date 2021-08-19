@@ -5,9 +5,9 @@ import {useLocalization} from "../contexts/LocalizationContext";
 const url = "http://10.0.10.71";
 const baseParams = "/actions.asp?db=hbdb&operation=do";
 
-export const FetchData = (pageRequest) => {
+export const FetchData = (pageRequest, tid = null) => {
   const {formatMessage} = useLocalization();
-
+  console.log(`tid Fetch`, tid);
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -25,7 +25,7 @@ export const FetchData = (pageRequest) => {
       case "/shortDics":
         return "&sp=ShortDics";
       case "/ShortDicsRecords":
-        return "&sp=ShortDicsRecords&@tid=13";
+        return `&sp=ShortDicsRecords&@tid=${tid}`;
       default:
         return "/home";
     }

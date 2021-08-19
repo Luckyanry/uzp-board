@@ -6,7 +6,6 @@ import DataGrid, {
   // Scrolling,
   ColumnChooser,
   Editing,
-  // MasterDetail,
   // Column,
   // RequiredRule,
   // PatternRule,
@@ -26,7 +25,10 @@ export const DetailTemplate = (props) => {
     useState(null);
   console.log(`props`, props);
 
-  const shortDicsRecords = FetchData("/ShortDicsRecords").shortDicsRecords;
+  const shortDicsRecords = FetchData(
+    "/ShortDicsRecords",
+    props.data.key
+  ).shortDicsRecords;
 
   const {formatMessage} = useLocalization();
   // const pathnameToName = pathname.split("/")[1];
@@ -52,14 +54,15 @@ export const DetailTemplate = (props) => {
     e.data.status = statusesLang[0];
   }
 
-  console.log(`dataState`, dataState);
-  console.log(`shortDicsRecordsDataState`, shortDicsRecordsDataState);
+  // console.log(`dataState`, dataState);
+  // console.log(`shortDicsRecordsDataState`, shortDicsRecordsDataState);
 
   return (
     <DataGrid
       id="grid"
-      dataSource={dataState}
-      keyExpr="dataField"
+      columns={dataState}
+      dataSource={shortDicsRecordsDataState}
+      keyExpr="id"
       repaintChangesOnly={true}
       remoteOperations={false}
       // rows
@@ -77,8 +80,6 @@ export const DetailTemplate = (props) => {
       // functions
       onInitNewRow={initNewRow}
     >
-      {/* <Scrolling mode="standard" /> */}
-
       <ColumnChooser
         enabled={true}
         allowSearch={true}
@@ -95,18 +96,6 @@ export const DetailTemplate = (props) => {
         allowUpdating={true}
       />
 
-      {/* <MasterDetail enabled={true} component={DetailTemplate} /> */}
-
-      {/* <Column
-        dataField="id"
-        caption="ID"
-        alignment="center"
-        disabled={false}
-        width={60}
-      >
-        <FormItem visible={false} />
-      </Column> */}
-
       {/* <Column dataField="dataField" /> */}
 
       {/* <Column
@@ -118,17 +107,6 @@ export const DetailTemplate = (props) => {
         <Lookup dataSource={statusesLang} />
         <RequiredRule />
       </Column> */}
-
-      {/* <Column type="buttons" width={110}>
-          <Button
-            name="edit"
-            hint={formatMessage("edit_new_item", localizedPageShortName)}
-          />
-          <Button
-            name="delete"
-            hint={formatMessage("delete_new_item", localizedPageShortName)}
-          />
-        </Column> */}
     </DataGrid>
   );
 };
