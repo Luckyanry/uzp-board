@@ -132,14 +132,14 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         {
           dataField: "code",
           width: 120,
-          message: "code_err_message",
+          message: "code_err_message_3",
           pattern: "^[0-9]{3}$",
           required: true,
         },
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "soato" || pathnameToName === "kspd") {
+    } else if (pathnameToName === "soato") {
       const pageTitleCollection = [
         {
           dataField: "code",
@@ -151,12 +151,24 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
+    } else if (pathnameToName === "kspd") {
+      const pageTitleCollection = [
+        {
+          dataField: "code",
+          width: 120,
+          message: "code_err_message_2",
+          pattern: "^[0-9]{1,2}$",
+          required: true,
+        },
+      ];
+
+      murkupCollection = [...pageTitleCollection];
     } else if (pathnameToName === "kfs") {
       const pageTitleCollection = [
         {
           dataField: "KFSCode",
           width: 100,
-          message: "code_err_message",
+          message: "code_err_message_3",
           pattern: "^[0-9]{3}$",
           required: true,
         },
@@ -190,12 +202,18 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
-  function onEditorPreparing(e) {
-    console.log(`e =>`, e);
-    // if (e.parentType === "dataRow" && e.dataField === "CityID") {
-    //   e.editorOptions.disabled = typeof e.row.data.StateID !== "number";
-    // }
-  }
+  // function onEditorPreparing(e) {
+  //   console.log(`onEditorPreparing(e) =>`, e);
+  //   // if (e.parentType === "dataRow" && e.dataField === "CityID") {
+  //   //   e.editorOptions.disabled = typeof e.row.data.StateID !== "number";
+  //   // }
+  // }
+
+  const onFocusedCellChanging = (e) => {
+    console.log(`onFocusedCellChanging(e.newRowIndex) => `, e.newRowIndex);
+    console.log(`onFocusedCellChanging(e) => `, e);
+    // e.isHighlighted = true;
+  };
 
   return (
     <div className="page-wrapper">
@@ -216,7 +234,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
-        defaultExpandedRowKeys={[0, 1]}
+        defaultExpandedRowKeys={[1, 3, 5]}
         // rows
         showRowLines={true}
         focusedRowEnabled={true}
@@ -235,7 +253,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         // functions
         autoExpandAll={toggler}
         onInitNewRow={initNewRow}
-        onEditorPreparing={onEditorPreparing}
+        // onEditorPreparing={onEditorPreparing}
+        onFocusedCellChanging={onFocusedCellChanging}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />
@@ -249,7 +268,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           emptyPanelText={formatMessage("colomn_chooser_empty_text")}
         />
         <FilterRow visible={true} />
-
         <Editing
           mode="popup"
           popup={popupOpt}
@@ -257,7 +275,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           allowUpdating={true}
           allowDeleting={true}
         />
-
         <Column
           dataField="id"
           caption="ID"
@@ -267,11 +284,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           disabled={true}
           width={80}
         />
-
         {customMarkupRender()}
-
         {customCodeMarkupRender()}
-
         <Column
           dataField="pid"
           caption={formatMessage("as_child_of")}
@@ -283,7 +297,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             displayExpr="name"
           />
         </Column>
-
         <Column
           dataField="status"
           caption={formatMessage("status")}
@@ -293,7 +306,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>
-
         <Column type="buttons" width={110}>
           <TreeListButton
             name="add"
@@ -308,7 +320,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             hint={formatMessage("delete_new_item", localizedPageShortName)}
           />
         </Column>
-
         <Paging defaultPageSize={10} enabled={true} />
         <Pager
           showPageSizeSelector={true}

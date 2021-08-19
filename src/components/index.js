@@ -1,5 +1,7 @@
 export {Header} from "./Header/Header";
 export {Footer} from "./Footer/Footer";
+export {DetailTemplate} from "./DetailTemplate/DetailTemplate";
+
 export {default as LoginForm} from "./LoginForm/LoginForm";
 export {default as UserPanel} from "./UserPanel/UserPanel";
 export {default as ResetPasswordForm} from "./ResetPasswordForm/ResetPasswordForm";

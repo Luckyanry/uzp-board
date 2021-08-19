@@ -98,6 +98,7 @@ const dictionary = {
     kopf_code: "Code {0}",
 
     shortDics: "Short directories",
+    name: "Short directories",
 
     status: "Status",
     Active: "Active",
@@ -112,7 +113,9 @@ const dictionary = {
     delete_new_item: "Delete {0} item",
 
     code_err_numeric_message: "The 'Code {0}' field must contain only digits!",
-    code_err_message: "The 'Code {0}' field must contain 3 digits!",
+    code_err_message_3: "The 'Code {0}' field must contain 3 digits!",
+    code_err_message_2:
+      "The 'Code {0}' field must contain a maximum of 2 digits!",
   },
   ru: {
     project_title: "ЕАИС",
@@ -181,7 +184,7 @@ const dictionary = {
       "Поле 'Код СООГУ' должно содержать от 4 до 5 цифр!",
     codeOKPO: "Код ОКПО",
     codeOKPO_numeric_err_message:
-      "Поле 'Код ОКПО' должно содержать максимум 8 цифры!",
+      "Поле 'Код ОКПО' должно содержать максимум 8 цифр!",
 
     kspd: "КСДП",
     kspd_title: "Классификатор состояния деятельности предприятия ({0})",
@@ -198,6 +201,7 @@ const dictionary = {
     kopf_code: "Код {0}",
 
     shortDics: "Короткие справочники",
+    name: "Короткие справочники",
 
     status: "Статус",
     Active: "Активен",
@@ -213,7 +217,8 @@ const dictionary = {
     delete_new_item: "Удалить запись {0}",
 
     code_err_numeric_message: "Поле 'Код {0}' должно содержать только цифры!",
-    code_err_message: "Поле 'Код {0}' должно содержать 3 цифры!",
+    code_err_message_3: "Поле 'Код {0}' должно содержать 3 цифры!",
+    code_err_message_2: "Поле 'Код {0}' должно максимум 2 цифры!",
   },
 };
 

@@ -8,6 +8,7 @@ import DataGrid, {
   Scrolling,
   ColumnChooser,
   Editing,
+  MasterDetail,
   Column,
   RequiredRule,
   PatternRule,
@@ -20,6 +21,7 @@ import DataGrid, {
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {DetailTemplate} from "../../components/DetailTemplate/DetailTemplate";
 
 import "./DataGridTypePage.scss";
 
@@ -43,6 +45,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("create_new_item", localizedPageShortName),
     showTitle: true,
+    hint: "Test",
     width: 1000,
   };
 
@@ -104,11 +107,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     } else if (pathnameToName === "shortDics") {
       const pageTitleCollection = [
         {value: "name", visible: true, required: true},
-        {value: "short_name_rus", visible: false, required: true},
+        {value: "short_name_rus", visible: false, required: false},
         {value: "short_name_uzcyr", visible: false, required: false},
         {value: "short_name_uzlat", visible: false, required: false},
         {value: "short_name_karlat", visible: false, required: false},
-        {value: "short_name_eng", visible: false, required: true},
+        {value: "short_name_eng", visible: false, required: false},
       ];
 
       murkupCollection = [...pageTitleCollection];
@@ -206,6 +209,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
+  // const onFocusedCellAction = (e) => {
+  //   const focusedRowId = e.rows[e.newRowIndex].key;
+  //   getFocusedRowId(focusedRowId);
+  //   // console.log(`onFocusedCellChanging(e.newRowIndex) => `, e.newRowIndex);
+  // };
+
   return (
     <>
       <h2 className={"content-block"}>
@@ -214,6 +223,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       <DataGrid
         dataSource={fetchDataState}
+        // keyExpr="id"
         repaintChangesOnly={true}
         remoteOperations={false}
         // rows
@@ -230,6 +240,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
+        // onFocusedCellChanging={onFocusedCellAction}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />
@@ -280,7 +291,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           </Column>
         )}
 
-        {pathnameToName !== "shortDics" && (
+        {/* {pathnameToName !== "shortDics" && (
           <Column
             dataField="status"
             caption={formatMessage("status")}
@@ -290,6 +301,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             <Lookup dataSource={statusesLang} />
             <RequiredRule />
           </Column>
+        )} */}
+
+        {pathnameToName === "shortDics" && (
+          <MasterDetail enabled={true} component={DetailTemplate} />
         )}
 
         <Column type="buttons" width={110}>

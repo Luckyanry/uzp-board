@@ -24,6 +24,8 @@ export const FetchData = (pageRequest) => {
         return "&sp=Kspd";
       case "/shortDics":
         return "&sp=ShortDics";
+      case "/ShortDicsRecords":
+        return "&sp=ShortDicsRecords&@tid=13";
       default:
         return "/home";
     }
@@ -76,6 +78,14 @@ export const FetchData = (pageRequest) => {
     load: () =>
       sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
         schema: "look",
+      }),
+  });
+
+  const shortDicsRecords = new CustomStore({
+    key: "id",
+    load: () =>
+      sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
+        schema: "get",
       }),
   });
 
@@ -188,5 +198,5 @@ export const FetchData = (pageRequest) => {
     }
   }
 
-  return {fetchData, lookData};
+  return {fetchData, lookData, shortDicsRecords};
 };
