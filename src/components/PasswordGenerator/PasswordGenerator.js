@@ -25,8 +25,9 @@ export const PasswordGenerator = () => {
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordFetchRules, setPasswordFetchRules] = useState(null);
-  const [minLength, setMinLength] = useState(8);
+  const [minLength, setMinLength] = useState(4);
   const [maxLength, setMaxLength] = useState(128);
+  const [minCharacterGroups, setMinCharacterGroups] = useState(128);
   const [hasLower, setHasLower] = useState(true);
   const [hasUpper, setHasUpper] = useState(true);
   const [hasNumber, setHasNumber] = useState(true);
@@ -42,6 +43,7 @@ export const PasswordGenerator = () => {
       setPasswordMode(() => (passwordMode === "text" ? "password" : "text"));
     },
   };
+
   const passwordGeneratorBtn = {
     icon: "add",
     type: "default",
@@ -55,6 +57,13 @@ export const PasswordGenerator = () => {
       );
 
       setConfirmPasswordState(newPassword);
+
+      console.log(`passwordFetchRules => minLength `, minLength);
+      console.log(`passwordFetchRules => maxLength `, maxLength);
+      console.log(
+        `passwordFetchRules => minCharacterGroups `,
+        minCharacterGroups
+      );
     },
   };
 
@@ -69,11 +78,16 @@ export const PasswordGenerator = () => {
     dictionaryByName
       ._loadFunc()
       .then((res) => res.data)
-      .then((arr) => setPasswordFetchRules(arr[0].jvson));
+      .then((arr) => {
+        setPasswordFetchRules(arr[0]);
+        setMinLength(arr[0].jvson.MinPasswordLength);
+        setMaxLength(arr[0].jvson.MaxPasswordLength);
+        setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(`Profile passwordFetchRules`, passwordFetchRules);
+  // console.log(`Profile passwordFetchRules`, passwordFetchRules);
 
   function onPasswordChanged(e) {
     setPasswordState(e.value);
@@ -122,13 +136,17 @@ export const PasswordGenerator = () => {
 
   function generatorPassword(lower, upper, number, symbol, length) {
     let generatedPassword = "";
+
     const typesCount = lower + upper + number + symbol;
-    const typeArr = [{lower}, {upper}, {number}, {symbol}].filter(
-      (item) => Object.values(item)[0]
-    );
+
+    const typeArr = [{lower}, {upper}, {number}, {symbol}]
+      .map((i) => [Math.random(), i])
+      .sort()
+      .map((i) => i[1])
+      .filter((item) => Object.values(item)[0]);
 
     // console.log(`typesCount`, typesCount);
-    // console.log(`typeArr`, typeArr);
+    console.log(`typeArr`, typeArr);
 
     if (typesCount === 0) {
       return "";
@@ -147,6 +165,10 @@ export const PasswordGenerator = () => {
     setPasswordState(finalPassword);
     return finalPassword;
   }
+
+  // console.log(`passwordFetchRules => minLength `, minLength);
+  // console.log(`passwordFetchRules => maxLength `, maxLength);
+  // console.log(`passwordFetchRules => minCharacterGroups `, minCharacterGroups);
 
   return (
     <div className="dx-fieldset">
