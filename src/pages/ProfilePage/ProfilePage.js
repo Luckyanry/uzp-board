@@ -37,8 +37,8 @@ export const ProfilePage = () => {
           />
         </div>
         <span>{notes}</span>
-        <PasswordGenerator />
       </div>
+      <PasswordGenerator />
 
       <div className={"content-block dx-card responsive-paddings"}>
         <Form
