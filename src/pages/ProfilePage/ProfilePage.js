@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 
 import Form, {SimpleItem, Label, Item} from "devextreme-react/form";
+
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {PasswordGenerator} from "../../components/PasswordGenerator/PasswordGenerator";
 
 import "./ProfilePage.scss";
 
@@ -35,6 +37,7 @@ export const ProfilePage = () => {
           />
         </div>
         <span>{notes}</span>
+        <PasswordGenerator />
       </div>
 
       <div className={"content-block dx-card responsive-paddings"}>

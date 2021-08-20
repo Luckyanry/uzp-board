@@ -26,6 +26,8 @@ export const FetchData = (pageRequest, tid = null) => {
         return "&sp=ShortDics";
       case "/ShortDicsRecords":
         return `&sp=ShortDicsRecords&@tid=${tid}`;
+      case "/DictionaryByName":
+        return `&sp=ShortDicsRecords&@name=PasswordPolicies`;
       default:
         return "/home";
     }
