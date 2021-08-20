@@ -7,7 +7,7 @@ const baseParams = "/actions.asp?db=hbdb&operation=do";
 
 export const FetchData = (pageRequest, tid = null) => {
   const {formatMessage} = useLocalization();
-  console.log(`tid Fetch`, tid);
+
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -78,14 +78,6 @@ export const FetchData = (pageRequest, tid = null) => {
     load: () =>
       sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
         schema: "look",
-      }),
-  });
-
-  const shortDicsRecords = new CustomStore({
-    key: "id",
-    load: () =>
-      sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
-        schema: "get",
       }),
   });
 
@@ -198,5 +190,5 @@ export const FetchData = (pageRequest, tid = null) => {
     }
   }
 
-  return {fetchData, lookData, shortDicsRecords};
+  return {fetchData, lookData};
 };

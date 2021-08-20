@@ -27,12 +27,10 @@ export const DetailTemplate = (props) => {
 
   const shortDicsRecords = FetchData(
     "/ShortDicsRecords",
-    props.data.key
-  ).shortDicsRecords;
+    props.data.data.id
+  ).fetchData;
 
   const {formatMessage} = useLocalization();
-  // const pathnameToName = pathname.split("/")[1];
-  // const localizedPageShortName = formatMessage(pathnameToName);
 
   const defaultStatus = ["Active", "Deactivated"];
   const statusesLang = defaultStatus.map((statusLang) => {
@@ -43,10 +41,7 @@ export const DetailTemplate = (props) => {
   useEffect(() => {
     setdataState(props.data.data.columnsjson.columns);
 
-    shortDicsRecords
-      ._loadFunc()
-      .then((res) => res.data)
-      .then((arr) => setShortDicsRecordsDataState(arr));
+    setShortDicsRecordsDataState(shortDicsRecords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,14 +50,14 @@ export const DetailTemplate = (props) => {
   }
 
   // console.log(`dataState`, dataState);
-  // console.log(`shortDicsRecordsDataState`, shortDicsRecordsDataState);
+  console.log(`shortDicsRecordsDataState`, shortDicsRecordsDataState);
 
   return (
     <DataGrid
       id="grid"
       columns={dataState}
       dataSource={shortDicsRecordsDataState}
-      keyExpr="id"
+      // keyExpr="id"
       repaintChangesOnly={true}
       remoteOperations={false}
       // rows
@@ -95,18 +90,6 @@ export const DetailTemplate = (props) => {
         allowDeleting={true}
         allowUpdating={true}
       />
-
-      {/* <Column dataField="dataField" /> */}
-
-      {/* <Column
-        dataField="status"
-        caption={formatMessage("status")}
-        alignment="center"
-        width={120}
-      >
-        <Lookup dataSource={statusesLang} />
-        <RequiredRule />
-      </Column> */}
     </DataGrid>
   );
 };

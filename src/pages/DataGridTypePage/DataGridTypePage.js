@@ -112,19 +112,22 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         {value: "short_name_uzlat", visible: false, required: false},
         {value: "short_name_karlat", visible: false, required: false},
         {value: "short_name_eng", visible: false, required: false},
+        {value: "class", visible: true, required: false},
+        // {value: "metaid", visible: true, required: true},
       ];
 
       murkupCollection = [...pageTitleCollection];
     }
 
     return murkupCollection.map((item, idx) => {
-      const {value, visible, required} = item;
+      const {value, visible, required, width = "auto"} = item;
       return (
         <Column
           key={idx}
           dataField={value}
           caption={formatMessage(value)}
           visible={visible}
+          width={width}
         >
           {required && <RequiredRule />}
         </Column>
@@ -266,7 +269,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         <Column
           dataField="id"
           caption="ID"
-          alignment="center"
+          alignment="right"
           disabled={true}
           width={60}
         >
@@ -281,7 +284,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           <Column
             dataField="metaid"
             caption={formatMessage("as_child_of")}
-            visible={false}
+            visible={true}
           >
             <Lookup
               dataSource={lookDataState}
@@ -290,18 +293,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             />
           </Column>
         )}
-
-        {/* {pathnameToName !== "shortDics" && (
-          <Column
-            dataField="status"
-            caption={formatMessage("status")}
-            alignment="center"
-            width={120}
-          >
-            <Lookup dataSource={statusesLang} />
-            <RequiredRule />
-          </Column>
-        )} */}
 
         {pathnameToName === "shortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />

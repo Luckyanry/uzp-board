@@ -98,7 +98,10 @@ const dictionary = {
     kopf_code: "Code {0}",
 
     shortDics: "Short directories",
-    name: "Short directories",
+    name: "Meta name",
+    class: "Class",
+    className: "Type",
+    metaid: "Meta ID",
 
     status: "Status",
     Active: "Active",
@@ -201,7 +204,10 @@ const dictionary = {
     kopf_code: "Код {0}",
 
     shortDics: "Короткие справочники",
-    name: "Короткие справочники",
+    name: "Мета название",
+    class: "Класс",
+    className: "Тип",
+    metaid: "Мета ID",
 
     status: "Статус",
     Active: "Активен",
