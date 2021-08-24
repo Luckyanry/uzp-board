@@ -16,7 +16,7 @@ import notify from "devextreme/ui/notify";
 
 import "./PasswordGenerator.scss";
 
-// import {useLocalization} from "../../contexts/LocalizationContext";
+import {useLocalization} from "../../contexts/LocalizationContext";
 
 import {FetchData} from "../../api/pages-fetch";
 
@@ -34,7 +34,7 @@ export const PasswordGenerator = () => {
   const [hasSymbol, setHasSymbol] = useState(true);
 
   const dictionaryByName = FetchData("/DictionaryByName").fetchData;
-  // const {formatMessage} = useLocalization();
+  const {formatMessage} = useLocalization();
 
   const passwordButton = {
     icon: "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/icons/eye.png",
@@ -104,7 +104,7 @@ export const PasswordGenerator = () => {
   function onFormSubmit(e) {
     notify(
       {
-        message: "You have submitted the form",
+        message: formatMessage("submit_notify"),
         position: {
           my: "center top",
           at: "center top",
@@ -181,7 +181,7 @@ export const PasswordGenerator = () => {
             <div className="dx-field-value">
               <TextBox
                 mode={passwordMode}
-                placeholder="Enter password"
+                placeholder={formatMessage("enter_password")}
                 stylingMode="filled"
                 // defaultValue="F5lzKs$0T"
                 defaultValue={passwordState}
@@ -189,19 +189,19 @@ export const PasswordGenerator = () => {
                 value={passwordState}
               >
                 <TextBoxButton
-                  name="generator"
+                  name={formatMessage("generate_password")}
                   location="after"
                   options={passwordGeneratorBtn}
                 />
 
                 <TextBoxButton
-                  name="password"
+                  name={formatMessage("show_password")}
                   location="after"
                   options={passwordButton}
                 />
 
                 <Validator>
-                  <RequiredRule message="Password is required" />
+                  <RequiredRule message={formatMessage("required_password")} />
                 </Validator>
               </TextBox>
             </div>
@@ -214,21 +214,23 @@ export const PasswordGenerator = () => {
             <div className="dx-field-value">
               <TextBox
                 mode={passwordMode}
-                placeholder="Confirm password"
+                placeholder={formatMessage("confirm_password")}
                 stylingMode="filled"
                 value={confirmPasswordState}
                 onValueChanged={onConfirmPasswordChanged}
               >
                 <TextBoxButton
-                  name="password"
+                  name={formatMessage("show_password")}
                   location="after"
                   options={passwordButton}
                 />
 
                 <Validator>
-                  <RequiredRule message="Confirm Password is required" />
+                  <RequiredRule
+                    message={formatMessage("confirm_required_password")}
+                  />
                   <CompareRule
-                    message="Password and Confirm Password do not match"
+                    message={formatMessage("password_not_match")}
                     comparisonTarget={passwordComparison}
                   />
                 </Validator>
@@ -241,7 +243,7 @@ export const PasswordGenerator = () => {
           <ValidationSummary id="summary"></ValidationSummary>
           <Button
             id="button"
-            text="Submit"
+            text={formatMessage("submit")}
             type="success"
             useSubmitBehavior={true}
           />

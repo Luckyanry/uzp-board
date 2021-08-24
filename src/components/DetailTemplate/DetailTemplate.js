@@ -1,18 +1,7 @@
 import React, {useEffect, useState} from "react";
 
 import "devextreme/data/odata/store";
-import DataGrid, {
-  // FilterRow,
-  // Scrolling,
-  ColumnChooser,
-  Editing,
-  // Column,
-  // RequiredRule,
-  // PatternRule,
-  // FormItem,
-  // Lookup,
-  // Button,
-} from "devextreme-react/data-grid";
+import DataGrid, {ColumnChooser, Editing} from "devextreme-react/data-grid";
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -20,7 +9,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import "./DetailTemplate.scss";
 
 export const DetailTemplate = (props) => {
-  const [dataState, setdataState] = useState(null);
+  const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
   console.log(`props`, props);
@@ -39,7 +28,7 @@ export const DetailTemplate = (props) => {
   });
 
   useEffect(() => {
-    setdataState(props.data.data.columnsjson.columns);
+    setAPIData(props.data.data.columnsjson.columns);
 
     setShortDicsRecordsDataState(shortDicsRecords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,13 +38,13 @@ export const DetailTemplate = (props) => {
     e.data.status = statusesLang[0];
   }
 
-  // console.log(`dataState`, dataState);
+  // console.log(`APIData`, APIData);
   console.log(`shortDicsRecordsDataState`, shortDicsRecordsDataState);
 
   return (
     <DataGrid
       id="grid"
-      columns={dataState}
+      columns={APIData}
       dataSource={shortDicsRecordsDataState}
       // keyExpr="id"
       repaintChangesOnly={true}

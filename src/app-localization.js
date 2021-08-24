@@ -7,6 +7,10 @@ const locales = [
     Name: "Русский",
     Value: "ru",
   },
+  {
+    Name: "O'zbek lotin",
+    Value: "uz-Latn",
+  },
 ];
 
 const dictionary = {
@@ -27,6 +31,16 @@ const dictionary = {
     Notes: "Notes",
     Address: "Address",
     logout: "Logout",
+
+    show_password: "Show password",
+    generate_password: "Create a strong password",
+    enter_password: "Enter password",
+    confirm_password: "Confirm password",
+    required_password: "Password is required",
+    confirm_required_password: "Confirm Password is required",
+    password_not_match: "Password and Confirm Password do not match",
+    submit: "Submit",
+    submit_notify: "You have successfully submitted the form!",
 
     directory: "Individ. and legal entities",
     // directory: "Individuals and legal entities",
@@ -83,7 +97,7 @@ const dictionary = {
       "The 'Code OKPO' field must contain a maximum of 8 digits!",
 
     kspd: "KSPD",
-    kspd_title: "{0}",
+    kspd_title: "Classification of the state of the enterprise {0}",
     kspd_code: "Code {0}",
 
     opf_title: "Org. and legal forms",
@@ -137,6 +151,17 @@ const dictionary = {
     Notes: "Заметки",
     Address: "Адрес",
     logout: "Выход",
+
+    show_password: "Показать пароль",
+    generate_password: "Создайте надежный пароль",
+    enter_password: "Введите пароль",
+    confirm_password: "Подтвердите пароль",
+    required_password: "Поле ввода пароля является обязательным",
+    confirm_required_password:
+      "Поле подтверждения пароля является обязательным",
+    password_not_match: "Поля Пароль и Подтверждение пароля не совпадают!",
+    submit: "Отправить",
+    submit_notify: "Вы успешно отправили форму!",
 
     directory: "Физ. и юр. лица",
 
@@ -225,6 +250,125 @@ const dictionary = {
     code_err_numeric_message: "Поле 'Код {0}' должно содержать только цифры!",
     code_err_message_3: "Поле 'Код {0}' должно содержать 3 цифры!",
     code_err_message_2: "Поле 'Код {0}' должно максимум 2 цифры!",
+  },
+  "uz-Latn": {
+    project_title: "UZP",
+    language: "Til",
+
+    home: "Uy",
+    home_page_desc: "Bosh sahifa tavsifi...",
+
+    profile: "Profil",
+    FirstName: "Ism",
+    LastName: "Familiya",
+    Prefix: "Prefiks",
+    Position: "Lavozim",
+    BirthDate: "Tug'ilgan sana",
+    HireDate: "Ishga qabul qilish sanasi",
+    Notes: "Eslatmalar",
+    Address: "Manzil",
+    logout: "Chiqish",
+
+    show_password: "Parolni ko'rsatish",
+    generate_password: "Kuchli parol yarating",
+    enter_password: "Parolni kiriting",
+    confirm_password: "Parolni tasdiqlang",
+    required_password: "Parol talab qilinadi",
+    confirm_required_password: "Parolni tasdiqlash talab qilinadi",
+    password_not_match: "Parol va Parolni tasdiqlash mos kelmaydi",
+    submit: "Yuborish",
+    submit_notify: "Siz shaklni muvaffaqiyatli topshirdingiz!",
+
+    directory: "Jismoniy va yuridik shaxslar",
+
+    countries: "Mamlakatlar",
+    countries_title: "'{0}' katalogi",
+    short_name: "Mamlakat nomi",
+    short_name_rus: "(RU) tilida mamlakat nomi",
+    short_name_uzcyr: "(ЎЗ) tilida mamlakat nomi",
+    short_name_uzlat: "(O’Z) tilida mamlakat nomi",
+    short_name_karlat: "(UZ-Q) tilida mamlakat nomi",
+    short_name_eng: "(EN) tilida mamlakat nomi",
+    alpha2code: "Alpha2",
+    alpha2code_err_message:
+      "'Alpha2' maydonida 2 ta katta harf bo'lishi kerak!",
+    alpha3code: "Alpha3",
+    alpha3code_err_message:
+      "'Alpha3' maydonida 3 ta katta harf bo'lishi kerak!",
+    numeric: "Raqamli",
+    numeric_err_message:
+      "'Raqamli' maydonida maksimal 4 ta raqam bo'lishi kerak!",
+
+    soato: "MBBT - SOATO",
+    soato_title:
+      "Katalog 'Ma'muriy-hududiy birliklarni belgilash tizimi' ({0})",
+    expand: "Barcha qatorlarni kengaytirish",
+    territory_name_rus: "Hudud nomi (RU)",
+    territory_name_uzcyr: "Hudud nomi (ЎЗ)",
+    territory_name_uzlat: "Hudud nomi (O’Z)",
+    territory_name_karlat: "Hudud nomi (UZ-Q)",
+    territory_name_eng: "Hudud nomi (EN)",
+    admin_centre_rus: "Ma'muriy markaz nomi (RU)",
+    admin_centre_uzcyr: "Ma'muriy markaz nomi (ЎЗ)",
+    admin_centre_uzlat: "Ma'muriy markaz nomi (O’Z)",
+    admin_centre_karlat: "Ma'muriy markaz nomi (UZ-Q)",
+    admin_centre_eng: "Ma'muriy markaz nomi (EN)",
+    as_child_of: "Qo'llaniladi",
+    soato_code: "Kod {0}",
+
+    soogu: "DXBBT - SOOGU",
+    soogu_title: "Davlat va xo'jalik boshqaruvi belgilari tizimi ({0})",
+    name_rus: "(RU) tilida mamlakat nomi",
+    name_uzcyr: "(ЎЗ) tilida mamlakat nomi",
+    name_uzlat: "(O’Z) tilida mamlakat nomi",
+    name_karlat: "(UZ-Q) tilida mamlakat nomi",
+    name_eng: "(EN) tilida mamlakat nomi",
+    code_soogu: "Kod SOOGU",
+    codeSogu_numeric_err_message:
+      "'Kod SOOGU' maydonida 4 dan 5 gacha raqam bo'lishi kerak!",
+    sogogu_okpo_title: "OKPO",
+    codeOKPO: "Kod OKPO",
+    codeOKPO_numeric_err_message:
+      "'Kod OKPO' maydonida maksimal 8 ta raqam bo'lishi kerak!",
+
+    kspd: "KHT - KSPD",
+    kspd_title: "Korxona holatining tasnifi {0}",
+    kspd_code: "Kod {0}",
+
+    opf_title: "Tashkiliy va huquqiy shakllar",
+
+    kfs: "MS - KFS",
+    kfs_title: "'Mulkchilik shakllari' katalogi ({0})",
+    kfs_code: "Kod {0}",
+
+    kopf: "THS - KOPF",
+    kopf_title: "'Tashkiliy va huquqiy shakllar' katalogi ({0})",
+    kopf_code: "Kod {0}",
+
+    shortDics: "Qisqa kataloglar",
+    name: "Meta nomi",
+    class: "Sinf",
+    className: "Turi",
+    metaid: "Meta ID",
+
+    status: "Holat",
+    Active: "Faol",
+    Deactivated: "O'chirilgan",
+
+    colomn_chooser: "Ustun tanlash",
+    colomn_chooser_empty_text:
+      "Yashirish uchun ustun sarlavhasini bu erga torting",
+
+    create_new_item: "Yangi {0} element yaratish",
+    add_new_item: "Yangi {0} ta element qo‘shish",
+    edit_new_item: "{0} ta elementni tahrirlash",
+    delete_new_item: "{0} ta elementni o‘chirish",
+
+    code_err_numeric_message:
+      "'Kod {0}' maydonida faqat raqamlar bo'lishi kerak!",
+    code_err_message_3: "'Kod {0}' maydonida 3 ta raqam bo'lishi kerak!",
+    code_err_message_2:
+      "'Kod {0}' maydonida maksimal 2 ta raqam bo'lishi kerak!",
   },
 };
 

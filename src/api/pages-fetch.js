@@ -171,7 +171,7 @@ export const FetchData = (pageRequest, tid = null) => {
   function responseData(data) {
     if (Array.isArray(data)) {
       const newData = statusBooleanToString(data);
-      // console.log("lookData =>", newData);
+
       return {
         data: newData,
         totalCount: newData.length,

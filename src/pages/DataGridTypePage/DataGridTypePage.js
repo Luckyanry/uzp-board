@@ -26,7 +26,7 @@ import {DetailTemplate} from "../../components/DetailTemplate/DetailTemplate";
 import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
-  const [fetchDataState, setFetchDataState] = useState(null);
+  const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
 
   const fetchData = FetchData(pathname).fetchData;
@@ -60,7 +60,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    setFetchDataState(fetchData);
+    setAPIData(fetchData);
 
     pathnameToName === "shortDics" &&
       lookData
@@ -120,14 +120,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     }
 
     return murkupCollection.map((item, idx) => {
-      const {value, visible, required, width = "auto"} = item;
+      const {value, visible, required} = item;
       return (
         <Column
           key={idx}
           dataField={value}
           caption={formatMessage(value)}
           visible={visible}
-          width={width}
         >
           {required && <RequiredRule />}
         </Column>
@@ -225,7 +224,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       </h2>
 
       <DataGrid
-        dataSource={fetchDataState}
+        dataSource={APIData}
         // keyExpr="id"
         repaintChangesOnly={true}
         remoteOperations={false}

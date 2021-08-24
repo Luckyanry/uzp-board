@@ -24,7 +24,7 @@ import "./TreeListTypePage.scss";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
-  const [fetchDataState, setFetchDataState] = useState(null);
+  const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
 
   const fetchData = FetchData(pathname).fetchData;
@@ -48,7 +48,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    setFetchDataState(fetchData);
+    setAPIData(fetchData);
 
     lookData
       ._loadFunc()
@@ -230,7 +230,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       />
 
       <TreeList
-        dataSource={fetchDataState}
+        dataSource={APIData}
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
@@ -268,6 +268,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           emptyPanelText={formatMessage("colomn_chooser_empty_text")}
         />
         <FilterRow visible={true} />
+
         <Editing
           mode="popup"
           popup={popupOpt}
@@ -275,6 +276,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           allowUpdating={true}
           allowDeleting={true}
         />
+
         <Column
           dataField="id"
           caption="ID"
@@ -284,8 +286,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           disabled={true}
           width={80}
         />
+
         {customMarkupRender()}
         {customCodeMarkupRender()}
+
         <Column
           dataField="pid"
           caption={formatMessage("as_child_of")}
@@ -297,6 +301,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             displayExpr="name"
           />
         </Column>
+
         <Column
           dataField="status"
           caption={formatMessage("status")}
@@ -306,6 +311,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           <Lookup dataSource={statusesLang} />
           <RequiredRule />
         </Column>
+
         <Column type="buttons" width={110}>
           <TreeListButton
             name="add"
@@ -320,6 +326,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             hint={formatMessage("delete_new_item", localizedPageShortName)}
           />
         </Column>
+
         <Paging defaultPageSize={10} enabled={true} />
         <Pager
           showPageSizeSelector={true}
