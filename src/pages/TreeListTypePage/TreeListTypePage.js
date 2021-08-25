@@ -27,6 +27,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
   const [stateOfRows, setStateOfRows] = useState("expand");
+  // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;

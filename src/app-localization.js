@@ -137,6 +137,17 @@ const dictionary = {
     edit_new_item: "Edit {0} item",
     delete_new_item: "Delete {0} item",
 
+    pattern_rule_err_msg_1:
+      "Password must contain at least one English lowercase characters (a through z), for example, 'abcd'!",
+    pattern_rule_err_msg_2:
+      "Password must contain at least one English lowercase characters (a through z) and one English uppercase characters (A through Z), for example, 'AbcD'!",
+    pattern_rule_err_msg_3:
+      "Password must contain at least one English lowercase characters (a through z), one English uppercase characters (A through Z) and one digit, for example, 'Ab7c'!",
+    pattern_rule_err_msg_4:
+      "Password must contain at least one English lowercase characters (a through z), one English uppercase characters (A through Z), one digit and one non-alphabetic characters, for example, 'n$R7'!",
+    string_length_rule_err_msg:
+      "Password must have at least {0} and must be less than {1} symbols",
+
     code_err_numeric_message: "The 'Code {0}' field must contain only digits!",
     code_err_message_3: "The 'Code {0}' field must contain 3 digits!",
     code_err_message_2:
@@ -265,6 +276,17 @@ const dictionary = {
     edit_new_item: "Изменить запись {0}",
     delete_new_item: "Удалить запись {0}",
 
+    pattern_rule_err_msg_1:
+      "Пароль должен содержать как минимум один строчный английский символ (от a до z), например, 'abcd'!",
+    pattern_rule_err_msg_2:
+      "Пароль должен содержать как минимум один строчный английский символ (от a до z) и один английский прописной символ (от A до Z), например, 'AbcD'!",
+    pattern_rule_err_msg_3:
+      "Пароль должен содержать как минимум один строчный английский символ (от a до z), один английский прописной символ (от A до Z) и одну цифру, например, 'Ab7c'!",
+    pattern_rule_err_msg_4:
+      "Пароль должен содержать как минимум один строчный английский символ (от a до z), один английский прописной символ (от A до Z), одну цифру и один неалфавитный символ, например, 'n$R7'.",
+    string_length_rule_err_msg:
+      "Пароль должен содержать не менее {0} и не более {1} символов.",
+
     code_err_numeric_message: "Поле 'Код {0}' должно содержать только цифры!",
     code_err_message_3: "Поле 'Код {0}' должно содержать 3 цифры!",
     code_err_message_2: "Поле 'Код {0}' должно содержать максимум 2 цифры!",
@@ -390,6 +412,17 @@ const dictionary = {
     add_new_item: "Yangi {0} ta element qo‘shish",
     edit_new_item: "{0} ta elementni tahrirlash",
     delete_new_item: "{0} ta elementni o‘chirish",
+
+    pattern_rule_err_msg_1:
+      "Parol kamida bitta inglizcha kichik harflardan (a dan zgacha), masalan, 'abcd'!",
+    pattern_rule_err_msg_2:
+      "Parol kamida bitta inglizcha kichik harflardan (a dan zgacha) va bitta inglizcha katta harflardan (A dan Z gacha), masalan, 'AbcD'!",
+    pattern_rule_err_msg_3:
+      "Parol kamida bitta inglizcha kichik harflardan (a dan zgacha), bitta inglizcha katta harflardan (A dan Z gacha) va itta raqamdan, masalan, 'Ab7c'!",
+    pattern_rule_err_msg_4:
+      "Parol kamida bitta inglizcha kichik harflardan (a dan zgacha), bitta inglizcha katta harflardan (A dan Z gacha), bitta raqamdan va bitta alifbo bo'lmagan belgilardan iborat bo'lishi kerak, masalan, 'n$R7'",
+    string_length_rule_err_msg:
+      "Parol kamida {0} bo'lishi va {1} belgidan kam bo'lmasligi kerak",
 
     code_err_numeric_message:
       "'Kod {0}' maydonida faqat raqamlar bo'lishi kerak!",

@@ -19,20 +19,15 @@ import "./PasswordGenerator.scss";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
 import {FetchData} from "../../api/pages-fetch";
-import {func} from "prop-types";
+// import {func} from "prop-types";
 
 export const PasswordGenerator = () => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
-  const [passwordFetchRules, setPasswordFetchRules] = useState(null);
-  const [minLength, setMinLength] = useState(4);
+  const [minLength, setMinLength] = useState(8);
   const [maxLength, setMaxLength] = useState(128);
-  const [minCharacterGroups, setMinCharacterGroups] = useState(3);
-  const [hasLower, setHasLower] = useState(true);
-  const [hasUpper, setHasUpper] = useState(true);
-  const [hasNumber, setHasNumber] = useState(true);
-  const [hasSymbol, setHasSymbol] = useState(true);
+  const [minCharacterGroups, setMinCharacterGroups] = useState(4);
 
   const dictionaryByName = FetchData("/DictionaryByName").fetchData;
   const {formatMessage} = useLocalization();
@@ -49,22 +44,16 @@ export const PasswordGenerator = () => {
     icon: "add",
     type: "default",
     onClick: () => {
+      const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
+
       const newPassword = generatorPassword(
-        hasLower,
-        hasUpper,
-        hasNumber,
-        hasSymbol,
+        setLower,
+        setUpper,
+        setNumber,
+        setSymbol,
         minLength
       );
-
       setConfirmPasswordState(newPassword);
-
-      console.log(`passwordFetchRules => minLength `, minLength);
-      console.log(`passwordFetchRules => maxLength `, maxLength);
-      console.log(
-        `passwordFetchRules => minCharacterGroups `,
-        minCharacterGroups
-      );
     },
   };
 
@@ -80,15 +69,12 @@ export const PasswordGenerator = () => {
       ._loadFunc()
       .then((res) => res.data)
       .then((arr) => {
-        setPasswordFetchRules(arr[0]);
         setMinLength(arr[0].jvson.MinPasswordLength);
         setMaxLength(arr[0].jvson.MaxPasswordLength);
         setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // console.log(`Profile passwordFetchRules`, passwordFetchRules);
 
   function onPasswordChanged(e) {
     setPasswordState(e.value);
@@ -103,6 +89,7 @@ export const PasswordGenerator = () => {
   }
 
   function onFormSubmit(e) {
+    console.log(`inputValidation`, inputValidation());
     notify(
       {
         message: formatMessage("submit_notify"),
@@ -135,7 +122,13 @@ export const PasswordGenerator = () => {
     return symbols[Math.floor(Math.random() * symbols.length)];
   }
 
-  function generatorPassword(lower, upper, number, symbol, length) {
+  function generatorPassword(
+    lower = true,
+    upper = false,
+    number = false,
+    symbol = false,
+    length
+  ) {
     let generatedPassword = "";
 
     const typesCount = lower + upper + number + symbol;
@@ -145,9 +138,6 @@ export const PasswordGenerator = () => {
       .sort()
       .map((i) => i[1])
       .filter((item) => Object.values(item)[0]);
-
-    console.log(`typesCount`, typesCount);
-    console.log(`typeArr`, typeArr);
 
     if (typesCount === 0) {
       return "";
@@ -163,8 +153,6 @@ export const PasswordGenerator = () => {
 
     const finalPassword = generatedPassword.slice(0, length);
 
-    console.log(`finalPassword => `, finalPassword);
-
     setPasswordState(finalPassword);
     return finalPassword;
   }
@@ -177,19 +165,50 @@ export const PasswordGenerator = () => {
 
     switch (minCharacterGroups) {
       case 1:
-        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+        return {
+          setLower: true,
+          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_1"),
+          regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
+        };
       case 2:
-        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+        return {
+          setLower: true,
+          setUpper: true,
+          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_2"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
+        };
       case 3:
-        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_3"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
+        };
       case 4:
-        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          setSymbol: true,
+          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_4"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+        };
 
       default:
-        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          setSymbol: true,
+          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_4"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+        };
     }
   }
-  console.log(`inputValidation`, inputValidation());
+
+  const {regExp, patternRuleErrMsg} = inputValidation();
+
   return (
     <div className="dx-fieldset">
       <form action="your-action" onSubmit={onFormSubmit}>
@@ -203,7 +222,6 @@ export const PasswordGenerator = () => {
                 mode={passwordMode}
                 placeholder={formatMessage("enter_password")}
                 stylingMode="filled"
-                // defaultValue="F5lzKs$0T"
                 defaultValue={passwordState}
                 onValueChanged={onPasswordChanged}
                 value={passwordState}
@@ -222,15 +240,18 @@ export const PasswordGenerator = () => {
 
                 <Validator>
                   <RequiredRule message={formatMessage("required_password")} />
-                  <PatternRule
-                    message="Do not use digits in the password"
-                    pattern={inputValidation()}
-                  />
+
                   <StringLengthRule
-                    message={`Password must have at least ${minLength} and must be less than ${maxLength} symbols`}
+                    message={formatMessage(
+                      "string_length_rule_err_msg",
+                      minLength,
+                      maxLength
+                    )}
                     min={minLength}
                     max={maxLength}
                   />
+
+                  <PatternRule message={patternRuleErrMsg} pattern={regExp} />
                 </Validator>
               </TextBox>
             </div>
@@ -258,18 +279,10 @@ export const PasswordGenerator = () => {
                   <RequiredRule
                     message={formatMessage("confirm_required_password")}
                   />
+
                   <CompareRule
                     message={formatMessage("password_not_match")}
                     comparisonTarget={passwordComparison}
-                  />
-                  <PatternRule
-                    message="Do not use digits in the password"
-                    pattern={inputValidation()}
-                  />
-                  <StringLengthRule
-                    message={`Password must have at least ${minLength} and must be less than ${maxLength} symbols`}
-                    min={minLength}
-                    max={maxLength}
                   />
                 </Validator>
               </TextBox>
