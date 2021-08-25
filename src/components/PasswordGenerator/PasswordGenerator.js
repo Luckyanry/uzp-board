@@ -161,7 +161,7 @@ export const PasswordGenerator = () => {
     }
 
     const finalPassword = generatedPassword.slice(0, length);
-    // console.log(`finalPassword`, finalPassword);
+
     setPasswordState(finalPassword);
     return finalPassword;
   }
