@@ -26,6 +26,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
+  const [stateOfRows, setStateOfRows] = useState("expand");
 
   const fetchData = FetchData(pathname).fetchData;
   const lookData = FetchData(pathname).lookData;
@@ -63,6 +64,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   function clickHandler() {
     setToggler((toggler) => !toggler);
+    setStateOfRows(() =>
+      stateOfRows === "minimised" ? "expand" : "minimised"
+    );
 
     if (toggler) {
       window.location.reload();
@@ -238,7 +242,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         className="btn"
         icon="hierarchy"
         stylingMode="outlined"
-        text={formatMessage("expand")}
+        text={formatMessage(stateOfRows)}
         onClick={clickHandler}
       />
 
@@ -247,7 +251,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         rootValue={0}
         keyExpr="id"
         parentIdExpr="pid"
-        defaultExpandedRowKeys={[1, 3, 5]}
+        // defaultExpandedRowKeys={[1, 3, 5]}
         // rows
         showRowLines={true}
         focusedRowEnabled={true}

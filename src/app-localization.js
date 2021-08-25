@@ -66,7 +66,7 @@ const dictionary = {
     soato: "SOATO",
     soato_title:
       "Directory 'System of designation of administrative-territorial units' ({0})",
-    expand: "Expand all rows",
+
     territory_name_rus: "Territory name (RU)",
     territory_name_uzcyr: "Territory name (ЎЗ)",
     territory_name_uzlat: "Territory name (O’Z)",
@@ -125,6 +125,9 @@ const dictionary = {
     status: "Status",
     Active: "Active",
     Deactivated: "Deactivated",
+
+    expand: "Expand all rows",
+    minimised: "Minimize all rows",
 
     colomn_chooser: "Column selection",
     colomn_chooser_empty_text: "Drag a column header here to hide it",
@@ -192,7 +195,7 @@ const dictionary = {
     soato: "СОАТО",
     soato_title:
       "Справочник 'Система обозначений административно-территориальных единиц' ({0})",
-    expand: "Развернуть все строки",
+
     territory_name_rus: "Территориальное название (РУ)",
     territory_name_uzcyr: "Территориальное название (ЎЗ)",
     territory_name_uzlat: "Территориальное название (O’Z)",
@@ -249,6 +252,9 @@ const dictionary = {
     status: "Статус",
     Active: "Активен",
     Deactivated: "Отключен",
+
+    expand: "Развернуть все строки",
+    minimised: "Свернуть все строки",
 
     colomn_chooser: "Выбор столбцов",
     colomn_chooser_empty_text:
@@ -315,7 +321,7 @@ const dictionary = {
     soato: "MBBT - SOATO",
     soato_title:
       "Katalog 'Ma'muriy-hududiy birliklarni belgilash tizimi' ({0})",
-    expand: "Barcha qatorlarni kengaytirish",
+
     territory_name_rus: "Hudud nomi (RU)",
     territory_name_uzcyr: "Hudud nomi (ЎЗ)",
     territory_name_uzlat: "Hudud nomi (O’Z)",
@@ -372,6 +378,9 @@ const dictionary = {
     status: "Holat",
     Active: "Faol",
     Deactivated: "O'chirilgan",
+
+    expand: "Barcha qatorlarni kengaytirish",
+    minimised: "Barcha qatorlarni kamaytiring",
 
     colomn_chooser: "Ustun tanlash",
     colomn_chooser_empty_text:

@@ -7,8 +7,8 @@ import {
   Validator,
   RequiredRule,
   CompareRule,
-  // PatternRule,
-  // StringLengthRule,
+  PatternRule,
+  StringLengthRule,
   // RangeRule,
   // AsyncRule
 } from "devextreme-react/validator";
@@ -19,6 +19,7 @@ import "./PasswordGenerator.scss";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
 import {FetchData} from "../../api/pages-fetch";
+import {func} from "prop-types";
 
 export const PasswordGenerator = () => {
   const [passwordState, setPasswordState] = useState("");
@@ -27,7 +28,7 @@ export const PasswordGenerator = () => {
   const [passwordFetchRules, setPasswordFetchRules] = useState(null);
   const [minLength, setMinLength] = useState(4);
   const [maxLength, setMaxLength] = useState(128);
-  const [minCharacterGroups, setMinCharacterGroups] = useState(128);
+  const [minCharacterGroups, setMinCharacterGroups] = useState(3);
   const [hasLower, setHasLower] = useState(true);
   const [hasUpper, setHasUpper] = useState(true);
   const [hasNumber, setHasNumber] = useState(true);
@@ -130,7 +131,7 @@ export const PasswordGenerator = () => {
   }
 
   function getRandomSymbol() {
-    const symbols = '!"#$%&()*+,-./:;<=>?@[]^_`{|}~(';
+    const symbols = `!"#$%&()*+,-./:;<=>?@[]^_{|}~`;
     return symbols[Math.floor(Math.random() * symbols.length)];
   }
 
@@ -145,7 +146,7 @@ export const PasswordGenerator = () => {
       .map((i) => i[1])
       .filter((item) => Object.values(item)[0]);
 
-    // console.log(`typesCount`, typesCount);
+    console.log(`typesCount`, typesCount);
     console.log(`typeArr`, typeArr);
 
     if (typesCount === 0) {
@@ -162,14 +163,33 @@ export const PasswordGenerator = () => {
 
     const finalPassword = generatedPassword.slice(0, length);
 
+    console.log(`finalPassword => `, finalPassword);
+
     setPasswordState(finalPassword);
     return finalPassword;
   }
 
-  // console.log(`passwordFetchRules => minLength `, minLength);
-  // console.log(`passwordFetchRules => maxLength `, maxLength);
-  // console.log(`passwordFetchRules => minCharacterGroups `, minCharacterGroups);
+  function inputValidation() {
+    const digitsRule = "0-9";
+    const symbolRule = String.raw`\!\"\#\$\%\&\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\{\|\}\~`;
+    const lowerLetterRule = "a-z";
+    const upperLetterRule = "A-Z";
 
+    switch (minCharacterGroups) {
+      case 1:
+        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+      case 2:
+        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+      case 3:
+        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+      case 4:
+        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+
+      default:
+        return `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`;
+    }
+  }
+  console.log(`inputValidation`, inputValidation());
   return (
     <div className="dx-fieldset">
       <form action="your-action" onSubmit={onFormSubmit}>
@@ -202,6 +222,15 @@ export const PasswordGenerator = () => {
 
                 <Validator>
                   <RequiredRule message={formatMessage("required_password")} />
+                  <PatternRule
+                    message="Do not use digits in the password"
+                    pattern={inputValidation()}
+                  />
+                  <StringLengthRule
+                    message={`Password must have at least ${minLength} and must be less than ${maxLength} symbols`}
+                    min={minLength}
+                    max={maxLength}
+                  />
                 </Validator>
               </TextBox>
             </div>
@@ -233,6 +262,15 @@ export const PasswordGenerator = () => {
                     message={formatMessage("password_not_match")}
                     comparisonTarget={passwordComparison}
                   />
+                  <PatternRule
+                    message="Do not use digits in the password"
+                    pattern={inputValidation()}
+                  />
+                  <StringLengthRule
+                    message={`Password must have at least ${minLength} and must be less than ${maxLength} symbols`}
+                    min={minLength}
+                    max={maxLength}
+                  />
                 </Validator>
               </TextBox>
             </div>
@@ -240,7 +278,7 @@ export const PasswordGenerator = () => {
         </div>
 
         <div className="dx-btn-fieldset">
-          <ValidationSummary id="summary"></ValidationSummary>
+          <ValidationSummary id="summary" />
           <Button
             id="button"
             text={formatMessage("submit")}
