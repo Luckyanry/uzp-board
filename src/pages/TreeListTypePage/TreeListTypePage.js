@@ -75,7 +75,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     if (
       pathnameToName === "kopf" ||
       pathnameToName === "kspd" ||
-      pathnameToName === "kfs"
+      pathnameToName === "kfs" ||
+      pathnameToName === "oked"
     ) {
       const pageTitleCollection = [
         "name_rus",
@@ -171,6 +172,18 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           message: "code_err_message_3",
           pattern: "^[0-9]{3}$",
           required: true,
+        },
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    } else if (pathnameToName === "oked") {
+      const pageTitleCollection = [
+        {
+          dataField: "code",
+          width: 120,
+          message: "code_err_message_5",
+          pattern: "^[0-9]{0,5}$",
+          required: false,
         },
       ];
 

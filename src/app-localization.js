@@ -111,6 +111,11 @@ const dictionary = {
     kopf_title: "Directory 'Organizational and Legal Forms' ({0})",
     kopf_code: "Code {0}",
 
+    oked: "OKED",
+    oked_title: "Classification of Types of Economic Activity ({0})",
+    oked_code: "Code {0}",
+    oked_ОКОНХ: "ОКОНХ",
+
     shortDics: "Short directories",
     name: "Meta name",
     class: "Class",
@@ -133,6 +138,8 @@ const dictionary = {
     code_err_message_3: "The 'Code {0}' field must contain 3 digits!",
     code_err_message_2:
       "The 'Code {0}' field must contain a maximum of 2 digits!",
+    code_err_message_5:
+      "The 'Code {0}' field must contain a maximum of 5 digits!",
   },
   ru: {
     project_title: "ЕАИС",
@@ -228,6 +235,11 @@ const dictionary = {
     kopf_title: "Справочник 'Организационно-правовые формы' ({0})",
     kopf_code: "Код {0}",
 
+    oked: "ОКЭД",
+    oked_title: "Классификатор видов экономической деятельности ({0})",
+    oked_code: "Код {0}",
+    oked_ОКОНХ: "ОКОНХ",
+
     shortDics: "Короткие справочники",
     name: "Мета название",
     class: "Класс",
@@ -249,7 +261,8 @@ const dictionary = {
 
     code_err_numeric_message: "Поле 'Код {0}' должно содержать только цифры!",
     code_err_message_3: "Поле 'Код {0}' должно содержать 3 цифры!",
-    code_err_message_2: "Поле 'Код {0}' должно максимум 2 цифры!",
+    code_err_message_2: "Поле 'Код {0}' должно содержать максимум 2 цифры!",
+    code_err_message_5: "Поле 'Код {0}' должно содержать максимум 5 цифр!",
   },
   "uz-Latn": {
     project_title: "UZP",
@@ -345,6 +358,11 @@ const dictionary = {
     kopf_title: "'Tashkiliy va huquqiy shakllar' katalogi ({0})",
     kopf_code: "Kod {0}",
 
+    oked: "IFTT - OKED",
+    oked_title: "Iqtisodiy faoliyat turlarining tasnifi ({0})",
+    oked_code: "Kod {0}",
+    oked_ОКОНХ: "ОКОНХ",
+
     shortDics: "Qisqa kataloglar",
     name: "Meta nomi",
     class: "Sinf",
@@ -369,6 +387,8 @@ const dictionary = {
     code_err_message_3: "'Kod {0}' maydonida 3 ta raqam bo'lishi kerak!",
     code_err_message_2:
       "'Kod {0}' maydonida maksimal 2 ta raqam bo'lishi kerak!",
+    code_err_message_5:
+      "'Kod {0}' maydonida maksimal 5 ta raqam bo'lishi kerak!",
   },
 };
 

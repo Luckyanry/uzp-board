@@ -22,6 +22,8 @@ export const FetchData = (pageRequest, tid = null) => {
         return "&sp=KFS";
       case "/kspd":
         return "&sp=Kspd";
+      case "/oked":
+        return "&sp=Oked";
       case "/shortDics":
         return "&sp=ShortDics";
       case "/ShortDicsRecords":

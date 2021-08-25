@@ -7,7 +7,7 @@ import {
 } from "./pages";
 
 const dataGridPagesPath = ["countries", "soogu", "shortDics"];
-const treeListPagesPath = ["soato", "kspd", "kfs", "kopf"];
+const treeListPagesPath = ["soato", "kspd", "kfs", "kopf", "oked"];
 
 const routes = [
   {

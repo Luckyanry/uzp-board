@@ -3,7 +3,7 @@ import {useLocalization} from "./contexts/LocalizationContext";
 export const AppNavigation = () => {
   const {formatMessage} = useLocalization();
 
-  const directoryFolder = ["countries", "soato", "soogu", "kspd"];
+  const directoryFolder = ["countries", "soato", "soogu", "kspd", "oked"];
   const opfFolder = ["kfs", "kopf"];
 
   function pathCreator(pathTitle) {
