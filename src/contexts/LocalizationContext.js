@@ -83,7 +83,7 @@ const LocalizationProvider = ({children}) => {
     setLang(e.value);
     setLocale(e.value);
     changeMyLocalTo(e.value);
-    // document.location.reload();
+    document.location.reload();
   }
 
   return (
