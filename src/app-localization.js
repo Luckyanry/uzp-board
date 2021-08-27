@@ -1,6 +1,6 @@
 const locales = [
   {
-    Name: "English",
+    Name: "r",
     Value: "en",
   },
   {
@@ -431,6 +431,14 @@ const dictionary = {
       "'Kod {0}' maydonida maksimal 2 ta raqam bo'lishi kerak!",
     code_err_message_5:
       "'Kod {0}' maydonida maksimal 5 ta raqam bo'lishi kerak!",
+  },
+  "uz-Cyrl": {
+    project_title: "UZP",
+    language: "Тили",
+  },
+  "kaa-Latn": {
+    project_title: "UZP",
+    language: "Tili",
   },
 };
 

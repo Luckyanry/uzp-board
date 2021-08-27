@@ -1,35 +1,38 @@
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
-import {useLocalization} from "../contexts/LocalizationContext";
 
 const url = "http://10.0.10.71";
-const baseParams = "/actions.asp?db=hbdb&operation=do";
+const baseParams = "/actions.asp?operation=do";
+const hbdbParam = "db=hbdb";
+const wisdbParam = "db=wisdb";
 
-export const FetchData = (pageRequest, tid = null) => {
-  const {formatMessage} = useLocalization();
-
+export const FetchData = (pageRequest, formatMessage, tid = null) => {
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
-        return "&sp=Soogu";
+        return `&${hbdbParam}&sp=Soogu`;
       case "/soato":
-        return "&sp=Soato";
+        return `&${hbdbParam}&sp=Soato`;
       case "/countries":
-        return "&sp=Countries";
+        return `&${hbdbParam}&sp=Countries`;
       case "/kopf":
-        return "&sp=Kopf";
+        return `&${hbdbParam}&sp=Kopf`;
       case "/kfs":
-        return "&sp=KFS";
+        return `&${hbdbParam}&sp=KFS`;
       case "/kspd":
-        return "&sp=Kspd";
+        return `&${hbdbParam}&sp=Kspd`;
       case "/oked":
-        return "&sp=Oked";
+        return `&${hbdbParam}&sp=Oked`;
       case "/shortDics":
-        return "&sp=ShortDics";
+        return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":
-        return `&sp=ShortDicsRecords&@tid=${tid}`;
+        return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
-        return `&sp=ShortDicsRecords&@name=PasswordPolicies`;
+        return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
+      case "/islang":
+        return `&${wisdbParam}&sp=islang`;
+      case "/w_changeMyLocaleTo":
+        return `&${wisdbParam}&sp=w_changeMyLocaleTo`;
       default:
         return "/home";
     }
@@ -71,6 +74,15 @@ export const FetchData = (pageRequest, tid = null) => {
         },
         "POST"
       ),
+    byKey: (key) =>
+      sendRequest(
+        finalUrl,
+        {
+          schema: "bykey",
+          "@key": key,
+        },
+        "POST"
+      ),
     onBeforeSend: function (method, ajaxOptions) {
       ajaxOptions.credentials = "include";
       ajaxOptions.xhrFields = {withCredentials: true};
@@ -83,6 +95,19 @@ export const FetchData = (pageRequest, tid = null) => {
       sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
         schema: "look",
       }),
+  });
+
+  const changeMyLocalToData = new CustomStore({
+    key: "short",
+    insert: (newKey) =>
+      sendRequest(
+        `${url}${baseParams}${pageRequestParams()}`,
+        {
+          schema: "dbo",
+          "@newkey": newKey,
+        },
+        "POST"
+      ),
   });
 
   async function sendRequest(url, data = {}, method = "GET") {
@@ -194,5 +219,5 @@ export const FetchData = (pageRequest, tid = null) => {
     }
   }
 
-  return {fetchData, lookData};
+  return {fetchData, lookData, changeMyLocalToData};
 };

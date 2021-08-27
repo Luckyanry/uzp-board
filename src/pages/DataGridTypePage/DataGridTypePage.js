@@ -29,10 +29,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
 
-  const fetchData = FetchData(pathname).fetchData;
-  const lookData = FetchData(pathname).lookData;
-
   const {formatMessage} = useLocalization();
+  const fetchData = FetchData(pathname, formatMessage).fetchData;
+  const lookData = FetchData(pathname, formatMessage).lookData;
+
   const pathnameToName = pathname.split("/")[1];
   const localizedPageShortName = formatMessage(pathnameToName);
 
