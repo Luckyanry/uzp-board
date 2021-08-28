@@ -12,11 +12,9 @@ const useLocalization = () => useContext(LocalizationContext);
 
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
+  const [defaultLang, setDefaultLang] = useState("en");
+  // const [currentLang, setCurrentLang] = useState("en");
   const [lang, setLang] = useState(() => getLocale());
-  const [defaultLang, setDefaultLang] = useState("ru");
-  const [currentLang, setCurrentLang] = useState(true);
-  // // const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
-  // //   useState(null);
 
   const islangFetch = FetchData("/islang", formatMessage).fetchData;
   const changedMyLocalFetch = FetchData(
@@ -28,47 +26,53 @@ const LocalizationProvider = ({children}) => {
     islangFetch
       ._loadFunc()
       .then((res) => res.data)
-      .then((arr) => {
-        setLangData(arr);
-        isCurrentLang(arr);
-        isDefaultLang(arr);
+      .then((data) => {
+        isEnabledLang(data);
+        isDefaultLang(data);
+        isCurrentLang(data);
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!langData) return;
+  console.log(`lang`, lang);
   initMessages();
   locale(lang);
 
   if (langData) {
-    console.log(`langData`, langData);
-    // console.log(`lang`, lang);
-    console.log(`currentLang`, currentLang);
+    // console.log(`langData`, langData);
+    // console.log(`currentLang`, currentLang);
     console.log(`defaultLang`, defaultLang);
-
     // isCurrentLang(langData);
     // isDefaultLang(langData);
   }
 
-  function isCurrentLang(value) {
-    if (value.length) {
-      const result = value.find((item) => item.iscurrent);
-      setCurrentLang(result.iscurrent);
+  function isEnabledLang(array) {
+    if (array.length) {
+      const result = array.filter(({isenabled}) => isenabled);
+      setLangData(result);
     }
   }
 
-  function isDefaultLang(value) {
-    if (value.length) {
-      const result = value.find((item) => item.isdefault);
-      setDefaultLang(result.short);
+  function isCurrentLang(array) {
+    if (array.length) {
+      const result = array.find(({iscurrent}) => iscurrent);
+      console.log(`result isCurrentLang`, result);
+      // setCurrentLang(result.short);
       setLocale(result.short);
+    }
+  }
+
+  function isDefaultLang(array) {
+    if (array.length) {
+      const result = array.find(({isdefault}) => isdefault);
+      setDefaultLang(result.short);
     }
   }
 
   function getLocale() {
     const locale = sessionStorage.getItem("locale");
-    return locale != null ? locale : "en";
+    return locale !== null ? locale : defaultLang;
   }
 
   function setLocale(locale) {
@@ -80,17 +84,17 @@ const LocalizationProvider = ({children}) => {
   }
 
   function changeLocale(e) {
+    changeMyLocalTo(e.value);
     setLang(e.value);
     setLocale(e.value);
-    changeMyLocalTo(e.value);
-    document.location.reload();
+    window.location.reload();
   }
 
   return (
     <LocalizationContext.Provider
       value={{
         lang,
-        locales: langData,
+        langData,
         changeLocale,
         locale,
         loadMessages,

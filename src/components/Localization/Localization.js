@@ -8,13 +8,13 @@ import "./Localization.scss";
 const selectBoxInputAttr = {id: "selectInput"};
 
 const Localization = () => {
-  const {lang, locales, changeLocale} = useLocalization();
+  const {lang, langData, changeLocale} = useLocalization();
   return (
     <div className="option">
       {/* <label htmlFor="selectInput">{formatMessage("language")}</label>
       &nbsp; */}
       <SelectBox
-        items={locales} //languages arr from pages-fetch
+        items={langData} //languages arr from pages-fetch
         valueExpr="short" //en
         displayExpr="nativename" //English
         value={lang} //en
