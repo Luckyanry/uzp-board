@@ -13,7 +13,6 @@ const useLocalization = () => useContext(LocalizationContext);
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
   const [defaultLang, setDefaultLang] = useState("en");
-  // const [currentLang, setCurrentLang] = useState("en");
   const [lang, setLang] = useState(() => getLocale());
 
   const islangFetch = FetchData("/islang", formatMessage).fetchData;
@@ -23,29 +22,20 @@ const LocalizationProvider = ({children}) => {
   ).changeMyLocalToData;
 
   useEffect(() => {
-    islangFetch
-      ._loadFunc()
-      .then((res) => res.data)
-      .then((data) => {
-        isEnabledLang(data);
-        isDefaultLang(data);
-        isCurrentLang(data);
-      });
+    const getLangsData = async () => {
+      const result = await islangFetch._loadFunc().then((res) => res.data);
 
+      isEnabledLang(result);
+      isDefaultLang(result);
+      isCurrentLang(result);
+    };
+
+    getLangsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(`lang`, lang);
   initMessages();
   locale(lang);
-
-  if (langData) {
-    // console.log(`langData`, langData);
-    // console.log(`currentLang`, currentLang);
-    console.log(`defaultLang`, defaultLang);
-    // isCurrentLang(langData);
-    // isDefaultLang(langData);
-  }
 
   function isEnabledLang(array) {
     if (array.length) {
@@ -57,8 +47,6 @@ const LocalizationProvider = ({children}) => {
   function isCurrentLang(array) {
     if (array.length) {
       const result = array.find(({iscurrent}) => iscurrent);
-      console.log(`result isCurrentLang`, result);
-      // setCurrentLang(result.short);
       setLocale(result.short);
     }
   }

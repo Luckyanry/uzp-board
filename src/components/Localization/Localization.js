@@ -14,10 +14,10 @@ const Localization = () => {
       {/* <label htmlFor="selectInput">{formatMessage("language")}</label>
       &nbsp; */}
       <SelectBox
-        items={langData} //languages arr from pages-fetch
-        valueExpr="short" //en
-        displayExpr="nativename" //English
-        value={lang} //en
+        items={langData}
+        valueExpr="short"
+        displayExpr="nativename"
+        value={lang}
         onValueChanged={changeLocale}
         inputAttr={selectBoxInputAttr}
       />
