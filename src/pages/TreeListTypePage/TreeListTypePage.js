@@ -25,7 +25,7 @@ import "./TreeListTypePage.scss";
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [APIData, setAPIData] = useState(null);
-  const [lookDataState, setLookDataState] = useState(null);
+  const [lookDataState, setLookDataState] = useState([]);
   const [stateOfRows, setStateOfRows] = useState("expand");
   // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
 
@@ -35,12 +35,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   const pathnameToName = pathname.split("/")[1];
   const localizedPageShortName = formatMessage(pathnameToName);
-
-  const defaultStatus = ["Active", "Deactivated"];
-  const statusesLang = defaultStatus.map((statusLang) => {
-    const statusLanguage = formatMessage(statusLang);
-    return statusLanguage;
-  });
 
   const popupOpt = {
     title: formatMessage("create_new_item", localizedPageShortName),
@@ -52,15 +46,26 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   useEffect(() => {
     setAPIData(fetchData);
 
-    lookData
-      ._loadFunc()
-      .then((res) => res.data)
-      .then((arr) => setLookDataState([...arr]));
+    const getLookDataState = async () => {
+      const result = await lookData._loadFunc().then((res) => res.data);
+
+      setLookDataState(result);
+    };
+
+    getLookDataState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function statusesLang() {
+    const defaultStatus = ["Active", "Deactivated"];
+    const statusLanguage = defaultStatus.map((statusLang) =>
+      formatMessage(statusLang)
+    );
+    return statusLanguage;
+  }
+
   function initNewRow(e) {
-    e.data.status = statusesLang[0];
+    e.data.status = statusesLang()[0];
   }
 
   function clickHandler() {
@@ -326,7 +331,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           alignment="center"
           width={120}
         >
-          <Lookup dataSource={statusesLang} />
+          <Lookup dataSource={statusesLang()} />
           <RequiredRule />
         </Column>
 

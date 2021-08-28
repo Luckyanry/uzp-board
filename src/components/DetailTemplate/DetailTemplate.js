@@ -21,12 +21,6 @@ export const DetailTemplate = (props) => {
 
   const {formatMessage} = useLocalization();
 
-  const defaultStatus = ["Active", "Deactivated"];
-  const statusesLang = defaultStatus.map((statusLang) => {
-    const statusLanguage = formatMessage(statusLang);
-    return statusLanguage;
-  });
-
   useEffect(() => {
     setAPIData(props.data.data.columnsjson.columns);
 
@@ -34,8 +28,16 @@ export const DetailTemplate = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function statusesLang() {
+    const defaultStatus = ["Active", "Deactivated"];
+    const statusLanguage = defaultStatus.map((statusLang) =>
+      formatMessage(statusLang)
+    );
+    return statusLanguage;
+  }
+
   function initNewRow(e) {
-    e.data.status = statusesLang[0];
+    e.data.status = statusesLang()[0];
   }
 
   // console.log(`APIData`, APIData);

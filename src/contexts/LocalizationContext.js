@@ -31,11 +31,10 @@ const LocalizationProvider = ({children}) => {
     };
 
     getLangsData();
+    initMessages();
+    locale(lang);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  initMessages();
-  locale(lang);
+  }, [lang]);
 
   function isEnabledLang(array) {
     if (array.length) {

@@ -36,12 +36,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const pathnameToName = pathname.split("/")[1];
   const localizedPageShortName = formatMessage(pathnameToName);
 
-  const defaultStatus = ["Active", "Deactivated"];
-  const statusesLang = defaultStatus.map((statusLang) => {
-    const statusLanguage = formatMessage(statusLang);
-    return statusLanguage;
-  });
-
   const popupGeneralOptions = {
     title: formatMessage("create_new_item", localizedPageShortName),
     showTitle: true,
@@ -62,11 +56,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   useEffect(() => {
     setAPIData(fetchData);
 
-    pathnameToName === "shortDics" &&
-      lookData
-        ._loadFunc()
-        .then((res) => res.data)
-        .then((arr) => setLookDataState(arr));
+    const getLookDataState = async () => {
+      const result = await lookData._loadFunc().then((res) => res.data);
+      setLookDataState(result);
+    };
+
+    pathnameToName === "shortDics" && getLookDataState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -76,8 +71,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       : countriesPopupOptions;
   }
 
+  function statusesLang() {
+    const defaultStatus = ["Active", "Deactivated"];
+    const statusLanguage = defaultStatus.map((statusLang) =>
+      formatMessage(statusLang)
+    );
+    return statusLanguage;
+  }
+
   function initNewRow(e) {
-    e.data.status = statusesLang[0];
+    e.data.status = statusesLang()[0];
   }
 
   function customMarkupRender() {
