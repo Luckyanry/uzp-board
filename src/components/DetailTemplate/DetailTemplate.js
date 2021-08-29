@@ -14,12 +14,13 @@ export const DetailTemplate = (props) => {
     useState(null);
   console.log(`props`, props);
 
+  const {formatMessage} = useLocalization();
+
   const shortDicsRecords = FetchData(
     "/ShortDicsRecords",
+    formatMessage,
     props.data.data.id
   ).fetchData;
-
-  const {formatMessage} = useLocalization();
 
   useEffect(() => {
     setAPIData(props.data.data.columnsjson.columns);

@@ -6,7 +6,14 @@ import {
   TreeListTypePage,
 } from "./pages";
 
-const dataGridPagesPath = ["countries", "soogu", "shortDics"];
+const dataGridPagesPath = [
+  "countries",
+  "soogu",
+  "ShortDics",
+  "usersList",
+  "usersRole",
+  "usersGroup",
+];
 const treeListPagesPath = ["soato", "kspd", "kfs", "kopf", "oked"];
 
 const routes = [

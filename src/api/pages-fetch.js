@@ -1,7 +1,7 @@
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 
-const url = "http://10.0.10.71";
+const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 const hbdbParam = "db=hbdb";
 const wisdbParam = "db=wisdb";
@@ -23,7 +23,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         return `&${hbdbParam}&sp=Kspd`;
       case "/oked":
         return `&${hbdbParam}&sp=Oked`;
-      case "/shortDics":
+      case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":
         return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
@@ -33,6 +33,12 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         return `&${wisdbParam}&sp=islang`;
       case "/w_changeMyLocaleTo":
         return `&${wisdbParam}&sp=w_changeMyLocaleTo`;
+      case "/usersList":
+        return `&${wisdbParam}&sp=UserObjects`;
+      case "/usersRole":
+        return `&${wisdbParam}&sp=RoleObjects`;
+      case "/usersGroup":
+        return `&${wisdbParam}&sp=GroupObjects`;
       default:
         return "/home";
     }
@@ -80,6 +86,46 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         {
           schema: "bykey",
           "@key": key,
+        },
+        "POST"
+      ),
+    onBeforeSend: function (method, ajaxOptions) {
+      ajaxOptions.credentials = "include";
+      ajaxOptions.xhrFields = {withCredentials: true};
+    },
+  });
+
+  const usersFetchData = new CustomStore({
+    key: "GID",
+    load: () =>
+      sendRequest(finalUrl, {
+        schema: "get",
+      }),
+    insert: (values) =>
+      sendRequest(
+        finalUrl,
+        {
+          schema: "ins",
+          "@jvalues": statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    update: (key, values) =>
+      sendRequest(
+        finalUrl,
+        {
+          schema: "upd",
+          "@guid": key,
+          "@jvalues": statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    remove: (key) =>
+      sendRequest(
+        finalUrl,
+        {
+          schema: "del",
+          "@guid": key,
         },
         "POST"
       ),
@@ -219,5 +265,5 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     }
   }
 
-  return {fetchData, lookData, changeMyLocalToData};
+  return {fetchData, lookData, changeMyLocalToData, usersFetchData};
 };

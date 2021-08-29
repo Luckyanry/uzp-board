@@ -1,25 +1,40 @@
-const locales = [
-  {
-    Name: "r",
-    Value: "en",
-  },
-  {
-    Name: "Русский",
-    Value: "ru",
-  },
-  {
-    Name: "O'zbek lotin",
-    Value: "uz-Latn",
-  },
-];
+// const locales = [
+//   {
+//     Name: "r",
+//     Value: "en",
+//   },
+//   {
+//     Name: "Русский",
+//     Value: "ru",
+//   },
+//   {
+//     Name: "O'zbek lotin",
+//     Value: "uz-Latn",
+//   },
+// ];
 
 const dictionary = {
   en: {
     project_title: "UZP",
     language: "Language",
+    id: "ID",
 
     home: "Home",
     home_page_desc: "Home page description...",
+
+    users: "Users",
+    users_dir_title: "Subsystem 'Users'",
+    usersList: "List of 'Users'",
+    usersRole: "List of 'Roles'",
+    usersGroup: "List of 'Groups'",
+    UserName: "User name",
+    Locale: "Short language code",
+    Locked: "Locked",
+    Disabled: "Disabled",
+    TimeZone: "Time zone",
+    created: "User registration date",
+    pwdlastchange: "Last password change",
+    UserType: "User Type",
 
     profile: "Profile",
     FirstName: "First Name",
@@ -158,9 +173,24 @@ const dictionary = {
   ru: {
     project_title: "ЕАИС",
     language: "Язык",
+    id: "ID",
 
     home: "Главная",
     home_page_desc: "Описание главной страницы...",
+
+    users: "Пользователи",
+    users_dir_title: "Подсистема 'Пользователи'",
+    usersList: "Список пользователей",
+    usersRole: "Список 'Ролей'",
+    usersGroup: "Список 'Групп'",
+    UserName: "Имя пользователя",
+    Locale: "Короткий языковый код",
+    Locked: "Заблокирован",
+    Disabled: "Отключен",
+    TimeZone: "Часовой пояс",
+    created: "Дата регистрации пользователя",
+    pwdlastchange: "Последнее изменение пароля",
+    UserType: "Тип пользователя",
 
     profile: "Профиль",
     FirstName: "Имя",
@@ -295,9 +325,24 @@ const dictionary = {
   "uz-Latn": {
     project_title: "UZP",
     language: "Til",
+    id: "ID",
 
     home: "Uy",
     home_page_desc: "Bosh sahifa tavsifi...",
+
+    users: "Foydalanuvchilar",
+    users_dir_title: "'Foydalanuvchilar' quyi tizimi",
+    usersList: "'Foydalanuvchilar' ro'yxati",
+    usersRole: "'Rolar' ro'yxati",
+    usersGroup: "'Guruhlar' ro'yxati",
+    UserName: "Foydalanuvchi nomi",
+    Locale: "Qisqa til kodi",
+    Locked: "Qulflangan",
+    Disabled: "O'chirilgan",
+    TimeZone: "Vaqt zonasi",
+    created: "Foydalanuvchilarni ro'yxatdan o'tkazish sanasi",
+    pwdlastchange: "So'nggi parolni o'zgartirish",
+    UserType: "Foydalanuvchi turi",
 
     profile: "Profil",
     FirstName: "Ism",
@@ -442,12 +487,15 @@ const dictionary = {
   },
 };
 
-function getLocales() {
-  return locales;
-}
+// function getLocales() {
+//   return locales;
+// }
 
 function getDictionary() {
   return dictionary;
 }
 
-export {getLocales, getDictionary};
+export {
+  // getLocales,
+  getDictionary,
+};

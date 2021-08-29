@@ -31,6 +31,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   const {formatMessage} = useLocalization();
   const fetchData = FetchData(pathname, formatMessage).fetchData;
+  const usersFetchData = FetchData(pathname, formatMessage).usersFetchData;
   const lookData = FetchData(pathname, formatMessage).lookData;
 
   const pathnameToName = pathname.split("/")[1];
@@ -54,14 +55,19 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    setAPIData(fetchData);
+    console.log(`pathnameToName`, pathnameToName);
+    pathnameToName === "usersList" ||
+    pathnameToName === "usersRole" ||
+    pathnameToName === "usersGroup"
+      ? setAPIData(usersFetchData)
+      : setAPIData(fetchData);
 
     const getLookDataState = async () => {
       const result = await lookData._loadFunc().then((res) => res.data);
       setLookDataState(result);
     };
 
-    pathnameToName === "shortDics" && getLookDataState();
+    pathnameToName === "ShortDics" && getLookDataState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -88,50 +94,125 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
     if (pathnameToName === "soogu") {
       const pageTitleCollection = [
-        {value: "name_rus", visible: true, required: true},
-        {value: "name_uzcyr", visible: false, required: false},
-        {value: "name_uzlat", visible: false, required: false},
-        {value: "name_karlat", visible: false, required: false},
-        {value: "name_eng", visible: false, required: false},
+        {
+          value: "id",
+          visible: true,
+          disabled: true,
+          required: false,
+          width: 60,
+          alignment: "right",
+          formItem: true,
+        },
+        {value: "name_rus", required: true, width: "100%"},
+        {value: "name_uzcyr", visible: false, width: "100%"},
+        {value: "name_uzlat", visible: false, width: "100%"},
+        {value: "name_karlat", visible: false, width: "100%"},
+        {value: "name_eng", visible: false, width: "100%"},
       ];
 
       murkupCollection = [...pageTitleCollection];
     } else if (pathnameToName === "countries") {
       const pageTitleCollection = [
-        {value: "short_name", visible: false, required: true},
-        {value: "short_name_rus", visible: true, required: true},
-        {value: "short_name_uzcyr", visible: true, required: false},
-        {value: "short_name_uzlat", visible: true, required: false},
-        {value: "short_name_karlat", visible: true, required: false},
-        {value: "short_name_eng", visible: true, required: true},
+        {
+          value: "id",
+          visible: true,
+          disabled: true,
+          width: 60,
+          alignment: "right",
+          formItem: true,
+        },
+        {
+          value: "short_name",
+          visible: false,
+          required: true,
+        },
+        {value: "short_name_rus", required: true},
+        {value: "short_name_uzcyr"},
+        {value: "short_name_uzlat"},
+        {value: "short_name_karlat"},
+        {value: "short_name_eng"},
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "shortDics") {
+    } else if (pathnameToName === "ShortDics") {
       const pageTitleCollection = [
-        {value: "name", visible: true, required: true},
-        {value: "short_name_rus", visible: false, required: false},
-        {value: "short_name_uzcyr", visible: false, required: false},
-        {value: "short_name_uzlat", visible: false, required: false},
-        {value: "short_name_karlat", visible: false, required: false},
-        {value: "short_name_eng", visible: false, required: false},
-        {value: "class", visible: true, required: false},
-        // {value: "metaid", visible: true, required: true},
+        {
+          value: "id",
+          visible: false,
+          disabled: true,
+          width: 60,
+          alignment: "right",
+          formItem: true,
+        },
+        {value: "name", required: true, width: "100%"},
+        {value: "short_name_rus", visible: false, width: "100%"},
+        {value: "short_name_uzcyr", visible: false, width: "100%"},
+        {value: "short_name_uzlat", visible: false, width: "100%"},
+        {value: "short_name_karlat", visible: false, width: "100%"},
+        {value: "short_name_eng", visible: false, width: "100%"},
+        {value: "class", width: 100, alignment: "center"},
+        {value: "metaid", caption: "as_child_of", lookup: true, width: "100%"},
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    } else if (pathnameToName === "usersList") {
+      const pageTitleCollection = [
+        {value: "UserName", required: true, width: 200},
+        {value: "Locale", width: 100, alignment: "center"},
+        {value: "Locked", width: 120, alignment: "center"},
+        {value: "Disabled", width: 100, alignment: "center"},
+        {value: "TimeZone", width: "100%"},
+        {value: "created", width: 200},
+        {value: "pwdlastchange", width: 200},
+        {value: "UserType", width: 120, alignment: "center"},
+      ];
+
+      murkupCollection = [...pageTitleCollection];
+    } else if (
+      pathnameToName === "usersRole" ||
+      pathnameToName === "usersGroup"
+    ) {
+      const pageTitleCollection = [
+        {value: "UserName", required: true, width: "100%"},
+        {value: "Disabled", width: 100, alignment: "center"},
+        {value: "created", width: "100%"},
+        {value: "UserType", width: 120, alignment: "center"},
       ];
 
       murkupCollection = [...pageTitleCollection];
     }
 
     return murkupCollection.map((item, idx) => {
-      const {value, visible, required} = item;
+      const {
+        value,
+        caption = value,
+        visible = true,
+        disabled = false,
+        required = false,
+        width = "auto",
+        alignment = "left",
+        formItem = false,
+        lookup = false,
+      } = item;
       return (
         <Column
           key={idx}
           dataField={value}
-          caption={formatMessage(value)}
+          caption={formatMessage(caption)}
           visible={visible}
+          disabled={disabled}
+          width={width}
+          alignment={alignment}
         >
           {required && <RequiredRule />}
+          {formItem && <FormItem visible={false} />}
+          {lookup && (
+            <Lookup
+              dataSource={lookDataState}
+              valueExpr="id"
+              displayExpr="className"
+            />
+          )}
         </Column>
       );
     });
@@ -165,7 +246,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       const pageTitleCollection = [
         {
           dataField: "alpha2code",
-          caption: "alpha3code",
+          caption: "alpha2code",
           width: 80,
           message: "alpha2code_err_message",
           pattern: "^[A-Z]{2}$",
@@ -268,35 +349,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowUpdating={true}
         />
 
-        <Column
-          dataField="id"
-          caption="ID"
-          alignment="right"
-          disabled={true}
-          width={60}
-        >
-          <FormItem visible={false} />
-        </Column>
-
         {customMarkupRender()}
 
         {customCodeMarkupRender()}
 
-        {pathnameToName === "shortDics" && (
-          <Column
-            dataField="metaid"
-            caption={formatMessage("as_child_of")}
-            visible={true}
-          >
-            <Lookup
-              dataSource={lookDataState}
-              valueExpr="id"
-              displayExpr="className"
-            />
-          </Column>
-        )}
-
-        {pathnameToName === "shortDics" && (
+        {pathnameToName === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
 

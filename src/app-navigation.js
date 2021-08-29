@@ -5,6 +5,7 @@ export const AppNavigation = () => {
 
   const directoryFolder = ["countries", "soato", "soogu", "kspd", "oked"];
   const opfFolder = ["kfs", "kopf"];
+  const usersDir = ["profile", "usersList", "usersRole", "usersGroup"];
 
   function pathCreator(pathTitle) {
     return pathTitle.map((item) => {
@@ -22,9 +23,9 @@ export const AppNavigation = () => {
       icon: "home",
     },
     {
-      text: formatMessage("profile"),
-      path: "/profile",
+      text: formatMessage("users_dir_title"),
       icon: "user",
+      items: pathCreator(usersDir),
     },
     {
       text: formatMessage("directory"),
@@ -38,7 +39,7 @@ export const AppNavigation = () => {
     },
     {
       text: formatMessage("shortDics"),
-      path: "/shortDics",
+      path: "/ShortDics",
       icon: "tableproperties",
     },
   ];
