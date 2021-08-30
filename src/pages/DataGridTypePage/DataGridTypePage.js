@@ -40,22 +40,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("create_new_item", localizedPageShortName),
     showTitle: true,
-    hint: "Test",
     width: 1000,
-  };
-
-  const sooguPopupOptions = {
-    ...popupGeneralOptions,
     height: 600,
   };
 
-  const countriesPopupOptions = {
-    ...popupGeneralOptions,
-    height: 700,
-  };
-
   useEffect(() => {
-    console.log(`pathnameToName`, pathnameToName);
     pathnameToName === "usersList" ||
     pathnameToName === "usersRole" ||
     pathnameToName === "usersGroup"
@@ -70,12 +59,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     pathnameToName === "ShortDics" && getLookDataState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function editingOption() {
-    return pathnameToName === "soogu"
-      ? sooguPopupOptions
-      : countriesPopupOptions;
-  }
 
   function statusesLang() {
     const defaultStatus = ["Active", "Deactivated"];
@@ -295,12 +278,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
-  // const onFocusedCellAction = (e) => {
-  //   const focusedRowId = e.rows[e.newRowIndex].key;
-  //   getFocusedRowId(focusedRowId);
-  //   // console.log(`onFocusedCellChanging(e.newRowIndex) => `, e.newRowIndex);
-  // };
-
   return (
     <>
       <h2 className={"content-block"}>
@@ -326,7 +303,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
-        // onFocusedCellChanging={onFocusedCellAction}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />
@@ -343,7 +319,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
         <Editing
           mode="popup"
-          popup={editingOption()}
+          popup={popupGeneralOptions}
           allowAdding={true}
           allowDeleting={true}
           allowUpdating={true}

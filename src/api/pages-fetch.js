@@ -1,12 +1,19 @@
+import React, {useState} from "react";
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
+import {PopupErrorComponent} from "../components";
 
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 const hbdbParam = "db=hbdb";
 const wisdbParam = "db=wisdb";
+const errorTestParam = "w_testDepthiRiseErrors";
 
 export const FetchData = (pageRequest, formatMessage, tid = null) => {
+  // const [popupVisible, setPopupVisible] = useState(false);
+  // const [currentAPIMsg, setCurrentAPIMsg] = useState({});
+  const [error, setError] = useState(null);
+
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -186,7 +193,10 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         if (response.ok) {
           return await response
             .json()
-            .then((data) => responseData(data))
+            .then(
+              (data) => responseData(data),
+              (error) => console.log(`error`, error.message)
+            )
             .catch((err) => {
               throw err;
             });
@@ -201,7 +211,10 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
       if (response.ok) {
         return await response
           .text()
-          .then((data) => responseData(data))
+          .then(
+            (data) => responseData(data),
+            (error) => console.log(`error`, error.message)
+          )
           .catch((err) => {
             throw err;
           });
@@ -241,6 +254,11 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     });
   }
 
+  // function showInfo(data) {
+  //   setCurrentAPIMsg(data);
+  //   setPopupVisible(true);
+  // }
+
   function responseData(data) {
     if (Array.isArray(data)) {
       const newData = statusBooleanToString(data);
@@ -250,18 +268,37 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         totalCount: newData.length,
       };
     }
-    if (!JSON.parse(data).hint) {
+
+    // if (!JSON.parse(data).hint) {
+    //   return data && JSON.parse(data);
+    // }
+
+    if (!data.hint) {
       return data && JSON.parse(data);
     } else {
-      throw new Error(
-        `
-        ScriptFile: ${data.ScriptFile},
-        Description: ${data.VBErr.Description},
-        Error Number: ${data.VBErr.Number},
-        Source: ${data.VBErr.Source},
-        Hint: ${data.hint}
-      `
-      );
+      // console.log(`fetch error => `, data);
+      setError(data);
+      // showInfo(data);
+      // throw new Error(
+      //   `
+      //   ScriptFile: ${data.ScriptFile},
+      //   Description: ${data.VBErr.Description},
+      //   Error Number: ${data.VBErr.Number},
+      //   Source: ${data.VBErr.Source},
+      //   Hint: ${data.hint}
+      // `
+      // );
+      throw data;
+      // return <PopupErrorComponent data={error} />;
+      // showInfo(data);
+      // return (
+      // <PopupErrorComponent
+      //   currentAPIMsg={currentAPIMsg}
+      //   setCurrentAPIMsg={setCurrentAPIMsg}
+      //   setPopupVisible={setPopupVisible}
+      //   popupVisible={popupVisible}
+      // />
+      // );
     }
   }
 

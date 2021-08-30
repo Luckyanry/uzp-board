@@ -12,9 +12,18 @@ export const DetailTemplate = (props) => {
   const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
-  console.log(`props`, props);
 
   const {formatMessage} = useLocalization();
+  console.log(`DetailTemplate props`, props);
+
+  const focusedRowTitle = props.data.data.name;
+
+  const popupOpt = {
+    title: formatMessage("create_new_item", focusedRowTitle),
+    showTitle: true,
+    width: 950,
+    height: 780,
+  };
 
   const shortDicsRecords = FetchData(
     "/ShortDicsRecords",
@@ -41,8 +50,12 @@ export const DetailTemplate = (props) => {
     e.data.status = statusesLang()[0];
   }
 
-  // console.log(`APIData`, APIData);
-  console.log(`shortDicsRecordsDataState`, shortDicsRecordsDataState);
+  // function onFocusedCellAction(e) {
+  //   const rowId = e.rows[e.newRowIndex].values[0];
+  //   // const rowName = rowId.data.name;
+  //   console.log(`rowName`, e);
+  //   setFocusedRowName(rowId);
+  // }
 
   return (
     <DataGrid
@@ -66,6 +79,7 @@ export const DetailTemplate = (props) => {
       wordWrapEnabled={true}
       // functions
       onInitNewRow={initNewRow}
+      // onFocusedCellChanging={onFocusedCellAction}
     >
       <ColumnChooser
         enabled={true}
@@ -77,7 +91,8 @@ export const DetailTemplate = (props) => {
       />
 
       <Editing
-        mode="batch"
+        mode="popup"
+        popup={popupOpt}
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}

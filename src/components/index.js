@@ -1,3 +1,4 @@
+export {PopupErrorComponent} from "./PopupErrorComponent/PopupErrorComponent";
 export {Header} from "./Header/Header";
 export {Footer} from "./Footer/Footer";
 export {DetailTemplate} from "./DetailTemplate/DetailTemplate";
