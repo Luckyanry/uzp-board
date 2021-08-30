@@ -21,6 +21,7 @@ import DataGrid, {
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
 import {DetailTemplate} from "../../components/DetailTemplate/DetailTemplate";
 
 import "./DataGridTypePage.scss";
@@ -284,76 +285,78 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         {formatMessage(`${pathnameToName}_title`, localizedPageShortName)}
       </h2>
 
-      <DataGrid
-        dataSource={APIData}
-        // keyExpr="id"
-        repaintChangesOnly={true}
-        remoteOperations={false}
-        // rows
-        focusedRowEnabled={true}
-        // columns
-        showColumnLines={true}
-        columnMinWidth={60}
-        columnAutoWidth={true}
-        columnHidingEnabled={false}
-        allowColumnResizing={true}
-        allowColumnReordering={true}
-        // appearance
-        hoverStateEnabled={true}
-        wordWrapEnabled={true}
-        // functions
-        onInitNewRow={initNewRow}
-      >
-        <Scrolling mode="standard" />
-        <SearchPanel visible={true} width={250} />
-        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
-        <ColumnChooser
-          enabled={true}
-          allowSearch={true}
-          width={300}
-          height={320}
-          title={formatMessage("colomn_chooser")}
-          emptyPanelText={formatMessage("colomn_chooser_empty_text")}
-        />
-        <FilterRow visible={true} />
-
-        <Editing
-          mode="popup"
-          popup={popupGeneralOptions}
-          allowAdding={true}
-          allowDeleting={true}
-          allowUpdating={true}
-        />
-
-        {customMarkupRender()}
-
-        {customCodeMarkupRender()}
-
-        {pathnameToName === "ShortDics" && (
-          <MasterDetail enabled={true} component={DetailTemplate} />
-        )}
-
-        <Column type="buttons" width={110}>
-          <Button
-            name="edit"
-            hint={formatMessage("edit_new_item", localizedPageShortName)}
+      <ErrorBoundary>
+        <DataGrid
+          dataSource={APIData}
+          // keyExpr="id"
+          repaintChangesOnly={true}
+          remoteOperations={false}
+          // rows
+          focusedRowEnabled={true}
+          // columns
+          showColumnLines={true}
+          columnMinWidth={60}
+          columnAutoWidth={true}
+          columnHidingEnabled={false}
+          allowColumnResizing={true}
+          allowColumnReordering={true}
+          // appearance
+          hoverStateEnabled={true}
+          wordWrapEnabled={true}
+          // functions
+          onInitNewRow={initNewRow}
+        >
+          <Scrolling mode="standard" />
+          <SearchPanel visible={true} width={250} />
+          {/* <HeaderFilter visible={true} allowSearch={true} /> */}
+          <ColumnChooser
+            enabled={true}
+            allowSearch={true}
+            width={300}
+            height={320}
+            title={formatMessage("colomn_chooser")}
+            emptyPanelText={formatMessage("colomn_chooser_empty_text")}
           />
-          <Button
-            name="delete"
-            hint={formatMessage("delete_new_item", localizedPageShortName)}
-          />
-        </Column>
+          <FilterRow visible={true} />
 
-        <Paging defaultPageSize={10} />
-        <Pager
-          showPageSizeSelector={true}
-          showNavigationButtons={true}
-          showInfo={true}
-          visible={true}
-          allowedPageSizes={[10, 20, 50, 100, "all"]}
-          showAllItem={true}
-        />
-      </DataGrid>
+          <Editing
+            mode="popup"
+            popup={popupGeneralOptions}
+            allowAdding={true}
+            allowDeleting={true}
+            allowUpdating={true}
+          />
+
+          {customMarkupRender()}
+
+          {customCodeMarkupRender()}
+
+          {pathnameToName === "ShortDics" && (
+            <MasterDetail enabled={true} component={DetailTemplate} />
+          )}
+
+          <Column type="buttons" width={110}>
+            <Button
+              name="edit"
+              hint={formatMessage("edit_new_item", localizedPageShortName)}
+            />
+            <Button
+              name="delete"
+              hint={formatMessage("delete_new_item", localizedPageShortName)}
+            />
+          </Column>
+
+          <Paging defaultPageSize={10} />
+          <Pager
+            showPageSizeSelector={true}
+            showNavigationButtons={true}
+            showInfo={true}
+            visible={true}
+            allowedPageSizes={[10, 20, 50, 100, "all"]}
+            showAllItem={true}
+          />
+        </DataGrid>
+      </ErrorBoundary>
     </>
   );
 };

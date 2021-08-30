@@ -5,6 +5,7 @@ import DataGrid, {ColumnChooser, Editing} from "devextreme-react/data-grid";
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+// import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 import "./DetailTemplate.scss";
 
@@ -12,6 +13,7 @@ export const DetailTemplate = (props) => {
   const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
+  // const [error, setError] = useState(null);
 
   const {formatMessage} = useLocalization();
   console.log(`DetailTemplate props`, props);
@@ -34,6 +36,14 @@ export const DetailTemplate = (props) => {
   useEffect(() => {
     setAPIData(props.data.data.columnsjson.columns);
 
+    // shortDicsRecords._loadFunc().then(
+    //   (res) => res.data,
+    //   (err) => {
+    //     console.log(`err => `, err);
+    //     setError(err);
+    //   }
+    // );
+
     setShortDicsRecordsDataState(shortDicsRecords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -49,7 +59,7 @@ export const DetailTemplate = (props) => {
   function initNewRow(e) {
     e.data.status = statusesLang()[0];
   }
-
+  // console.log(`error`, error);
   // function onFocusedCellAction(e) {
   //   const rowId = e.rows[e.newRowIndex].values[0];
   //   // const rowName = rowId.data.name;
@@ -58,6 +68,7 @@ export const DetailTemplate = (props) => {
   // }
 
   return (
+    // <ErrorBoundary msg={error}>
     <DataGrid
       id="grid"
       columns={APIData}
@@ -98,5 +109,6 @@ export const DetailTemplate = (props) => {
         allowUpdating={true}
       />
     </DataGrid>
+    // </ErrorBoundary>
   );
 };

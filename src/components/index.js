@@ -1,4 +1,4 @@
-export {PopupErrorComponent} from "./PopupErrorComponent/PopupErrorComponent";
+export {default as ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
 export {Header} from "./Header/Header";
 export {Footer} from "./Footer/Footer";
 export {DetailTemplate} from "./DetailTemplate/DetailTemplate";

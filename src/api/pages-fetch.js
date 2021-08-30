@@ -1,19 +1,13 @@
-import React, {useState} from "react";
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
-import {PopupErrorComponent} from "../components";
 
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 const hbdbParam = "db=hbdb";
 const wisdbParam = "db=wisdb";
-const errorTestParam = "w_testDepthiRiseErrors";
+// const errorTestParam = "w_testDepthiRiseErrors";
 
 export const FetchData = (pageRequest, formatMessage, tid = null) => {
-  // const [popupVisible, setPopupVisible] = useState(false);
-  // const [currentAPIMsg, setCurrentAPIMsg] = useState({});
-  const [error, setError] = useState(null);
-
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -33,7 +27,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":
-        return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
+        return `&${wisdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       case "/islang":
@@ -254,11 +248,6 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     });
   }
 
-  // function showInfo(data) {
-  //   setCurrentAPIMsg(data);
-  //   setPopupVisible(true);
-  // }
-
   function responseData(data) {
     if (Array.isArray(data)) {
       const newData = statusBooleanToString(data);
@@ -277,28 +266,17 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
       return data && JSON.parse(data);
     } else {
       // console.log(`fetch error => `, data);
-      setError(data);
-      // showInfo(data);
-      // throw new Error(
-      //   `
-      //   ScriptFile: ${data.ScriptFile},
-      //   Description: ${data.VBErr.Description},
-      //   Error Number: ${data.VBErr.Number},
-      //   Source: ${data.VBErr.Source},
-      //   Hint: ${data.hint}
-      // `
-      // );
-      throw data;
-      // return <PopupErrorComponent data={error} />;
-      // showInfo(data);
-      // return (
-      // <PopupErrorComponent
-      //   currentAPIMsg={currentAPIMsg}
-      //   setCurrentAPIMsg={setCurrentAPIMsg}
-      //   setPopupVisible={setPopupVisible}
-      //   popupVisible={popupVisible}
-      // />
-      // );
+
+      throw new Error(
+        `
+        ScriptFile: ${data.ScriptFile},
+        Description: ${data.VBErr.Description},
+        Error Number: ${data.VBErr.Number},
+        Source: ${data.VBErr.Source},
+        Hint: ${data.hint}
+      `
+      );
+      // throw data;
     }
   }
 
