@@ -1,4 +1,5 @@
 import CustomStore from "devextreme/data/custom_store";
+// import DataSource from "devextreme/data/data_source";
 import "whatwg-fetch";
 
 const url = "https://10.0.10.71";
@@ -27,7 +28,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":
-        return `&${wisdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
+        return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       case "/islang":
@@ -136,12 +137,57 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     },
   });
 
+  // const lookData = {
+  //   // ?experement with this article => https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/How_To/Bind_a_Lookup_Column_to_a_Custom_Data_Source/
+
+  //   store: new CustomStore({
+  //     key: "id",
+  //     loadMode: "raw",
+  //     load: (loadOptions) => {
+  //       console.log(`loadOptions`, loadOptions);
+
+  //       let params = "";
+  //       [
+  //         "skip",
+  //         "take",
+  //       ].forEach(function (i) {
+  //         if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+  //           params += `&@${i}=${JSON.stringify(loadOptions[i])}`;
+  //         }
+  //       });
+
+  //       return sendRequest(
+  //         // `${url}${baseParams}${pageRequestParams()}&@skip=0&@take=10`,
+  //         `${url}${baseParams}${pageRequestParams()}${params}`,
+  //         // `${url}${baseParams}${pageRequestParams()}`,
+  //         {
+  //           schema: "look",
+  //         }
+  //       );
+  //     },
+  //     // byKey: (key) => {
+  //     //   return fetch(`${url}${baseParams}${pageRequestParams()}${key}`);
+  //     // },
+  //   }),
+  //   take: 10,
+  //   skip: 0,
+  //   paginate: true,
+  //   pageSize: 10,
+  // };
+
+  // const lookupDataSource = new DataSource({
+  //   store: lookData,
+  //   paginate: true,
+  //   pageSize: 10,
+  // });
+
   const lookData = new CustomStore({
     key: "id",
-    load: () =>
-      sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
+    load: () => {
+      return sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
         schema: "look",
-      }),
+      });
+    },
   });
 
   const changeMyLocalToData = new CustomStore({
@@ -233,7 +279,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
 
   function statusBooleanToString(data) {
     return data.map((item) => {
-      if (typeof item.status === "boolean") {
+      if (item.status && typeof item.status === "boolean") {
         const changeStatus = {
           ...item,
           status: item.status
@@ -249,8 +295,14 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
   }
 
   function responseData(data) {
+    let newData = null;
+
     if (Array.isArray(data)) {
-      const newData = statusBooleanToString(data);
+      if (data[0].status) {
+        newData = statusBooleanToString(data);
+      } else {
+        newData = data;
+      }
 
       return {
         data: newData,
@@ -280,5 +332,15 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     }
   }
 
-  return {fetchData, lookData, changeMyLocalToData, usersFetchData};
+  return {
+    fetchData,
+    lookData,
+    changeMyLocalToData,
+    usersFetchData,
+    // lookupDataSource,
+  };
 };
+
+// function isNotEmpty(value) {
+//   return value !== undefined && value !== null && value !== "";
+// }

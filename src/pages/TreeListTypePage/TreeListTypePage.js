@@ -31,6 +31,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   const {formatMessage} = useLocalization();
   const fetchData = FetchData(pathname, formatMessage).fetchData;
+  // const lookData = FetchData(pathname, formatMessage).lookupDataSource;
   const lookData = FetchData(pathname, formatMessage).lookData;
 
   const pathnameToName = pathname.split("/")[1];
@@ -47,6 +48,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     setAPIData(fetchData);
 
     const getLookDataState = async () => {
+      // console.log(`lookData => `, lookData);
+      // const result = await lookData.store._loadFunc().then((res) => res.data);
       const result = await lookData._loadFunc().then((res) => res.data);
 
       setLookDataState(result);
@@ -232,11 +235,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   //   // }
   // }
 
-  const onFocusedCellChanging = (e) => {
-    console.log(`onFocusedCellChanging(e.newRowIndex) => `, e.newRowIndex);
-    console.log(`onFocusedCellChanging(e) => `, e);
-    // e.isHighlighted = true;
-  };
+  // const onFocusedCellChanging = (e) => {
+  //   console.log(`onFocusedCellChanging(e.newRowIndex) => `, e.newRowIndex);
+  //   console.log(`onFocusedCellChanging(e) => `, e);
+  //   // e.isHighlighted = true;
+  // };
 
   return (
     <div className="page-wrapper">
@@ -277,7 +280,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         autoExpandAll={toggler}
         onInitNewRow={initNewRow}
         // onEditorPreparing={onEditorPreparing}
-        onFocusedCellChanging={onFocusedCellChanging}
+        // onFocusedCellChanging={onFocusedCellChanging}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />
@@ -322,6 +325,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             dataSource={lookDataState}
             valueExpr="id"
             displayExpr="name"
+            // dropDownCentered={true}
+            // searchEnabled={true}
           />
         </Column>
 

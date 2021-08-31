@@ -85,12 +85,12 @@ export default function ChangePasswordForm(props) {
 }
 
 const passwordEditorOptions = {
-  stylingMode: "filled",
+  stylingMode: "outlined",
   placeholder: "Password",
   mode: "password",
 };
 const confirmedPasswordEditorOptions = {
-  stylingMode: "filled",
+  stylingMode: "outlined",
   placeholder: "Confirm Password",
   mode: "password",
 };
