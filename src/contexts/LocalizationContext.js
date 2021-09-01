@@ -12,14 +12,24 @@ const useLocalization = () => useContext(LocalizationContext);
 
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
+  const [customMessagesData, setCustomMessagesData] = useState({});
   const [defaultLang, setDefaultLang] = useState("en");
   const [lang, setLang] = useState(() => getLocale());
 
   const islangFetch = FetchData("/islang", formatMessage).fetchData;
+
+  const customMessages = FetchData(
+    "/CustomMessages",
+    formatMessage
+  ).custumMessageData;
+
   const changedMyLocalFetch = FetchData(
     "/w_changeMyLocaleTo",
     formatMessage
   ).changeMyLocalToData;
+
+  initMessages();
+  locale(lang);
 
   useEffect(() => {
     const getLangsData = async () => {
@@ -30,9 +40,14 @@ const LocalizationProvider = ({children}) => {
       isCurrentLang(result);
     };
 
+    const getCustomMessages = async () => {
+      await customMessages
+        ._loadFunc()
+        .then((res) => setCustomMessagesData({[lang]: res}));
+    };
+
+    getCustomMessages();
     getLangsData();
-    initMessages();
-    locale(lang);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
@@ -77,6 +92,13 @@ const LocalizationProvider = ({children}) => {
     document.location.reload();
   }
 
+  function initMessages() {
+    loadMessages(ruMessages);
+    loadMessages(uzLatnMessages);
+    loadMessages(getDictionary());
+    loadMessages(customMessagesData);
+  }
+
   return (
     <LocalizationContext.Provider
       value={{
@@ -93,11 +115,5 @@ const LocalizationProvider = ({children}) => {
     </LocalizationContext.Provider>
   );
 };
-
-function initMessages() {
-  loadMessages(ruMessages);
-  loadMessages(uzLatnMessages);
-  loadMessages(getDictionary());
-}
 
 export {LocalizationProvider, useLocalization};

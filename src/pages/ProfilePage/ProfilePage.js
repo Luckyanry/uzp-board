@@ -27,7 +27,9 @@ export const ProfilePage = () => {
 
   return (
     <>
-      <h2 className={"content-block"}>{formatMessage("profile")}</h2>
+      <h2 className={"content-block"}>
+        {formatMessage("msgProfileMenuTitle")}
+      </h2>
 
       <div className={"content-block dx-card responsive-paddings"}>
         <div className={"form-avatar"}>
@@ -52,28 +54,28 @@ export const ProfilePage = () => {
         >
           <SimpleItem dataField="ID" isRequired={true} />
           <SimpleItem dataField="FirstName" isRequired={true}>
-            <Label text={formatMessage("FirstName")} />
+            <Label text={formatMessage("msgFirstName")} />
           </SimpleItem>
           <SimpleItem dataField="LastName" isRequired={true}>
-            <Label text={formatMessage("LastName")} />
+            <Label text={formatMessage("msgLastName")} />
           </SimpleItem>
           <SimpleItem dataField="Prefix">
-            <Label text={formatMessage("Prefix")} />
+            <Label text={formatMessage("msgPrefix")} />
           </SimpleItem>
           <SimpleItem dataField="Position">
-            <Label text={formatMessage("Position")} />
+            <Label text={formatMessage("msgPosition")} />
           </SimpleItem>
           <SimpleItem dataField="BirthDate" isRequired={true}>
-            <Label text={formatMessage("BirthDate")} />
+            <Label text={formatMessage("msgBirthDate")} />
           </SimpleItem>
           <SimpleItem dataField="HireDate" isRequired={true}>
-            <Label text={formatMessage("HireDate")} />
+            <Label text={formatMessage("msgHireDate")} />
           </SimpleItem>
           <SimpleItem dataField="Address" isRequired={true}>
-            <Label text={formatMessage("Address")} />
+            <Label text={formatMessage("msgAddress")} />
           </SimpleItem>
           <Item dataField="Notes">
-            <Label text={formatMessage("Notes")} />
+            <Label text={formatMessage("msgNotes")} />
           </Item>
         </Form>
       </div>

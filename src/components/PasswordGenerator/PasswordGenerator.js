@@ -92,7 +92,7 @@ export const PasswordGenerator = () => {
     console.log(`inputValidation`, inputValidation());
     notify(
       {
-        message: formatMessage("submit_notify"),
+        message: formatMessage("msgSubmitNotify"),
         position: {
           my: "center top",
           at: "center top",
@@ -167,14 +167,14 @@ export const PasswordGenerator = () => {
       case 1:
         return {
           setLower: true,
-          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_1"),
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgOneGroup"),
           regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
         };
       case 2:
         return {
           setLower: true,
           setUpper: true,
-          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_2"),
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgTwoGroups"),
           regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
         };
       case 3:
@@ -182,7 +182,9 @@ export const PasswordGenerator = () => {
           setLower: true,
           setUpper: true,
           setNumber: true,
-          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_3"),
+          patternRuleErrMsg: formatMessage(
+            "msgPwdPatternRuleErrMsgThreeGroups"
+          ),
           regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
         };
       case 4:
@@ -191,7 +193,7 @@ export const PasswordGenerator = () => {
           setUpper: true,
           setNumber: true,
           setSymbol: true,
-          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_4"),
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
           regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
         };
 
@@ -201,7 +203,7 @@ export const PasswordGenerator = () => {
           setUpper: true,
           setNumber: true,
           setSymbol: true,
-          patternRuleErrMsg: formatMessage("pattern_rule_err_msg_4"),
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
           regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
         };
     }
@@ -220,30 +222,32 @@ export const PasswordGenerator = () => {
             <div className="dx-field-value">
               <TextBox
                 mode={passwordMode}
-                placeholder={formatMessage("enter_password")}
+                placeholder={formatMessage("msgEnterPassword")}
                 stylingMode="filled"
                 defaultValue={passwordState}
                 onValueChanged={onPasswordChanged}
                 value={passwordState}
               >
                 <TextBoxButton
-                  name={formatMessage("generate_password")}
+                  name={formatMessage("msgGeneratePassword")}
                   location="after"
                   options={passwordGeneratorBtn}
                 />
 
                 <TextBoxButton
-                  name={formatMessage("show_password")}
+                  name={formatMessage("msgShowPassword")}
                   location="after"
                   options={passwordButton}
                 />
 
                 <Validator>
-                  <RequiredRule message={formatMessage("required_password")} />
+                  <RequiredRule
+                    message={formatMessage("msgRequiredPassword")}
+                  />
 
                   <StringLengthRule
                     message={formatMessage(
-                      "string_length_rule_err_msg",
+                      "msgPwdStringLengthRuleErrMsg",
                       minLength,
                       maxLength
                     )}
@@ -264,24 +268,24 @@ export const PasswordGenerator = () => {
             <div className="dx-field-value">
               <TextBox
                 mode={passwordMode}
-                placeholder={formatMessage("confirm_password")}
+                placeholder={formatMessage("msgConfirmPassword")}
                 stylingMode="filled"
                 value={confirmPasswordState}
                 onValueChanged={onConfirmPasswordChanged}
               >
                 <TextBoxButton
-                  name={formatMessage("show_password")}
+                  name={formatMessage("msgShowPassword")}
                   location="after"
                   options={passwordButton}
                 />
 
                 <Validator>
                   <RequiredRule
-                    message={formatMessage("confirm_required_password")}
+                    message={formatMessage("msgConfirmRequiredPassword")}
                   />
 
                   <CompareRule
-                    message={formatMessage("password_not_match")}
+                    message={formatMessage("msgPasswordNotMatch")}
                     comparisonTarget={passwordComparison}
                   />
                 </Validator>
@@ -294,7 +298,7 @@ export const PasswordGenerator = () => {
           <ValidationSummary id="summary" />
           <Button
             id="button"
-            text={formatMessage("submit")}
+            text={formatMessage("msgSubmit")}
             type="success"
             useSubmitBehavior={true}
           />

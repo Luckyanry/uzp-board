@@ -7,7 +7,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <h2 className={"content-block"}>{formatMessage("home")}</h2>
+      <h2 className={"content-block"}>{formatMessage("msgHomeMenuTitle")}</h2>
       <div className={"content-block"}>
         <div className={"dx-card responsive-paddings"}>
           <div className={"logos-container"}>
@@ -58,7 +58,7 @@ export const HomePage = () => {
             </svg>
           </div>
 
-          <h5>{formatMessage("home_page_desc")}</h5>
+          <h5>{formatMessage("msgHomePageTextAbout")}</h5>
         </div>
       </div>
     </>

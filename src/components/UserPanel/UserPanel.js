@@ -20,12 +20,12 @@ export default function UserPanel({menuMode}) {
 
   const menuItems = () => [
     {
-      text: formatMessage("profile"),
+      text: formatMessage("msgProfileMenuTitle"),
       icon: "user",
       onClick: navigateToProfile,
     },
     {
-      text: formatMessage("logout"),
+      text: formatMessage("msgLogout"),
       icon: "runner",
       onClick: signOut,
     },

@@ -10,6 +10,7 @@ import TreeList, {
   Column,
   RequiredRule,
   PatternRule,
+  FormItem,
   Lookup,
   Button as TreeListButton,
   Paging,
@@ -26,7 +27,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
-  const [stateOfRows, setStateOfRows] = useState("expand");
+  const [stateOfRows, setStateOfRows] = useState("msgExpandAllRows");
   // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
 
   const {formatMessage} = useLocalization();
@@ -34,11 +35,14 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   // const lookData = FetchData(pathname, formatMessage).lookupDataSource;
   const lookData = FetchData(pathname, formatMessage).lookData;
 
-  const pathnameToName = pathname.split("/")[1];
-  const localizedPageShortName = formatMessage(pathnameToName);
+  const pathnameToNameWithoutSlash = pathname.split("/")[1];
+  const localPathname = createCustomMsg(pathnameToNameWithoutSlash);
+  const localPageAbbreviation = formatMessage(
+    customPageAbbreviationMsg(pathnameToNameWithoutSlash)
+  );
 
   const popupOpt = {
-    title: formatMessage("create_new_item", localizedPageShortName),
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
     width: 950,
     height: 780,
@@ -60,7 +64,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }, []);
 
   function statusesLang() {
-    const defaultStatus = ["Active", "Deactivated"];
+    const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
     const statusLanguage = defaultStatus.map((statusLang) =>
       formatMessage(statusLang)
     );
@@ -74,7 +78,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   function clickHandler() {
     setToggler((toggler) => !toggler);
     setStateOfRows(() =>
-      stateOfRows === "minimised" ? "expand" : "minimised"
+      stateOfRows === "msgMinimisedAllRows"
+        ? "msgExpandAllRows"
+        : "msgMinimisedAllRows"
     );
 
     if (toggler) {
@@ -82,58 +88,117 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
   }
 
+  function createCustomMsg(message) {
+    const changeFirstLetterToUpper = `${message[0].toUpperCase()}${message.slice(
+      1
+    )}`;
+    return `msg${changeFirstLetterToUpper}`;
+  }
+
+  function customPageAbbreviationMsg(message) {
+    return `msg${message[0].toUpperCase()}${message.slice(1)}Abbreviation`;
+  }
+
   function customMarkupRender() {
     let columnsTitleCollection = [];
 
     if (
-      pathnameToName === "kopf" ||
-      pathnameToName === "kspd" ||
-      pathnameToName === "kfs" ||
-      pathnameToName === "oked"
+      pathnameToNameWithoutSlash === "kopf" ||
+      pathnameToNameWithoutSlash === "kspd" ||
+      pathnameToNameWithoutSlash === "kfs" ||
+      pathnameToNameWithoutSlash === "oked"
     ) {
       const pageTitleCollection = [
-        "name_rus",
-        "name_uzcyr",
-        "name_uzlat",
-        "name_karlat",
-        "name_eng",
+        {
+          value: "id",
+          caption: "msgId",
+          visible: false,
+          disabled: true,
+          required: false,
+          allowEditing: false,
+          formItem: true,
+          width: 80,
+          alignment: "center",
+        },
+        {value: "name_rus", caption: "msgNameRus", visible: true},
+        {value: "name_uzcyr", caption: "msgNameUzcyr"},
+        {value: "name_uzlat", caption: "msgNameUzlat"},
+        {value: "name_karlat", caption: "msgNameKarlat"},
+        {value: "name_eng", caption: "msgNameEng"},
+        {value: "pid", caption: "msgAsChildOf", visible: false, lookup: true},
       ];
+
       columnsTitleCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "soato") {
+    } else if (pathnameToNameWithoutSlash === "soato") {
       const pageTitleCollection = [
-        "territory_name_rus",
-        "territory_name_uzcyr",
-        "territory_name_uzlat",
-        "territory_name_karlat",
-        "territory_name_eng",
-        "admin_centre_rus",
-        "admin_centre_uzcyr",
-        "admin_centre_uzlat",
-        "admin_centre_karlat",
-        "admin_centre_eng",
+        {
+          value: "id",
+          caption: "msgId",
+          visible: false,
+          disabled: true,
+          required: false,
+          allowEditing: false,
+          formItem: true,
+          width: 80,
+          alignment: "center",
+        },
+        {
+          value: "territory_name_rus",
+          caption: "msgTerritoryNameRus",
+          visible: true,
+        },
+        {value: "territory_name_uzcyr", caption: "msgTerritoryNameUzcyr"},
+        {value: "territory_name_uzlat", caption: "msgTerritoryNameUzlat"},
+        {value: "territory_name_karlat", caption: "msgTerritoryNameKarlat"},
+        {value: "territory_name_eng", caption: "msgTerritoryNameEng"},
+        {value: "admin_centre_rus", caption: "msgAdminCentreRus"},
+        {value: "admin_centre_uzcyr", caption: "msgAdminCentreUzcyr"},
+        {value: "admin_centre_uzlat", caption: "msgAdminCentreUzlat"},
+        {value: "admin_centre_karlat", caption: "msgAdminCentreKarlat"},
+        {value: "admin_centre_eng", caption: "msgAdminCentreEng"},
+        {value: "pid", caption: "msgAsChildOf", visible: false, lookup: true},
       ];
+
       columnsTitleCollection = [...pageTitleCollection];
     }
 
-    return columnsTitleCollection.map((columnTitle, idx) => {
-      // if true - return required and visible column =)
-      return columnTitle === "name_rus" ||
-        columnTitle === "territory_name_rus" ? (
+    return columnsTitleCollection.map((item, idx) => {
+      const {
+        value,
+        caption = value,
+        visible = false,
+        disabled = false,
+        required = false,
+        width = "100%",
+        minWidth = 250,
+        alignment = "left",
+        formItem = false,
+        lookup = false,
+        allowEditing = true,
+      } = item;
+
+      return (
         <Column
-          dataField={columnTitle}
-          caption={formatMessage(columnTitle)}
-          minWidth={250}
           key={idx}
+          dataField={value}
+          caption={formatMessage(caption)}
+          visible={visible}
+          disabled={disabled}
+          width={width}
+          alignment={alignment}
+          minWidth={minWidth}
+          allowEditing={allowEditing}
         >
-          <RequiredRule />
+          {required && <RequiredRule />}
+          {formItem && <FormItem visible={false} />}
+          {lookup && (
+            <Lookup
+              dataSource={lookDataState}
+              valueExpr="id"
+              displayExpr="name"
+            />
+          )}
         </Column>
-      ) : (
-        <Column
-          dataField={columnTitle}
-          caption={formatMessage(columnTitle)}
-          visible={false}
-          key={idx}
-        />
       );
     });
   }
@@ -141,60 +206,56 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   function customCodeMarkupRender() {
     let murkupCollection = [];
 
-    if (pathnameToName === "kopf") {
+    if (pathnameToNameWithoutSlash === "kopf") {
       const pageTitleCollection = [
         {
           dataField: "code",
           width: 120,
-          message: "code_err_message_3",
+          message: "msgCodeErrThreeDigitsMsg",
           pattern: "^[0-9]{3}$",
-          required: true,
         },
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "soato") {
+    } else if (pathnameToNameWithoutSlash === "soato") {
       const pageTitleCollection = [
         {
           dataField: "code",
           width: 120,
-          message: "code_err_numeric_message",
+          message: "msgCodeErrNumericMsg",
           pattern: "^[0-9]*$",
-          required: true,
         },
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "kspd") {
+    } else if (pathnameToNameWithoutSlash === "kspd") {
       const pageTitleCollection = [
         {
           dataField: "code",
           width: 120,
-          message: "code_err_message_2",
+          message: "msgCodeErrTwoDigitsMsg",
           pattern: "^[0-9]{1,2}$",
-          required: true,
         },
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "kfs") {
+    } else if (pathnameToNameWithoutSlash === "kfs") {
       const pageTitleCollection = [
         {
           dataField: "KFSCode",
           width: 100,
-          message: "code_err_message_3",
+          message: "msgCodeErrThreeDigitsMsg",
           pattern: "^[0-9]{3}$",
-          required: true,
         },
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToName === "oked") {
+    } else if (pathnameToNameWithoutSlash === "oked") {
       const pageTitleCollection = [
         {
           dataField: "code",
           width: 120,
-          message: "code_err_message_5",
+          message: "msgCodeErrFiveDigitsMsg",
           pattern: "^[0-9]{0,5}$",
           required: false,
         },
@@ -204,22 +265,26 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
 
     return murkupCollection.map((item, idx) => {
-      const {dataField, width, message, pattern, required} = item;
+      const {
+        dataField,
+        width,
+        message,
+        pattern,
+        required = true,
+        alignment = "left",
+      } = item;
 
       return (
         <Column
           key={idx}
           dataField={dataField}
-          caption={formatMessage(
-            `${pathnameToName}_code`,
-            localizedPageShortName
-          )}
-          alignment="left"
+          caption={formatMessage(`${localPathname}Code`, localPageAbbreviation)}
+          alignment={alignment}
           width={width}
           visible={true}
         >
           <PatternRule
-            message={formatMessage(message, localizedPageShortName)}
+            message={formatMessage(message, localPageAbbreviation)}
             pattern={new RegExp(pattern)}
           />
           {required && <RequiredRule />}
@@ -244,7 +309,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>
-        {formatMessage(`${pathnameToName}_title`, localizedPageShortName)}
+        {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
 
       <Button
@@ -269,7 +334,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         showColumnLines={true}
         columnMinWidth={60}
         columnAutoWidth={true}
-        columnHidingEnabled={true}
+        columnHidingEnabled={false}
         allowColumnResizing={true}
         allowColumnReordering={true}
         // appearance
@@ -290,8 +355,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           allowSearch={true}
           width={300}
           height={365}
-          title={formatMessage("colomn_chooser")}
-          emptyPanelText={formatMessage("colomn_chooser_empty_text")}
+          title={formatMessage("msgColomnChooser")}
+          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
         />
         <FilterRow visible={true} />
 
@@ -303,36 +368,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           allowDeleting={true}
         />
 
-        <Column
-          dataField="id"
-          caption="ID"
-          alignment="center"
-          visible={false}
-          allowEditing={false}
-          disabled={true}
-          width={80}
-        />
-
         {customMarkupRender()}
         {customCodeMarkupRender()}
 
         <Column
-          dataField="pid"
-          caption={formatMessage("as_child_of")}
-          visible={false}
-        >
-          <Lookup
-            dataSource={lookDataState}
-            valueExpr="id"
-            displayExpr="name"
-            // dropDownCentered={true}
-            // searchEnabled={true}
-          />
-        </Column>
-
-        <Column
           dataField="status"
-          caption={formatMessage("status")}
+          caption={formatMessage("msgStatus")}
           alignment="center"
           width={120}
         >
@@ -343,15 +384,15 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         <Column type="buttons" width={110}>
           <TreeListButton
             name="add"
-            hint={formatMessage("add_new_item", localizedPageShortName)}
+            hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
           />
           <TreeListButton
             name="edit"
-            hint={formatMessage("edit_new_item", localizedPageShortName)}
+            hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
           />
           <TreeListButton
             name="delete"
-            hint={formatMessage("delete_new_item", localizedPageShortName)}
+            hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
         </Column>
 

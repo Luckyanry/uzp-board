@@ -10,35 +10,42 @@ export const AppNavigation = () => {
   function pathCreator(pathTitle) {
     return pathTitle.map((item) => {
       return {
-        text: formatMessage(item),
+        text: formatMessage(customizeTitleMsg(item)),
         path: `/${item}`,
       };
     });
   }
 
+  function customizeTitleMsg(message) {
+    const changeFirstLetterToUpper = `${message[0].toUpperCase()}${message.slice(
+      1
+    )}`;
+    return `msg${changeFirstLetterToUpper}MenuTitle`;
+  }
+
   return [
     {
-      text: formatMessage("home"),
+      text: formatMessage("msgHomeMenuTitle"),
       path: "/home",
       icon: "home",
     },
     {
-      text: formatMessage("users_dir_title"),
+      text: formatMessage("msgUsersDirMenuTitle"),
       icon: "user",
       items: pathCreator(usersDir),
     },
     {
-      text: formatMessage("directory"),
+      text: formatMessage("msgDirectoryILEMenuTitle"),
       icon: "mediumiconslayout",
       items: pathCreator(directoryFolder),
     },
     {
-      text: formatMessage("opf_title"),
+      text: formatMessage("msgOpfMenuTitle"),
       icon: "product",
       items: pathCreator(opfFolder),
     },
     {
-      text: formatMessage("shortDics"),
+      text: formatMessage("msgShortDicsMenuTitle"),
       path: "/ShortDics",
       icon: "tableproperties",
     },

@@ -11,7 +11,7 @@ const Localization = () => {
   const {lang, langData, changeLocale} = useLocalization();
   return (
     <div className="option">
-      {/* <label htmlFor="selectInput">{formatMessage("language")}</label>
+      {/* <label htmlFor="selectInput">{formatMessage("msgLanguage")}</label>
       &nbsp; */}
       <SelectBox
         items={langData}

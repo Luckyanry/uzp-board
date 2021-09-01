@@ -31,6 +31,8 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
+      case "/CustomMessages":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
       case "/islang":
         return `&${wisdbParam}&sp=islang`;
       case "/w_changeMyLocaleTo":
@@ -50,10 +52,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
 
   const fetchData = new CustomStore({
     key: "id",
-    load: () =>
-      sendRequest(finalUrl, {
-        schema: "get",
-      }),
+    load: () => sendRequest(finalUrl, {schema: "get"}),
     insert: (values) =>
       sendRequest(
         finalUrl,
@@ -184,23 +183,22 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
   const lookData = new CustomStore({
     key: "id",
     load: () => {
-      return sendRequest(`${url}${baseParams}${pageRequestParams()}`, {
-        schema: "look",
-      });
+      return sendRequest(finalUrl, {schema: "look"});
     },
   });
 
   const changeMyLocalToData = new CustomStore({
     key: "short",
     insert: (newKey) =>
-      sendRequest(
-        `${url}${baseParams}${pageRequestParams()}`,
-        {
-          schema: "dbo",
-          "@newkey": newKey,
-        },
-        "POST"
-      ),
+      sendRequest(finalUrl, {schema: "dbo", "@newkey": newKey}, "POST"),
+  });
+
+  const custumMessageData = new CustomStore({
+    key: "id",
+    loadMode: "row",
+    load: () => {
+      return sendRequest(finalUrl, {schema: "get"}, "POST");
+    },
   });
 
   async function sendRequest(url, data = {}, method = "GET") {
@@ -212,6 +210,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
 
     const getOptions = {
       method,
+      // cache: false,
       credentials: "include",
       xhrFields: {withCredentials: true},
     };
@@ -222,6 +221,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
+      // cache: false,
       credentials: "include",
       xhrFields: {withCredentials: true},
     };
@@ -270,7 +270,8 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     if (values.status) {
       newStatus = {
         ...values,
-        status: values.status === formatMessage("Active") ? true : false,
+        status:
+          values.status === formatMessage("msgStatusActive") ? true : false,
       };
     }
 
@@ -283,8 +284,8 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         const changeStatus = {
           ...item,
           status: item.status
-            ? formatMessage("Active")
-            : formatMessage("Deactivated"),
+            ? formatMessage("msgStatusActive")
+            : formatMessage("msgStatusDeactivated"),
         };
 
         return changeStatus;
@@ -317,8 +318,6 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     if (!data.hint) {
       return data && JSON.parse(data);
     } else {
-      // console.log(`fetch error => `, data);
-
       throw new Error(
         `
         ScriptFile: ${data.ScriptFile},
@@ -337,6 +336,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     lookData,
     changeMyLocalToData,
     usersFetchData,
+    custumMessageData,
     // lookupDataSource,
   };
 };

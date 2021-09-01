@@ -21,7 +21,7 @@ export const DetailTemplate = (props) => {
   const focusedRowTitle = props.data.data.name;
 
   const popupOpt = {
-    title: formatMessage("create_new_item", focusedRowTitle),
+    title: formatMessage("msgCreateNewItem", focusedRowTitle),
     showTitle: true,
     width: 950,
     height: 780,
@@ -49,7 +49,7 @@ export const DetailTemplate = (props) => {
   }, []);
 
   function statusesLang() {
-    const defaultStatus = ["Active", "Deactivated"];
+    const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
     const statusLanguage = defaultStatus.map((statusLang) =>
       formatMessage(statusLang)
     );
@@ -97,8 +97,8 @@ export const DetailTemplate = (props) => {
         allowSearch={true}
         width={300}
         height={320}
-        title={formatMessage("colomn_chooser")}
-        emptyPanelText={formatMessage("colomn_chooser_empty_text")}
+        title={formatMessage("msgColomnChooser")}
+        emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
       />
 
       <Editing
