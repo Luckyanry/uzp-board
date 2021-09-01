@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from "react";
 
 import "devextreme/data/odata/store";
-import DataGrid, {ColumnChooser, Editing} from "devextreme-react/data-grid";
+import DataGrid, {
+  ColumnChooser,
+  Editing,
+  Paging,
+  Pager,
+} from "devextreme-react/data-grid";
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -107,6 +112,16 @@ export const DetailTemplate = (props) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
+      />
+
+      <Paging defaultPageSize={10} />
+      <Pager
+        showPageSizeSelector={true}
+        showNavigationButtons={true}
+        showInfo={true}
+        visible={true}
+        allowedPageSizes={[10, 20, 50, 100, "all"]}
+        showAllItem={true}
       />
     </DataGrid>
     // </ErrorBoundary>

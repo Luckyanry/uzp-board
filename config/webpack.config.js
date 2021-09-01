@@ -347,7 +347,7 @@ module.exports = function (webpackEnv) {
           "scheduler/tracing": "scheduler/tracing-profiling",
         }),
         ...(modules.webpackAliases || {}),
-        inferno: "inferno/dist/index.dev.esm.js",
+        // inferno: "inferno/dist/index.dev.esm.js",
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
