@@ -31,6 +31,8 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
+      case "/ShortDicsRecordsFlatOkedSchema":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/CustomMessages":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
       case "/islang":
@@ -164,9 +166,9 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
   //         }
   //       );
   //     },
-  //     // byKey: (key) => {
-  //     //   return fetch(`${url}${baseParams}${pageRequestParams()}${key}`);
-  //     // },
+  //     byKey: (key) => {
+  //        return fetch(`${url}${baseParams}${pageRequestParams()}${key}`);
+  //     },
   //   }),
   //   take: 10,
   //   skip: 0,

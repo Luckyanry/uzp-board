@@ -270,6 +270,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         alignment = "left",
         formItem = false,
         lookup = false,
+        ...params
       } = item;
 
       return (
@@ -281,6 +282,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           disabled={disabled}
           width={width}
           alignment={alignment}
+          {...params}
         >
           {required && <RequiredRule />}
           {formItem && <FormItem visible={false} />}
@@ -352,7 +354,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     }
 
     return murkupCollection.map((item, idx) => {
-      const {dataField, caption, width, message, pattern, required} = item;
+      const {dataField, caption, width, message, pattern, required, ...params} =
+        item;
 
       return (
         <Column
@@ -362,6 +365,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           alignment="center"
           width={width}
           visible={true}
+          {...params}
         >
           <PatternRule
             message={formatMessage(message)}

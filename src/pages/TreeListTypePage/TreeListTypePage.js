@@ -175,6 +175,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         formItem = false,
         lookup = false,
         allowEditing = true,
+        ...params
       } = item;
 
       return (
@@ -188,6 +189,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
+          {...params}
         >
           {required && <RequiredRule />}
           {formItem && <FormItem visible={false} />}
@@ -272,6 +274,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         pattern,
         required = true,
         alignment = "left",
+        ...params
       } = item;
 
       return (
@@ -282,6 +285,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           alignment={alignment}
           width={width}
           visible={true}
+          {...params}
         >
           <PatternRule
             message={formatMessage(message, localPageAbbreviation)}
@@ -292,7 +296,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       );
     });
   }
-
+  console.log(`customCodeMarkupRender`, customCodeMarkupRender());
   // function onEditorPreparing(e) {
   //   console.log(`onEditorPreparing(e) =>`, e);
   //   // if (e.parentType === "dataRow" && e.dataField === "CityID") {
