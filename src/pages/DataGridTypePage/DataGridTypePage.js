@@ -30,9 +30,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [lookDataState, setLookDataState] = useState(null);
 
   const {formatMessage} = useLocalization();
-  const fetchData = FetchData(pathname, formatMessage).fetchData;
-  const usersFetchData = FetchData(pathname, formatMessage).usersFetchData;
-  const lookData = FetchData(pathname, formatMessage).lookData;
 
   const pathnameToNameWithoutSlash = pathname.split("/")[1];
   const localPathname = createCustomMsg(pathnameToNameWithoutSlash);
@@ -48,32 +45,44 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
+    const spForURL = firstLetterToUpper(pathnameToNameWithoutSlash);
+    const fetchData = FetchData(pathname, formatMessage).fetchData;
+    const usersFetchData = FetchData(pathname, formatMessage).usersFetchData;
+
     pathnameToNameWithoutSlash === "usersList" ||
     pathnameToNameWithoutSlash === "usersRole" ||
     pathnameToNameWithoutSlash === "usersGroup"
       ? setAPIData(usersFetchData)
       : setAPIData(fetchData);
 
-    const getLookDataState = async () => {
+    const getLookDataState = async (spForURL) => {
+      const lookData = FetchData(
+        pathname,
+        formatMessage,
+        null,
+        spForURL
+      ).lookData;
       const result = await lookData._loadFunc().then((res) => res.data);
+
       setLookDataState(result);
     };
 
-    pathnameToNameWithoutSlash === "ShortDics" && getLookDataState();
+    pathnameToNameWithoutSlash === "ShortDics" && getLookDataState(spForURL);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // function initNewRow(e) {}
 
+  function firstLetterToUpper(message) {
+    return `${message[0].toUpperCase()}${message.slice(1)}`;
+  }
+
   function createCustomMsg(message) {
-    const changeFirstLetterToUpper = `${message[0].toUpperCase()}${message.slice(
-      1
-    )}`;
-    return `msg${changeFirstLetterToUpper}`;
+    return `msg${firstLetterToUpper(message)}`;
   }
 
   function customPageAbbreviationMsg(message) {
-    return `msg${message[0].toUpperCase()}${message.slice(1)}Abbreviation`;
+    return `msg${firstLetterToUpper(message)}Abbreviation`;
   }
 
   function customMarkupRender() {

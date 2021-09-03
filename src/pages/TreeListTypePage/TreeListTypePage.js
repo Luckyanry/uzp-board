@@ -40,10 +40,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const localPageAbbreviation = formatMessage(
     customPageAbbreviationMsg(pathnameToNameWithoutSlash)
   );
-  console.log(
-    `firstLetterToUpper => `,
-    firstLetterToUpper(pathnameToNameWithoutSlash)
-  );
 
   const popupOpt = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
@@ -140,11 +136,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function createCustomMsg(message) {
-    return `msg${message[0].toUpperCase()}${message.slice(1)}`;
+    return `msg${firstLetterToUpper(message)}`;
   }
 
   function customPageAbbreviationMsg(message) {
-    return `msg${message[0].toUpperCase()}${message.slice(1)}Abbreviation`;
+    return `msg${firstLetterToUpper(message)}Abbreviation`;
   }
 
   function customMarkupRender() {
@@ -152,7 +148,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
     pathnameToNameWithoutSlash === "oked" &&
       (columnsTitleCollection = columnsSchemaData);
-    // && console.log(`columnsTitleCollection oked `, columnsSchemaData);
 
     if (
       pathnameToNameWithoutSlash === "kopf" ||
