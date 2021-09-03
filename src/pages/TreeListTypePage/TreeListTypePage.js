@@ -25,20 +25,24 @@ import "./TreeListTypePage.scss";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [toggler, setToggler] = useState(false);
-  const [APIData, setAPIData] = useState(null);
+  const [columnsSchemaData, setColumnsSchemaData] = useState([]);
+  const [APIData, setAPIData] = useState([]);
   const [lookDataState, setLookDataState] = useState([]);
   const [stateOfRows, setStateOfRows] = useState("msgExpandAllRows");
   // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
 
   const {formatMessage} = useLocalization();
-  const fetchData = FetchData(pathname, formatMessage).fetchData;
+
   // const lookData = FetchData(pathname, formatMessage).lookupDataSource;
-  const lookData = FetchData(pathname, formatMessage).lookData;
 
   const pathnameToNameWithoutSlash = pathname.split("/")[1];
   const localPathname = createCustomMsg(pathnameToNameWithoutSlash);
   const localPageAbbreviation = formatMessage(
     customPageAbbreviationMsg(pathnameToNameWithoutSlash)
+  );
+  console.log(
+    `firstLetterToUpper => `,
+    firstLetterToUpper(pathnameToNameWithoutSlash)
   );
 
   const popupOpt = {
@@ -49,17 +53,60 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    setAPIData(fetchData);
+    const spForURL = firstLetterToUpper(pathnameToNameWithoutSlash);
 
-    const getLookDataState = async () => {
+    async function getColumnsSchemaData() {
+      const fetchColumnsSchemaData = FetchData(
+        pathname,
+        formatMessage
+      ).fetchData;
+
+      const result = await fetchColumnsSchemaData
+        ._loadFunc()
+        .then((res) => res.data);
+
+      setColumnsSchemaData(result);
+
+      const findLookup = result.find((item) => item.lookup);
+      const getIsfetchField = findLookup.lookup.isfetch;
+      const getpForURL = getIsfetchField.split(".")[2];
+
+      getAPIData(spForURL);
+      getLookDataState(getpForURL);
+    }
+
+    function getAPIData(getpForURL) {
+      const fetchData = FetchData(
+        pathname,
+        formatMessage,
+        null,
+        getpForURL
+      ).fetchColumnsSchemaData;
+
+      setAPIData(fetchData);
+    }
+
+    async function getLookDataState(getpForURL) {
+      const lookData = FetchData(
+        pathname,
+        formatMessage,
+        null,
+        getpForURL
+      ).lookData;
       // console.log(`lookData => `, lookData);
       // const result = await lookData.store._loadFunc().then((res) => res.data);
       const result = await lookData._loadFunc().then((res) => res.data);
-
       setLookDataState(result);
-    };
+    }
 
-    getLookDataState();
+    if (pathnameToNameWithoutSlash === "oked") {
+      getColumnsSchemaData();
+    }
+
+    if (pathnameToNameWithoutSlash !== "oked") {
+      getAPIData(spForURL);
+      getLookDataState(spForURL);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -88,11 +135,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
   }
 
+  function firstLetterToUpper(message) {
+    return `${message[0].toUpperCase()}${message.slice(1)}`;
+  }
+
   function createCustomMsg(message) {
-    const changeFirstLetterToUpper = `${message[0].toUpperCase()}${message.slice(
-      1
-    )}`;
-    return `msg${changeFirstLetterToUpper}`;
+    return `msg${message[0].toUpperCase()}${message.slice(1)}`;
   }
 
   function customPageAbbreviationMsg(message) {
@@ -102,15 +150,19 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   function customMarkupRender() {
     let columnsTitleCollection = [];
 
+    pathnameToNameWithoutSlash === "oked" &&
+      (columnsTitleCollection = columnsSchemaData);
+    // && console.log(`columnsTitleCollection oked `, columnsSchemaData);
+
     if (
       pathnameToNameWithoutSlash === "kopf" ||
       pathnameToNameWithoutSlash === "kspd" ||
-      pathnameToNameWithoutSlash === "kfs" ||
-      pathnameToNameWithoutSlash === "oked"
+      pathnameToNameWithoutSlash === "kfs"
+      // || pathnameToNameWithoutSlash === "oked"
     ) {
       const pageTitleCollection = [
         {
-          value: "id",
+          dataField: "id",
           caption: "msgId",
           visible: false,
           disabled: true,
@@ -120,19 +172,25 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           width: 80,
           alignment: "center",
         },
-        {value: "name_rus", caption: "msgNameRus", visible: true},
-        {value: "name_uzcyr", caption: "msgNameUzcyr"},
-        {value: "name_uzlat", caption: "msgNameUzlat"},
-        {value: "name_karlat", caption: "msgNameKarlat"},
-        {value: "name_eng", caption: "msgNameEng"},
-        {value: "pid", caption: "msgAsChildOf", visible: false, lookup: true},
+        {dataField: "name_rus", caption: "msgNameRus", visible: true},
+        {dataField: "name_uzcyr", caption: "msgNameUzcyr"},
+        {dataField: "name_uzlat", caption: "msgNameUzlat"},
+        {dataField: "name_karlat", caption: "msgNameKarlat"},
+        {dataField: "name_eng", caption: "msgNameEng"},
+        {
+          dataField: "pid",
+          caption: "msgAsChildOf",
+          visible: false,
+          lookup: true,
+        },
       ];
 
       columnsTitleCollection = [...pageTitleCollection];
+      // console.log(`columnsTitleCollection kopf => `, columnsTitleCollection);
     } else if (pathnameToNameWithoutSlash === "soato") {
       const pageTitleCollection = [
         {
-          value: "id",
+          dataField: "id",
           caption: "msgId",
           visible: false,
           disabled: true,
@@ -143,20 +201,25 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           alignment: "center",
         },
         {
-          value: "territory_name_rus",
+          dataField: "territory_name_rus",
           caption: "msgTerritoryNameRus",
           visible: true,
         },
-        {value: "territory_name_uzcyr", caption: "msgTerritoryNameUzcyr"},
-        {value: "territory_name_uzlat", caption: "msgTerritoryNameUzlat"},
-        {value: "territory_name_karlat", caption: "msgTerritoryNameKarlat"},
-        {value: "territory_name_eng", caption: "msgTerritoryNameEng"},
-        {value: "admin_centre_rus", caption: "msgAdminCentreRus"},
-        {value: "admin_centre_uzcyr", caption: "msgAdminCentreUzcyr"},
-        {value: "admin_centre_uzlat", caption: "msgAdminCentreUzlat"},
-        {value: "admin_centre_karlat", caption: "msgAdminCentreKarlat"},
-        {value: "admin_centre_eng", caption: "msgAdminCentreEng"},
-        {value: "pid", caption: "msgAsChildOf", visible: false, lookup: true},
+        {dataField: "territory_name_uzcyr", caption: "msgTerritoryNameUzcyr"},
+        {dataField: "territory_name_uzlat", caption: "msgTerritoryNameUzlat"},
+        {dataField: "territory_name_karlat", caption: "msgTerritoryNameKarlat"},
+        {dataField: "territory_name_eng", caption: "msgTerritoryNameEng"},
+        {dataField: "admin_centre_rus", caption: "msgAdminCentreRus"},
+        {dataField: "admin_centre_uzcyr", caption: "msgAdminCentreUzcyr"},
+        {dataField: "admin_centre_uzlat", caption: "msgAdminCentreUzlat"},
+        {dataField: "admin_centre_karlat", caption: "msgAdminCentreKarlat"},
+        {dataField: "admin_centre_eng", caption: "msgAdminCentreEng"},
+        {
+          dataField: "pid",
+          caption: "msgAsChildOf",
+          visible: false,
+          lookup: true,
+        },
       ];
 
       columnsTitleCollection = [...pageTitleCollection];
@@ -164,8 +227,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
     return columnsTitleCollection.map((item, idx) => {
       const {
-        value,
-        caption = value,
+        dataField,
+        dataType = "string",
+        caption = dataField,
         visible = false,
         disabled = false,
         required = false,
@@ -181,8 +245,13 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       return (
         <Column
           key={idx}
-          dataField={value}
-          caption={formatMessage(caption)}
+          dataField={dataField}
+          dataType={dataType}
+          caption={
+            pathnameToNameWithoutSlash === "oked"
+              ? caption
+              : formatMessage(caption)
+          }
           visible={visible}
           disabled={disabled}
           width={width}
@@ -200,6 +269,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
               displayExpr="name"
             />
           )}
+          {/* {dataField === "code" && (
+            <PatternRule
+              message={formatMessage(message, localPageAbbreviation)}
+              pattern={new RegExp(pattern)}
+            />
+          )} */}
         </Column>
       );
     });
@@ -252,19 +327,20 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "oked") {
-      const pageTitleCollection = [
-        {
-          dataField: "code",
-          width: 120,
-          message: "msgCodeErrFiveDigitsMsg",
-          pattern: "^[0-9]{0,5}$",
-          required: false,
-        },
-      ];
-
-      murkupCollection = [...pageTitleCollection];
     }
+    // else if (pathnameToNameWithoutSlash === "oked") {
+    //   const pageTitleCollection = [
+    //     {
+    //       dataField: "code",
+    //       width: 120,
+    //       message: "msgCodeErrFiveDigitsMsg",
+    //       pattern: "^[0-9]{0,5}$",
+    //       required: false,
+    //     },
+    //   ];
+
+    //   murkupCollection = [...pageTitleCollection];
+    // }
 
     return murkupCollection.map((item, idx) => {
       const {
@@ -296,7 +372,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       );
     });
   }
-  console.log(`customCodeMarkupRender`, customCodeMarkupRender());
+  // console.log(`customCodeMarkupRender`, customCodeMarkupRender());
+
   // function onEditorPreparing(e) {
   //   console.log(`onEditorPreparing(e) =>`, e);
   //   // if (e.parentType === "dataRow" && e.dataField === "CityID") {

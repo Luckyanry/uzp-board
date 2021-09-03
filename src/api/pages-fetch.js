@@ -8,7 +8,12 @@ const hbdbParam = "db=hbdb";
 const wisdbParam = "db=wisdb";
 // const errorTestParam = "w_testDepthiRiseErrors";
 
-export const FetchData = (pageRequest, formatMessage, tid = null) => {
+export const FetchData = (
+  pageRequest,
+  formatMessage,
+  tid = null,
+  sp = null
+) => {
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -21,18 +26,16 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
         return `&${hbdbParam}&sp=Kopf`;
       case "/kfs":
         return `&${hbdbParam}&sp=KFS`;
-      case "/kspd":
-        return `&${hbdbParam}&sp=Kspd`;
-      case "/oked":
-        return `&${hbdbParam}&sp=Oked`;
+      // case "/kspd":
+      //   return `&${hbdbParam}&sp=Kspd`;
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
+      case "/oked":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/ShortDicsRecords":
         return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
-      case "/ShortDicsRecordsFlatOkedSchema":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/CustomMessages":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
       case "/islang":
@@ -86,6 +89,54 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
     byKey: (key) =>
       sendRequest(
         finalUrl,
+        {
+          schema: "bykey",
+          "@key": key,
+        },
+        "POST"
+      ),
+    onBeforeSend: function (method, ajaxOptions) {
+      ajaxOptions.credentials = "include";
+      ajaxOptions.xhrFields = {withCredentials: true};
+    },
+  });
+
+  const urlFromPages = `${url}${baseParams}&${hbdbParam}&sp=${sp}`;
+
+  const fetchColumnsSchemaData = new CustomStore({
+    key: "id",
+    load: () => sendRequest(urlFromPages, {schema: "get"}),
+    insert: (values) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "ins",
+          values: statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    update: (key, values) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "upd",
+          "@id": key,
+          values: statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    remove: (key) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "del",
+          "@id": key,
+        },
+        "POST"
+      ),
+    byKey: (key) =>
+      sendRequest(
+        urlFromPages,
         {
           schema: "bykey",
           "@key": key,
@@ -185,7 +236,9 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
   const lookData = new CustomStore({
     key: "id",
     load: () => {
-      return sendRequest(finalUrl, {schema: "look"});
+      return sendRequest(urlFromPages, {
+        schema: "look",
+      });
     },
   });
 
@@ -334,6 +387,7 @@ export const FetchData = (pageRequest, formatMessage, tid = null) => {
   }
 
   return {
+    fetchColumnsSchemaData,
     fetchData,
     lookData,
     changeMyLocalToData,
