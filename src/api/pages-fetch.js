@@ -27,8 +27,8 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
       case "/kopf":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KopfColumnSchema`;
-      // case "/kfs":
-      //   return `&${hbdbParam}&sp=KFS`;
+      case "/kfs":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KfsColumnSchema`;
       // case "/kspd":
       //   return `&${hbdbParam}&sp=Kspd`;
       case "/ShortDics":
@@ -41,10 +41,10 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
-      case "/CustomMessages":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
+      // case "/CustomMessages":
+      //   return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
       // case "/islang":
-      //   return `&${wisdbParam}&sp=Islang`;
+      //   return `&${wisdbParam}&sp=islang`;
       // case "/w_changeMyLocaleTo":
       //   return `&${wisdbParam}&sp=W_changeMyLocaleTo`;
       case "/usersList":
@@ -257,7 +257,7 @@ export const FetchData = (
     key: "id",
     // loadMode: "row",
     load: () => {
-      return sendRequest(finalUrl, {schema: "get"}, "POST");
+      return sendRequest(urlFromPages, {schema: "get"}, "POST");
     },
   });
 

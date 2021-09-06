@@ -20,7 +20,7 @@ const LocalizationProvider = ({children}) => {
     "/w_changeMyLocaleTo",
     formatMessage,
     null,
-    "/w_changeMyLocaleTo",
+    "w_changeMyLocaleTo",
     "wisdb"
   ).changeMyLocalToData;
 
@@ -34,7 +34,8 @@ const LocalizationProvider = ({children}) => {
       "/CustomMessages",
       formatMessage,
       null,
-      "CustomMessages"
+      "ShortDicsRecordsFlatCustomMessagesObject",
+      "hbdb"
     ).custumMessageData;
 
     const getLangsData = async () => {
@@ -72,7 +73,7 @@ const LocalizationProvider = ({children}) => {
     //   didCancel = true;
     // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lang]);
+  }, []);
 
   function isEnabledLang(array) {
     if (array.length) {
@@ -112,7 +113,10 @@ const LocalizationProvider = ({children}) => {
     changeMyLocalTo(e.value);
     setLang(e.value);
     setLocale(e.value);
-    document.location.reload();
+
+    setTimeout(() => {
+      document.location.reload();
+    }, 500);
   }
 
   function initMessages() {
