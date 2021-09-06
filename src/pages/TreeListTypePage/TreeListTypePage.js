@@ -96,11 +96,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       setLookDataState(result);
     }
 
-    if (pathnameWithoutSlash === "oked") {
+    if (pathnameWithoutSlash === "oked" || pathnameWithoutSlash === "kopf") {
       getColumnsSchemaData();
-    }
-
-    if (pathnameWithoutSlash !== "oked") {
+    } else {
       getAPIData(pathnameWithoutSlash);
       getLookDataState(pathnameWithoutSlash);
     }
@@ -155,18 +153,17 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
   }
 
+  function checkIfArrIncludesValue(arr, value) {
+    return arr.includes(value);
+  }
+
   function customMarkupRender() {
     let columnsTitleCollection = [];
 
-    pathnameWithoutSlash === "oked" &&
+    checkIfArrIncludesValue(["oked", "kopf"], pathnameWithoutSlash) &&
       (columnsTitleCollection = columnsSchemaData);
 
-    if (
-      pathnameWithoutSlash === "kopf" ||
-      pathnameWithoutSlash === "kspd" ||
-      pathnameWithoutSlash === "kfs"
-      // || pathnameWithoutSlash === "oked"
-    ) {
+    if (pathnameWithoutSlash === "kspd" || pathnameWithoutSlash === "kfs") {
       const pageTitleCollection = [
         {
           dataField: "id",
@@ -245,7 +242,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         alignment = "left",
         formItem = false,
         lookup = false,
-        allowEditing = true,
+        allowEditing = false,
         ...params
       } = item;
 
@@ -255,7 +252,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           dataField={dataField}
           dataType={dataType}
           caption={
-            pathnameWithoutSlash === "oked" ? caption : formatMessage(caption)
+            checkIfArrIncludesValue(["oked", "kopf"], pathnameWithoutSlash)
+              ? caption
+              : formatMessage(caption)
           }
           visible={visible}
           disabled={disabled}
@@ -274,6 +273,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
               displayExpr="name"
             />
           )}
+          {dataField === "status" && <Lookup dataSource={statusesLang()} />}
           {/* {dataField === "code" && (
             <PatternRule
               message={formatMessage(message, localPageAbbreviation)}
@@ -288,18 +288,20 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   function customCodeMarkupRender() {
     let murkupCollection = [];
 
-    if (pathnameWithoutSlash === "kopf") {
-      const pageTitleCollection = [
-        {
-          dataField: "code",
-          width: 120,
-          message: "msgCodeErrThreeDigitsMsg",
-          pattern: "^[0-9]{3}$",
-        },
-      ];
+    // if (pathnameWithoutSlash === "kopf") {
+    //   const pageTitleCollection = [
+    //     {
+    //       dataField: "code",
+    //       width: 120,
+    //       message: "msgCodeErrThreeDigitsMsg",
+    //       pattern: "^[0-9]{3}$",
+    //     },
+    //   ];
 
-      murkupCollection = [...pageTitleCollection];
-    } else if (pathnameWithoutSlash === "soato") {
+    //   murkupCollection = [...pageTitleCollection];
+    // }
+
+    if (pathnameWithoutSlash === "soato") {
       const pageTitleCollection = [
         {
           dataField: "code",
@@ -310,7 +312,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameWithoutSlash === "kspd") {
+    }
+
+    if (pathnameWithoutSlash === "kspd") {
       const pageTitleCollection = [
         {
           dataField: "code",
@@ -321,7 +325,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameWithoutSlash === "kfs") {
+    }
+
+    if (pathnameWithoutSlash === "kfs") {
       const pageTitleCollection = [
         {
           dataField: "KFSCode",
@@ -457,15 +463,17 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         {customMarkupRender()}
         {customCodeMarkupRender()}
 
-        <Column
-          dataField="status"
-          caption={formatMessage("msgStatus")}
-          alignment="center"
-          width={120}
-        >
-          <Lookup dataSource={statusesLang()} />
-          <RequiredRule />
-        </Column>
+        {!checkIfArrIncludesValue(["oked", "kopf"], pathnameWithoutSlash) && (
+          <Column
+            dataField="status"
+            caption={formatMessage("msgStatus")}
+            alignment="center"
+            width={120}
+          >
+            <Lookup dataSource={statusesLang()} />
+            <RequiredRule />
+          </Column>
+        )}
 
         <Column type="buttons" width={110}>
           <TreeListButton

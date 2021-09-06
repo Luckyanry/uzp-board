@@ -99,13 +99,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       pathnameWithoutSlash === "mihalla"
     ) {
       getColumnsSchemaData();
-    }
-
-    if (
-      pathnameWithoutSlash !== "countries" ||
-      pathnameWithoutSlash !== "mihalla"
-    ) {
+    } else {
       const fetchData = FetchData(pathname, formatMessage).fetchData;
+
       const usersFetchData = FetchData(
         pathname,
         formatMessage,
@@ -162,6 +158,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     }
   }
 
+  function checkIfArrIncludesValue(arr, value) {
+    return arr.includes(value);
+  }
+
   function customMarkupRender() {
     let murkupCollection = [];
 
@@ -212,8 +212,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       murkupCollection = [...pageTitleCollection];
     }
 
-    (pathnameWithoutSlash === "countries" ||
-      pathnameWithoutSlash === "mihalla") &&
+    checkIfArrIncludesValue(["countries", "mihalla"], pathnameWithoutSlash) &&
       (murkupCollection = columnsSchemaData);
 
     // if (pathnameWithoutSlash === "countries") {
@@ -400,8 +399,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           dataField={dataField}
           dataType={dataType}
           caption={
-            pathnameWithoutSlash === "countries" ||
-            pathnameWithoutSlash === "mihalla"
+            checkIfArrIncludesValue(
+              ["countries", "mihalla"],
+              pathnameWithoutSlash
+            )
               ? caption
               : formatMessage(caption)
           }

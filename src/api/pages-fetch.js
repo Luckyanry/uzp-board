@@ -25,8 +25,8 @@ export const FetchData = (
       //   return `&${hbdbParam}&sp=Countries`;
       case "/countries":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
-      // case "/kopf":
-      //   return `&${hbdbParam}&sp=Kopf`;
+      case "/kopf":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KopfColumnSchema`;
       // case "/kfs":
       //   return `&${hbdbParam}&sp=KFS`;
       // case "/kspd":

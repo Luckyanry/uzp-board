@@ -21,16 +21,15 @@ export const DetailTemplate = (props) => {
   // const [error, setError] = useState(null);
 
   const {formatMessage} = useLocalization();
-  // console.log(`DetailTemplate props`, props);
 
-  const focusedRowTitle = props.data.data.name;
+  // const focusedRowTitle = props.data.data.name;
 
-  const popupOpt = {
-    title: formatMessage("msgCreateNewItem", focusedRowTitle),
-    showTitle: true,
-    width: 950,
-    height: 780,
-  };
+  // const popupOpt = {
+  //   title: formatMessage("msgCreateNewItem", focusedRowTitle),
+  //   showTitle: true,
+  //   width: 950,
+  //   height: 780,
+  // };
 
   const shortDicsRecords = FetchData(
     "/ShortDicsRecords",
@@ -107,8 +106,8 @@ export const DetailTemplate = (props) => {
       />
 
       <Editing
-        mode="popup"
-        popup={popupOpt}
+        mode="batch"
+        // popup={popupOpt}
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
