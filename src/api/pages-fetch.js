@@ -19,18 +19,16 @@ export const FetchData = (
     switch (pageRequest) {
       case "/soogu":
         return `&${hbdbParam}&sp=Soogu`;
-      // case "/soato":
-      //   return `&${hbdbParam}&sp=Soato`;
-      // case "/countries":
-      //   return `&${hbdbParam}&sp=Countries`;
+      case "/soato":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=SoatoColumnSchema`;
       case "/countries":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
       case "/kopf":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KopfColumnSchema`;
       case "/kfs":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KfsColumnSchema`;
-      // case "/kspd":
-      //   return `&${hbdbParam}&sp=Kspd`;
+      case "/kspd":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KspdColumnSchema`;
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
       case "/oked":
