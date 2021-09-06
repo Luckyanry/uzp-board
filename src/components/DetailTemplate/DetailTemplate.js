@@ -21,7 +21,7 @@ export const DetailTemplate = (props) => {
   // const [error, setError] = useState(null);
 
   const {formatMessage} = useLocalization();
-  console.log(`DetailTemplate props`, props);
+  // console.log(`DetailTemplate props`, props);
 
   const focusedRowTitle = props.data.data.name;
 

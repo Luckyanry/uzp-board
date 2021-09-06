@@ -26,15 +26,16 @@ import {DetailTemplate} from "../../components/DetailTemplate/DetailTemplate";
 import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
+  const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
 
   const {formatMessage} = useLocalization();
 
-  const pathnameToNameWithoutSlash = pathname.split("/")[1];
-  const localPathname = createCustomMsg(pathnameToNameWithoutSlash);
+  const pathnameWithoutSlash = pathname.split("/")[1];
+  const localPathname = createCustomMsg(pathnameWithoutSlash);
   const localPageAbbreviation = formatMessage(
-    customPageAbbreviationMsg(pathnameToNameWithoutSlash)
+    customPageAbbreviationMsg(pathnameWithoutSlash)
   );
 
   const popupGeneralOptions = {
@@ -45,33 +46,92 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    const spForURL = firstLetterToUpper(pathnameToNameWithoutSlash);
-    const fetchData = FetchData(pathname, formatMessage).fetchData;
-    const usersFetchData = FetchData(pathname, formatMessage).usersFetchData;
+    // const spForURL = firstLetterToUpper(pathnameWithoutSlash);
+    async function getColumnsSchemaData() {
+      const fetchColumnsSchemaData = FetchData(
+        pathname,
+        formatMessage,
+        null,
+        pathnameWithoutSlash,
+        "hbdb"
+      ).fetchData;
 
-    pathnameToNameWithoutSlash === "usersList" ||
-    pathnameToNameWithoutSlash === "usersRole" ||
-    pathnameToNameWithoutSlash === "usersGroup"
-      ? setAPIData(usersFetchData)
-      : setAPIData(fetchData);
+      const result = await fetchColumnsSchemaData
+        ._loadFunc()
+        .then((res) => res.data);
 
-    const getLookDataState = async (spForURL) => {
+      setColumnsSchemaData(result);
+      getAPIData(pathnameWithoutSlash);
+
+      const lookupSpForURL = getSpForURLFromLookup(result);
+
+      if (lookupSpForURL) {
+        getLookDataState(lookupSpForURL);
+      }
+    }
+
+    function getAPIData(spForURL) {
+      const fetchData = FetchData(
+        pathname,
+        formatMessage,
+        null,
+        spForURL
+      ).fetchColumnsSchemaData;
+
+      setAPIData(fetchData);
+    }
+
+    async function getLookDataState(spForURL) {
       const lookData = FetchData(
         pathname,
         formatMessage,
         null,
         spForURL
       ).lookData;
+
       const result = await lookData._loadFunc().then((res) => res.data);
 
       setLookDataState(result);
-    };
+    }
 
-    pathnameToNameWithoutSlash === "ShortDics" && getLookDataState(spForURL);
+    if (pathnameWithoutSlash === "countries") {
+      getColumnsSchemaData();
+    }
+
+    if (pathnameWithoutSlash !== "countries") {
+      const fetchData = FetchData(pathname, formatMessage).fetchData;
+      const usersFetchData = FetchData(
+        pathname,
+        formatMessage,
+        null
+      ).usersFetchData;
+
+      pathnameWithoutSlash === "usersList" ||
+      pathnameWithoutSlash === "usersRole" ||
+      pathnameWithoutSlash === "usersGroup"
+        ? setAPIData(usersFetchData)
+        : setAPIData(fetchData);
+
+      // getAPIData(pathnameWithoutSlash);
+      // getLookDataState(pathnameWithoutSlash);
+    }
+
+    pathnameWithoutSlash === "ShortDics" &&
+      getLookDataState(pathnameWithoutSlash);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // function initNewRow(e) {}
+  function statusesLang() {
+    const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
+    const statusLanguage = defaultStatus.map((statusLang) =>
+      formatMessage(statusLang)
+    );
+    return statusLanguage;
+  }
+
+  function initNewRow(e) {
+    e.data.status = statusesLang()[0];
+  }
 
   function firstLetterToUpper(message) {
     return `${message[0].toUpperCase()}${message.slice(1)}`;
@@ -85,13 +145,24 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     return `msg${firstLetterToUpper(message)}Abbreviation`;
   }
 
+  function getSpForURLFromLookup(data) {
+    const findLookup = data.find((item) => item.lookup);
+
+    if (findLookup) {
+      const getIsfetchField = findLookup.lookup.isfetch;
+      return getIsfetchField.split(".")[2];
+    } else {
+      return;
+    }
+  }
+
   function customMarkupRender() {
     let murkupCollection = [];
 
-    if (pathnameToNameWithoutSlash === "soogu") {
+    if (pathnameWithoutSlash === "soogu") {
       const pageTitleCollection = [
         {
-          value: "id",
+          dataField: "id",
           caption: "msgId",
           visible: true,
           disabled: true,
@@ -101,31 +172,31 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           formItem: true,
         },
         {
-          value: "name_rus",
+          dataField: "name_rus",
           caption: "msgNameRus",
           required: true,
           width: "100%",
         },
         {
-          value: "name_uzcyr",
+          dataField: "name_uzcyr",
           caption: "msgNameUzcyr",
           visible: false,
           width: "100%",
         },
         {
-          value: "name_uzlat",
+          dataField: "name_uzlat",
           caption: "msgNameUzlat",
           visible: false,
           width: "100%",
         },
         {
-          value: "name_karlat",
+          dataField: "name_karlat",
           caption: "msgNameKarlat",
           visible: false,
           width: "100%",
         },
         {
-          value: "name_eng",
+          dataField: "name_eng",
           caption: "msgNameEng",
           visible: false,
           width: "100%",
@@ -133,105 +204,134 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "countries") {
+    }
+
+    pathnameWithoutSlash === "countries" &&
+      (murkupCollection = columnsSchemaData);
+
+    // if (pathnameWithoutSlash === "countries") {
+    //   const pageTitleCollection = [
+    //     {
+    //       dataField: "id",
+    //       caption: "msgId",
+    //       visible: true,
+    //       disabled: true,
+    //       width: 60,
+    //       alignment: "right",
+    //       formItem: true,
+    //     },
+    //     {
+    //       dataField: "short_name",
+    //       caption: "msgShortName",
+    //       visible: false,
+    //       required: true,
+    //       width: "100%",
+    //     },
+    //     {dataField: "short_name_rus", caption: "msgShortNameRus", required: true},
+    //     {dataField: "short_name_uzcyr", caption: "msgShortNameUzcyr"},
+    //     {dataField: "short_name_uzlat", caption: "msgShortNameUzlat"},
+    //     {dataField: "short_name_karlat", caption: "msgShortNameKarlat"},
+    //     {dataField: "short_name_eng", caption: "msgShortNameEng"},
+    //   ];
+
+    //   murkupCollection = [...pageTitleCollection];
+    // }
+
+    if (pathnameWithoutSlash === "ShortDics") {
       const pageTitleCollection = [
         {
-          value: "id",
+          dataField: "id",
           caption: "msgId",
-          visible: true,
+          visible: false,
           disabled: true,
           width: 60,
           alignment: "right",
           formItem: true,
         },
         {
-          value: "short_name",
-          caption: "msgShortName",
-          visible: false,
+          dataField: "name",
+          caption: "msgMetaName",
           required: true,
           width: "100%",
         },
-        {value: "short_name_rus", caption: "msgShortNameRus", required: true},
-        {value: "short_name_uzcyr", caption: "msgShortNameUzcyr"},
-        {value: "short_name_uzlat", caption: "msgShortNameUzlat"},
-        {value: "short_name_karlat", caption: "msgShortNameKarlat"},
-        {value: "short_name_eng", caption: "msgShortNameEng"},
-      ];
-
-      murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "ShortDics") {
-      const pageTitleCollection = [
         {
-          value: "id",
-          caption: "msgId",
-          visible: false,
-          disabled: true,
-          width: 60,
-          alignment: "right",
-          formItem: true,
-        },
-        {value: "name", caption: "msgMetaName", required: true, width: "100%"},
-        {
-          value: "short_name_rus",
+          dataField: "short_name_rus",
           caption: "msgShortNameRus",
           visible: false,
           width: "100%",
         },
         {
-          value: "short_name_uzcyr",
+          dataField: "short_name_uzcyr",
           caption: "msgShortNameUzcyr",
           visible: false,
           width: "100%",
         },
         {
-          value: "short_name_uzlat",
+          dataField: "short_name_uzlat",
           caption: "msgShortNameUzlat",
           visible: false,
           width: "100%",
         },
         {
-          value: "short_name_karlat",
+          dataField: "short_name_karlat",
           caption: "msgShortNameKarlat",
           visible: false,
           width: "100%",
         },
         {
-          value: "short_name_eng",
+          dataField: "short_name_eng",
           caption: "msgShortNameEng",
           visible: false,
           width: "100%",
         },
-        {value: "class", caption: "msgClass", width: 100, alignment: "center"},
-        {value: "metaid", caption: "msgAsChildOf", lookup: true, width: "100%"},
+        {
+          dataField: "class",
+          caption: "msgClass",
+          width: 100,
+          alignment: "center",
+        },
+        {
+          dataField: "metaid",
+          caption: "msgAsChildOf",
+          lookup: true,
+          width: "100%",
+        },
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "usersList") {
+    }
+
+    if (pathnameWithoutSlash === "usersList") {
       const pageTitleCollection = [
-        {value: "UserName", caption: "msgUserName", required: true, width: 200},
         {
-          value: "Locale",
+          dataField: "UserName",
+          caption: "msgUserName",
+          required: true,
+          width: 200,
+        },
+        {
+          dataField: "Locale",
           caption: "msgLocale",
           width: 100,
           alignment: "center",
         },
         {
-          value: "Locked",
+          dataField: "Locked",
           caption: "msgLocked",
           width: 120,
           alignment: "center",
         },
         {
-          value: "Disabled",
+          dataField: "Disabled",
           caption: "msgDisabled",
           width: 100,
           alignment: "center",
         },
-        {value: "TimeZone", caption: "msgTimeZone", width: "100%"},
-        {value: "created", caption: "msgCreated", width: 200},
-        {value: "pwdlastchange", caption: "msgPwdLastChange", width: 200},
+        {dataField: "TimeZone", caption: "msgTimeZone", width: "100%"},
+        {dataField: "created", caption: "msgCreated", width: 200},
+        {dataField: "pwdlastchange", caption: "msgPwdLastChange", width: 200},
         {
-          value: "UserType",
+          dataField: "UserType",
           caption: "msgUserType",
           width: 120,
           alignment: "center",
@@ -239,26 +339,28 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (
-      pathnameToNameWithoutSlash === "usersRole" ||
-      pathnameToNameWithoutSlash === "usersGroup"
+    }
+
+    if (
+      pathnameWithoutSlash === "usersRole" ||
+      pathnameWithoutSlash === "usersGroup"
     ) {
       const pageTitleCollection = [
         {
-          value: "UserName",
+          dataField: "UserName",
           caption: "msgUserName",
           required: true,
           width: "100%",
         },
         {
-          value: "Disabled",
+          dataField: "Disabled",
           caption: "msgDisabled",
           width: 100,
           alignment: "center",
         },
-        {value: "created", caption: "msgCreated", width: "100%"},
+        {dataField: "created", caption: "msgCreated", width: "100%"},
         {
-          value: "UserType",
+          dataField: "UserType",
           caption: "msgUserType",
           width: 120,
           alignment: "center",
@@ -270,27 +372,38 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
     return murkupCollection.map((item, idx) => {
       const {
-        value,
-        caption = value,
+        dataField,
+        dataType = "string",
+        caption = dataField,
         visible = true,
         disabled = false,
         required = false,
-        width = "100%",
-        alignment = "left",
+        width = "auto",
+        minWidth = 80,
+        alignment,
         formItem = false,
         lookup = false,
+        allowEditing = true,
         ...params
       } = item;
 
       return (
         <Column
           key={idx}
-          dataField={value}
-          caption={formatMessage(caption)}
+          dataField={dataField}
+          dataType={dataType}
+          caption={
+            pathnameWithoutSlash === "countries"
+              ? caption
+              : formatMessage(caption)
+          }
           visible={visible}
           disabled={disabled}
-          width={width}
+          // width={width}
+          width={dataField !== "id" ? width : 80}
           alignment={alignment}
+          minWidth={minWidth}
+          allowEditing={allowEditing}
           {...params}
         >
           {required && <RequiredRule />}
@@ -302,6 +415,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               displayExpr="className"
             />
           )}
+          {dataField === "status" && <Lookup dataSource={statusesLang()} />}
+          {/* {dataField === "code" && (
+            <PatternRule
+              message={formatMessage(message, localPageAbbreviation)}
+              pattern={new RegExp(pattern)}
+            />
+          )} */}
         </Column>
       );
     });
@@ -310,7 +430,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   function customCodeMarkupRender() {
     let murkupCollection = [];
 
-    if (pathnameToNameWithoutSlash === "soogu") {
+    if (pathnameWithoutSlash === "soogu") {
       const pageTitleCollection = [
         {
           dataField: "CodeSogu",
@@ -331,36 +451,38 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "countries") {
-      const pageTitleCollection = [
-        {
-          dataField: "alpha2code",
-          caption: "msgAlpha2Code",
-          width: 80,
-          message: "msgAlpha2CodeErrMsg",
-          pattern: "^[A-Z]{2}$",
-          required: true,
-        },
-        {
-          dataField: "alpha3code",
-          caption: "msgAlpha3Code",
-          width: 80,
-          message: "msgAlpha3CodeErrMsg",
-          pattern: "^[A-Z]{3}$",
-          required: true,
-        },
-        {
-          dataField: "numeric",
-          caption: "msgNumeric",
-          width: 100,
-          message: "msgNumericErrMessage",
-          pattern: "^[0-9]{0,4}$",
-          required: false,
-        },
-      ];
-
-      murkupCollection = [...pageTitleCollection];
     }
+
+    // if (pathnameWithoutSlash === "countries") {
+    //   const pageTitleCollection = [
+    //     {
+    //       dataField: "alpha2code",
+    //       caption: "msgAlpha2Code",
+    //       width: 80,
+    //       message: "msgAlpha2CodeErrMsg",
+    //       pattern: "^[A-Z]{2}$",
+    //       required: true,
+    //     },
+    //     {
+    //       dataField: "alpha3code",
+    //       caption: "msgAlpha3Code",
+    //       width: 80,
+    //       message: "msgAlpha3CodeErrMsg",
+    //       pattern: "^[A-Z]{3}$",
+    //       required: true,
+    //     },
+    //     {
+    //       dataField: "numeric",
+    //       caption: "msgNumeric",
+    //       width: 100,
+    //       message: "msgNumericErrMessage",
+    //       pattern: "^[0-9]{0,4}$",
+    //       required: false,
+    //     },
+    //   ];
+
+    //   murkupCollection = [...pageTitleCollection];
+    // }
 
     return murkupCollection.map((item, idx) => {
       const {dataField, caption, width, message, pattern, required, ...params} =
@@ -409,7 +531,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         hoverStateEnabled={true}
         wordWrapEnabled={true}
         // functions
-        // onInitNewRow={initNewRow}
+        onInitNewRow={initNewRow}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />
@@ -436,7 +558,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
         {customCodeMarkupRender()}
 
-        {pathnameToNameWithoutSlash === "ShortDics" && (
+        {pathnameWithoutSlash === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
 

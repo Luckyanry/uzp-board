@@ -12,20 +12,23 @@ export const FetchData = (
   pageRequest,
   formatMessage,
   tid = null,
-  sp = null
+  sp = null,
+  db = "hbdb"
 ) => {
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
         return `&${hbdbParam}&sp=Soogu`;
-      case "/soato":
-        return `&${hbdbParam}&sp=Soato`;
+      // case "/soato":
+      //   return `&${hbdbParam}&sp=Soato`;
+      // case "/countries":
+      //   return `&${hbdbParam}&sp=Countries`;
       case "/countries":
-        return `&${hbdbParam}&sp=Countries`;
-      case "/kopf":
-        return `&${hbdbParam}&sp=Kopf`;
-      case "/kfs":
-        return `&${hbdbParam}&sp=KFS`;
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
+      // case "/kopf":
+      //   return `&${hbdbParam}&sp=Kopf`;
+      // case "/kfs":
+      //   return `&${hbdbParam}&sp=KFS`;
       // case "/kspd":
       //   return `&${hbdbParam}&sp=Kspd`;
       case "/ShortDics":
@@ -38,10 +41,10 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       case "/CustomMessages":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
-      case "/islang":
-        return `&${wisdbParam}&sp=islang`;
-      case "/w_changeMyLocaleTo":
-        return `&${wisdbParam}&sp=w_changeMyLocaleTo`;
+      // case "/islang":
+      //   return `&${wisdbParam}&sp=Islang`;
+      // case "/w_changeMyLocaleTo":
+      //   return `&${wisdbParam}&sp=W_changeMyLocaleTo`;
       case "/usersList":
         return `&${wisdbParam}&sp=UserObjects`;
       case "/usersRole":
@@ -101,7 +104,7 @@ export const FetchData = (
     },
   });
 
-  const urlFromPages = `${url}${baseParams}&${hbdbParam}&sp=${sp}`;
+  const urlFromPages = `${url}${baseParams}&db=${db}&sp=${sp}`;
 
   const fetchColumnsSchemaData = new CustomStore({
     key: "id",
@@ -245,12 +248,12 @@ export const FetchData = (
   const changeMyLocalToData = new CustomStore({
     key: "short",
     insert: (newKey) =>
-      sendRequest(finalUrl, {schema: "dbo", "@newkey": newKey}, "POST"),
+      sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST"),
   });
 
   const custumMessageData = new CustomStore({
     key: "id",
-    loadMode: "row",
+    // loadMode: "row",
     load: () => {
       return sendRequest(finalUrl, {schema: "get"}, "POST");
     },

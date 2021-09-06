@@ -28,17 +28,18 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState([]);
   const [lookDataState, setLookDataState] = useState([]);
-  const [stateOfRows, setStateOfRows] = useState("msgExpandAllRows");
+  const [expandRowsBtnText, setExpandRowsBtnText] =
+    useState("msgExpandAllRows");
   // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
 
   const {formatMessage} = useLocalization();
 
   // const lookData = FetchData(pathname, formatMessage).lookupDataSource;
 
-  const pathnameToNameWithoutSlash = pathname.split("/")[1];
-  const localPathname = createCustomMsg(pathnameToNameWithoutSlash);
+  const pathnameWithoutSlash = pathname.split("/")[1];
+  const localPathname = createCustomMsg(pathnameWithoutSlash);
   const localPageAbbreviation = formatMessage(
-    customPageAbbreviationMsg(pathnameToNameWithoutSlash)
+    customPageAbbreviationMsg(pathnameWithoutSlash)
   );
 
   const popupOpt = {
@@ -49,7 +50,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    const spForURL = firstLetterToUpper(pathnameToNameWithoutSlash);
+    // const spForURL = firstLetterToUpper(pathnameWithoutSlash);
 
     async function getColumnsSchemaData() {
       const fetchColumnsSchemaData = FetchData(
@@ -62,46 +63,46 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         .then((res) => res.data);
 
       setColumnsSchemaData(result);
+      getAPIData(pathnameWithoutSlash);
 
-      const findLookup = result.find((item) => item.lookup);
-      const getIsfetchField = findLookup.lookup.isfetch;
-      const getpForURL = getIsfetchField.split(".")[2];
+      const lookupSpForURL = getSpForURLFromLookup(result);
 
-      getAPIData(spForURL);
-      getLookDataState(getpForURL);
+      if (lookupSpForURL) {
+        getLookDataState(lookupSpForURL);
+      }
     }
 
-    function getAPIData(getpForURL) {
+    function getAPIData(spForURL) {
       const fetchData = FetchData(
         pathname,
         formatMessage,
         null,
-        getpForURL
+        spForURL
       ).fetchColumnsSchemaData;
 
       setAPIData(fetchData);
     }
 
-    async function getLookDataState(getpForURL) {
+    async function getLookDataState(lookupSpForURL) {
       const lookData = FetchData(
         pathname,
         formatMessage,
         null,
-        getpForURL
+        lookupSpForURL
       ).lookData;
-      // console.log(`lookData => `, lookData);
-      // const result = await lookData.store._loadFunc().then((res) => res.data);
+
       const result = await lookData._loadFunc().then((res) => res.data);
+
       setLookDataState(result);
     }
 
-    if (pathnameToNameWithoutSlash === "oked") {
+    if (pathnameWithoutSlash === "oked") {
       getColumnsSchemaData();
     }
 
-    if (pathnameToNameWithoutSlash !== "oked") {
-      getAPIData(spForURL);
-      getLookDataState(spForURL);
+    if (pathnameWithoutSlash !== "oked") {
+      getAPIData(pathnameWithoutSlash);
+      getLookDataState(pathnameWithoutSlash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -120,8 +121,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   function clickHandler() {
     setToggler((toggler) => !toggler);
-    setStateOfRows(() =>
-      stateOfRows === "msgMinimisedAllRows"
+    setExpandRowsBtnText(() =>
+      expandRowsBtnText === "msgMinimisedAllRows"
         ? "msgExpandAllRows"
         : "msgMinimisedAllRows"
     );
@@ -143,17 +144,28 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     return `msg${firstLetterToUpper(message)}Abbreviation`;
   }
 
+  function getSpForURLFromLookup(data) {
+    const findLookup = data.find((item) => item.lookup);
+
+    if (findLookup) {
+      const getIsfetchField = findLookup.lookup.isfetch;
+      return getIsfetchField.split(".")[2];
+    } else {
+      return;
+    }
+  }
+
   function customMarkupRender() {
     let columnsTitleCollection = [];
 
-    pathnameToNameWithoutSlash === "oked" &&
+    pathnameWithoutSlash === "oked" &&
       (columnsTitleCollection = columnsSchemaData);
 
     if (
-      pathnameToNameWithoutSlash === "kopf" ||
-      pathnameToNameWithoutSlash === "kspd" ||
-      pathnameToNameWithoutSlash === "kfs"
-      // || pathnameToNameWithoutSlash === "oked"
+      pathnameWithoutSlash === "kopf" ||
+      pathnameWithoutSlash === "kspd" ||
+      pathnameWithoutSlash === "kfs"
+      // || pathnameWithoutSlash === "oked"
     ) {
       const pageTitleCollection = [
         {
@@ -182,7 +194,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
       columnsTitleCollection = [...pageTitleCollection];
       // console.log(`columnsTitleCollection kopf => `, columnsTitleCollection);
-    } else if (pathnameToNameWithoutSlash === "soato") {
+    } else if (pathnameWithoutSlash === "soato") {
       const pageTitleCollection = [
         {
           dataField: "id",
@@ -243,9 +255,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           dataField={dataField}
           dataType={dataType}
           caption={
-            pathnameToNameWithoutSlash === "oked"
-              ? caption
-              : formatMessage(caption)
+            pathnameWithoutSlash === "oked" ? caption : formatMessage(caption)
           }
           visible={visible}
           disabled={disabled}
@@ -278,7 +288,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   function customCodeMarkupRender() {
     let murkupCollection = [];
 
-    if (pathnameToNameWithoutSlash === "kopf") {
+    if (pathnameWithoutSlash === "kopf") {
       const pageTitleCollection = [
         {
           dataField: "code",
@@ -289,7 +299,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "soato") {
+    } else if (pathnameWithoutSlash === "soato") {
       const pageTitleCollection = [
         {
           dataField: "code",
@@ -300,7 +310,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "kspd") {
+    } else if (pathnameWithoutSlash === "kspd") {
       const pageTitleCollection = [
         {
           dataField: "code",
@@ -311,7 +321,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ];
 
       murkupCollection = [...pageTitleCollection];
-    } else if (pathnameToNameWithoutSlash === "kfs") {
+    } else if (pathnameWithoutSlash === "kfs") {
       const pageTitleCollection = [
         {
           dataField: "KFSCode",
@@ -323,7 +333,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
       murkupCollection = [...pageTitleCollection];
     }
-    // else if (pathnameToNameWithoutSlash === "oked") {
+    // else if (pathnameWithoutSlash === "oked") {
     //   const pageTitleCollection = [
     //     {
     //       dataField: "code",
@@ -392,7 +402,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         className="btn"
         icon="hierarchy"
         stylingMode="outlined"
-        text={formatMessage(stateOfRows)}
+        text={formatMessage(expandRowsBtnText)}
         onClick={clickHandler}
       />
 

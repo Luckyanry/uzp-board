@@ -16,28 +16,43 @@ const LocalizationProvider = ({children}) => {
   const [defaultLang, setDefaultLang] = useState("en");
   const [lang, setLang] = useState(() => getLocale());
 
-  const islangFetch = FetchData("/islang", formatMessage).fetchData;
-
-  const customMessages = FetchData(
-    "/CustomMessages",
-    formatMessage
-  ).custumMessageData;
-
   const changedMyLocalFetch = FetchData(
     "/w_changeMyLocaleTo",
-    formatMessage
+    formatMessage,
+    null,
+    "/w_changeMyLocaleTo",
+    "wisdb"
   ).changeMyLocalToData;
 
   initMessages();
-  locale(lang);
+  // locale(lang);
 
   useEffect(() => {
+    // let didCancel = false;
+
+    const customMessages = FetchData(
+      "/CustomMessages",
+      formatMessage,
+      null,
+      "CustomMessages"
+    ).custumMessageData;
+
     const getLangsData = async () => {
+      const islangFetch = FetchData(
+        "/islang",
+        formatMessage,
+        null,
+        "islang",
+        "wisdb"
+      ).fetchColumnsSchemaData;
+
       const result = await islangFetch._loadFunc().then((res) => res.data);
 
+      // if (!didCancel) {
       isEnabledLang(result);
       isDefaultLang(result);
       isCurrentLang(result);
+      // }
     };
 
     const getCustomMessages = async () => {
@@ -48,6 +63,14 @@ const LocalizationProvider = ({children}) => {
 
     getCustomMessages();
     getLangsData();
+
+    // if (!didCancel) {
+    locale(lang);
+    // }
+
+    // return () => {
+    //   didCancel = true;
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
