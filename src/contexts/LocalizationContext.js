@@ -28,14 +28,11 @@ const LocalizationProvider = ({children}) => {
   // locale(lang);
 
   useEffect(() => {
-    // let didCancel = false;
-
     const customMessages = FetchData(
       "/CustomMessages",
       formatMessage,
       null,
-      "ShortDicsRecordsFlatCustomMessagesObject",
-      "hbdb"
+      "ShortDicsRecordsFlatCustomMessagesObject"
     ).custumMessageData;
 
     const getLangsData = async () => {
@@ -49,11 +46,9 @@ const LocalizationProvider = ({children}) => {
 
       const result = await islangFetch._loadFunc().then((res) => res.data);
 
-      // if (!didCancel) {
       isEnabledLang(result);
       isDefaultLang(result);
       isCurrentLang(result);
-      // }
     };
 
     const getCustomMessages = async () => {
@@ -64,14 +59,7 @@ const LocalizationProvider = ({children}) => {
 
     getCustomMessages();
     getLangsData();
-
-    // if (!didCancel) {
     locale(lang);
-    // }
-
-    // return () => {
-    //   didCancel = true;
-    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
