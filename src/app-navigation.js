@@ -3,7 +3,14 @@ import {useLocalization} from "./contexts/LocalizationContext";
 export const AppNavigation = () => {
   const {formatMessage} = useLocalization();
 
-  const directoryFolder = ["countries", "soato", "soogu", "kspd", "oked"];
+  const directoryFolder = [
+    "countries",
+    "soato",
+    "soogu",
+    "kspd",
+    "oked",
+    "mihalla",
+  ];
   const opfFolder = ["kfs", "kopf"];
   const usersDir = ["profile", "usersList", "usersRole", "usersGroup"];
 

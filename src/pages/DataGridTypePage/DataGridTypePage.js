@@ -42,7 +42,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
     width: 1000,
-    height: 600,
+    height: 700,
   };
 
   useEffect(() => {
@@ -94,11 +94,17 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       setLookDataState(result);
     }
 
-    if (pathnameWithoutSlash === "countries") {
+    if (
+      pathnameWithoutSlash === "countries" ||
+      pathnameWithoutSlash === "mihalla"
+    ) {
       getColumnsSchemaData();
     }
 
-    if (pathnameWithoutSlash !== "countries") {
+    if (
+      pathnameWithoutSlash !== "countries" ||
+      pathnameWithoutSlash !== "mihalla"
+    ) {
       const fetchData = FetchData(pathname, formatMessage).fetchData;
       const usersFetchData = FetchData(
         pathname,
@@ -206,7 +212,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       murkupCollection = [...pageTitleCollection];
     }
 
-    pathnameWithoutSlash === "countries" &&
+    (pathnameWithoutSlash === "countries" ||
+      pathnameWithoutSlash === "mihalla") &&
       (murkupCollection = columnsSchemaData);
 
     // if (pathnameWithoutSlash === "countries") {
@@ -386,14 +393,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowEditing = true,
         ...params
       } = item;
-
+      // console.log(`dataField`, dataField);
       return (
         <Column
           key={idx}
           dataField={dataField}
           dataType={dataType}
           caption={
-            pathnameWithoutSlash === "countries"
+            pathnameWithoutSlash === "countries" ||
+            pathnameWithoutSlash === "mihalla"
               ? caption
               : formatMessage(caption)
           }
@@ -408,11 +416,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         >
           {required && <RequiredRule />}
           {formItem && <FormItem visible={false} />}
-          {lookup && (
+          {lookup && pathnameWithoutSlash === "ShortDics" && (
             <Lookup
               dataSource={lookDataState}
               valueExpr="id"
               displayExpr="className"
+            />
+          )}
+          {lookup && pathnameWithoutSlash !== "ShortDics" && (
+            <Lookup
+              dataSource={lookDataState}
+              valueExpr="id"
+              displayExpr="name"
             />
           )}
           {dataField === "status" && <Lookup dataSource={statusesLang()} />}
