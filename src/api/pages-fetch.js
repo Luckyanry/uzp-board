@@ -35,6 +35,8 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
       case "/personObjects":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
+      case "/orgUnits":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":

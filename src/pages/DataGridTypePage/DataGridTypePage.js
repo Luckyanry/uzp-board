@@ -87,7 +87,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
         setAPIData(usersFetchData);
       } else if (
-        checkIfArrIncludesValue(["personObjects"], pathnameWithoutSlash)
+        checkIfArrIncludesValue(
+          ["personObjects", "orgUnits"],
+          pathnameWithoutSlash
+        )
       ) {
         const fetchData = FetchData(
           pathname,
@@ -257,6 +260,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "roleObjects",
         "groupObjects",
         "personObjects",
+        "orgUnits",
       ],
       pathnameWithoutSlash
     ) && (murkupCollection = columnsSchemaData);
