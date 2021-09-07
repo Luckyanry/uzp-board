@@ -16,6 +16,7 @@ const dataGridPagesPath = [
   "mihalla",
   "personObjects",
   "orgUnits",
+  "employees",
 ];
 const treeListPagesPath = ["soato", "kspd", "kfs", "kopf", "oked"];
 

@@ -33,33 +33,32 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/mihalla":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
-      case "/personObjects":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
-      case "/orgUnits":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
-      case "/ShortDics":
-        return `&${hbdbParam}&sp=ShortDics`;
-      case "/ShortDicsRecords":
-        return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
-      case "/DictionaryByName":
-        return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
-      // case "/CustomMessages":
-      //   return `&${hbdbParam}&sp=ShortDicsRecordsFlatCustomMessagesObject`;
-      // case "/islang":
-      //   return `&${wisdbParam}&sp=islang`;
-      // case "/w_changeMyLocaleTo":
-      //   return `&${wisdbParam}&sp=W_changeMyLocaleTo`;
+
       case "/userObjects":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISUserAccountColumnSchema`;
       case "/roleObjects":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISRoleAccountColumnSchema`;
       case "/groupObjects":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISGroupAccountColumnSchema`;
+
+      case "/personObjects":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
+      case "/orgUnits":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
+      case "/employees":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=EmployeeObjectColumnSchema`;
+
+      case "/ShortDics":
+        return `&${hbdbParam}&sp=ShortDics`;
+      case "/ShortDicsRecords":
+        return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
+      case "/DictionaryByName":
+        return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       default:
         return "/home";
     }
   };
-
+  // odb.get.Employees EmployeeObjectColumnSchema
   const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
 
   const fetchData = new CustomStore({

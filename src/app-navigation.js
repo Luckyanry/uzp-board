@@ -12,6 +12,7 @@ export const AppNavigation = () => {
     "mihalla",
     "personObjects",
     "orgUnits",
+    "employees",
   ];
   const opfFolder = ["kfs", "kopf"];
   const usersDir = ["profile", "userObjects", "roleObjects", "groupObjects"];
