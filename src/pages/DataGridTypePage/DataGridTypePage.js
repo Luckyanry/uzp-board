@@ -429,7 +429,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           {...params}
         >
           {required && <RequiredRule />}
-          {formItem && <FormItem visible={false} />}
+          {/* {formItem && <FormItem visible={false} />} */}
+          <FormItem {...formItem} />
 
           {lookup && pathnameWithoutSlash === "ShortDics" && (
             <Lookup

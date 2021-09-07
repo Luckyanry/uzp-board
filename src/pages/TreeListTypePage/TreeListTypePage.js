@@ -263,7 +263,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         allowEditing = false,
         ...params
       } = item;
-
+      // console.log(`item `, item.formItem);
       return (
         <Column
           key={idx}
@@ -287,7 +287,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           {...params}
         >
           {required && <RequiredRule />}
-          {formItem && <FormItem visible={false} />}
+          {/* {formItem && <FormItem visible={false} />} */}
+          <FormItem {...formItem} />
           {lookup && (
             <Lookup
               dataSource={lookDataState}
@@ -484,6 +485,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         />
 
         {customMarkupRender()}
+        {/* {console.log(customMarkupRender())} */}
         {/* {customCodeMarkupRender()} */}
 
         {/* {!checkIfArrIncludesValue(
