@@ -9,7 +9,7 @@ import TreeList, {
   Editing,
   Column,
   RequiredRule,
-  PatternRule,
+  // PatternRule,
   FormItem,
   Lookup,
   Button as TreeListButton,
@@ -160,9 +160,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
   }
 
-  function checkIfArrIncludesValue(arr, value) {
-    return arr.includes(value);
-  }
+  // function checkIfArrIncludesValue(arr, value) {
+  //   return arr.includes(value);
+  // }
 
   function customMarkupRender() {
     let columnsTitleCollection = columnsSchemaData;

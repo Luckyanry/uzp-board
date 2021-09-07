@@ -10,9 +10,9 @@ const dataGridPagesPath = [
   "countries",
   "soogu",
   "ShortDics",
-  "usersList",
-  "usersRole",
-  "usersGroup",
+  "userObjects",
+  "roleObjects",
+  "groupObjects",
   "mihalla",
 ];
 const treeListPagesPath = ["soato", "kspd", "kfs", "kopf", "oked"];

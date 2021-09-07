@@ -5,7 +5,7 @@ import "whatwg-fetch";
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 const hbdbParam = "db=hbdb";
-const wisdbParam = "db=wisdb";
+// const wisdbParam = "db=wisdb";
 // const errorTestParam = "w_testDepthiRiseErrors";
 
 export const FetchData = (
@@ -18,7 +18,7 @@ export const FetchData = (
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
-        return `&${hbdbParam}&sp=Soogu`;
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=SooguColumnSchema`;
       case "/soato":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=SoatoColumnSchema`;
       case "/countries":
@@ -29,12 +29,12 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KfsColumnSchema`;
       case "/kspd":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KspdColumnSchema`;
-      case "/ShortDics":
-        return `&${hbdbParam}&sp=ShortDics`;
       case "/oked":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/mihalla":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
+      case "/ShortDics":
+        return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":
         return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
@@ -45,12 +45,12 @@ export const FetchData = (
       //   return `&${wisdbParam}&sp=islang`;
       // case "/w_changeMyLocaleTo":
       //   return `&${wisdbParam}&sp=W_changeMyLocaleTo`;
-      case "/usersList":
-        return `&${wisdbParam}&sp=UserObjects`;
-      case "/usersRole":
-        return `&${wisdbParam}&sp=RoleObjects`;
-      case "/usersGroup":
-        return `&${wisdbParam}&sp=GroupObjects`;
+      case "/userObjects":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISUserAccountColumnSchema`;
+      case "/roleObjects":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISRoleAccountColumnSchema`;
+      case "/groupObjects":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISGroupAccountColumnSchema`;
       default:
         return "/home";
     }
@@ -155,12 +155,12 @@ export const FetchData = (
   const usersFetchData = new CustomStore({
     key: "GID",
     load: () =>
-      sendRequest(finalUrl, {
+      sendRequest(urlFromPages, {
         schema: "get",
       }),
     insert: (values) =>
       sendRequest(
-        finalUrl,
+        urlFromPages,
         {
           schema: "ins",
           "@jvalues": statusStringToBoolean(values),
@@ -169,7 +169,7 @@ export const FetchData = (
       ),
     update: (key, values) =>
       sendRequest(
-        finalUrl,
+        urlFromPages,
         {
           schema: "upd",
           "@guid": key,
@@ -179,7 +179,7 @@ export const FetchData = (
       ),
     remove: (key) =>
       sendRequest(
-        finalUrl,
+        urlFromPages,
         {
           schema: "del",
           "@guid": key,

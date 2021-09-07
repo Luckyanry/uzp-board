@@ -12,7 +12,7 @@ export const AppNavigation = () => {
     "mihalla",
   ];
   const opfFolder = ["kfs", "kopf"];
-  const usersDir = ["profile", "usersList", "usersRole", "usersGroup"];
+  const usersDir = ["profile", "userObjects", "roleObjects", "groupObjects"];
 
   function pathCreator(pathTitle) {
     return pathTitle.map((item) => {
