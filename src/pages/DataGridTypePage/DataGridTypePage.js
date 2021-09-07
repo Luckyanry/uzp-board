@@ -86,6 +86,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         ).usersFetchData;
 
         setAPIData(usersFetchData);
+      } else if (
+        checkIfArrIncludesValue(["personObjects"], pathnameWithoutSlash)
+      ) {
+        const fetchData = FetchData(
+          pathname,
+          formatMessage,
+          null,
+          spForURL,
+          "odb"
+        ).personFetchData;
+
+        setAPIData(fetchData);
       } else {
         const fetchData = FetchData(
           pathname,
@@ -244,6 +256,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "userObjects",
         "roleObjects",
         "groupObjects",
+        "personObjects",
       ],
       pathnameWithoutSlash
     ) && (murkupCollection = columnsSchemaData);

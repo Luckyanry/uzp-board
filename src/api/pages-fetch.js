@@ -33,6 +33,8 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/mihalla":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
+      case "/personObjects":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
       case "/ShortDicsRecords":
@@ -183,6 +185,46 @@ export const FetchData = (
         {
           schema: "del",
           "@guid": key,
+        },
+        "POST"
+      ),
+    onBeforeSend: function (method, ajaxOptions) {
+      ajaxOptions.credentials = "include";
+      ajaxOptions.xhrFields = {withCredentials: true};
+    },
+  });
+
+  const personFetchData = new CustomStore({
+    key: "oid",
+    load: () =>
+      sendRequest(urlFromPages, {
+        schema: "get",
+      }),
+    insert: (values) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "ins",
+          "@jvalues": statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    update: (key, values) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "upd",
+          "@oid": key,
+          "@jvalues": statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    remove: (key) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "del",
+          "@oid": key,
         },
         "POST"
       ),
@@ -396,6 +438,7 @@ export const FetchData = (
     changeMyLocalToData,
     usersFetchData,
     custumMessageData,
+    personFetchData,
     // lookupDataSource,
   };
 };
