@@ -47,6 +47,8 @@ export const FetchData = (
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
       case "/employees":
         return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=EmployeeObjectColumnSchema`;
+      case "/legals":
+        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
 
       case "/ShortDics":
         return `&${hbdbParam}&sp=ShortDics`;
@@ -58,7 +60,7 @@ export const FetchData = (
         return "/home";
     }
   };
-  // odb.get.Employees EmployeeObjectColumnSchema
+
   const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
 
   const fetchData = new CustomStore({

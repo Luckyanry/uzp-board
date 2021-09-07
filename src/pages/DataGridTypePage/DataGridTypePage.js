@@ -88,7 +88,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         setAPIData(usersFetchData);
       } else if (
         checkIfArrIncludesValue(
-          ["personObjects", "orgUnits", "employees"],
+          ["personObjects", "orgUnits", "employees", "legals"],
           pathnameWithoutSlash
         )
       ) {
@@ -262,6 +262,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "personObjects",
         "orgUnits",
         "employees",
+        "legals",
       ],
       pathnameWithoutSlash
     ) && (murkupCollection = columnsSchemaData);
@@ -421,21 +422,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           key={idx}
           dataField={dataField}
           dataType={dataType}
-          // caption={
-          //   checkIfArrIncludesValue(
-          //     [
-          //       "countries",
-          //       "mihalla",
-          //       "soogu",
-          //       "userObjects",
-          //       "roleObjects",
-          //       "groupObjects",
-          //     ],
-          //     pathnameWithoutSlash
-          //   )
-          //     ? caption
-          //     : formatMessage(caption)
-          // }
           caption={caption}
           visible={visible}
           disabled={disabled}
@@ -447,7 +433,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           {...params}
         >
           {required && <RequiredRule />}
-          {/* {formItem && <FormItem visible={false} />} */}
+
           <FormItem {...formItem} />
 
           {lookup && pathnameWithoutSlash === "ShortDics" && (
