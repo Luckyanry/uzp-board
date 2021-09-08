@@ -422,6 +422,18 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   //   // e.isHighlighted = true;
   // };
 
+  // function onToolbarPreparing(e) {
+  //   console.log(e);
+  // e.toolbarOptions.items[0].showText = "always";
+  // e.toolbarOptions.items[0].options.text = "Button text";
+  // e.toolbarOptions.items[0].options.hint = "Text";
+
+  // e.toolbarOptions.items.push({
+  //   location: "after",
+  //   template: "deleteButton",
+  // });
+  // }
+
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>
@@ -462,6 +474,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         onInitNewRow={initNewRow}
         // onEditorPreparing={onEditorPreparing}
         // onFocusedCellChanging={onFocusedCellChanging}
+        // onToolbarPreparing={onToolbarPreparing}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />

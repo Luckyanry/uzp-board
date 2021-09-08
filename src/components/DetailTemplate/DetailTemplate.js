@@ -63,7 +63,7 @@ export const DetailTemplate = (props) => {
   function initNewRow(e) {
     e.data.status = statusesLang()[0];
   }
-  // console.log(`error`, error);
+
   // function onFocusedCellAction(e) {
   //   const rowId = e.rows[e.newRowIndex].values[0];
   //   // const rowName = rowId.data.name;

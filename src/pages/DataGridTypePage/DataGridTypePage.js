@@ -17,7 +17,17 @@ import DataGrid, {
   Button,
   Paging,
   Pager,
+  Form,
 } from "devextreme-react/data-grid";
+// import {Item} from "devextreme-react/form";
+import {
+  SimpleItem,
+  GroupItem,
+  TabbedItem,
+  TabPanelOptions,
+  Tab,
+  EmptyItem,
+} from "devextreme-react/form";
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -29,11 +39,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
+  const [userDataGID, setUserDataGID] = useState("");
+  const [userFormData, setUserFormData] = useState(null);
+  const [userRolesFormData, setUserRolesFormData] = useState(null);
+  // const [allUserRoles, setAllUserRoles] = useState(null);
 
   const {formatMessage} = useLocalization();
 
   const pathnameWithoutSlash = pathname.split("/")[1];
   const localPathname = createCustomMsg(pathnameWithoutSlash);
+
   const localPageAbbreviation = formatMessage(
     customPageAbbreviationMsg(pathnameWithoutSlash)
   );
@@ -41,6 +56,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
+    width: 1000,
+    height: 700,
+  };
+
+  const popupUsersPageOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: false,
     width: 1000,
     height: 700,
   };
@@ -134,6 +156,31 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    async function getUserRolesFormData() {
+      const usersFetchData = FetchData(
+        pathname,
+        formatMessage,
+        null,
+        `w_DisplayUserRoles&@GID=${userDataGID}`,
+        "wisdb"
+      ).usersFetchData;
+
+      const result = await usersFetchData._loadFunc().then((res) => res.data);
+
+      setUserRolesFormData(result);
+    }
+
+    checkIfArrIncludesValue(
+      ["userObjects", "roleObjects", "groupObjects"],
+      pathnameWithoutSlash
+    ) &&
+      userDataGID &&
+      getUserRolesFormData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userDataGID]);
+
   function statusesLang() {
     const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
     const statusLanguage = defaultStatus.map((statusLang) =>
@@ -144,6 +191,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   function initNewRow(e) {
     e.data.status = statusesLang()[0];
+    // e.element.title = formatMessage("msgCreateNewItem", localPageAbbreviation);
   }
 
   function firstLetterToUpper(message) {
@@ -470,6 +518,38 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
+  function onFocusedCellAction(e) {
+    // console.log(`e`, e);
+
+    if (
+      checkIfArrIncludesValue(
+        ["userObjects", "roleObjects", "groupObjects"],
+        pathnameWithoutSlash
+      )
+    ) {
+      const rowId = e.rows[e.newRowIndex].data.GID;
+      const formDataFromFocusedRow = e.rows[e.newRowIndex].data;
+      setUserDataGID(rowId);
+      setUserFormData(formDataFromFocusedRow);
+    }
+  }
+
+  function customSimpleItemMarkup(formData) {
+    if (!formData) {
+      return;
+    }
+
+    // console.log(`formData =>>`, formData);
+
+    return Object.keys(formData).map((item, idx) => (
+      <SimpleItem key={idx} dataField={item} />
+    ));
+  }
+
+  userDataGID &&
+    userRolesFormData &&
+    console.log(`userRolesFormData`, userRolesFormData);
+
   // function customCodeMarkupRender() {
   //   let murkupCollection = [];
 
@@ -551,17 +631,17 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   //   });
   // }
 
-  function onToolbarPreparing(e) {
-    console.log(e);
-    // e.toolbarOptions.items[0].showText = "always";
-    // e.toolbarOptions.items[0].options.text = "Button text";
-    // e.toolbarOptions.items[0].options.hint = "Text";
+  // function onToolbarPreparing(e) {
+  //   console.log(e);
+  // e.toolbarOptions.items[0].showText = "always";
+  // e.toolbarOptions.items[0].options.text = "Button text";
+  // e.toolbarOptions.items[0].options.hint = "Text";
 
-    // e.toolbarOptions.items.push({
-    //   location: "after",
-    //   template: "deleteButton",
-    // });
-  }
+  // e.toolbarOptions.items.push({
+  //   location: "after",
+  //   template: "deleteButton",
+  // });
+  // }
 
   return (
     <>
@@ -587,7 +667,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
-        onToolbarPreparing={onToolbarPreparing}
+        // onToolbarPreparing={onToolbarPreparing}
+        onFocusedCellChanging={onFocusedCellAction}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />
@@ -602,13 +683,70 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         />
         <FilterRow visible={true} />
 
-        <Editing
-          mode="popup"
-          popup={popupGeneralOptions}
-          allowAdding={true}
-          allowDeleting={true}
-          allowUpdating={true}
-        />
+        {checkIfArrIncludesValue(
+          ["userObjects", "roleObjects", "groupObjects"],
+          pathnameWithoutSlash
+        ) ? (
+          <Editing
+            mode="popup"
+            popup={popupUsersPageOptions}
+            allowAdding={true}
+            allowDeleting={true}
+            allowUpdating={true}
+          >
+            <Form
+              id="form"
+              formData={
+                userDataGID && userRolesFormData && userRolesFormData[0]
+              }
+              // showColonAfterLabel={true}
+              // labelLocation={"top"}
+              // minColWidth={900}
+              colCount={1}
+              width={"100%"}
+              // colSpan={3}
+            >
+              <GroupItem
+                caption={`Information about ${
+                  userFormData && userFormData.UserName
+                }`}
+              >
+                <TabbedItem>
+                  <TabPanelOptions deferRendering={false} />
+
+                  <Tab title="General" colCount={2}>
+                    {customSimpleItemMarkup(userFormData)}
+                  </Tab>
+
+                  <Tab title="Group/Role" colCount={2}>
+                    {userDataGID &&
+                      userRolesFormData &&
+                      userRolesFormData.map((user, idx) => (
+                        <GroupItem
+                          key={idx}
+                          colCount={2}
+                          colSpan={2}
+                          caption={`Information about ${user.UserName}`}
+                        >
+                          {customSimpleItemMarkup(user)}
+                          <EmptyItem />
+                          <EmptyItem />
+                        </GroupItem>
+                      ))}
+                  </Tab>
+                </TabbedItem>
+              </GroupItem>
+            </Form>
+          </Editing>
+        ) : (
+          <Editing
+            mode="popup"
+            popup={popupGeneralOptions}
+            allowAdding={true}
+            allowDeleting={true}
+            allowUpdating={true}
+          />
+        )}
 
         {customMarkupRender()}
 

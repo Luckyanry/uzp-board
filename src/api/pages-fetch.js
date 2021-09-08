@@ -304,6 +304,15 @@ export const FetchData = (
     },
   });
 
+  const userTabsData = new CustomStore({
+    key: "GID",
+    load: () => {
+      return sendRequest(urlFromPages, {
+        schema: "get",
+      });
+    },
+  });
+
   async function sendRequest(url, data = {}, method = "GET") {
     const params = Object.keys(data)
       .map((key) => {
@@ -442,6 +451,7 @@ export const FetchData = (
     usersFetchData,
     custumMessageData,
     personFetchData,
+    userTabsData,
     // lookupDataSource,
   };
 };
