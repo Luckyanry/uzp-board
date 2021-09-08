@@ -422,7 +422,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           key={idx}
           dataField={dataField}
           dataType={dataType}
-          caption={caption}
+          // caption={caption}
+          caption={
+            checkIfArrIncludesValue(["ShortDics"], pathnameWithoutSlash)
+              ? formatMessage(caption)
+              : caption
+          }
           visible={visible}
           disabled={disabled}
           // width={width}
@@ -546,6 +551,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   //   });
   // }
 
+  function onToolbarPreparing(e) {
+    console.log(e);
+    // e.toolbarOptions.items[0].showText = "always";
+    // e.toolbarOptions.items[0].options.text = "Button text";
+    // e.toolbarOptions.items[0].options.hint = "Text";
+
+    // e.toolbarOptions.items.push({
+    //   location: "after",
+    //   template: "deleteButton",
+    // });
+  }
+
   return (
     <>
       <h2 className={"content-block"}>
@@ -570,6 +587,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
+        onToolbarPreparing={onToolbarPreparing}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />

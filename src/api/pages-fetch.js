@@ -4,7 +4,7 @@ import "whatwg-fetch";
 
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
-const hbdbParam = "db=hbdb";
+// const hbdbParam = "db=hbdb";
 // const wisdbParam = "db=wisdb";
 // const errorTestParam = "w_testDepthiRiseErrors";
 
@@ -18,44 +18,44 @@ export const FetchData = (
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=SooguColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=SooguColumnSchema`;
       case "/soato":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=SoatoColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=SoatoColumnSchema`;
       case "/countries":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
       case "/kopf":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KopfColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KopfColumnSchema`;
       case "/kfs":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KfsColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KfsColumnSchema`;
       case "/kspd":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=KspdColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KspdColumnSchema`;
       case "/oked":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
       case "/mihalla":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
 
       case "/userObjects":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISUserAccountColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISUserAccountColumnSchema`;
       case "/roleObjects":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISRoleAccountColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISRoleAccountColumnSchema`;
       case "/groupObjects":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=ISGroupAccountColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISGroupAccountColumnSchema`;
 
       case "/personObjects":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
       case "/orgUnits":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
       case "/employees":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=EmployeeObjectColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=EmployeeObjectColumnSchema`;
       case "/legals":
-        return `&${hbdbParam}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
 
       case "/ShortDics":
-        return `&${hbdbParam}&sp=ShortDics`;
+        return `&db=${db}&sp=ShortDics`;
       case "/ShortDicsRecords":
-        return `&${hbdbParam}&sp=ShortDicsRecords&@tid=${tid}`;
+        return `&db=${db}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
-        return `&${hbdbParam}&sp=ShortDicsRecords&@name=PasswordPolicies`;
+        return `&db=${db}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       default:
         return "/home";
     }
@@ -109,7 +109,7 @@ export const FetchData = (
     },
   });
 
-  const urlFromPages = `${url}${baseParams}&db=${db}&sp=${sp}`;
+  const urlFromPages = `${url}${baseParams}&sp=${sp}&db=${db}`;
 
   const fetchColumnsSchemaData = new CustomStore({
     key: "id",
