@@ -35,7 +35,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   const {formatMessage} = useLocalization();
 
-  // const lookData = FetchData(pathname, formatMessage).lookupDataSource;
+  // const lookData = FetchData(formatMessage, pathname).lookupDataSource;
 
   const pathnameWithoutSlash = pathname.split("/")[1];
   const localPathname = createCustomMsg(pathnameWithoutSlash);
@@ -52,43 +52,32 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
   useEffect(() => {
     async function getColumnsSchemaData() {
-      const fetchColumnsSchemaData = FetchData(
-        pathname,
-        formatMessage
-      ).fetchData;
+      const fetchColumnsSchemaData = fetchDataConstructor("hbdb").fetchData;
 
       const result = await fetchColumnsSchemaData
         ._loadFunc()
         .then((res) => res.data);
 
       setColumnsSchemaData(result);
-      getAPIData(pathnameWithoutSlash);
+      getAPIData();
 
       const lookupSpForURL = getSpForURLFromLookup(result);
 
-      // console.log(`lookupSpForURL`, lookupSpForURL);
       if (lookupSpForURL) {
         lookupSpForURL.map((item) => getLookDataState(item));
-        // getLookDataState(lookupSpForURL);
       }
     }
 
-    function getAPIData(spForURL) {
-      const fetchData = FetchData(
-        pathname,
-        formatMessage,
-        null,
-        spForURL
-      ).fetchColumnsSchemaData;
+    function getAPIData() {
+      const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
 
       setAPIData(fetchData);
     }
 
     async function getLookDataState(lookupSpForURL) {
       const lookData = FetchData(
-        pathname,
         formatMessage,
-        null,
+        pathname,
         lookupSpForURL
       ).lookData;
 
@@ -110,8 +99,13 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     //   getAPIData(pathnameWithoutSlash);
     //   getLookDataState(pathnameWithoutSlash);
     // }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function fetchDataConstructor(dataBase) {
+    return FetchData(formatMessage, pathname, pathnameWithoutSlash, dataBase);
+  }
 
   function statusesLang() {
     const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];

@@ -29,9 +29,12 @@ import {
   EmptyItem,
 } from "devextreme-react/form";
 
+// import {Tabs} from "devextreme-react/tabs";
+
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {DetailTemplate} from "../../components/DetailTemplate/DetailTemplate";
+import {DetailUserTemplate} from "../../components";
 
 import "./DataGridTypePage.scss";
 
@@ -68,22 +71,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    // const spForURL = firstLetterToUpper(pathnameWithoutSlash);
     async function getColumnsSchemaData() {
-      const fetchColumnsSchemaData = FetchData(
-        pathname,
-        formatMessage,
-        null,
-        pathnameWithoutSlash,
-        "hbdb"
-      ).fetchData;
+      const fetchColumnsSchemaData = fetchDataConstructor("hbdb").fetchData;
 
       const result = await fetchColumnsSchemaData
         ._loadFunc()
         .then((res) => res.data);
 
       setColumnsSchemaData(result);
-      getAPIData(pathnameWithoutSlash);
+      getAPIData();
 
       const lookupSpForURL = getSpForURLFromLookup(result);
 
@@ -92,20 +88,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       }
     }
 
-    function getAPIData(spForURL) {
+    function getAPIData() {
       if (
         checkIfArrIncludesValue(
           ["userObjects", "roleObjects", "groupObjects"],
           pathnameWithoutSlash
         )
       ) {
-        const usersFetchData = FetchData(
-          pathname,
-          formatMessage,
-          null,
-          spForURL,
-          "wisdb"
-        ).usersFetchData;
+        const usersFetchData = fetchDataConstructor("wisdb").usersFetchData;
 
         setAPIData(usersFetchData);
       } else if (
@@ -114,54 +104,37 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           pathnameWithoutSlash
         )
       ) {
-        const fetchData = FetchData(
-          pathname,
-          formatMessage,
-          null,
-          spForURL,
-          "odb"
-        ).personFetchData;
+        const fetchData = fetchDataConstructor("odb").personFetchData;
 
         setAPIData(fetchData);
       } else {
-        const fetchData = FetchData(
-          pathname,
-          formatMessage,
-          null,
-          spForURL,
-          "hbdb"
-        ).fetchColumnsSchemaData;
+        const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
 
         setAPIData(fetchData);
       }
     }
 
     async function getLookDataState(spForURL) {
-      const lookData = FetchData(
-        pathname,
-        formatMessage,
-        null,
-        spForURL
-      ).lookData;
-
+      const lookData = FetchData(formatMessage, pathname, spForURL).lookData;
       const result = await lookData._loadFunc().then((res) => res.data);
 
       setLookDataState(result);
     }
 
-    getColumnsSchemaData();
+    pathnameWithoutSlash !== "ShortDics" && getColumnsSchemaData();
 
-    pathnameWithoutSlash === "ShortDics" &&
+    if (pathnameWithoutSlash === "ShortDics") {
+      getAPIData();
       getLookDataState(pathnameWithoutSlash);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     async function getUserRolesFormData() {
       const usersFetchData = FetchData(
-        pathname,
         formatMessage,
-        null,
+        pathname,
         `w_DisplayUserRoles&@GID=${userDataGID}`,
         "wisdb"
       ).usersFetchData;
@@ -180,6 +153,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userDataGID]);
+
+  function fetchDataConstructor(dataBase) {
+    return FetchData(formatMessage, pathname, pathnameWithoutSlash, dataBase);
+  }
 
   function statusesLang() {
     const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
@@ -539,8 +516,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       return;
     }
 
-    // console.log(`formData =>>`, formData);
-
     return Object.keys(formData).map((item, idx) => (
       <SimpleItem key={idx} dataField={item} />
     ));
@@ -648,6 +623,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
+      {/* <Tabs items={tabs} itemRender={renderTabItem} /> */}
       <DataGrid
         dataSource={APIData}
         // keyExpr="id"
@@ -699,12 +675,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               formData={
                 userDataGID && userRolesFormData && userRolesFormData[0]
               }
-              // showColonAfterLabel={true}
-              // labelLocation={"top"}
-              // minColWidth={900}
               colCount={1}
               width={"100%"}
-              // colSpan={3}
             >
               <GroupItem
                 caption={`Information about ${
@@ -755,6 +727,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         {pathnameWithoutSlash === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
+        {pathnameWithoutSlash === "userObjects" && (
+          <MasterDetail enabled={true} component={DetailUserTemplate} />
+        )}
 
         <Column type="buttons" width={110}>
           <Button
@@ -766,7 +741,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
         </Column>
-
         <Paging defaultPageSize={10} />
         <Pager
           showPageSizeSelector={true}

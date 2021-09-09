@@ -17,9 +17,8 @@ const LocalizationProvider = ({children}) => {
   const [lang, setLang] = useState(() => getLocale());
 
   const changedMyLocalFetch = FetchData(
-    "/w_changeMyLocaleTo",
     formatMessage,
-    null,
+    "/w_changeMyLocaleTo",
     "w_changeMyLocaleTo",
     "wisdb"
   ).changeMyLocalToData;
@@ -29,17 +28,16 @@ const LocalizationProvider = ({children}) => {
 
   useEffect(() => {
     const customMessages = FetchData(
-      "/CustomMessages",
       formatMessage,
-      null,
-      "ShortDicsRecordsFlatCustomMessagesObject"
+      "/CustomMessages",
+      "ShortDicsRecordsFlatCustomMessagesObject",
+      "hbdb"
     ).custumMessageData;
 
     const getLangsData = async () => {
       const islangFetch = FetchData(
-        "/islang",
         formatMessage,
-        null,
+        "/islang",
         "islang",
         "wisdb"
       ).fetchColumnsSchemaData;

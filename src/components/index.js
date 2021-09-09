@@ -1,7 +1,9 @@
 export {default as ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
 export {Header} from "./Header/Header";
 export {Footer} from "./Footer/Footer";
+
 export {DetailTemplate} from "./DetailTemplate/DetailTemplate";
+export {DetailUserTemplate} from "./DetailUserTemplate/DetailUserTemplate";
 export {PasswordGenerator} from "./PasswordGenerator/PasswordGenerator";
 
 export {default as LoginForm} from "./LoginForm/LoginForm";

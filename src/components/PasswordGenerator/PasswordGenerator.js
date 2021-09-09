@@ -29,7 +29,6 @@ export const PasswordGenerator = () => {
   const [maxLength, setMaxLength] = useState(128);
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
 
-  const dictionaryByName = FetchData("/DictionaryByName").fetchData;
   const {formatMessage} = useLocalization();
 
   const passwordButton = {
@@ -65,6 +64,13 @@ export const PasswordGenerator = () => {
   };
 
   useEffect(() => {
+    const dictionaryByName = FetchData(
+      formatMessage,
+      "/DictionaryByName"
+      // "ShortDicsRecords&@name=PasswordPolicies",
+      // "hbdb"
+    ).fetchData;
+
     dictionaryByName
       ._loadFunc()
       .then((res) => res.data)
@@ -229,7 +235,8 @@ export const PasswordGenerator = () => {
                 value={passwordState}
               >
                 <TextBoxButton
-                  name={formatMessage("msgGeneratePassword")}
+                  name="msgGenerateStrongPassword"
+                  // name={formatMessage("msgGenerateStrongPassword")}
                   location="after"
                   options={passwordGeneratorBtn}
                 />
@@ -274,7 +281,7 @@ export const PasswordGenerator = () => {
                 onValueChanged={onConfirmPasswordChanged}
               >
                 <TextBoxButton
-                  name={formatMessage("msgShowPassword")}
+                  name={formatMessage("msgShowConfirmedPassword")}
                   location="after"
                   options={passwordButton}
                 />

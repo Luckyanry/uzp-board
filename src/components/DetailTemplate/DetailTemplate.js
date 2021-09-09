@@ -31,23 +31,15 @@ export const DetailTemplate = (props) => {
   //   height: 780,
   // };
 
-  const shortDicsRecords = FetchData(
-    "/ShortDicsRecords",
-    formatMessage,
-    props.data.data.id
-  ).fetchData;
-
   useEffect(() => {
+    const shortDicsRecords = FetchData(
+      formatMessage,
+      "/ShortDicsRecords",
+      `ShortDicsRecords&@tid=${props.data.data.id}`,
+      "hbdb"
+    ).fetchColumnsSchemaData;
+
     setAPIData(props.data.data.columnsjson.columns);
-
-    // shortDicsRecords._loadFunc().then(
-    //   (res) => res.data,
-    //   (err) => {
-    //     console.log(`err => `, err);
-    //     setError(err);
-    //   }
-    // );
-
     setShortDicsRecordsDataState(shortDicsRecords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -63,13 +55,6 @@ export const DetailTemplate = (props) => {
   function initNewRow(e) {
     e.data.status = statusesLang()[0];
   }
-
-  // function onFocusedCellAction(e) {
-  //   const rowId = e.rows[e.newRowIndex].values[0];
-  //   // const rowName = rowId.data.name;
-  //   console.log(`rowName`, e);
-  //   setFocusedRowName(rowId);
-  // }
 
   return (
     // <ErrorBoundary msg={error}>
@@ -94,7 +79,6 @@ export const DetailTemplate = (props) => {
       wordWrapEnabled={true}
       // functions
       onInitNewRow={initNewRow}
-      // onFocusedCellChanging={onFocusedCellAction}
     >
       <ColumnChooser
         enabled={true}

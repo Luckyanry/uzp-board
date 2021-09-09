@@ -9,9 +9,8 @@ const baseParams = "/actions.asp?operation=do";
 // const errorTestParam = "w_testDepthiRiseErrors";
 
 export const FetchData = (
-  pageRequest,
   formatMessage,
-  tid = null,
+  pageRequest,
   sp = null,
   db = "hbdb"
 ) => {
@@ -50,10 +49,10 @@ export const FetchData = (
       case "/legals":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
 
-      case "/ShortDics":
-        return `&db=${db}&sp=ShortDics`;
-      case "/ShortDicsRecords":
-        return `&db=${db}&sp=ShortDicsRecords&@tid=${tid}`;
+      // case "/ShortDics":
+      //   return `&db=${db}&sp=ShortDics`;
+      // case "/ShortDicsRecords":
+      //   return `&db=${db}&sp=ShortDicsRecords&@tid=${tid}`;
       case "/DictionaryByName":
         return `&db=${db}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       default:
