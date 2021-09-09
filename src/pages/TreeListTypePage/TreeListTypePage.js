@@ -58,10 +58,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       setColumnsSchemaData(result);
       getAPIData();
 
-      const lookupSpForURL = getSpForURLFromLookup(result);
+      const lookupParamsForURL = getLookupParamsForURL(result);
 
-      if (lookupSpForURL) {
-        lookupSpForURL.map((item) => getLookDataState(item));
+      if (lookupParamsForURL.length) {
+        lookupParamsForURL.map(({sp, db, dataField}) =>
+          getLookDataState(sp, db, dataField)
+        );
       }
     }
 
@@ -71,16 +73,17 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       setAPIData(fetchData);
     }
 
-    async function getLookDataState(lookupSpForURL) {
+    async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
       const lookData = FetchData(
         formatMessage,
         pathname,
-        lookupSpForURL
+        lookupSpForURL,
+        lookupDBForURL
       ).lookData;
 
       const result = await lookData._loadFunc().then((res) => res.data);
 
-      setLookDataState(result);
+      setLookDataState((prev) => [...prev, {[dataField]: result}]);
     }
 
     getColumnsSchemaData();
@@ -128,14 +131,19 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     return `msg${firstLetterToUpper(message)}Abbreviation`;
   }
 
-  function getSpForURLFromLookup(data) {
+  function getLookupParamsForURL(data) {
     const findLookup = data.filter(({lookup}) => lookup);
 
-    if (findLookup) {
-      return findLookup.map(({lookup}) => lookup.isfetch.split(".")[2]);
-    } else {
-      return;
-    }
+    if (!findLookup) return;
+
+    const result = findLookup.map(({lookup, dataField}) => {
+      const getDBFormLookup = lookup.isfetch.split(".")[0];
+      const getSpFormLookup = lookup.isfetch.split(".")[2];
+
+      return {sp: getSpFormLookup, db: getDBFormLookup, dataField};
+    });
+
+    return result;
   }
 
   function customMarkupRender() {
@@ -174,7 +182,15 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
           <FormItem {...formItem} />
 
-          {lookup && <Lookup {...lookup} dataSource={lookDataState} />}
+          {lookup &&
+            lookDataState.map((item) => {
+              // eslint-disable-next-line
+              if (!item[dataField]) return;
+
+              return (
+                <Lookup key={idx} {...lookup} dataSource={item[dataField]} />
+              );
+            })}
 
           {dataField === "status" && <Lookup dataSource={statusesLang()} />}
           {/* {dataField === "code" && (
@@ -252,7 +268,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         />
 
         {customMarkupRender()}
-        {console.log("customMarkupRender", customMarkupRender())}
 
         <Column type="buttons" width={110}>
           <TreeListButton

@@ -30,7 +30,7 @@ import "./DataGridTypePage.scss";
 export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
-  const [lookDataState, setLookDataState] = useState(null);
+  const [lookDataState, setLookDataState] = useState([]);
 
   const {formatMessage} = useLocalization();
 
@@ -59,10 +59,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       setColumnsSchemaData(result);
       getAPIData();
 
-      const lookupSpForURL = getSpForURLFromLookup(result);
+      const lookupParamsForURL = getLookupParamsForURL(result);
 
-      if (lookupSpForURL) {
-        getLookDataState(lookupSpForURL);
+      if (lookupParamsForURL.length) {
+        lookupParamsForURL.map(({sp, db, dataField}) =>
+          getLookDataState(sp, db, dataField)
+        );
       }
     }
 
@@ -92,11 +94,17 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       }
     }
 
-    async function getLookDataState(spForURL) {
-      const lookData = FetchData(formatMessage, pathname, spForURL).lookData;
+    async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
+      const lookData = FetchData(
+        formatMessage,
+        pathname,
+        lookupSpForURL,
+        lookupDBForURL
+      ).lookData;
+
       const result = await lookData._loadFunc().then((res) => res.data);
 
-      setLookDataState(result);
+      setLookDataState((prev) => [...prev, {[dataField]: result}]);
     }
 
     pathnameWithoutSlash !== "ShortDics" && getColumnsSchemaData();
@@ -136,15 +144,19 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     return `msg${firstLetterToUpper(message)}Abbreviation`;
   }
 
-  function getSpForURLFromLookup(data) {
-    const findLookup = data.find((item) => item.lookup);
+  function getLookupParamsForURL(data) {
+    const findLookup = data.filter(({lookup}) => lookup);
 
-    if (findLookup) {
-      const getIsfetchField = findLookup.lookup.isfetch;
-      return getIsfetchField.split(".")[2];
-    } else {
-      return;
-    }
+    if (!findLookup) return;
+
+    const result = findLookup.map(({lookup, dataField}) => {
+      const getDBFormLookup = lookup.isfetch.split(".")[0];
+      const getSpFormLookup = lookup.isfetch.split(".")[2];
+
+      return {sp: getSpFormLookup, db: getDBFormLookup, dataField};
+    });
+
+    return result;
   }
 
   function checkIfArrIncludesValue(arr, value) {
@@ -279,9 +291,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             <Lookup {...lookup} dataSource={lookDataState} />
           )}
 
-          {lookup && pathnameWithoutSlash !== "ShortDics" && (
-            <Lookup {...lookup} dataSource={lookDataState} />
-          )}
+          {lookup &&
+            lookDataState.map((item) => {
+              // eslint-disable-next-line
+              if (!item[dataField]) return;
+
+              return (
+                <Lookup key={idx} {...lookup} dataSource={item[dataField]} />
+              );
+            })}
 
           {dataField === "status" && <Lookup dataSource={statusesLang()} />}
 

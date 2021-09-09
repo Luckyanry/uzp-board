@@ -23,10 +23,10 @@ import "./DetailUserTemplate.scss";
 export const DetailUserTemplate = ({data}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
-  const [lookDataState, setLookDataState] = useState(null);
+  const [lookDataState, setLookDataState] = useState([]);
 
   const {formatMessage} = useLocalization();
-  // console.log(`props`, data);
+
   const pathname = "/w_DisplayUserRoles";
   const focusedRowTitle = data.data.UserName;
 
@@ -53,10 +53,12 @@ export const DetailUserTemplate = ({data}) => {
       setColumnsSchemaData(result);
       getAPIData();
 
-      const lookupSpForURL = getSpForURLFromLookup(result);
+      const lookupParamsForURL = getLookupParamsForURL(result);
 
-      if (lookupSpForURL) {
-        getLookDataState(lookupSpForURL);
+      if (lookupParamsForURL.length) {
+        lookupParamsForURL.map(({sp, db, dataField}) =>
+          getLookDataState(sp, db, dataField)
+        );
       }
     }
 
@@ -71,31 +73,36 @@ export const DetailUserTemplate = ({data}) => {
       setAPIData(usersFetchData);
     }
 
-    async function getLookDataState(spForURL) {
+    async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
       const lookData = FetchData(
         formatMessage,
         pathname,
-        spForURL,
-        "wisdb"
+        lookupSpForURL,
+        lookupDBForURL
       ).lookData;
+
       const result = await lookData._loadFunc().then((res) => res.data);
 
-      setLookDataState(result);
+      setLookDataState((prev) => [...prev, {[dataField]: result}]);
     }
 
     getColumnsSchemaData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function getSpForURLFromLookup(data) {
-    const findLookup = data.find((item) => item.lookup);
-    if (findLookup) {
-      const getIsfetchField = findLookup.lookup.isfetch;
-      // console.log(`getIsfetchField`, getIsfetchField);
-      return getIsfetchField.split(".")[2];
-    } else {
-      return;
-    }
+  function getLookupParamsForURL(data) {
+    const findLookup = data.filter(({lookup}) => lookup);
+
+    if (!findLookup) return;
+
+    const result = findLookup.map(({lookup, dataField}) => {
+      const getDBFormLookup = lookup.isfetch.split(".")[0];
+      const getSpFormLookup = lookup.isfetch.split(".")[2];
+
+      return {sp: getSpFormLookup, db: getDBFormLookup, dataField};
+    });
+
+    return result;
   }
 
   function customMarkupRender() {
@@ -134,7 +141,15 @@ export const DetailUserTemplate = ({data}) => {
 
           <FormItem {...formItem} />
 
-          {lookup && <Lookup {...lookup} dataSource={lookDataState} />}
+          {lookup &&
+            lookDataState.map((item) => {
+              // eslint-disable-next-line
+              if (!item[dataField]) return;
+
+              return (
+                <Lookup key={idx} {...lookup} dataSource={item[dataField]} />
+              );
+            })}
         </Column>
       );
     });
