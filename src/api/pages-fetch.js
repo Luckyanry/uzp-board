@@ -4,9 +4,7 @@ import "whatwg-fetch";
 
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
-// const hbdbParam = "db=hbdb";
-// const wisdbParam = "db=wisdb";
-// const errorTestParam = "w_testDepthiRiseErrors";
+// const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
 export const FetchData = (
   formatMessage,
@@ -30,8 +28,8 @@ export const FetchData = (
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KspdColumnSchema`;
       case "/oked":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
-      case "/mihalla":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=MihallaColumnSchema`;
+      case "/mahalla":
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=MahallaColumnSchema`;
 
       case "/userObjects":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISUserAccountColumnSchema`;
@@ -53,8 +51,8 @@ export const FetchData = (
       //   return `&db=${db}&sp=ShortDics`;
       // case "/ShortDicsRecords":
       //   return `&db=${db}&sp=ShortDicsRecords&@tid=${tid}`;
-      case "/DictionaryByName":
-        return `&db=${db}&sp=ShortDicsRecords&@name=PasswordPolicies`;
+      // case "/DictionaryByName":
+      //   return `&db=${db}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       default:
         return "/home";
     }
@@ -303,12 +301,43 @@ export const FetchData = (
     },
   });
 
-  const userTabsData = new CustomStore({
-    key: "GID",
-    load: () => {
-      return sendRequest(urlFromPages, {
+  const detailUserTemplateData = new CustomStore({
+    key: "RGID",
+    load: () =>
+      sendRequest(urlFromPages, {
         schema: "get",
-      });
+      }),
+    insert: (values) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "ins",
+          "@jvalues": statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    update: (key, values) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "upd",
+          "@guid": key,
+          "@jvalues": statusStringToBoolean(values),
+        },
+        "POST"
+      ),
+    remove: (key) =>
+      sendRequest(
+        urlFromPages,
+        {
+          schema: "del",
+          "@guid": key,
+        },
+        "POST"
+      ),
+    onBeforeSend: function (method, ajaxOptions) {
+      ajaxOptions.credentials = "include";
+      ajaxOptions.xhrFields = {withCredentials: true};
     },
   });
 
@@ -450,8 +479,7 @@ export const FetchData = (
     usersFetchData,
     custumMessageData,
     personFetchData,
-    userTabsData,
-    // lookupDataSource,
+    detailUserTemplateData,
   };
 };
 

@@ -9,7 +9,7 @@ export const AppNavigation = () => {
     "soogu",
     "kspd",
     "oked",
-    "mihalla",
+    "mahalla",
     "personObjects",
     "orgUnits",
     "employees",

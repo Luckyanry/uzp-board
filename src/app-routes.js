@@ -13,7 +13,7 @@ const dataGridPagesPath = [
   "userObjects",
   "roleObjects",
   "groupObjects",
-  "mihalla",
+  "mahalla",
   "personObjects",
   "orgUnits",
   "employees",

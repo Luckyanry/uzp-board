@@ -14,15 +14,15 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./DetailTemplate.scss";
 
-export const DetailTemplate = (props) => {
+export const DetailTemplate = ({data}) => {
   const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
   // const [error, setError] = useState(null);
 
   const {formatMessage} = useLocalization();
-
-  // const focusedRowTitle = props.data.data.name;
+  // console.log(`props`, data);
+  // const focusedRowTitle = data.data.name;
 
   // const popupOpt = {
   //   title: formatMessage("msgCreateNewItem", focusedRowTitle),
@@ -35,11 +35,11 @@ export const DetailTemplate = (props) => {
     const shortDicsRecords = FetchData(
       formatMessage,
       "/ShortDicsRecords",
-      `ShortDicsRecords&@tid=${props.data.data.id}`,
+      `ShortDicsRecords&@tid=${data.data.id}`,
       "hbdb"
     ).fetchColumnsSchemaData;
 
-    setAPIData(props.data.data.columnsjson.columns);
+    setAPIData(data.data.columnsjson.columns);
     setShortDicsRecordsDataState(shortDicsRecords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -62,7 +62,6 @@ export const DetailTemplate = (props) => {
       id="grid"
       columns={APIData}
       dataSource={shortDicsRecordsDataState}
-      // keyExpr="id"
       repaintChangesOnly={true}
       remoteOperations={false}
       // rows

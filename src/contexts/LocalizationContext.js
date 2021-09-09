@@ -5,7 +5,6 @@ import * as ruMessages from "devextreme/localization/messages/ru.json";
 import * as uzLatnMessages from "devextreme/localization/messages/uz-Latn.json";
 
 import {FetchData} from "../api/pages-fetch";
-// import {getDictionary} from "../app-localization";
 
 const LocalizationContext = React.createContext();
 const useLocalization = () => useContext(LocalizationContext);
@@ -108,7 +107,6 @@ const LocalizationProvider = ({children}) => {
   function initMessages() {
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
-    // loadMessages(getDictionary());
     loadMessages(customMessagesData);
   }
 
@@ -121,7 +119,6 @@ const LocalizationProvider = ({children}) => {
         locale,
         loadMessages,
         formatMessage,
-        // getDictionary,
       }}
     >
       {children}

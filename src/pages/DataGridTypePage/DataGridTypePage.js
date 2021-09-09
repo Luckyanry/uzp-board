@@ -17,19 +17,8 @@ import DataGrid, {
   Button,
   Paging,
   Pager,
-  Form,
+  // Form,
 } from "devextreme-react/data-grid";
-// import {Item} from "devextreme-react/form";
-import {
-  SimpleItem,
-  GroupItem,
-  TabbedItem,
-  TabPanelOptions,
-  Tab,
-  EmptyItem,
-} from "devextreme-react/form";
-
-// import {Tabs} from "devextreme-react/tabs";
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -42,10 +31,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState(null);
-  const [userDataGID, setUserDataGID] = useState("");
-  const [userFormData, setUserFormData] = useState(null);
-  const [userRolesFormData, setUserRolesFormData] = useState(null);
-  // const [allUserRoles, setAllUserRoles] = useState(null);
 
   const {formatMessage} = useLocalization();
 
@@ -59,13 +44,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
-    width: 1000,
-    height: 700,
-  };
-
-  const popupUsersPageOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
-    showTitle: false,
     width: 1000,
     height: 700,
   };
@@ -130,30 +108,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    async function getUserRolesFormData() {
-      const usersFetchData = FetchData(
-        formatMessage,
-        pathname,
-        `w_DisplayUserRoles&@GID=${userDataGID}`,
-        "wisdb"
-      ).usersFetchData;
-
-      const result = await usersFetchData._loadFunc().then((res) => res.data);
-
-      setUserRolesFormData(result);
-    }
-
-    checkIfArrIncludesValue(
-      ["userObjects", "roleObjects", "groupObjects"],
-      pathnameWithoutSlash
-    ) &&
-      userDataGID &&
-      getUserRolesFormData();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userDataGID]);
-
   function fetchDataConstructor(dataBase) {
     return FetchData(formatMessage, pathname, pathnameWithoutSlash, dataBase);
   }
@@ -168,7 +122,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   function initNewRow(e) {
     e.data.status = statusesLang()[0];
-    // e.element.title = formatMessage("msgCreateNewItem", localPageAbbreviation);
   }
 
   function firstLetterToUpper(message) {
@@ -201,85 +154,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   function customMarkupRender() {
     let murkupCollection = [];
 
-    // if (pathnameWithoutSlash === "soogu") {
-    //   const pageTitleCollection = [
-    //     {
-    //       dataField: "id",
-    //       caption: "msgId",
-    //       visible: true,
-    //       disabled: true,
-    //       required: false,
-    //       width: 60,
-    //       alignment: "right",
-    //       formItem: true,
-    //     },
-    //     {
-    //       dataField: "name_rus",
-    //       caption: "msgNameRus",
-    //       required: true,
-    //       width: "100%",
-    //     },
-    //     {
-    //       dataField: "name_uzcyr",
-    //       caption: "msgNameUzcyr",
-    //       visible: false,
-    //       width: "100%",
-    //     },
-    //     {
-    //       dataField: "name_uzlat",
-    //       caption: "msgNameUzlat",
-    //       visible: false,
-    //       width: "100%",
-    //     },
-    //     {
-    //       dataField: "name_karlat",
-    //       caption: "msgNameKarlat",
-    //       visible: false,
-    //       width: "100%",
-    //     },
-    //     {
-    //       dataField: "name_eng",
-    //       caption: "msgNameEng",
-    //       visible: false,
-    //       width: "100%",
-    //     },
-    //   ];
-
-    //   murkupCollection = [...pageTitleCollection];
-    // }
-
-    // if (pathnameWithoutSlash === "countries") {
-    //   const pageTitleCollection = [
-    //     {
-    //       dataField: "id",
-    //       caption: "msgId",
-    //       visible: true,
-    //       disabled: true,
-    //       width: 60,
-    //       alignment: "right",
-    //       formItem: true,
-    //     },
-    //     {
-    //       dataField: "short_name",
-    //       caption: "msgShortName",
-    //       visible: false,
-    //       required: true,
-    //       width: "100%",
-    //     },
-    //     {dataField: "short_name_rus", caption: "msgShortNameRus", required: true},
-    //     {dataField: "short_name_uzcyr", caption: "msgShortNameUzcyr"},
-    //     {dataField: "short_name_uzlat", caption: "msgShortNameUzlat"},
-    //     {dataField: "short_name_karlat", caption: "msgShortNameKarlat"},
-    //     {dataField: "short_name_eng", caption: "msgShortNameEng"},
-    //   ];
-
-    //   murkupCollection = [...pageTitleCollection];
-    // }
-
     checkIfArrIncludesValue(
       [
         "countries",
-        "mihalla",
+        "mahalla",
         "soogu",
         "userObjects",
         "roleObjects",
@@ -356,75 +234,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       murkupCollection = [...pageTitleCollection];
     }
 
-    // if (pathnameWithoutSlash === "userObjects") {
-    //   const pageTitleCollection = [
-    //     {
-    //       dataField: "UserName",
-    //       caption: "msgUserName",
-    //       required: true,
-    //       width: 200,
-    //     },
-    //     {
-    //       dataField: "Locale",
-    //       caption: "msgLocale",
-    //       width: 100,
-    //       alignment: "center",
-    //     },
-    //     {
-    //       dataField: "Locked",
-    //       caption: "msgLocked",
-    //       width: 120,
-    //       alignment: "center",
-    //     },
-    //     {
-    //       dataField: "Disabled",
-    //       caption: "msgDisabled",
-    //       width: 100,
-    //       alignment: "center",
-    //     },
-    //     {dataField: "TimeZone", caption: "msgTimeZone", width: "100%"},
-    //     {dataField: "created", caption: "msgCreated", width: 200},
-    //     {dataField: "pwdlastchange", caption: "msgPwdLastChange", width: 200},
-    //     {
-    //       dataField: "UserType",
-    //       caption: "msgUserType",
-    //       width: 120,
-    //       alignment: "center",
-    //     },
-    //   ];
-
-    //   murkupCollection = [...pageTitleCollection];
-    // }
-
-    // if (
-    //   // pathnameWithoutSlash === "roleObjects" ||
-    //   pathnameWithoutSlash === "groupObjects"
-    // ) {
-    //   const pageTitleCollection = [
-    //     {
-    //       dataField: "UserName",
-    //       caption: "msgUserName",
-    //       required: true,
-    //       width: "100%",
-    //     },
-    //     {
-    //       dataField: "Disabled",
-    //       caption: "msgDisabled",
-    //       width: 100,
-    //       alignment: "center",
-    //     },
-    //     {dataField: "created", caption: "msgCreated", width: "100%"},
-    //     {
-    //       dataField: "UserType",
-    //       caption: "msgUserType",
-    //       width: 120,
-    //       alignment: "center",
-    //     },
-    //   ];
-
-    //   murkupCollection = [...pageTitleCollection];
-    // }
-
     return murkupCollection.map((item, idx) => {
       const {
         dataField,
@@ -469,16 +278,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           {lookup && pathnameWithoutSlash === "ShortDics" && (
             <Lookup
               dataSource={lookDataState}
-              valueExpr="id"
-              displayExpr="className"
+              valueExpr={lookup.valueExpr}
+              displayExpr={lookup.displayExpr}
             />
           )}
 
           {lookup && pathnameWithoutSlash !== "ShortDics" && (
             <Lookup
               dataSource={lookDataState}
-              valueExpr="id"
-              displayExpr="name"
+              valueExpr={lookup.valueExpr}
+              displayExpr={lookup.displayExpr}
             />
           )}
 
@@ -494,129 +303,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       );
     });
   }
-
-  function onFocusedCellAction(e) {
-    // console.log(`e`, e);
-
-    if (
-      checkIfArrIncludesValue(
-        ["userObjects", "roleObjects", "groupObjects"],
-        pathnameWithoutSlash
-      )
-    ) {
-      const rowId = e.rows[e.newRowIndex].data.GID;
-      const formDataFromFocusedRow = e.rows[e.newRowIndex].data;
-      setUserDataGID(rowId);
-      setUserFormData(formDataFromFocusedRow);
-    }
-  }
-
-  function customSimpleItemMarkup(formData) {
-    if (!formData) {
-      return;
-    }
-
-    return Object.keys(formData).map((item, idx) => (
-      <SimpleItem key={idx} dataField={item} />
-    ));
-  }
-
-  userDataGID &&
-    userRolesFormData &&
-    console.log(`userRolesFormData`, userRolesFormData);
-
-  // function customCodeMarkupRender() {
-  //   let murkupCollection = [];
-
-  //   if (pathnameWithoutSlash === "soogu") {
-  //     const pageTitleCollection = [
-  //       {
-  //         dataField: "CodeSogu",
-  //         caption: "msgCodeSoogu",
-  //         width: 120,
-  //         message: "msgCodeSooguNumericErrMsg",
-  //         pattern: "^[0-9]{4,5}$",
-  //         required: true,
-  //       },
-  //       {
-  //         dataField: "CodeOKPO",
-  //         caption: "msgCodeOKPO",
-  //         width: 120,
-  //         message: "msgCodeOKPONumericErrMsg",
-  //         pattern: "^[0-9]{0,8}$",
-  //         required: true,
-  //       },
-  //     ];
-
-  //     murkupCollection = [...pageTitleCollection];
-  //   }
-
-  //   // if (pathnameWithoutSlash === "countries") {
-  //   //   const pageTitleCollection = [
-  //   //     {
-  //   //       dataField: "alpha2code",
-  //   //       caption: "msgAlpha2Code",
-  //   //       width: 80,
-  //   //       message: "msgAlpha2CodeErrMsg",
-  //   //       pattern: "^[A-Z]{2}$",
-  //   //       required: true,
-  //   //     },
-  //   //     {
-  //   //       dataField: "alpha3code",
-  //   //       caption: "msgAlpha3Code",
-  //   //       width: 80,
-  //   //       message: "msgAlpha3CodeErrMsg",
-  //   //       pattern: "^[A-Z]{3}$",
-  //   //       required: true,
-  //   //     },
-  //   //     {
-  //   //       dataField: "numeric",
-  //   //       caption: "msgNumeric",
-  //   //       width: 100,
-  //   //       message: "msgNumericErrMessage",
-  //   //       pattern: "^[0-9]{0,4}$",
-  //   //       required: false,
-  //   //     },
-  //   //   ];
-
-  //   //   murkupCollection = [...pageTitleCollection];
-  //   // }
-
-  //   return murkupCollection.map((item, idx) => {
-  //     const {dataField, caption, width, message, pattern, required, ...params} =
-  //       item;
-
-  //     return (
-  //       <Column
-  //         key={idx}
-  //         dataField={dataField}
-  //         caption={formatMessage(caption)}
-  //         alignment="center"
-  //         width={width}
-  //         visible={true}
-  //         {...params}
-  //       >
-  //         <PatternRule
-  //           message={formatMessage(message)}
-  //           pattern={new RegExp(pattern)}
-  //         />
-  //         {required && <RequiredRule />}
-  //       </Column>
-  //     );
-  //   });
-  // }
-
-  // function onToolbarPreparing(e) {
-  //   console.log(e);
-  // e.toolbarOptions.items[0].showText = "always";
-  // e.toolbarOptions.items[0].options.text = "Button text";
-  // e.toolbarOptions.items[0].options.hint = "Text";
-
-  // e.toolbarOptions.items.push({
-  //   location: "after",
-  //   template: "deleteButton",
-  // });
-  // }
 
   return (
     <>
@@ -644,7 +330,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // functions
         onInitNewRow={initNewRow}
         // onToolbarPreparing={onToolbarPreparing}
-        onFocusedCellChanging={onFocusedCellAction}
+        // onFocusedCellChanging={onFocusedCellAction}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />
@@ -659,77 +345,24 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         />
         <FilterRow visible={true} />
 
-        {checkIfArrIncludesValue(
-          ["userObjects", "roleObjects", "groupObjects"],
-          pathnameWithoutSlash
-        ) ? (
-          <Editing
-            mode="popup"
-            popup={popupUsersPageOptions}
-            allowAdding={true}
-            allowDeleting={true}
-            allowUpdating={true}
-          >
-            <Form
-              id="form"
-              formData={
-                userDataGID && userRolesFormData && userRolesFormData[0]
-              }
-              colCount={1}
-              width={"100%"}
-            >
-              <GroupItem
-                caption={`Information about ${
-                  userFormData && userFormData.UserName
-                }`}
-              >
-                <TabbedItem>
-                  <TabPanelOptions deferRendering={false} />
-
-                  <Tab title="General" colCount={2}>
-                    {customSimpleItemMarkup(userFormData)}
-                  </Tab>
-
-                  <Tab title="Group/Role" colCount={2}>
-                    {userDataGID &&
-                      userRolesFormData &&
-                      userRolesFormData.map((user, idx) => (
-                        <GroupItem
-                          key={idx}
-                          colCount={2}
-                          colSpan={2}
-                          caption={`Information about ${user.UserName}`}
-                        >
-                          {customSimpleItemMarkup(user)}
-                          <EmptyItem />
-                          <EmptyItem />
-                        </GroupItem>
-                      ))}
-                  </Tab>
-                </TabbedItem>
-              </GroupItem>
-            </Form>
-          </Editing>
-        ) : (
-          <Editing
-            mode="popup"
-            popup={popupGeneralOptions}
-            allowAdding={true}
-            allowDeleting={true}
-            allowUpdating={true}
-          />
-        )}
+        <Editing
+          mode="popup"
+          popup={popupGeneralOptions}
+          allowAdding={true}
+          allowDeleting={true}
+          allowUpdating={true}
+        />
 
         {customMarkupRender()}
-
-        {/* {customCodeMarkupRender()} */}
 
         {pathnameWithoutSlash === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
-        {pathnameWithoutSlash === "userObjects" && (
-          <MasterDetail enabled={true} component={DetailUserTemplate} />
-        )}
+
+        {checkIfArrIncludesValue(
+          ["userObjects", "roleObjects", "groupObjects"],
+          pathnameWithoutSlash
+        ) && <MasterDetail enabled={true} component={DetailUserTemplate} />}
 
         <Column type="buttons" width={110}>
           <Button
@@ -741,6 +374,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
         </Column>
+
         <Paging defaultPageSize={10} />
         <Pager
           showPageSizeSelector={true}
@@ -754,3 +388,382 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     </>
   );
 };
+
+// ===============
+
+// import {Item} from "devextreme-react/form";
+// import {
+//   SimpleItem,
+//   GroupItem,
+//   TabbedItem,
+//   TabPanelOptions,
+//   Tab,
+//   EmptyItem,
+// } from "devextreme-react/form";
+
+// import {Tabs} from "devextreme-react/tabs";
+
+// ===============
+
+// const popupUsersPageOptions = {
+//   title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+//   showTitle: false,
+//   width: 1000,
+//   height: 700,
+// };
+
+// ===============
+
+// useEffect(() => {
+//   async function getUserRolesFormData() {
+//     const usersFetchData = FetchData(
+//       formatMessage,
+//       pathname,
+//       `w_DisplayUserRoles&@GID=${userDataGID}`,
+//       "wisdb"
+//     ).usersFetchData;
+
+//     const result = await usersFetchData._loadFunc().then((res) => res.data);
+
+//     setUserRolesFormData(result);
+//   }
+
+//   checkIfArrIncludesValue(
+//     ["userObjects", "roleObjects", "groupObjects"],
+//     pathnameWithoutSlash
+//   ) &&
+//     userDataGID &&
+//     getUserRolesFormData();
+
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+// }, [userDataGID]);
+
+// ===============
+
+// if (pathnameWithoutSlash === "soogu") {
+//   const pageTitleCollection = [
+//     {
+//       dataField: "id",
+//       caption: "msgId",
+//       visible: true,
+//       disabled: true,
+//       required: false,
+//       width: 60,
+//       alignment: "right",
+//       formItem: true,
+//     },
+//     {
+//       dataField: "name_rus",
+//       caption: "msgNameRus",
+//       required: true,
+//       width: "100%",
+//     },
+//     {
+//       dataField: "name_uzcyr",
+//       caption: "msgNameUzcyr",
+//       visible: false,
+//       width: "100%",
+//     },
+//     {
+//       dataField: "name_uzlat",
+//       caption: "msgNameUzlat",
+//       visible: false,
+//       width: "100%",
+//     },
+//     {
+//       dataField: "name_karlat",
+//       caption: "msgNameKarlat",
+//       visible: false,
+//       width: "100%",
+//     },
+//     {
+//       dataField: "name_eng",
+//       caption: "msgNameEng",
+//       visible: false,
+//       width: "100%",
+//     },
+//   ];
+
+//   murkupCollection = [...pageTitleCollection];
+// }
+
+// if (pathnameWithoutSlash === "countries") {
+//   const pageTitleCollection = [
+//     {
+//       dataField: "id",
+//       caption: "msgId",
+//       visible: true,
+//       disabled: true,
+//       width: 60,
+//       alignment: "right",
+//       formItem: true,
+//     },
+//     {
+//       dataField: "short_name",
+//       caption: "msgShortName",
+//       visible: false,
+//       required: true,
+//       width: "100%",
+//     },
+//     {dataField: "short_name_rus", caption: "msgShortNameRus", required: true},
+//     {dataField: "short_name_uzcyr", caption: "msgShortNameUzcyr"},
+//     {dataField: "short_name_uzlat", caption: "msgShortNameUzlat"},
+//     {dataField: "short_name_karlat", caption: "msgShortNameKarlat"},
+//     {dataField: "short_name_eng", caption: "msgShortNameEng"},
+//   ];
+
+//   murkupCollection = [...pageTitleCollection];
+// }
+
+// ===============
+
+// if (pathnameWithoutSlash === "userObjects") {
+//   const pageTitleCollection = [
+//     {
+//       dataField: "UserName",
+//       caption: "msgUserName",
+//       required: true,
+//       width: 200,
+//     },
+//     {
+//       dataField: "Locale",
+//       caption: "msgLocale",
+//       width: 100,
+//       alignment: "center",
+//     },
+//     {
+//       dataField: "Locked",
+//       caption: "msgLocked",
+//       width: 120,
+//       alignment: "center",
+//     },
+//     {
+//       dataField: "Disabled",
+//       caption: "msgDisabled",
+//       width: 100,
+//       alignment: "center",
+//     },
+//     {dataField: "TimeZone", caption: "msgTimeZone", width: "100%"},
+//     {dataField: "created", caption: "msgCreated", width: 200},
+//     {dataField: "pwdlastchange", caption: "msgPwdLastChange", width: 200},
+//     {
+//       dataField: "UserType",
+//       caption: "msgUserType",
+//       width: 120,
+//       alignment: "center",
+//     },
+//   ];
+
+//   murkupCollection = [...pageTitleCollection];
+// }
+
+// if (
+//   // pathnameWithoutSlash === "roleObjects" ||
+//   pathnameWithoutSlash === "groupObjects"
+// ) {
+//   const pageTitleCollection = [
+//     {
+//       dataField: "UserName",
+//       caption: "msgUserName",
+//       required: true,
+//       width: "100%",
+//     },
+//     {
+//       dataField: "Disabled",
+//       caption: "msgDisabled",
+//       width: 100,
+//       alignment: "center",
+//     },
+//     {dataField: "created", caption: "msgCreated", width: "100%"},
+//     {
+//       dataField: "UserType",
+//       caption: "msgUserType",
+//       width: 120,
+//       alignment: "center",
+//     },
+//   ];
+
+//   murkupCollection = [...pageTitleCollection];
+// }
+
+// ===============
+
+// function onFocusedCellAction(e) {
+//   // console.log(`e`, e);
+
+//   if (
+//     checkIfArrIncludesValue(
+//       ["userObjects", "roleObjects", "groupObjects"],
+//       pathnameWithoutSlash
+//     )
+//   ) {
+//     const rowId = e.rows[e.newRowIndex].data.GID;
+//     const formDataFromFocusedRow = e.rows[e.newRowIndex].data;
+//     setUserDataGID(rowId);
+//     setUserFormData(formDataFromFocusedRow);
+//   }
+// }
+
+// function customSimpleItemMarkup(formData) {
+//   if (!formData) {
+//     return;
+//   }
+
+//   return Object.keys(formData).map((item, idx) => (
+//     <SimpleItem key={idx} dataField={item} />
+//   ));
+// }
+
+// function customCodeMarkupRender() {
+//   let murkupCollection = [];
+
+//   if (pathnameWithoutSlash === "soogu") {
+//     const pageTitleCollection = [
+//       {
+//         dataField: "CodeSogu",
+//         caption: "msgCodeSoogu",
+//         width: 120,
+//         message: "msgCodeSooguNumericErrMsg",
+//         pattern: "^[0-9]{4,5}$",
+//         required: true,
+//       },
+//       {
+//         dataField: "CodeOKPO",
+//         caption: "msgCodeOKPO",
+//         width: 120,
+//         message: "msgCodeOKPONumericErrMsg",
+//         pattern: "^[0-9]{0,8}$",
+//         required: true,
+//       },
+//     ];
+
+//     murkupCollection = [...pageTitleCollection];
+//   }
+
+//   // if (pathnameWithoutSlash === "countries") {
+//   //   const pageTitleCollection = [
+//   //     {
+//   //       dataField: "alpha2code",
+//   //       caption: "msgAlpha2Code",
+//   //       width: 80,
+//   //       message: "msgAlpha2CodeErrMsg",
+//   //       pattern: "^[A-Z]{2}$",
+//   //       required: true,
+//   //     },
+//   //     {
+//   //       dataField: "alpha3code",
+//   //       caption: "msgAlpha3Code",
+//   //       width: 80,
+//   //       message: "msgAlpha3CodeErrMsg",
+//   //       pattern: "^[A-Z]{3}$",
+//   //       required: true,
+//   //     },
+//   //     {
+//   //       dataField: "numeric",
+//   //       caption: "msgNumeric",
+//   //       width: 100,
+//   //       message: "msgNumericErrMessage",
+//   //       pattern: "^[0-9]{0,4}$",
+//   //       required: false,
+//   //     },
+//   //   ];
+
+//   //   murkupCollection = [...pageTitleCollection];
+//   // }
+
+//   return murkupCollection.map((item, idx) => {
+//     const {dataField, caption, width, message, pattern, required, ...params} =
+//       item;
+
+//     return (
+//       <Column
+//         key={idx}
+//         dataField={dataField}
+//         caption={formatMessage(caption)}
+//         alignment="center"
+//         width={width}
+//         visible={true}
+//         {...params}
+//       >
+//         <PatternRule
+//           message={formatMessage(message)}
+//           pattern={new RegExp(pattern)}
+//         />
+//         {required && <RequiredRule />}
+//       </Column>
+//     );
+//   });
+// }
+
+// function onToolbarPreparing(e) {
+//   console.log(e);
+// e.toolbarOptions.items[0].showText = "always";
+// e.toolbarOptions.items[0].options.text = "Button text";
+// e.toolbarOptions.items[0].options.hint = "Text";
+
+// e.toolbarOptions.items.push({
+//   location: "after",
+//   template: "deleteButton",
+// });
+// }
+
+// ==================
+
+// {
+//   checkIfArrIncludesValue(
+//     ["userObjects", "roleObjects", "groupObjects"],
+//     pathnameWithoutSlash
+//   ) ? (
+//     <Editing
+//       mode="popup"
+//       popup={popupUsersPageOptions}
+//       allowAdding={true}
+//       allowDeleting={true}
+//       allowUpdating={true}
+//     >
+//       <Form
+//         id="form"
+//         formData={userDataGID && userRolesFormData && userRolesFormData[0]}
+//         colCount={1}
+//         width={"100%"}
+//       >
+//         <GroupItem
+//           caption={`Information about ${userFormData && userFormData.UserName}`}
+//         >
+//           <TabbedItem>
+//             <TabPanelOptions deferRendering={false} />
+
+//             <Tab title="General" colCount={2}>
+//               {customSimpleItemMarkup(userFormData)}
+//             </Tab>
+
+//             <Tab title="Group/Role" colCount={2}>
+//               {userDataGID &&
+//                 userRolesFormData &&
+//                 userRolesFormData.map((user, idx) => (
+//                   <GroupItem
+//                     key={idx}
+//                     colCount={2}
+//                     colSpan={2}
+//                     caption={`Information about ${user.UserName}`}
+//                   >
+//                     {customSimpleItemMarkup(user)}
+//                     <EmptyItem />
+//                     <EmptyItem />
+//                   </GroupItem>
+//                 ))}
+//             </Tab>
+//           </TabbedItem>
+//         </GroupItem>
+//       </Form>
+//     </Editing>
+//   ) : (
+//     <Editing
+//       mode="popup"
+//       popup={popupGeneralOptions}
+//       allowAdding={true}
+//       allowDeleting={true}
+//       allowUpdating={true}
+//     />
+//   );
+// }
