@@ -276,19 +276,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           <FormItem {...formItem} />
 
           {lookup && pathnameWithoutSlash === "ShortDics" && (
-            <Lookup
-              dataSource={lookDataState}
-              valueExpr={lookup.valueExpr}
-              displayExpr={lookup.displayExpr}
-            />
+            <Lookup {...lookup} dataSource={lookDataState} />
           )}
 
           {lookup && pathnameWithoutSlash !== "ShortDics" && (
-            <Lookup
-              dataSource={lookDataState}
-              valueExpr={lookup.valueExpr}
-              displayExpr={lookup.displayExpr}
-            />
+            <Lookup {...lookup} dataSource={lookDataState} />
           )}
 
           {dataField === "status" && <Lookup dataSource={statusesLang()} />}

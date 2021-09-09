@@ -47,12 +47,6 @@ export const FetchData = (
       case "/legals":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
 
-      // case "/ShortDics":
-      //   return `&db=${db}&sp=ShortDics`;
-      // case "/ShortDicsRecords":
-      //   return `&db=${db}&sp=ShortDicsRecords&@tid=${tid}`;
-      // case "/DictionaryByName":
-      //   return `&db=${db}&sp=ShortDicsRecords&@name=PasswordPolicies`;
       default:
         return "/home";
     }

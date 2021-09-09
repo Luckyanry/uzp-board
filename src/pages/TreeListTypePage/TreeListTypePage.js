@@ -155,7 +155,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         allowEditing = false,
         ...params
       } = item;
-      console.log(`lookup`, {...lookup});
+
       return (
         <Column
           key={idx}
@@ -171,15 +171,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           {...params}
         >
           {required && <RequiredRule />}
+
           <FormItem {...formItem} />
-          {lookup && (
-            <Lookup
-              dataSource={lookDataState}
-              valueExpr={lookup.valueExpr}
-              displayExpr={lookup.displayExpr}
-              // {...lookup}
-            />
-          )}
+
+          {lookup && <Lookup {...lookup} dataSource={lookDataState} />}
+
           {dataField === "status" && <Lookup dataSource={statusesLang()} />}
           {/* {dataField === "code" && (
             <PatternRule
@@ -256,6 +252,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         />
 
         {customMarkupRender()}
+        {console.log("customMarkupRender", customMarkupRender())}
 
         <Column type="buttons" width={110}>
           <TreeListButton

@@ -131,21 +131,15 @@ export const DetailUserTemplate = ({data}) => {
           {...params}
         >
           {required && <RequiredRule />}
+
           <FormItem {...formItem} />
-          {lookup && (
-            <Lookup
-              dataSource={lookDataState}
-              valueExpr={lookup.valueExpr}
-              displayExpr={lookup.displayExpr}
-            />
-          )}
+
+          {lookup && <Lookup {...lookup} dataSource={lookDataState} />}
         </Column>
       );
     });
   }
 
-  console.log(`columns`, columnsSchemaData);
-  console.log(`dataSource`, APIData);
   const tabs = [{text: "Group/Role", icon: "user"}, {text: "Comment"}];
 
   return (
