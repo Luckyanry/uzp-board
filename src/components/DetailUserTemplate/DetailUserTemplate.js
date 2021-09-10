@@ -12,7 +12,7 @@ import DataGrid, {
   Paging,
   Pager,
 } from "devextreme-react/data-grid";
-import {Tabs} from "devextreme-react/tabs";
+import {TabPanel, Item} from "devextreme-react/tab-panel";
 
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -155,74 +155,77 @@ export const DetailUserTemplate = ({data}) => {
     });
   }
 
-  const tabs = [{text: "Group/Role", icon: "user"}, {text: "Comment"}];
-
   return (
     <>
       {/* <ErrorBoundary msg={error}> */}
-      <Tabs items={tabs} />
-      <DataGrid
-        id="grid"
-        // columns={columnsSchemaData}
-        dataSource={APIData}
-        repaintChangesOnly={true}
-        remoteOperations={false}
-        // rows
-        focusedRowEnabled={true}
-        // columns
-        showColumnLines={true}
-        columnMinWidth={60}
-        columnAutoWidth={true}
-        columnHidingEnabled={false}
-        allowColumnResizing={true}
-        allowColumnReordering={true}
-        // appearance
-        hoverStateEnabled={true}
-        wordWrapEnabled={true}
-        // functions
-      >
-        <ColumnChooser
-          enabled={true}
-          allowSearch={true}
-          width={300}
-          height={320}
-          title={formatMessage("msgColomnChooser")}
-          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-        />
+      <TabPanel>
+        <Item title="Group/Role">
+          <DataGrid
+            id="grid"
+            // columns={columnsSchemaData}
+            dataSource={APIData}
+            repaintChangesOnly={true}
+            remoteOperations={false}
+            // rows
+            focusedRowEnabled={true}
+            // columns
+            showColumnLines={true}
+            columnMinWidth={60}
+            columnAutoWidth={true}
+            columnHidingEnabled={false}
+            allowColumnResizing={true}
+            allowColumnReordering={true}
+            // appearance
+            hoverStateEnabled={true}
+            wordWrapEnabled={true}
+            // functions
+          >
+            <ColumnChooser
+              enabled={true}
+              allowSearch={true}
+              width={300}
+              height={320}
+              title={formatMessage("msgColomnChooser")}
+              emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+            />
 
-        <Editing
-          // mode="batch"
-          mode="popup"
-          popup={popupOpt}
-          allowAdding={true}
-          allowDeleting={true}
-          allowUpdating={true}
-        />
+            <Editing
+              // mode="batch"
+              mode="popup"
+              popup={popupOpt}
+              allowAdding={true}
+              allowDeleting={true}
+              allowUpdating={true}
+            />
 
-        {customMarkupRender()}
+            {customMarkupRender()}
 
-        <Column type="buttons" width={110}>
-          <Button
-            name="edit"
-            hint={formatMessage("msgEditNewItem", focusedRowTitle)}
-          />
-          <Button
-            name="delete"
-            hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
-          />
-        </Column>
+            <Column type="buttons" width={110}>
+              <Button
+                name="edit"
+                hint={formatMessage("msgEditNewItem", focusedRowTitle)}
+              />
+              <Button
+                name="delete"
+                hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
+              />
+            </Column>
 
-        <Paging defaultPageSize={10} />
-        <Pager
-          showPageSizeSelector={true}
-          showNavigationButtons={true}
-          showInfo={true}
-          visible={true}
-          allowedPageSizes={[10, 20, 50, 100, "all"]}
-          showAllItem={true}
-        />
-      </DataGrid>
-
+            <Paging defaultPageSize={10} />
+            <Pager
+              showPageSizeSelector={true}
+              showNavigationButtons={true}
+              showInfo={true}
+              visible={true}
+              allowedPageSizes={[10, 20, 50, 100, "all"]}
+              showAllItem={true}
+            />
+          </DataGrid>
+        </Item>
+        <Item title="Members">
+          <h2>New tab with info about Members...</h2>
+        </Item>
+      </TabPanel>
       {/* </ErrorBoundary> */}
     </>
   );
