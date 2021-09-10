@@ -168,7 +168,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "upd",
-          "@guid": key,
+          "@gid": key,
           "@jvalues": statusStringToBoolean(values),
         },
         "POST"
@@ -178,7 +178,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "del",
-          "@guid": key,
+          "@gid": key,
         },
         "POST"
       ),
@@ -296,7 +296,7 @@ export const FetchData = (
   });
 
   const detailUserTemplateData = new CustomStore({
-    key: "RGID",
+    key: "UGID",
     load: () =>
       sendRequest(urlFromPages, {
         schema: "get",
@@ -315,7 +315,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "upd",
-          "@guid": key,
+          "@gid": key,
           "@jvalues": statusStringToBoolean(values),
         },
         "POST"
@@ -325,7 +325,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "del",
-          "@guid": key,
+          "@gid": key,
         },
         "POST"
       ),
