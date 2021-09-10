@@ -94,6 +94,7 @@ export const DetailTemplate = ({data}) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
+        startEditAction="dblClick"
       />
 
       <Paging defaultPageSize={10} />
