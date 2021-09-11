@@ -283,7 +283,7 @@ export const FetchData = (
 
   const changeMyLocalToData = new CustomStore({
     key: "short",
-    insert: (newKey) =>
+    update: (newKey) =>
       sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST"),
   });
 
