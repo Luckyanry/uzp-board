@@ -94,7 +94,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       }
     }
 
-    async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
+    async function getLookDataState(
+      lookupSpForURL,
+      lookupDBForURL,
+      dataField = null
+    ) {
       const lookData = FetchData(
         formatMessage,
         pathname,
@@ -104,7 +108,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       const result = await lookData._loadFunc().then((res) => res.data);
 
-      setLookDataState((prev) => [...prev, {[dataField]: result}]);
+      setLookDataState((prev) =>
+        dataField ? [...prev, {[dataField]: result}] : result
+      );
     }
 
     pathnameWithoutSlash !== "ShortDics" && getColumnsSchemaData();
@@ -288,10 +294,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           <FormItem {...formItem} />
 
           {lookup && pathnameWithoutSlash === "ShortDics" && (
-            <Lookup {...lookup} dataSource={lookDataState} />
+            <Lookup
+              dataSource={lookDataState}
+              valueExpr="id"
+              displayExpr="className"
+            />
           )}
 
           {lookup &&
+            pathnameWithoutSlash !== "ShortDics" &&
             lookDataState.map((item) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;

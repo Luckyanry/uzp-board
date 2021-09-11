@@ -296,7 +296,7 @@ export const FetchData = (
   });
 
   const detailUserTemplateData = new CustomStore({
-    key: "UGID",
+    key: "RGID",
     load: () =>
       sendRequest(urlFromPages, {
         schema: "get",
