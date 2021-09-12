@@ -8,7 +8,7 @@ import "./Localization.scss";
 const selectBoxInputAttr = {id: "selectInput"};
 
 const Localization = () => {
-  const {lang, langData, changeLocale} = useLocalization();
+  const {lang, langData, changeLocaleHendler} = useLocalization();
   return (
     <div className="option">
       {/* <label htmlFor="selectInput">{formatMessage("msgLanguage")}</label>
@@ -18,7 +18,7 @@ const Localization = () => {
         valueExpr="short"
         displayExpr="nativename"
         value={lang}
-        onValueChanged={changeLocale}
+        onValueChanged={changeLocaleHendler}
         inputAttr={selectBoxInputAttr}
       />
     </div>

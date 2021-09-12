@@ -12,11 +12,10 @@ import {
 } from "devextreme-react/validator";
 import notify from "devextreme/ui/notify";
 
-import "./PasswordGenerator.scss";
-
 import {useLocalization} from "../../contexts/LocalizationContext";
-
 import {FetchData} from "../../api/pages-fetch";
+
+import "./PasswordGenerator.scss";
 
 export const PasswordGenerator = () => {
   const [passwordState, setPasswordState] = useState("");
@@ -62,7 +61,6 @@ export const PasswordGenerator = () => {
 
   useEffect(() => {
     const dictionaryByName = FetchData(
-      formatMessage,
       "/DictionaryByName",
       "ShortDicsRecords&@name=PasswordPolicies",
       "hbdb"

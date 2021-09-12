@@ -5,6 +5,7 @@ export {Footer} from "./Footer/Footer";
 export {DetailTemplate} from "./DetailTemplate/DetailTemplate";
 export {DetailUserTemplate} from "./DetailUserTemplate/DetailUserTemplate";
 export {PasswordGenerator} from "./PasswordGenerator/PasswordGenerator";
+export {StatusLangToggler} from "./StatusLangToggler/StatusLangToggler";
 
 export {default as LoginForm} from "./LoginForm/LoginForm";
 export {default as UserPanel} from "./UserPanel/UserPanel";

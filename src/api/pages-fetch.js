@@ -1,17 +1,13 @@
 import CustomStore from "devextreme/data/custom_store";
-// import DataSource from "devextreme/data/data_source";
 import "whatwg-fetch";
+
+import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
 
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
-export const FetchData = (
-  formatMessage,
-  pageRequest,
-  sp = null,
-  db = "hbdb"
-) => {
+export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -62,7 +58,7 @@ export const FetchData = (
         finalUrl,
         {
           schema: "ins",
-          values: statusStringToBoolean(values),
+          values: StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -72,7 +68,7 @@ export const FetchData = (
         {
           schema: "upd",
           "@id": key,
-          values: statusStringToBoolean(values),
+          values: StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -110,7 +106,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "ins",
-          values: statusStringToBoolean(values),
+          values: StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -120,7 +116,7 @@ export const FetchData = (
         {
           schema: "upd",
           "@id": key,
-          values: statusStringToBoolean(values),
+          values: StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -159,7 +155,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "ins",
-          "@jvalues": statusStringToBoolean(values),
+          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -169,7 +165,7 @@ export const FetchData = (
         {
           schema: "upd",
           "@gid": key,
-          "@jvalues": statusStringToBoolean(values),
+          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -199,7 +195,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "ins",
-          "@jvalues": statusStringToBoolean(values),
+          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -209,7 +205,7 @@ export const FetchData = (
         {
           schema: "upd",
           "@oid": key,
-          "@jvalues": statusStringToBoolean(values),
+          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -306,7 +302,7 @@ export const FetchData = (
         urlFromPages,
         {
           schema: "ins",
-          "@jvalues": statusStringToBoolean(values),
+          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -316,7 +312,7 @@ export const FetchData = (
         {
           schema: "upd",
           "@gid": key,
-          "@jvalues": statusStringToBoolean(values),
+          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
         },
         "POST"
       ),
@@ -398,43 +394,12 @@ export const FetchData = (
     }
   }
 
-  function statusStringToBoolean(values) {
-    let newStatus = values;
-
-    if (values.status) {
-      newStatus = {
-        ...values,
-        status:
-          values.status === formatMessage("msgStatusActive") ? true : false,
-      };
-    }
-
-    return JSON.stringify(newStatus);
-  }
-
-  function statusBooleanToString(data) {
-    return data.map((item) => {
-      if (item.status && typeof item.status === "boolean") {
-        const changeStatus = {
-          ...item,
-          status: item.status
-            ? formatMessage("msgStatusActive")
-            : formatMessage("msgStatusDeactivated"),
-        };
-
-        return changeStatus;
-      }
-
-      return item;
-    });
-  }
-
   function responseData(data) {
     let newData = null;
 
     if (Array.isArray(data)) {
       if (data[0].status) {
-        newData = statusBooleanToString(data);
+        newData = StatusLangToggler().statusBooleanToString(data);
       } else {
         newData = data;
       }
@@ -444,10 +409,6 @@ export const FetchData = (
         totalCount: newData.length,
       };
     }
-
-    // if (!JSON.parse(data).hint) {
-    //   return data && JSON.parse(data);
-    // }
 
     if (!data.hint) {
       return data && JSON.parse(data);
@@ -476,7 +437,3 @@ export const FetchData = (
     detailUserTemplateData,
   };
 };
-
-// function isNotEmpty(value) {
-//   return value !== undefined && value !== null && value !== "";
-// }

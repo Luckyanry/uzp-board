@@ -14,21 +14,18 @@ const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
   const [customMessagesData, setCustomMessagesData] = useState({});
   const [defaultLang, setDefaultLang] = useState("en");
-  const [lang, setLang] = useState(() => getLocale());
+  const [lang, setLang] = useState(getFromSessionStorege(defaultLang));
 
   const changedMyLocalFetch = FetchData(
-    formatMessage,
     "/w_changeMyLocaleTo",
     "w_changeMyLocaleTo",
     "wisdb"
   ).changeMyLocalToData;
 
   initMessages();
-  // locale(lang);
 
   useEffect(() => {
     const customMessages = FetchData(
-      formatMessage,
       "/CustomMessages",
       "ShortDicsRecordsFlatCustomMessagesObject",
       "hbdb"
@@ -36,7 +33,6 @@ const LocalizationProvider = ({children}) => {
 
     const getLangsData = async () => {
       const islangFetch = FetchData(
-        formatMessage,
         "/islang",
         "islang",
         "wisdb"
@@ -45,8 +41,8 @@ const LocalizationProvider = ({children}) => {
       const result = await islangFetch._loadFunc().then((res) => res.data);
 
       isEnabledLang(result);
-      isDefaultLang(result);
       isCurrentLang(result);
+      isDefaultLang(result);
     };
 
     const getCustomMessages = async () => {
@@ -73,7 +69,10 @@ const LocalizationProvider = ({children}) => {
   function isCurrentLang(array) {
     if (array.length) {
       const result = array.find(({iscurrent}) => iscurrent);
-      setLocale(result.short);
+      const locale = sessionStorage.getItem("locale");
+
+      if (!locale) return;
+      setToSessionStorege(result.short);
     }
   }
 
@@ -81,15 +80,20 @@ const LocalizationProvider = ({children}) => {
     if (array.length) {
       const result = array.find(({isdefault}) => isdefault);
       setDefaultLang(result.short);
+
+      const locale = sessionStorage.getItem("locale");
+
+      if (locale) return;
+      changeLocale(result.short);
     }
   }
 
-  function getLocale() {
+  function getFromSessionStorege(defaultValue) {
     const locale = sessionStorage.getItem("locale");
-    return locale !== null ? locale : defaultLang;
+    return locale !== null ? locale : defaultValue;
   }
 
-  function setLocale(locale) {
+  function setToSessionStorege(locale) {
     sessionStorage.setItem("locale", locale);
   }
 
@@ -97,14 +101,19 @@ const LocalizationProvider = ({children}) => {
     changedMyLocalFetch._updateFunc(newKey);
   }
 
-  function changeLocale(e) {
-    changeMyLocalTo(e.value);
-    setLang(e.value);
-    setLocale(e.value);
+  function changeLocale(value) {
+    changeMyLocalTo(value);
+    initMessages();
+    setLang(value);
+    setToSessionStorege(value);
 
     setTimeout(() => {
-      // document.location.reload();
+      document.location.reload();
     }, 500);
+  }
+
+  function changeLocaleHendler(e) {
+    changeLocale(e.value);
   }
 
   function initMessages() {
@@ -119,7 +128,7 @@ const LocalizationProvider = ({children}) => {
       value={{
         lang,
         langData,
-        changeLocale,
+        changeLocaleHendler,
         locale,
         loadMessages,
         formatMessage,

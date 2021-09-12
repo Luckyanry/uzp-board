@@ -20,10 +20,17 @@ import DataGrid, {
   // Form,
 } from "devextreme-react/data-grid";
 
-import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {DetailTemplate} from "../../components/DetailTemplate/DetailTemplate";
+import {FetchData} from "../../api/pages-fetch";
+import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
+import {DetailTemplate} from "../../components";
 import {DetailUserTemplate} from "../../components";
+import {
+  checkIfArrIncludesValue,
+  createCustomMsg,
+  customPageAbbreviationMsg,
+  getLookupParamsForURL,
+} from "../../helpers/functions";
 
 import "./DataGridTypePage.scss";
 
@@ -36,10 +43,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   const pathnameWithoutSlash = pathname.split("/")[1];
   const localPathname = createCustomMsg(pathnameWithoutSlash);
-
   const localPageAbbreviation = formatMessage(
     customPageAbbreviationMsg(pathnameWithoutSlash)
   );
+
+  const statusToggler = StatusLangToggler().statusToggler();
 
   const popupGeneralOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
@@ -100,7 +108,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       dataField = null
     ) {
       const lookData = FetchData(
-        formatMessage,
         pathname,
         lookupSpForURL,
         lookupDBForURL
@@ -123,50 +130,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   }, []);
 
   function fetchDataConstructor(dataBase) {
-    return FetchData(formatMessage, pathname, pathnameWithoutSlash, dataBase);
-  }
-
-  function statusesLang() {
-    const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
-    const statusLanguage = defaultStatus.map((statusLang) =>
-      formatMessage(statusLang)
-    );
-    return statusLanguage;
+    return FetchData(pathname, pathnameWithoutSlash, dataBase);
   }
 
   function initNewRow(e) {
-    e.data.status = statusesLang()[0];
-  }
-
-  function firstLetterToUpper(message) {
-    return `${message[0].toUpperCase()}${message.slice(1)}`;
-  }
-
-  function createCustomMsg(message) {
-    return `msg${firstLetterToUpper(message)}`;
-  }
-
-  function customPageAbbreviationMsg(message) {
-    return `msg${firstLetterToUpper(message)}Abbreviation`;
-  }
-
-  function getLookupParamsForURL(data) {
-    const findLookup = data.filter(({lookup}) => lookup);
-
-    if (!findLookup) return;
-
-    const result = findLookup.map(({lookup, dataField}) => {
-      const getDBFormLookup = lookup.isfetch.split(".")[0];
-      const getSpFormLookup = lookup.isfetch.split(".")[2];
-
-      return {sp: getSpFormLookup, db: getDBFormLookup, dataField};
-    });
-
-    return result;
-  }
-
-  function checkIfArrIncludesValue(arr, value) {
-    return arr.includes(value);
+    e.data.status = statusToggler[0];
   }
 
   function customMarkupRender() {
@@ -312,7 +280,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               );
             })}
 
-          {dataField === "status" && <Lookup dataSource={statusesLang()} />}
+          {dataField === "status" && <Lookup dataSource={statusToggler} />}
 
           {/* {dataField === "code" && (
             <PatternRule

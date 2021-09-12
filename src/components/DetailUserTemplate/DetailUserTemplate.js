@@ -14,9 +14,10 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import {TabPanel, Item} from "devextreme-react/tab-panel";
 
-import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {FetchData} from "../../api/pages-fetch";
 // import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import {getLookupParamsForURL} from "../../helpers/functions";
 
 import "./DetailUserTemplate.scss";
 
@@ -40,7 +41,6 @@ export const DetailUserTemplate = ({data}) => {
   useEffect(() => {
     async function getColumnsSchemaData() {
       const fetchColumnsSchemaData = FetchData(
-        formatMessage,
         pathname,
         "ShortDicsRecordsFlat&@name=DisplayUserRolesColumnSchema",
         "hbdb"
@@ -65,7 +65,6 @@ export const DetailUserTemplate = ({data}) => {
 
     async function getAPIData() {
       const usersFetchData = FetchData(
-        formatMessage,
         pathname,
         `w_DisplayUserRoles&@GID=${data.key}`,
         "wisdb"
@@ -76,7 +75,6 @@ export const DetailUserTemplate = ({data}) => {
 
     async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
       const lookData = FetchData(
-        formatMessage,
         pathname,
         lookupSpForURL,
         lookupDBForURL
@@ -92,21 +90,6 @@ export const DetailUserTemplate = ({data}) => {
     getColumnsSchemaData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function getLookupParamsForURL(data) {
-    const findLookup = data.filter(({lookup}) => lookup);
-
-    if (!findLookup) return;
-
-    const result = findLookup.map(({lookup, dataField}) => {
-      const getDBFormLookup = lookup.isfetch.split(".")[0];
-      const getSpFormLookup = lookup.isfetch.split(".")[2];
-
-      return {sp: getSpFormLookup, db: getDBFormLookup, dataField};
-    });
-
-    return result;
-  }
 
   function customMarkupRender() {
     return columnsSchemaData.map((item, idx) => {
@@ -154,7 +137,7 @@ export const DetailUserTemplate = ({data}) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;
 
-              console.log("item after ", item[dataField]);
+              // console.log("item after ", item[dataField]);
 
               // setLookDataState([]);
 

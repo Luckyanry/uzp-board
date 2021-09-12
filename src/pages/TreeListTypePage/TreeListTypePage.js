@@ -18,8 +18,14 @@ import TreeList, {
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
-import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {FetchData} from "../../api/pages-fetch";
+import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
+import {
+  createCustomMsg,
+  customPageAbbreviationMsg,
+  getLookupParamsForURL,
+} from "../../helpers/functions";
 
 import "./TreeListTypePage.scss";
 
@@ -39,6 +45,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const localPageAbbreviation = formatMessage(
     customPageAbbreviationMsg(pathnameWithoutSlash)
   );
+
+  const statusToggler = StatusLangToggler().statusToggler();
 
   const popupOpt = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
@@ -75,7 +83,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
     async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
       const lookData = FetchData(
-        formatMessage,
         pathname,
         lookupSpForURL,
         lookupDBForURL
@@ -91,19 +98,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }, []);
 
   function fetchDataConstructor(dataBase) {
-    return FetchData(formatMessage, pathname, pathnameWithoutSlash, dataBase);
-  }
-
-  function statusesLang() {
-    const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
-    const statusLanguage = defaultStatus.map((statusLang) =>
-      formatMessage(statusLang)
-    );
-    return statusLanguage;
+    return FetchData(pathname, pathnameWithoutSlash, dataBase);
   }
 
   function initNewRow(e) {
-    e.data.status = statusesLang()[0];
+    e.data.status = statusToggler[0];
   }
 
   function clickHandler() {
@@ -117,33 +116,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     if (toggler) {
       window.location.reload();
     }
-  }
-
-  function firstLetterToUpper(message) {
-    return `${message[0].toUpperCase()}${message.slice(1)}`;
-  }
-
-  function createCustomMsg(message) {
-    return `msg${firstLetterToUpper(message)}`;
-  }
-
-  function customPageAbbreviationMsg(message) {
-    return `msg${firstLetterToUpper(message)}Abbreviation`;
-  }
-
-  function getLookupParamsForURL(data) {
-    const findLookup = data.filter(({lookup}) => lookup);
-
-    if (!findLookup) return;
-
-    const result = findLookup.map(({lookup, dataField}) => {
-      const getDBFormLookup = lookup.isfetch.split(".")[0];
-      const getSpFormLookup = lookup.isfetch.split(".")[2];
-
-      return {sp: getSpFormLookup, db: getDBFormLookup, dataField};
-    });
-
-    return result;
   }
 
   function customMarkupRender() {
@@ -192,7 +164,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
               );
             })}
 
-          {dataField === "status" && <Lookup dataSource={statusesLang()} />}
+          {dataField === "status" && <Lookup dataSource={statusToggler} />}
           {/* {dataField === "code" && (
             <PatternRule
               message={formatMessage(message, localPageAbbreviation)}
@@ -297,11 +269,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     </div>
   );
 };
-
-// ===========
-// function checkIfArrIncludesValue(arr, value) {
-//   return arr.includes(value);
-// }
 
 // ===========
 // function customMarkupRender() {

@@ -1,5 +1,6 @@
 import React from "react";
 import {useLocalization} from "../../contexts/LocalizationContext";
+// import {formatMessage} from "devextreme/localization";
 import "./HomePage.scss";
 
 export const HomePage = () => {

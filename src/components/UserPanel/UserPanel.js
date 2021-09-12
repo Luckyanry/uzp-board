@@ -3,8 +3,9 @@ import {useHistory} from "react-router-dom";
 
 import ContextMenu, {Position} from "devextreme-react/context-menu";
 import List from "devextreme-react/list";
-import {useAuth} from "../../contexts/Auth";
+
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {useAuth} from "../../contexts/Auth";
 
 import "./UserPanel.scss";
 

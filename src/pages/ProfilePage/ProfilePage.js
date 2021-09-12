@@ -10,6 +10,8 @@ import "./ProfilePage.scss";
 export const ProfilePage = () => {
   const [notes, setNotes] = useState("Ivan has been our designer since 2010.");
 
+  const {formatMessage} = useLocalization();
+
   const employee = {
     ID: 87,
     FirstName: "Ivan",
@@ -22,8 +24,6 @@ export const ProfilePage = () => {
     Notes: notes,
     Address: "04112, Kyiv, Ukraine",
   };
-
-  const {formatMessage} = useLocalization();
 
   return (
     <>

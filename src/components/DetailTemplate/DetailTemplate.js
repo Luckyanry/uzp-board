@@ -8,8 +8,8 @@ import DataGrid, {
   Pager,
 } from "devextreme-react/data-grid";
 
-import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {FetchData} from "../../api/pages-fetch";
 // import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 import "./DetailTemplate.scss";
@@ -33,7 +33,6 @@ export const DetailTemplate = ({data}) => {
 
   useEffect(() => {
     const shortDicsRecords = FetchData(
-      formatMessage,
       "/ShortDicsRecords",
       `ShortDicsRecords&@tid=${data.data.id}`,
       "hbdb"
@@ -43,18 +42,6 @@ export const DetailTemplate = ({data}) => {
     setShortDicsRecordsDataState(shortDicsRecords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function statusesLang() {
-    const defaultStatus = ["msgStatusActive", "msgStatusDeactivated"];
-    const statusLanguage = defaultStatus.map((statusLang) =>
-      formatMessage(statusLang)
-    );
-    return statusLanguage;
-  }
-
-  function initNewRow(e) {
-    e.data.status = statusesLang()[0];
-  }
 
   return (
     // <ErrorBoundary msg={error}>
@@ -77,7 +64,6 @@ export const DetailTemplate = ({data}) => {
       hoverStateEnabled={true}
       wordWrapEnabled={true}
       // functions
-      onInitNewRow={initNewRow}
     >
       <ColumnChooser
         enabled={true}
