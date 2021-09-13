@@ -122,8 +122,16 @@ export const DetailUserTemplate = ({data}) => {
           minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
-          trueText={formatMessage("msgStatusActive")}
-          falseText={formatMessage("msgStatusDeactivated")}
+          trueText={
+            dataField === "status"
+              ? formatMessage("msgStatusActive")
+              : formatMessage("msgYes")
+          }
+          falseText={
+            dataField === "status"
+              ? formatMessage("msgStatusDeactivated")
+              : formatMessage("msgNo")
+          }
           {...params}
         >
           {required && <RequiredRule />}

@@ -259,12 +259,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowEditing={allowEditing}
           showEditorAlways={false}
           trueText={
-            dataField === "status" ? formatMessage("msgStatusActive") : "Yes"
+            dataField === "status"
+              ? formatMessage("msgStatusActive")
+              : formatMessage("msgYes")
           }
           falseText={
             dataField === "status"
               ? formatMessage("msgStatusDeactivated")
-              : "No"
+              : formatMessage("msgNo")
           }
           {...params}
         >
