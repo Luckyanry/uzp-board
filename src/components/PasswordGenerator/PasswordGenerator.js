@@ -15,12 +15,16 @@ import notify from "devextreme/ui/notify";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 
+import visibilityOff from "./visibilityOff.svg";
+import visibility from "./visibility.svg";
+import enhancedEncryption from "./enhancedEncryption.svg";
 import "./PasswordGenerator.scss";
 
 export const PasswordGenerator = () => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
+  const [passwordVisibility, setPasswordVisibility] = useState(visibility);
   const [minLength, setMinLength] = useState(8);
   const [maxLength, setMaxLength] = useState(128);
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
@@ -28,15 +32,18 @@ export const PasswordGenerator = () => {
   const {formatMessage} = useLocalization();
 
   const passwordButton = {
-    icon: "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/icons/eye.png",
+    icon: passwordVisibility,
     type: "default",
     onClick: () => {
+      setPasswordVisibility(() =>
+        passwordVisibility === visibility ? visibilityOff : visibility
+      );
       setPasswordMode(() => (passwordMode === "text" ? "password" : "text"));
     },
   };
 
   const passwordGeneratorBtn = {
-    icon: "add",
+    icon: enhancedEncryption,
     type: "default",
     onClick: () => {
       const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
