@@ -49,180 +49,289 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
   };
 
   const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
-
-  const fetchData = new CustomStore({
-    key: "id",
-    load: () => sendRequest(finalUrl, {schema: "get"}),
-    insert: (values) =>
-      sendRequest(
-        finalUrl,
-        {
-          schema: "ins",
-          values: StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    update: (key, values) =>
-      sendRequest(
-        finalUrl,
-        {
-          schema: "upd",
-          "@id": key,
-          values: StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    remove: (key) =>
-      sendRequest(
-        finalUrl,
-        {
-          schema: "del",
-          "@id": key,
-        },
-        "POST"
-      ),
-    byKey: (key) =>
-      sendRequest(
-        finalUrl,
-        {
-          schema: "bykey",
-          "@key": key,
-        },
-        "POST"
-      ),
-    onBeforeSend: function (method, ajaxOptions) {
-      ajaxOptions.credentials = "include";
-      ajaxOptions.xhrFields = {withCredentials: true};
-    },
-  });
-
   const urlFromPages = `${url}${baseParams}&sp=${sp}&db=${db}`;
 
-  const fetchColumnsSchemaData = new CustomStore({
+  const fetchDataConstructor = (
+    storeKey = "id",
+    urlType = urlFromPages,
+    valueType = "values",
+    keyType = "@id",
+    byKeyType = "@key"
+  ) => {
+    return new CustomStore({
+      key: storeKey,
+      load: () => sendRequest(urlType, {schema: "get"}),
+      insert: (values) =>
+        sendRequest(
+          urlType,
+          {
+            schema: "ins",
+            // [valueType]: JSON.stringify(values),
+            [valueType]: StatusLangToggler().statusStringToBoolean(values),
+          },
+          "POST"
+        ),
+      update: (key, values) =>
+        sendRequest(
+          urlType,
+          {
+            schema: "upd",
+            [keyType]: key,
+            // [valueType]: JSON.stringify(values),
+            [valueType]: StatusLangToggler().statusStringToBoolean(values),
+          },
+          "POST"
+        ),
+      remove: (key) =>
+        sendRequest(
+          urlType,
+          {
+            schema: "del",
+            [keyType]: key,
+          },
+          "POST"
+        ),
+      byKey: (key) =>
+        sendRequest(
+          urlType,
+          {
+            schema: "bykey",
+            [byKeyType]: key,
+          },
+          "POST"
+        ),
+      onBeforeSend: function (method, ajaxOptions) {
+        ajaxOptions.credentials = "include";
+        ajaxOptions.xhrFields = {withCredentials: true};
+      },
+    });
+  };
+
+  const fetchData = fetchDataConstructor("id", finalUrl, "values", "@id");
+
+  const fetchColumnsSchemaData = fetchDataConstructor(
+    "id",
+    urlFromPages,
+    "values",
+    "@id"
+  );
+
+  const usersFetchData = fetchDataConstructor(
+    "GID",
+    urlFromPages,
+    "@jvalues",
+    "@gid"
+  );
+
+  const personFetchData = fetchDataConstructor(
+    "oid",
+    urlFromPages,
+    "@jvalues",
+    "@oid"
+  );
+
+  const detailUserTemplateData = fetchDataConstructor(
+    "RGID",
+    urlFromPages,
+    "@jvalues",
+    "@gid"
+  );
+
+  const changeMyLocalToData = new CustomStore({
+    key: "short",
+    update: (newKey) =>
+      sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST"),
+  });
+
+  const custumMessageData = new CustomStore({
     key: "id",
-    load: () => sendRequest(urlFromPages, {schema: "get"}),
-    insert: (values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "ins",
-          values: StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    update: (key, values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "upd",
-          "@id": key,
-          values: StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    remove: (key) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "del",
-          "@id": key,
-        },
-        "POST"
-      ),
-    byKey: (key) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "bykey",
-          "@key": key,
-        },
-        "POST"
-      ),
-    onBeforeSend: function (method, ajaxOptions) {
-      ajaxOptions.credentials = "include";
-      ajaxOptions.xhrFields = {withCredentials: true};
+    // loadMode: "row",
+    load: () => {
+      return sendRequest(urlFromPages, {schema: "get"}, "POST");
     },
   });
 
-  const usersFetchData = new CustomStore({
-    key: "GID",
-    load: () =>
-      sendRequest(urlFromPages, {
-        schema: "get",
-      }),
-    insert: (values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "ins",
-          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    update: (key, values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "upd",
-          "@gid": key,
-          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    remove: (key) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "del",
-          "@gid": key,
-        },
-        "POST"
-      ),
-    onBeforeSend: function (method, ajaxOptions) {
-      ajaxOptions.credentials = "include";
-      ajaxOptions.xhrFields = {withCredentials: true};
-    },
-  });
+  //   const fetchData = new CustomStore({
+  //   key: "id",
+  //   load: () => sendRequest(finalUrl, {schema: "get"}),
+  //   insert: (values) =>
+  //     sendRequest(
+  //       finalUrl,
+  //       {
+  //         schema: "ins",
+  //         // values: StatusLangToggler().statusStringToBoolean(values),
+  //         values: JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   update: (key, values) =>
+  //     sendRequest(
+  //       finalUrl,
+  //       {
+  //         schema: "upd",
+  //         "@id": key,
+  //         // values: StatusLangToggler().statusStringToBoolean(values),
+  //         values: JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   remove: (key) =>
+  //     sendRequest(
+  //       finalUrl,
+  //       {
+  //         schema: "del",
+  //         "@id": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   byKey: (key) =>
+  //     sendRequest(
+  //       finalUrl,
+  //       {
+  //         schema: "bykey",
+  //         "@key": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   onBeforeSend: function (method, ajaxOptions) {
+  //     ajaxOptions.credentials = "include";
+  //     ajaxOptions.xhrFields = {withCredentials: true};
+  //   },
+  // });
 
-  const personFetchData = new CustomStore({
-    key: "oid",
-    load: () =>
-      sendRequest(urlFromPages, {
-        schema: "get",
-      }),
-    insert: (values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "ins",
-          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    update: (key, values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "upd",
-          "@oid": key,
-          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    remove: (key) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "del",
-          "@oid": key,
-        },
-        "POST"
-      ),
-    onBeforeSend: function (method, ajaxOptions) {
-      ajaxOptions.credentials = "include";
-      ajaxOptions.xhrFields = {withCredentials: true};
-    },
-  });
+  // ========================================
+
+  // const fetchColumnsSchemaData = new CustomStore({
+  //   key: "id",
+  //   load: () => sendRequest(urlFromPages, {schema: "get"}),
+  //   insert: (values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "ins",
+  //         // values: StatusLangToggler().statusStringToBoolean(values),
+  //         values: JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   update: (key, values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "upd",
+  //         "@id": key,
+  //         // values: StatusLangToggler().statusStringToBoolean(values),
+  //         values: JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   remove: (key) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "del",
+  //         "@id": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   byKey: (key) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "bykey",
+  //         "@key": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   onBeforeSend: function (method, ajaxOptions) {
+  //     ajaxOptions.credentials = "include";
+  //     ajaxOptions.xhrFields = {withCredentials: true};
+  //   },
+  // });
+
+  // const usersFetchData = new CustomStore({
+  //   key: "GID",
+  //   load: () =>
+  //     sendRequest(urlFromPages, {
+  //       schema: "get",
+  //     }),
+  //   insert: (values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "ins",
+  //         // "@jvalues": StatusLangToggler().statusStringToBoolean(values),
+  //         "@jvalues": JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   update: (key, values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "upd",
+  //         "@gid": key,
+  //         // "@jvalues": StatusLangToggler().statusStringToBoolean(values),
+  //         "@jvalues": JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   remove: (key) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "del",
+  //         "@gid": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   onBeforeSend: function (method, ajaxOptions) {
+  //     ajaxOptions.credentials = "include";
+  //     ajaxOptions.xhrFields = {withCredentials: true};
+  //   },
+  // });
+
+  // const personFetchData = new CustomStore({
+  //   key: "oid",
+  //   load: () =>
+  //     sendRequest(urlFromPages, {
+  //       schema: "get",
+  //     }),
+  //   insert: (values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "ins",
+  //         // "@jvalues": StatusLangToggler().statusStringToBoolean(values),
+  //         "@jvalues": JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   update: (key, values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "upd",
+  //         "@oid": key,
+  //         // "@jvalues": StatusLangToggler().statusStringToBoolean(values),
+  //         "@jvalues": JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   remove: (key) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "del",
+  //         "@oid": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   onBeforeSend: function (method, ajaxOptions) {
+  //     ajaxOptions.credentials = "include";
+  //     ajaxOptions.xhrFields = {withCredentials: true};
+  //   },
+  // });
 
   // const lookData = {
   //   // ?experement with this article => https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/How_To/Bind_a_Lookup_Column_to_a_Custom_Data_Source/
@@ -277,59 +386,47 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     },
   });
 
-  const changeMyLocalToData = new CustomStore({
-    key: "short",
-    update: (newKey) =>
-      sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST"),
-  });
-
-  const custumMessageData = new CustomStore({
-    key: "id",
-    // loadMode: "row",
-    load: () => {
-      return sendRequest(urlFromPages, {schema: "get"}, "POST");
-    },
-  });
-
-  const detailUserTemplateData = new CustomStore({
-    key: "RGID",
-    load: () =>
-      sendRequest(urlFromPages, {
-        schema: "get",
-      }),
-    insert: (values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "ins",
-          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    update: (key, values) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "upd",
-          "@gid": key,
-          "@jvalues": StatusLangToggler().statusStringToBoolean(values),
-        },
-        "POST"
-      ),
-    remove: (key) =>
-      sendRequest(
-        urlFromPages,
-        {
-          schema: "del",
-          "@gid": key,
-        },
-        "POST"
-      ),
-    onBeforeSend: function (method, ajaxOptions) {
-      ajaxOptions.credentials = "include";
-      ajaxOptions.xhrFields = {withCredentials: true};
-    },
-  });
+  // const detailUserTemplateData = new CustomStore({
+  //   key: "RGID",
+  //   load: () =>
+  //     sendRequest(urlFromPages, {
+  //       schema: "get",
+  //     }),
+  //   insert: (values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "ins",
+  //         // "@jvalues": StatusLangToggler().statusStringToBoolean(values),
+  //         "@jvalues": JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   update: (key, values) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "upd",
+  //         "@gid": key,
+  //         // "@jvalues": StatusLangToggler().statusStringToBoolean(values),
+  //         "@jvalues": JSON.stringify(values),
+  //       },
+  //       "POST"
+  //     ),
+  //   remove: (key) =>
+  //     sendRequest(
+  //       urlFromPages,
+  //       {
+  //         schema: "del",
+  //         "@gid": key,
+  //       },
+  //       "POST"
+  //     ),
+  //   onBeforeSend: function (method, ajaxOptions) {
+  //     ajaxOptions.credentials = "include";
+  //     ajaxOptions.xhrFields = {withCredentials: true};
+  //   },
+  // });
 
   async function sendRequest(url, data = {}, method = "GET") {
     const params = Object.keys(data)
@@ -394,15 +491,13 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     }
   }
 
-  function responseData(data) {
+  async function responseData(data) {
     let newData = null;
 
     if (Array.isArray(data)) {
-      if (data[0].status) {
-        newData = StatusLangToggler().statusBooleanToString(data);
-      } else {
-        newData = data;
-      }
+      data[0].status
+        ? (newData = StatusLangToggler().statusBooleanToString(data))
+        : (newData = data);
 
       return {
         data: newData,
@@ -422,7 +517,6 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
         Hint: ${data.hint}
       `
       );
-      // throw data;
     }
   }
 
@@ -437,3 +531,17 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     detailUserTemplateData,
   };
 };
+
+// *** async function responseData with cheking staus field into data ***
+// let newData = null;
+
+// if (Array.isArray(data)) {
+//   data[0].status
+//     ? (newData = StatusLangToggler().statusBooleanToString(data))
+//     : (newData = data);
+
+//   return {
+//     data: newData,
+//     totalCount: newData.length,
+//   };
+// }

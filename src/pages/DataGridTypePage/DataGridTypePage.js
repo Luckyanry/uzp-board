@@ -18,6 +18,7 @@ import DataGrid, {
   Paging,
   Pager,
   // Form,
+  // LoadPanel,
 } from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -134,6 +135,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
+    console.log(`e initNewRow `, e);
     e.data.status = statusToggler[0];
   }
 
@@ -255,6 +257,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
+          showEditorAlways={false}
+          trueText={
+            dataField === "status" ? formatMessage("msgStatusActive") : "Yes"
+          }
+          falseText={
+            dataField === "status"
+              ? formatMessage("msgStatusDeactivated")
+              : "No"
+          }
           {...params}
         >
           {required && <RequiredRule />}
@@ -293,6 +304,27 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
+  // function onEditorPreparing(e) {
+  //   if (e.parentType === "dataRow" && e.dataField === "soato_id") {
+  //     console.log(`e `, e);
+
+  //     // e.editorOptions.onValueChanged = function (ev) {
+  //     //   console.log(`ev `, ev);
+  //     //   console.log(`ev `, ev.event.offsetY);
+  //     //   let selectedItem = ev.component.option("selectedItem");
+  //     //   e.setValue(selectedItem);
+  //     // };
+  //   }
+  // }
+
+  // function handleOptionChange(e) {
+  //   console.log(`handleOptionChange e =>`, e);
+  //   if (e.fullName === "paging.pageSize") {
+  //   }
+  //   if (e.fullName === "paging.pageIndex") {
+  //   }
+  // }
+
   return (
     <>
       <h2 className={"content-block"}>
@@ -320,6 +352,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         onInitNewRow={initNewRow}
         // onToolbarPreparing={onToolbarPreparing}
         // onFocusedCellChanging={onFocusedCellAction}
+        // onEditorPreparing={onEditorPreparing}
+        // onOptionChanged={handleOptionChange}
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} width={250} />
@@ -333,7 +367,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
         />
         <FilterRow visible={true} />
-
         <Editing
           mode="popup"
           popup={popupGeneralOptions}
@@ -341,18 +374,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowDeleting={true}
           allowUpdating={true}
         />
-
         {customMarkupRender()}
-
         {pathnameWithoutSlash === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
-
         {checkIfArrIncludesValue(
           ["userObjects", "roleObjects", "groupObjects"],
           pathnameWithoutSlash
         ) && <MasterDetail enabled={true} component={DetailUserTemplate} />}
-
         <Column type="buttons" width={110}>
           <Button
             name="edit"
@@ -363,7 +392,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
         </Column>
-
         <Paging defaultPageSize={10} />
         <Pager
           showPageSizeSelector={true}
@@ -373,6 +401,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowedPageSizes={[10, 20, 50, 100, "all"]}
           showAllItem={true}
         />
+        {/* <LoadPanel enabled="true" /> */}
       </DataGrid>
     </>
   );

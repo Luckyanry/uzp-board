@@ -15,6 +15,7 @@ import TreeList, {
   Button as TreeListButton,
   Paging,
   Pager,
+  LoadPanel,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
@@ -148,6 +149,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
+          showEditorAlways={false}
+          trueText={formatMessage("msgStatusActive")}
+          falseText={formatMessage("msgStatusDeactivated")}
           {...params}
         >
           {required && <RequiredRule />}
@@ -265,6 +269,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           showAllItem={true}
           visible={true}
         />
+        <LoadPanel enabled="true" />
       </TreeList>
     </div>
   );

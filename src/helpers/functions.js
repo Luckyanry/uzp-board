@@ -1,8 +1,3 @@
-// import {FetchData} from "../api/pages-fetch";
-// import {useLocalization} from "../contexts/LocalizationContext";
-
-// const {formatMessage} = useLocalization();
-
 function checkIfArrIncludesValue(arr, value) {
   return arr.includes(value);
 }
