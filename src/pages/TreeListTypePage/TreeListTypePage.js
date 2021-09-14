@@ -92,6 +92,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         lookupSpForURL,
         lookupDBForURL
       ).lookData;
+      console.log(`lookData `, lookData);
 
       await lookData.store
         ._loadFunc()
@@ -111,7 +112,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
-    console.log(`e initNewRow `, e);
+    // console.log(`e initNewRow `, e);
     e.data.status = statusToggler[0];
   }
 
@@ -178,10 +179,12 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           {lookup &&
             lookDataState.map((item) => {
               // eslint-disable-next-line
-              if (!item[dataField]) return;
-
               return (
-                <Lookup key={idx} {...lookup} dataSource={item[dataField]} />
+                <Lookup
+                  key={idx}
+                  {...lookup}
+                  dataSource={{...item[dataField], ...lookup.dataSource}}
+                />
               );
             })}
 

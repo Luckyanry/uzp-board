@@ -290,7 +290,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               if (!item[dataField]) return;
 
               return (
-                <Lookup key={idx} {...lookup} dataSource={item[dataField]} />
+                <Lookup
+                  key={idx}
+                  {...lookup}
+                  dataSource={{...item[dataField], ...lookup.dataSource}}
+                />
               );
             })}
 

@@ -2,6 +2,7 @@ import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
+// import {isNotEmpty} from "../helpers/functions";
 
 const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
@@ -159,6 +160,7 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
       load: async () => await sendRequest(urlFromPages, {schema: "look"}),
     }),
     paginate: true,
+    pageSize: 10,
   };
 
   async function sendRequest(url, data = {}, method = "GET") {
@@ -270,8 +272,10 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
 // ======== test lookup ========
 // const lookPaginateData = new CustomStore({
 //   key: "id",
-//   loadMode: "raw",
+//   loadMode: "processed",
 //   load: async (loadOptions) => {
+//     console.log(`loadOptions `, loadOptions);
+
 //     let params = "";
 
 //     ["skip", "take"].forEach(function (i) {
@@ -284,16 +288,25 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
 //       schema: "look",
 //     });
 //   },
+//   byKey: async (key) =>
+//     await sendRequest(
+//       urlFromPages,
+//       {
+//         schema: "bykey",
+//         "@id": key,
+//       },
+//       "POST"
+//     ),
 // });
 
-// const lookData = new DataSource({
+// const lookData = {
 //   store: lookPaginateData,
 //   paginate: true,
 //   pageSize: 50,
 
-//   take: 100,
-//   skip: 0,
-// });
+//   // take: 10,
+//   // skip: 0,
+// };
 
 // ========== Test Lookup on client (working var.) ==========
 

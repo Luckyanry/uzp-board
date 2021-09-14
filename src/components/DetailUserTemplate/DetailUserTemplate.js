@@ -150,7 +150,11 @@ export const DetailUserTemplate = ({data}) => {
               if (!item[dataField]) return;
 
               return (
-                <Lookup key={idx} {...lookup} dataSource={item[dataField]} />
+                <Lookup
+                  key={idx}
+                  {...lookup}
+                  dataSource={{...item[dataField], ...lookup.dataSource}}
+                />
               );
             })}
           {/* 
