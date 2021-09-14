@@ -73,18 +73,24 @@ export const DetailUserTemplate = ({data}) => {
       setAPIData(usersFetchData);
     }
 
-    async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
+    async function getLookDataState(
+      lookupSpForURL,
+      lookupDBForURL,
+      dataField = null
+    ) {
       const lookData = FetchData(
         pathname,
         lookupSpForURL,
         lookupDBForURL
       ).lookData;
 
-      const result = await lookData._loadFunc().then((res) => res.data);
-      // console.log(`result => `, result);
-      setLookDataState((prev) => [...prev, {[dataField]: result}]);
-      // setLookDataState((prev) => [...prev, result]);
-      // setLookDataState(result);
+      await lookData.store
+        ._loadFunc()
+        .then((res) => (lookData.store.__rawData = [...res.data]));
+
+      setLookDataState((prev) =>
+        dataField ? [...prev, {[dataField]: lookData}] : lookData
+      );
     }
 
     getColumnsSchemaData();
@@ -140,17 +146,8 @@ export const DetailUserTemplate = ({data}) => {
 
           {lookup &&
             lookDataState.map((item) => {
-              // console.log(`columnsSchemaData `, columnsSchemaData);
-              // console.log("lookDataState in ", lookDataState);
-              // console.log("item ", item);
-              // console.log("item before ", item[dataField]);
-
               // eslint-disable-next-line
               if (!item[dataField]) return;
-
-              // console.log("item after ", item[dataField]);
-
-              // setLookDataState([]);
 
               return (
                 <Lookup key={idx} {...lookup} dataSource={item[dataField]} />

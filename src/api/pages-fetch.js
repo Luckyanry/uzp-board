@@ -55,14 +55,13 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     storeKey = "id",
     urlType = urlFromPages,
     valueType = "values",
-    keyType = "@id",
-    byKeyType = "@key"
+    keyType = "@id"
   ) => {
     return new CustomStore({
       key: storeKey,
-      load: () => sendRequest(urlType, {schema: "get"}),
-      insert: (values) =>
-        sendRequest(
+      load: async () => await sendRequest(urlType, {schema: "get"}),
+      insert: async (values) =>
+        await sendRequest(
           urlType,
           {
             schema: "ins",
@@ -71,8 +70,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
           },
           "POST"
         ),
-      update: (key, values) =>
-        sendRequest(
+      update: async (key, values) =>
+        await sendRequest(
           urlType,
           {
             schema: "upd",
@@ -82,8 +81,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
           },
           "POST"
         ),
-      remove: (key) =>
-        sendRequest(
+      remove: async (key) =>
+        await sendRequest(
           urlType,
           {
             schema: "del",
@@ -91,12 +90,12 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
           },
           "POST"
         ),
-      byKey: (key) =>
-        sendRequest(
+      byKey: async (key) =>
+        await sendRequest(
           urlType,
           {
             schema: "bykey",
-            [byKeyType]: key,
+            [keyType]: key,
           },
           "POST"
         ),
@@ -139,80 +138,34 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
 
   const changeMyLocalToData = new CustomStore({
     key: "short",
-    update: (newKey) =>
-      sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST"),
+    update: async (newKey) =>
+      await sendRequest(
+        urlFromPages,
+        {schema: "dbo", "@newkey": newKey},
+        "POST"
+      ),
   });
 
   const custumMessageData = new CustomStore({
     key: "id",
     // loadMode: "row",
-    load: () => {
-      return sendRequest(urlFromPages, {schema: "get"}, "POST");
-    },
+    load: async () => await sendRequest(urlFromPages, {schema: "get"}, "POST"),
   });
 
-  //   const fetchData = new CustomStore({
-  //   key: "id",
-  //   load: () => sendRequest(finalUrl, {schema: "get"}),
-  //   insert: (values) =>
-  //     sendRequest(
-  //       finalUrl,
-  //       {
-  //         schema: "ins",
-  //         // values: StatusLangToggler().statusStringToBoolean(values),
-  //         values: JSON.stringify(values),
-  //       },
-  //       "POST"
-  //     ),
-  //   update: (key, values) =>
-  //     sendRequest(
-  //       finalUrl,
-  //       {
-  //         schema: "upd",
-  //         "@id": key,
-  //         // values: StatusLangToggler().statusStringToBoolean(values),
-  //         values: JSON.stringify(values),
-  //       },
-  //       "POST"
-  //     ),
-  //   remove: (key) =>
-  //     sendRequest(
-  //       finalUrl,
-  //       {
-  //         schema: "del",
-  //         "@id": key,
-  //       },
-  //       "POST"
-  //     ),
-  //   byKey: (key) =>
-  //     sendRequest(
-  //       finalUrl,
-  //       {
-  //         schema: "bykey",
-  //         "@key": key,
-  //       },
-  //       "POST"
-  //     ),
-  //   onBeforeSend: function (method, ajaxOptions) {
-  //     ajaxOptions.credentials = "include";
-  //     ajaxOptions.xhrFields = {withCredentials: true};
-  //   },
-  // });
-
-  const lookData = new CustomStore({
-    key: "id",
-    load: () => {
-      return sendRequest(urlFromPages, {
-        schema: "look",
-      });
-    },
-  });
+  const lookData = {
+    store: new CustomStore({
+      key: "id",
+      loadMode: "raw",
+      load: async () => await sendRequest(urlFromPages, {schema: "look"}),
+    }),
+    paginate: true,
+  };
 
   async function sendRequest(url, data = {}, method = "GET") {
     const params = Object.keys(data)
-      .map((key) => {
-        return `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
-      })
+      .map(
+        (key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
+      )
       .join("&");
 
     const getOptions = {
@@ -312,16 +265,51 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
   };
 };
 
-// *** async function responseData with cheking staus field into data ***
-// let newData = null;
+// ?experement with this article => https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/How_To/Bind_a_Lookup_Column_to_a_Custom_Data_Source/
 
-// if (Array.isArray(data)) {
-//   data[0].status
-//     ? (newData = StatusLangToggler().statusBooleanToString(data))
-//     : (newData = data);
+// ======== test lookup ========
+// const lookPaginateData = new CustomStore({
+//   key: "id",
+//   loadMode: "raw",
+//   load: async (loadOptions) => {
+//     let params = "";
 
-//   return {
-//     data: newData,
-//     totalCount: newData.length,
-//   };
-// }
+//     ["skip", "take"].forEach(function (i) {
+//       if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+//         params += `&@${i}=${JSON.stringify(loadOptions[i])}`;
+//       }
+//     });
+
+//     return await sendRequest(`${urlFromPages}${params}`, {
+//       schema: "look",
+//     });
+//   },
+// });
+
+// const lookData = new DataSource({
+//   store: lookPaginateData,
+//   paginate: true,
+//   pageSize: 50,
+
+//   take: 100,
+//   skip: 0,
+// });
+
+// ========== Test Lookup on client (working var.) ==========
+
+// const lookDataOnClient = {
+//   store: new CustomStore({
+//     key: "id",
+//     loadMode: "raw",
+//     load: async () => {
+//       return await fetch(
+//         "https://10.0.10.71/actions.asp?operation=do&sp=soato&db=hbdb&schema=look",
+//         {
+//           credentials: "include",
+//           xhrFields: {withCredentials: true},
+//         }
+//       ).then((response) => response.json());
+//     },
+//   }),
+//   paginate: true,
+// };

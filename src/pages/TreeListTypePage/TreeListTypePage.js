@@ -82,16 +82,24 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       setAPIData(fetchData);
     }
 
-    async function getLookDataState(lookupSpForURL, lookupDBForURL, dataField) {
+    async function getLookDataState(
+      lookupSpForURL,
+      lookupDBForURL,
+      dataField = null
+    ) {
       const lookData = FetchData(
         pathname,
         lookupSpForURL,
         lookupDBForURL
       ).lookData;
 
-      const result = await lookData._loadFunc().then((res) => res.data);
+      await lookData.store
+        ._loadFunc()
+        .then((res) => (lookData.store.__rawData = [...res.data]));
 
-      setLookDataState((prev) => [...prev, {[dataField]: result}]);
+      setLookDataState((prev) =>
+        dataField ? [...prev, {[dataField]: lookData}] : lookData
+      );
     }
 
     getColumnsSchemaData();
@@ -103,6 +111,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
+    console.log(`e initNewRow `, e);
     e.data.status = statusToggler[0];
   }
 

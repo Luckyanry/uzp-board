@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import "devextreme/data/odata/store";
 import DataGrid, {
   SearchPanel,
-  // HeaderFilter,
+  HeaderFilter,
   FilterRow,
   Scrolling,
   ColumnChooser,
@@ -18,7 +18,7 @@ import DataGrid, {
   Paging,
   Pager,
   // Form,
-  // LoadPanel,
+  LoadPanel,
 } from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -114,10 +114,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         lookupDBForURL
       ).lookData;
 
-      const result = await lookData._loadFunc().then((res) => res.data);
+      await lookData.store
+        ._loadFunc()
+        .then((res) => (lookData.store.__rawData = [...res.data]));
 
       setLookDataState((prev) =>
-        dataField ? [...prev, {[dataField]: result}] : result
+        dataField ? [...prev, {[dataField]: lookData}] : lookData
       );
     }
 
@@ -135,7 +137,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
-    console.log(`e initNewRow `, e);
     e.data.status = statusToggler[0];
   }
 
@@ -306,27 +307,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
-  // function onEditorPreparing(e) {
-  //   if (e.parentType === "dataRow" && e.dataField === "soato_id") {
-  //     console.log(`e `, e);
-
-  //     // e.editorOptions.onValueChanged = function (ev) {
-  //     //   console.log(`ev `, ev);
-  //     //   console.log(`ev `, ev.event.offsetY);
-  //     //   let selectedItem = ev.component.option("selectedItem");
-  //     //   e.setValue(selectedItem);
-  //     // };
-  //   }
-  // }
-
-  // function handleOptionChange(e) {
-  //   console.log(`handleOptionChange e =>`, e);
-  //   if (e.fullName === "paging.pageSize") {
-  //   }
-  //   if (e.fullName === "paging.pageIndex") {
-  //   }
-  // }
-
   return (
     <>
       <h2 className={"content-block"}>
@@ -352,14 +332,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
-        // onToolbarPreparing={onToolbarPreparing}
-        // onFocusedCellChanging={onFocusedCellAction}
-        // onEditorPreparing={onEditorPreparing}
-        // onOptionChanged={handleOptionChange}
       >
-        <Scrolling mode="standard" />
+        <Scrolling mode="standard" useNative="true" />
         <SearchPanel visible={true} width={250} />
-        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
+
+        <HeaderFilter visible={true} allowSearch={true} />
         <ColumnChooser
           enabled={true}
           allowSearch={true}
@@ -368,7 +345,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           title={formatMessage("msgColomnChooser")}
           emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
         />
+
         <FilterRow visible={true} />
+
         <Editing
           mode="popup"
           popup={popupGeneralOptions}
@@ -376,14 +355,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowDeleting={true}
           allowUpdating={true}
         />
+
         {customMarkupRender()}
+
         {pathnameWithoutSlash === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
+
         {checkIfArrIncludesValue(
           ["userObjects", "roleObjects", "groupObjects"],
           pathnameWithoutSlash
         ) && <MasterDetail enabled={true} component={DetailUserTemplate} />}
+
         <Column type="buttons" width={110}>
           <Button
             name="edit"
@@ -403,7 +386,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowedPageSizes={[10, 20, 50, 100, "all"]}
           showAllItem={true}
         />
-        {/* <LoadPanel enabled="true" /> */}
+        <LoadPanel enabled="true" />
       </DataGrid>
     </>
   );
