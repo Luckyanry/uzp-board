@@ -92,7 +92,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         lookupSpForURL,
         lookupDBForURL
       ).lookData;
-      console.log(`lookData `, lookData);
 
       await lookData.store
         ._loadFunc()
@@ -101,6 +100,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       setLookDataState((prev) =>
         dataField ? [...prev, {[dataField]: lookData}] : lookData
       );
+      console.log(`lookData `, lookData);
     }
 
     getColumnsSchemaData();
@@ -177,13 +177,21 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           <FormItem {...formItem} />
 
           {lookup &&
-            lookDataState.map((item) => {
+            lookDataState.map((item, i) => {
               // eslint-disable-next-line
+              if (!item[dataField]) return;
+
+              //const dataSourceWithStoreParams = {
+              //  ...item[dataField],
+              //  ...lookup.dataSource,
+              //};
+              // dataSource={{...item[dataField], ...lookup.dataSource}}
+
               return (
                 <Lookup
-                  key={idx}
+                  key={i + dataField}
                   {...lookup}
-                  dataSource={{...item[dataField], ...lookup.dataSource}}
+                  dataSource={item[dataField]}
                 />
               );
             })}

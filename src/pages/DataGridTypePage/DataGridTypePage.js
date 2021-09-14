@@ -285,15 +285,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
           {lookup &&
             pathnameWithoutSlash !== "ShortDics" &&
-            lookDataState.map((item) => {
+            lookDataState.map((item, i) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;
 
+              // dataSource={{...item[dataField], ...lookup.dataSource}}
               return (
                 <Lookup
-                  key={idx}
+                  key={i + dataField}
                   {...lookup}
-                  dataSource={{...item[dataField], ...lookup.dataSource}}
+                  dataSource={item[dataField]}
                 />
               );
             })}

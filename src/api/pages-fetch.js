@@ -60,9 +60,9 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
   ) => {
     return new CustomStore({
       key: storeKey,
-      load: async () => await sendRequest(urlType, {schema: "get"}),
-      insert: async (values) =>
-        await sendRequest(
+      load: () => sendRequest(urlType, {schema: "get"}),
+      insert: (values) =>
+        sendRequest(
           urlType,
           {
             schema: "ins",
@@ -71,8 +71,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
           },
           "POST"
         ),
-      update: async (key, values) =>
-        await sendRequest(
+      update: (key, values) =>
+        sendRequest(
           urlType,
           {
             schema: "upd",
@@ -82,8 +82,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
           },
           "POST"
         ),
-      remove: async (key) =>
-        await sendRequest(
+      remove: (key) =>
+        sendRequest(
           urlType,
           {
             schema: "del",
@@ -91,8 +91,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
           },
           "POST"
         ),
-      byKey: async (key) =>
-        await sendRequest(
+      byKey: (key) =>
+        sendRequest(
           urlType,
           {
             schema: "bykey",
@@ -157,10 +157,10 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     store: new CustomStore({
       key: "id",
       loadMode: "raw",
-      load: async () => await sendRequest(urlFromPages, {schema: "look"}),
+      load: () => sendRequest(urlFromPages, {schema: "look"}),
     }),
     paginate: true,
-    pageSize: 10,
+    pageSize: 20,
   };
 
   async function sendRequest(url, data = {}, method = "GET") {
