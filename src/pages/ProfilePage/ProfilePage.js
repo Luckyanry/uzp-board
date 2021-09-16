@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import Form, {SimpleItem, Label, Item} from "devextreme-react/form";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {PasswordGenerator} from "../../components/PasswordGenerator/PasswordGenerator";
+import {PasswordGenerator} from "../../components";
 
 import "./ProfilePage.scss";
 

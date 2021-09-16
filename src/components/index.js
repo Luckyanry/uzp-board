@@ -2,9 +2,11 @@ export {default as ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
 export {Header} from "./Header/Header";
 export {Footer} from "./Footer/Footer";
 
-export {DetailTemplate} from "./DetailTemplate/DetailTemplate";
-export {DetailUserTemplate} from "./DetailUserTemplate/DetailUserTemplate";
-export {PasswordGenerator} from "./PasswordGenerator/PasswordGenerator";
+export {default as DetailTemplate} from "./DetailTemplate/DetailTemplate";
+export {default as DetailUserTemplate} from "./DetailUserTemplate/DetailUserTemplate";
+export {default as UserDetailTab} from "./UserDetailTab/UserDetailTab";
+export {default as PasswordGenerator} from "./PasswordGenerator/PasswordGenerator";
+
 export {StatusLangToggler} from "./StatusLangToggler/StatusLangToggler";
 
 export {default as LoginForm} from "./LoginForm/LoginForm";

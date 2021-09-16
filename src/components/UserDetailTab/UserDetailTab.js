@@ -12,26 +12,26 @@ import DataGrid, {
   Paging,
   Pager,
   StateStoring,
+  Scrolling,
 } from "devextreme-react/data-grid";
-import {TabPanel, Item} from "devextreme-react/tab-panel";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
-// import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 import {getLookupParamsForURL} from "../../helpers/functions";
+// import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
-import "./DetailUserTemplate.scss";
+import "./UserDetailTab.scss";
 
-const DetailUserTemplate = ({data}) => {
+const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
   const {formatMessage} = useLocalization();
-  console.log(`data`, data);
+  // console.log(`props => `, GID, UserName);
 
-  const pathname = "/w_DisplayUserRoles";
-  const focusedRowTitle = data.data.UserName;
+  const pathname = `/${UserGroups}`;
+  const focusedRowTitle = UserName;
 
   const popupOpt = {
     title: formatMessage("msgCreateNewItem", focusedRowTitle),
@@ -44,7 +44,7 @@ const DetailUserTemplate = ({data}) => {
     async function getColumnsSchemaData() {
       const fetchColumnsSchemaData = FetchData(
         pathname,
-        "ShortDicsRecordsFlat&@name=DisplayUserRolesColumnSchema",
+        `ShortDicsRecordsFlat&@name=${UserGroups}ColumnSchema`,
         "hbdb"
       ).fetchColumnsSchemaData;
 
@@ -56,7 +56,6 @@ const DetailUserTemplate = ({data}) => {
       getAPIData();
 
       const lookupParamsForURL = getLookupParamsForURL(result);
-      // console.log(`lookupParamsForURL `, lookupParamsForURL);
 
       if (lookupParamsForURL.length) {
         lookupParamsForURL.map(({sp, db, dataField}) =>
@@ -68,7 +67,7 @@ const DetailUserTemplate = ({data}) => {
     async function getAPIData() {
       const usersFetchData = FetchData(
         pathname,
-        `w_DisplayUserRoles&@GID=${data.key}`,
+        `${UserGroups}&@GID=${GID}`,
         "wisdb"
       ).detailUserTemplateData;
 
@@ -109,7 +108,7 @@ const DetailUserTemplate = ({data}) => {
         disabled = false,
         required = false,
         width = "100%",
-        minWidth = 250,
+        minWidth = 80,
         alignment = "left",
         formItem = false,
         lookup = false,
@@ -165,86 +164,83 @@ const DetailUserTemplate = ({data}) => {
     });
   }
 
+  function initNewRow(e) {
+    e.data.UGID = GID;
+  }
+
+  function onDataErrorEvent(e) {
+    e.error.message =
+      "Выбранный пользователь пока не имеет записи в этой категории. Создайте новую запись ... UGID | RGID | IFC.";
+    // console.log(`onDataErrorEvent e `, e);
+  }
+
   return (
-    <>
-      {/* <ErrorBoundary msg={error}> */}
-      <TabPanel>
-        <Item title="Group/Role">
-          <DataGrid
-            id="grid"
-            // columns={columnsSchemaData}
-            dataSource={APIData}
-            repaintChangesOnly={true}
-            remoteOperations={false}
-            // rows
-            focusedRowEnabled={true}
-            // columns
-            showColumnLines={true}
-            columnMinWidth={60}
-            columnAutoWidth={true}
-            columnHidingEnabled={false}
-            allowColumnResizing={true}
-            allowColumnReordering={true}
-            // appearance
-            hoverStateEnabled={true}
-            wordWrapEnabled={true}
-            // functions
-          >
-            <ColumnChooser
-              enabled={true}
-              allowSearch={true}
-              width={300}
-              height={320}
-              title={formatMessage("msgColomnChooser")}
-              emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-            />
+    // <ErrorBoundary msg={error}>
+    <DataGrid
+      id="grid"
+      // columns={columnsSchemaData}
+      dataSource={APIData}
+      repaintChangesOnly={true}
+      remoteOperations={false}
+      // rows
+      focusedRowEnabled={true}
+      // columns
+      showColumnLines={true}
+      columnMinWidth={80}
+      columnAutoWidth={true}
+      columnHidingEnabled={false}
+      allowColumnResizing={true}
+      allowColumnReordering={true}
+      // appearance
+      hoverStateEnabled={true}
+      wordWrapEnabled={true}
+      showBorders={true}
+      // functions
+      onInitNewRow={initNewRow}
+      onDataErrorOccurred={onDataErrorEvent}
+    >
+      <ColumnChooser
+        enabled={true}
+        allowSearch={true}
+        width={300}
+        height={320}
+        title={formatMessage("msgColomnChooser")}
+        emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+      />
+      <Scrolling mode="standard" useNative="true" />
+      <StateStoring enabled={false} type="localStorage" storageKey="storage" />
 
-            <StateStoring
-              enabled={true}
-              type="localStorage"
-              storageKey="storage"
-            />
+      <Editing
+        mode="batch"
+        // mode="popup"
+        popup={popupOpt}
+        allowAdding={true}
+        allowDeleting={true}
+        allowUpdating={false}
+        startEditAction="dblClick"
+      />
 
-            <Editing
-              // mode="batch"
-              mode="popup"
-              popup={popupOpt}
-              allowAdding={true}
-              allowDeleting={true}
-              allowUpdating={true}
-            />
+      {customMarkupRender()}
 
-            {customMarkupRender()}
+      <Column type="buttons">
+        <Button
+          name="delete"
+          hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
+        />
+      </Column>
 
-            <Column type="buttons" width={110}>
-              <Button
-                name="edit"
-                hint={formatMessage("msgEditNewItem", focusedRowTitle)}
-              />
-              <Button
-                name="delete"
-                hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
-              />
-            </Column>
-
-            <Paging defaultPageSize={10} />
-            <Pager
-              showPageSizeSelector={true}
-              showNavigationButtons={true}
-              showInfo={true}
-              visible={true}
-              allowedPageSizes={[10, 20, 50, 100, "all"]}
-              showAllItem={true}
-            />
-          </DataGrid>
-        </Item>
-        <Item title="Members">
-          <h2>New tab with info about Members...</h2>
-        </Item>
-      </TabPanel>
-      {/* </ErrorBoundary> */}
-    </>
+      <Paging defaultPageSize={10} />
+      <Pager
+        showPageSizeSelector={true}
+        showNavigationButtons={true}
+        showInfo={true}
+        visible={true}
+        allowedPageSizes={[10, 20, 50, 100, "all"]}
+        showAllItem={true}
+      />
+    </DataGrid>
+    // </ErrorBoundary>
   );
 };
 
-export default DetailUserTemplate;
+export default UserDetailTab;

@@ -16,6 +16,7 @@ import TreeList, {
   Paging,
   Pager,
   LoadPanel,
+  StateStoring,
 } from "devextreme-react/tree-list";
 import Button from "devextreme-react/button";
 
@@ -262,6 +263,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
         />
         <FilterRow visible={true} />
+        <StateStoring
+          enabled={false}
+          type="localStorage"
+          storageKey="storage"
+        />
 
         <Editing
           mode="popup"

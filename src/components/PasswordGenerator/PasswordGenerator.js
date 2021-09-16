@@ -20,7 +20,7 @@ import visibility from "./visibility.svg";
 import enhancedEncryption from "./enhancedEncryption.svg";
 import "./PasswordGenerator.scss";
 
-export const PasswordGenerator = () => {
+const PasswordGenerator = () => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
@@ -316,3 +316,5 @@ export const PasswordGenerator = () => {
     </div>
   );
 };
+
+export default PasswordGenerator;

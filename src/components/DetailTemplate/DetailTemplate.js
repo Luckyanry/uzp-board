@@ -6,6 +6,7 @@ import DataGrid, {
   Editing,
   Paging,
   Pager,
+  StateStoring,
 } from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -14,7 +15,7 @@ import {FetchData} from "../../api/pages-fetch";
 
 import "./DetailTemplate.scss";
 
-export const DetailTemplate = ({data}) => {
+const DetailTemplate = ({data}) => {
   const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
@@ -74,6 +75,8 @@ export const DetailTemplate = ({data}) => {
         emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
       />
 
+      <StateStoring enabled={false} type="localStorage" storageKey="storage" />
+
       <Editing
         mode="batch"
         // popup={popupOpt}
@@ -96,3 +99,5 @@ export const DetailTemplate = ({data}) => {
     // </ErrorBoundary>
   );
 };
+
+export default DetailTemplate;

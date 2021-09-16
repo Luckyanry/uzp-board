@@ -17,15 +17,20 @@ import DataGrid, {
   Button,
   Paging,
   Pager,
-  // Form,
+  Form,
   LoadPanel,
+  StateStoring,
 } from "devextreme-react/data-grid";
+import {
+  SimpleItem,
+  GroupItem,
+  TabbedItem,
+  TabPanelOptions,
+  Tab,
+} from "devextreme-react/form";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
-import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
-import {DetailTemplate} from "../../components";
-import {DetailUserTemplate} from "../../components";
 import {
   checkIfArrIncludesValue,
   createCustomMsg,
@@ -33,12 +38,20 @@ import {
   getLookupParamsForURL,
 } from "../../helpers/functions";
 
+import {StatusLangToggler} from "../../components";
+import {DetailTemplate} from "../../components";
+import {UserDetailTab} from "../../components";
+
 import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
+
+  const [userID, setUserID] = useState("");
+  const [userFormData, setUserFormData] = useState(null);
+  const [userGroupItemCaption, setUserGroupItemCaption] = useState("");
 
   const {formatMessage} = useLocalization();
 
@@ -55,6 +68,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     showTitle: true,
     width: 1000,
     height: 700,
+  };
+
+  const popupUsersPageOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: false,
+    width: 1200,
+    height: 900,
   };
 
   useEffect(() => {
@@ -138,6 +158,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   function initNewRow(e) {
     e.data.status = statusToggler[0];
+    setUserID("");
   }
 
   function customMarkupRender() {
@@ -312,12 +333,85 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
+  function onFocusedCellChanging(e) {
+    if (
+      checkIfArrIncludesValue(
+        ["userObjects", "roleObjects", "groupObjects"],
+        pathnameWithoutSlash
+      )
+    ) {
+      // console.log(`onFocusedCellAction e `, e);
+
+      const userFormData = e.rows[e.newRowIndex].data;
+      const rowId = userFormData.GID;
+      const groupItemCaption = userFormData.UserName;
+      // console.log(`onFocusedCellChanging userFormData`, userFormData);
+
+      setUserID(rowId);
+      setUserFormData(userFormData);
+      setUserGroupItemCaption(groupItemCaption);
+    }
+  }
+
+  function customSimpleItemMarkup(formData) {
+    if (!formData) {
+      return;
+    }
+
+    return Object.keys(formData).map((item, idx) => {
+      return <SimpleItem key={idx} dataField={item} />;
+    });
+  }
+
+  // function handleOptionChange(e) {
+  //   e.fullName === "focusedRowKey" && setUserID(e.value);
+  // }
+
+  function editorCustomMarkup() {
+    return userID ? (
+      <Editing
+        mode="popup"
+        popup={popupUsersPageOptions}
+        allowAdding={true}
+        allowDeleting={true}
+        allowUpdating={true}
+      >
+        <Form id="form" formData={userFormData} colCount={1} width={"100%"}>
+          <GroupItem caption={`Information about ${userGroupItemCaption}`}>
+            <TabbedItem>
+              <TabPanelOptions deferRendering={false} />
+              <Tab title="Информация о пользователе" colCount={2}>
+                {customSimpleItemMarkup(userFormData)}
+              </Tab>
+
+              <Tab title="Группы" colCount={2}>
+                <UserDetailTab user={userFormData} UserGroups={"UserGroups"} />
+              </Tab>
+
+              <Tab title="Роли" colCount={2}>
+                <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
+              </Tab>
+            </TabbedItem>
+          </GroupItem>
+        </Form>
+      </Editing>
+    ) : (
+      <Editing
+        mode="popup"
+        popup={popupGeneralOptions}
+        allowAdding={true}
+        allowDeleting={true}
+        allowUpdating={true}
+      />
+    );
+  }
+
   return (
     <>
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
-      {/* <Tabs items={tabs} itemRender={renderTabItem} /> */}
+
       <DataGrid
         dataSource={APIData}
         // keyExpr="id"
@@ -325,9 +419,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         remoteOperations={false}
         // rows
         focusedRowEnabled={true}
+        // focusedRowIndex={0}
         // columns
         showColumnLines={true}
-        columnMinWidth={60}
+        columnMinWidth={80}
         columnAutoWidth={true}
         columnHidingEnabled={false}
         allowColumnResizing={true}
@@ -337,10 +432,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // functions
         onInitNewRow={initNewRow}
+        onFocusedCellChanging={onFocusedCellChanging}
+
+        // onContentReady={selectFirstRow}
+        // onOptionChanged={handleOptionChange}
       >
         <Scrolling mode="standard" useNative="true" />
         <SearchPanel visible={true} width={250} />
-
         <HeaderFilter visible={true} allowSearch={true} />
         <ColumnChooser
           enabled={true}
@@ -350,27 +448,34 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           title={formatMessage("msgColomnChooser")}
           emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
         />
+        <StateStoring
+          enabled={false}
+          type="localStorage"
+          storageKey="storage"
+        />
 
         <FilterRow visible={true} />
 
-        <Editing
-          mode="popup"
-          popup={popupGeneralOptions}
-          allowAdding={true}
-          allowDeleting={true}
-          allowUpdating={true}
-        />
+        {checkIfArrIncludesValue(
+          ["userObjects", "roleObjects", "groupObjects"],
+          pathnameWithoutSlash
+        ) ? (
+          editorCustomMarkup()
+        ) : (
+          <Editing
+            mode="popup"
+            popup={popupGeneralOptions}
+            allowAdding={true}
+            allowDeleting={true}
+            allowUpdating={true}
+          />
+        )}
 
         {customMarkupRender()}
 
         {pathnameWithoutSlash === "ShortDics" && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
-
-        {checkIfArrIncludesValue(
-          ["userObjects", "roleObjects", "groupObjects"],
-          pathnameWithoutSlash
-        ) && <MasterDetail enabled={true} component={DetailUserTemplate} />}
 
         <Column type="buttons" width={110}>
           <Button
@@ -382,6 +487,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
         </Column>
+
         <Paging defaultPageSize={10} />
         <Pager
           showPageSizeSelector={true}
@@ -396,6 +502,21 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     </>
   );
 };
+
+// ===============
+
+//<GroupItem caption={`Information about ${userID && userGroupItemCaption}`}>
+//  <TabbedItem>
+//    <TabPanelOptions deferRendering={false} />
+//    <Tab title="General" colCount={2}>
+//      {customSimpleItemMarkup(userFormData)}
+//    </Tab>
+
+//    <Tab title="Group/Role" colCount={2}>
+//      {userID && <UserDetailTab user={userFormData} />}
+//    </Tab>
+//  </TabbedItem>
+//</GroupItem>;
 
 // ===============
 
@@ -702,6 +823,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 //     );
 //   });
 // }
+
+// ==================
 
 // function onToolbarPreparing(e) {
 //   console.log(e);
