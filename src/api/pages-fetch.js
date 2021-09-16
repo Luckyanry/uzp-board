@@ -4,7 +4,8 @@ import "whatwg-fetch";
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
 // import {isNotEmpty} from "../helpers/functions";
 
-const url = "https://10.0.10.71";
+const url = "https://uz-sql.dvlpr.lan";
+// const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
