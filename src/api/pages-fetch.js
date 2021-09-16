@@ -134,15 +134,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
   const detailUserTemplateData = fetchDataConstructor(
     "RGID",
     urlFromPages,
-    "@jvalues",
-    "gid"
-  );
-
-  const detailUserTabsData = fetchDataConstructor(
-    ["UGID", "RGID", "IFC"],
-    urlFromPages,
-    "@jvalues",
-    "@guid"
+    "values",
+    "@gid"
   );
 
   const changeMyLocalToData = new CustomStore({
@@ -272,7 +265,6 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     custumMessageData,
     personFetchData,
     detailUserTemplateData,
-    detailUserTabsData,
   };
 };
 
