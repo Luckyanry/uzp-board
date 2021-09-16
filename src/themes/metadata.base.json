@@ -1,27 +1,51 @@
 {
   "items": [
     {
-      "key": "$base-bg",
-      "value": "rgba(255, 255, 255, 1)"
-    },
-    {
-      "key": "$base-border-color",
-      "value": "rgba(0, 79, 67, 1)"
-    },
-    {
-      "key": "$base-text-color",
-      "value": "rgba(73, 73, 73, 1)"
-    },
-    {
-      "key": "$base-accent",
-      "value": "rgba(0, 147, 124, 1)"
-    },
-    {
       "key": "$base-border-radius",
       "value": "4.38px"
-    }
+  },
+  {
+      "key": "$base-accent",
+      "value": "#00937C"
+  },
+  {
+      "key": "$base-danger",
+      "value": "#D91F11"
+  },
+  {
+      "key": "$base-label-color",
+      "value": "#696F79"
+  },
+  {
+      "key": "$base-icon-color",
+      "value": "#343A40"
+  },
+  {
+      "key": "$button-danger-border-color",
+      "value": "#D91F11"
+  },
+  {
+      "key": "$button-normal-color",
+      "value": "#00937C"
+  },
+  {
+      "key": "$button-normal-border-color",
+      "value": "rgba(255, 255, 255, 1)"
+  },
+  {
+      "key": "$button-normal-bg",
+      "value": "rgba(255, 255, 255, 1)"
+  },
+  {
+      "key": "$datagrid-selection-bg",
+      "value": "#004F43"
+  },
+  {
+      "key": "$datagrid-focused-border-color",
+      "value": "#004F43"
+  }
   ],
-  "baseTheme": "material.teal.light",
+  "baseTheme": "greenmist",
   "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
   "outputColorScheme": "base",
   "version": "21.1.5",

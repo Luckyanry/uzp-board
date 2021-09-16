@@ -1,0 +1,54 @@
+{
+    "items": [
+        {
+            "key": "$base-border-radius",
+            "value": "4.38px"
+        },
+        {
+            "key": "$base-accent",
+            "value": "#00937C"
+        },
+        {
+            "key": "$base-danger",
+            "value": "#D91F11"
+        },
+        {
+            "key": "$base-label-color",
+            "value": "#696F79"
+        },
+        {
+            "key": "$base-icon-color",
+            "value": "#343A40"
+        },
+        {
+            "key": "$button-danger-border-color",
+            "value": "#D91F11"
+        },
+        {
+            "key": "$button-normal-color",
+            "value": "#00937C"
+        },
+        {
+            "key": "$button-normal-border-color",
+            "value": "rgba(255, 255, 255, 1)"
+        },
+        {
+            "key": "$button-normal-bg",
+            "value": "rgba(255, 255, 255, 1)"
+        },
+        {
+            "key": "$datagrid-selection-bg",
+            "value": "#004F43"
+        },
+        {
+            "key": "$datagrid-focused-border-color",
+            "value": "#004F43"
+        }
+    ],
+    "baseTheme": "generic.greenmist",
+    "outputColorScheme": "custom",
+    "makeSwatch": true,
+    "version": "21.1.5",
+    "widgets": [],
+    "removeExternalResources": true
+}
