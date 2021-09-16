@@ -73,8 +73,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupUsersPageOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: false,
-    width: 1200,
-    height: 900,
+    width: 900,
+    height: 650,
   };
 
   useEffect(() => {
@@ -377,18 +377,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowUpdating={true}
       >
         <Form id="form" formData={userFormData} colCount={1} width={"100%"}>
-          <GroupItem caption={`Information about ${userGroupItemCaption}`}>
+          <GroupItem caption={userGroupItemCaption}>
             <TabbedItem>
               <TabPanelOptions deferRendering={false} />
-              <Tab title="Информация о пользователе" colCount={2}>
+              <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
                 {customSimpleItemMarkup(userFormData)}
               </Tab>
 
-              <Tab title="Группы" colCount={2}>
+              <Tab title={formatMessage("msgGroups")} colCount={2}>
                 <UserDetailTab user={userFormData} UserGroups={"UserGroups"} />
               </Tab>
 
-              <Tab title="Роли" colCount={2}>
+              <Tab title={formatMessage("msgRoles")} colCount={2}>
                 <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
               </Tab>
             </TabbedItem>
