@@ -44,7 +44,7 @@ export default function CreateAccountForm(props) {
 
   return (
     <form className={"create-account-form"} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={loading}>
+      <Form formData={formData.current} disabled={loading} width={"100%"}>
         <Item
           dataField={"email"}
           editorType={"dxTextBox"}
