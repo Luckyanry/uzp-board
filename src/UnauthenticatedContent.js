@@ -12,7 +12,10 @@ export default function UnauthenticatedContent() {
   return (
     <Switch>
       <Route exact path="/login">
-        <SingleCard title="Sign In">
+        <SingleCard
+          title="Вход в систему"
+          description="Выберите один из вариантов входа в админ панель ГУБДД"
+        >
           <LoginForm />
         </SingleCard>
       </Route>
