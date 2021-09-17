@@ -20,6 +20,21 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
+  const emailEditorOptions = {
+    stylingMode: "filled",
+    placeholder: "Введите логин",
+    mode: "text",
+  };
+  const passwordEditorOptions = {
+    stylingMode: "filled",
+    placeholder: "Введите пароль",
+    mode: "password",
+  };
+  const rememberMeEditorOptions = {
+    text: "Remember me",
+    elementAttr: {class: "form-text"},
+  };
+
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -41,24 +56,34 @@ export default function LoginForm() {
 
   return (
     <form className={"login-form"} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={loading}>
+      <Form
+        formData={formData.current}
+        disabled={loading}
+        showColonAfterLabel={false}
+        showRequiredMark={false}
+      >
         <Item
           dataField={"email"}
           editorType={"dxTextBox"}
           editorOptions={emailEditorOptions}
+          cssClass={"input"}
         >
-          <RequiredRule message="Email is required" />
-          <EmailRule message="Email is invalid" />
-          <Label visible={false} />
+          {/* <p>Логин</p> */}
+          <RequiredRule message="Login is required" />
+          {/* <EmailRule message="Email is invalid" /> */}
+          <Label visible={true} text={"Логин"} />
         </Item>
+
         <Item
           dataField={"password"}
           editorType={"dxTextBox"}
           editorOptions={passwordEditorOptions}
         >
+          {/* <p>Пароль</p> */}
           <RequiredRule message="Password is required" />
-          <Label visible={false} />
+          <Label visible={true} text={"Пароль"} />
         </Item>
+
         <Item
           dataField={"rememberMe"}
           editorType={"dxCheckBox"}
@@ -66,6 +91,13 @@ export default function LoginForm() {
         >
           <Label visible={false} />
         </Item>
+
+        <Item>
+          <div className={"link"}>
+            <Link to={"/reset-password"}>Forgot password?</Link>
+          </div>
+        </Item>
+
         <ButtonItem>
           <ButtonOptions
             width={"100%"}
@@ -81,34 +113,15 @@ export default function LoginForm() {
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={"link"}>
-            <Link to={"/reset-password"}>Forgot password?</Link>
-          </div>
-        </Item>
-        <ButtonItem>
+
+        {/* <ButtonItem>
           <ButtonOptions
             text={"Create an account"}
             width={"100%"}
             onClick={onCreateAccountClick}
           />
-        </ButtonItem>
+        </ButtonItem> */}
       </Form>
     </form>
   );
 }
-
-const emailEditorOptions = {
-  stylingMode: "filled",
-  placeholder: "Email",
-  mode: "email",
-};
-const passwordEditorOptions = {
-  stylingMode: "filled",
-  placeholder: "Password",
-  mode: "password",
-};
-const rememberMeEditorOptions = {
-  text: "Remember me",
-  elementAttr: {class: "form-text"},
-};

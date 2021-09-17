@@ -1,11 +1,52 @@
 @import "../../themes/generated/variables.base.scss";
 
 .single-card {
-  .dx-card {
-    width: 330px;
-    margin: auto auto;
-    padding: 40px;
-    flex-grow: 0;
+  .container {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+  }
+
+  .left-content-wrapper {
+    // display: flex;
+    padding: 150px 103px 292px;
+    height: auto;
+
+    color: #fff;
+
+    // .img {
+    //   display: block;
+    //   max-width: 100%;
+    //   height: auto;
+    //   margin: 0;
+    // }
+
+    .logo {
+      margin-bottom: 130px;
+    }
+
+    .img-title {
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .img-text {
+      margin-bottom: 60px;
+    }
+
+    .angle-icon {
+      margin-left: calc(100% - 21px);
+    }
+  }
+
+  .content {
+    // position: relative;
+
+    display: flex;
+    flex-direction: column;
+    padding: 70px;
+    min-height: 100%;
 
     .screen-x-small & {
       width: 100%;
@@ -17,19 +58,68 @@
       flex-grow: 1;
     }
 
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+      margin-top: 0;
+      margin-bottom: 80px;
+
+      list-style: none;
+    }
+
+    .link {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      font-style: normal;
+
+      a {
+        text-decoration: none;
+      }
+    }
+
     .header {
-      margin-bottom: 30px;
+      max-width: 426px;
+      margin: 0 auto 30px;
+      flex: 1 1 auto;
 
       .title {
+        margin-top: 0;
+        margin-bottom: 10px;
+
+        font-size: 30px;
+        font-weight: 700;
         color: $base-text-color;
-        line-height: 28px;
-        font-weight: 500;
-        font-size: 24px;
+        line-height: 36px;
       }
 
       .description {
+        margin-bottom: 35px;
+
+        font-size: 18px;
+        font-weight: 400;
+
         color: rgba($base-text-color, alpha($base-text-color) * 0.7);
-        line-height: 18px;
+        line-height: 28px;
+      }
+    }
+
+    .content-footer {
+      padding: 0;
+      margin: 0;
+
+      font-size: 14px;
+      text-align: right;
+
+      .page-counter {
+        font-weight: 500;
+        color: #8692a6;
+      }
+
+      .text {
+        font-weight: 600;
+        color: #00937c;
       }
     }
   }

@@ -21,9 +21,9 @@ function AppWrapper() {
     return <LoadPanel visible={true} />;
   }
 
-  if (user) {
-    return <Content />;
-  }
+  // if (user) {
+  //   return <Content />;
+  // }
 
   return <UnauthenticatedContent />;
 }

@@ -4,10 +4,20 @@ import "whatwg-fetch";
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
 // import {isNotEmpty} from "../helpers/functions";
 
-const url = "https://uz-sql.dvlpr.lan";
+// const url = "https://uz.is.in.ua";
+const url = "https://ea.is.in.ua";
 // const url = "https://10.0.10.71";
 const baseParams = "/actions.asp?operation=do";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
+
+/*  
+  на 10.0.10.71 два сайти 
+  https://uz.is.in.ua -- цей через AD-auth
+  https://uzapi.is.in.ua -- цей "анонімний", без AD-auth
+
+  на 10.0.10.73 покищо один сайт
+  https://ea.is.in.ua  -- "анонімний", без AD-auth
+*/
 
 export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
   const pageRequestParams = () => {

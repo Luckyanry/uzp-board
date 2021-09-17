@@ -9,7 +9,11 @@ export {default as PasswordGenerator} from "./PasswordGenerator/PasswordGenerato
 
 export {StatusLangToggler} from "./StatusLangToggler/StatusLangToggler";
 
+export {default as Localization} from "./Localization/Localization";
+
+export {default as LoginStartForm} from "./LoginStartForm/LoginStartForm";
 export {default as LoginForm} from "./LoginForm/LoginForm";
+
 export {default as UserPanel} from "./UserPanel/UserPanel";
 export {default as ResetPasswordForm} from "./ResetPasswordForm/ResetPasswordForm";
 export {default as CreateAccountForm} from "./CreateAccountForm/CreateAccountForm";

@@ -1,6 +1,9 @@
 @import "../../themes/generated/variables.base.scss";
 
 .login-form {
+  padding-top: 24px;
+  border-top: 1px solid #eeeeee;
+
   .link {
     text-align: center;
     font-size: 16px;
@@ -14,5 +17,18 @@
   .form-text {
     margin: 10px 0;
     color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+  }
+
+  .dx-label-h-align {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .dx-field-item-label-content {
+    margin-bottom: 12px;
+  }
+
+  .input {
+    // padding: 30px;
   }
 }
