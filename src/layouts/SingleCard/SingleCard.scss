@@ -8,18 +8,9 @@
   }
 
   .left-content-wrapper {
-    // display: flex;
     padding: 150px 103px 292px;
     height: auto;
-
     color: #fff;
-
-    // .img {
-    //   display: block;
-    //   max-width: 100%;
-    //   height: auto;
-    //   margin: 0;
-    // }
 
     .logo {
       margin-bottom: 130px;
@@ -41,8 +32,6 @@
   }
 
   .content {
-    // position: relative;
-
     display: flex;
     flex-direction: column;
     padding: 70px;
@@ -100,7 +89,7 @@
         font-size: 18px;
         font-weight: 400;
 
-        color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+        color: #8692a6;
         line-height: 28px;
       }
     }
@@ -114,13 +103,19 @@
 
       .page-counter {
         font-weight: 500;
+        text-transform: uppercase;
         color: #8692a6;
       }
 
       .text {
+        font-size: 16px;
         font-weight: 600;
         color: #00937c;
       }
+    }
+
+    .dx-placeholder::before {
+      padding: 0 30px;
     }
   }
 }

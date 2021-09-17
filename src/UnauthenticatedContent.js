@@ -1,25 +1,19 @@
 import React from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
 import {SingleCard} from "./layouts";
-import {
-  LoginForm,
-  ResetPasswordForm,
-  ChangePasswordForm,
-  LoginStartForm,
-} from "./components";
+import {LoginForm, ResetPasswordForm, LoginStartForm} from "./components";
 
-// import {useLocalization} from "../../contexts/LocalizationContext";
+import {useLocalization} from "./contexts/LocalizationContext";
 
 export default function UnauthenticatedContent() {
-  // const {formatMessage} = useLocalization();
-  // formatMessage("msgStatusActive")
+  const {formatMessage} = useLocalization();
 
   return (
     <Switch>
       <Route exact path="/login">
         <SingleCard
-          title={"Вход в систему"}
-          description={"Выберите один из вариантов входа в админ панель ГУБДД."}
+          title={formatMessage("msgLoginStartFormTitle")}
+          description={formatMessage("msgLoginStartFormDesc")}
         >
           <LoginStartForm />
         </SingleCard>
@@ -27,12 +21,10 @@ export default function UnauthenticatedContent() {
 
       <Route exact path="/login-form">
         <SingleCard
-          title={"Вход в систему"}
-          description={
-            "Введите логин и пароль. Если у вас их нет, обратитесь к админу."
-          }
+          title={formatMessage("msgLoginFormTitle")}
+          description={formatMessage("msgLoginFormDesc")}
           prevPage={true}
-          footerTitle={"Вход через логин"}
+          footerTitle={formatMessage("msgLoginFormFooterTitle")}
           pageStep="02"
         >
           <LoginForm />
@@ -41,16 +33,13 @@ export default function UnauthenticatedContent() {
 
       <Route exact path="/reset-password">
         <SingleCard
-          title="Reset Password"
-          description="Please enter the email address that you used to register, and we will send you a link to reset your password via Email."
+          title={formatMessage("msgResetPasswordFormTitle")}
+          description={formatMessage("msgResetPasswordFormDesc")}
+          prevPage={true}
+          footerTitle={formatMessage("msgResetPasswordFormFooterTitle")}
+          pageStep="02"
         >
           <ResetPasswordForm />
-        </SingleCard>
-      </Route>
-
-      <Route exact path="/change-password/:recoveryCode">
-        <SingleCard title="Change Password">
-          <ChangePasswordForm />
         </SingleCard>
       </Route>
 

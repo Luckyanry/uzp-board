@@ -1,38 +1,41 @@
 import React, {useState, useRef, useCallback} from "react";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Form, {
   Item,
   Label,
   ButtonItem,
   ButtonOptions,
   RequiredRule,
-  EmailRule,
 } from "devextreme-react/form";
 import LoadIndicator from "devextreme-react/load-indicator";
 import notify from "devextreme/ui/notify";
+
 import {useAuth} from "../../contexts/Auth";
+import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./LoginForm.scss";
 
 export default function LoginForm() {
-  const history = useHistory();
   const {signIn} = useAuth();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
-  const emailEditorOptions = {
+  const {formatMessage} = useLocalization();
+
+  const loginEditorOptions = {
     stylingMode: "filled",
-    placeholder: "Введите логин",
+    placeholder: formatMessage("msgEnterLogin"),
     mode: "text",
+    elementAttr: {class: "form-input"},
+    height: 64,
   };
+
   const passwordEditorOptions = {
     stylingMode: "filled",
-    placeholder: "Введите пароль",
+    placeholder: formatMessage("msgEnterPassword"),
     mode: "password",
-  };
-  const rememberMeEditorOptions = {
-    text: "Remember me",
-    elementAttr: {class: "form-text"},
+    elementAttr: {class: "form-input"},
+    height: 64,
   };
 
   const onSubmit = useCallback(
@@ -50,10 +53,6 @@ export default function LoginForm() {
     [signIn]
   );
 
-  const onCreateAccountClick = useCallback(() => {
-    history.push("/create-account");
-  }, [history]);
-
   return (
     <form className={"login-form"} onSubmit={onSubmit}>
       <Form
@@ -63,44 +62,37 @@ export default function LoginForm() {
         showRequiredMark={false}
       >
         <Item
-          dataField={"email"}
+          dataField={"login"}
           editorType={"dxTextBox"}
-          editorOptions={emailEditorOptions}
+          editorOptions={loginEditorOptions}
           cssClass={"input"}
         >
-          {/* <p>Логин</p> */}
-          <RequiredRule message="Login is required" />
-          {/* <EmailRule message="Email is invalid" /> */}
-          <Label visible={true} text={"Логин"} />
+          <RequiredRule message={formatMessage("msgRequiredLogin")} />
+          <Label visible={true} text={formatMessage("msgLogin")} />
         </Item>
 
         <Item
           dataField={"password"}
           editorType={"dxTextBox"}
           editorOptions={passwordEditorOptions}
+          ssClass={"input"}
         >
-          {/* <p>Пароль</p> */}
-          <RequiredRule message="Password is required" />
-          <Label visible={true} text={"Пароль"} />
-        </Item>
-
-        <Item
-          dataField={"rememberMe"}
-          editorType={"dxCheckBox"}
-          editorOptions={rememberMeEditorOptions}
-        >
-          <Label visible={false} />
+          <RequiredRule message={formatMessage("msgRequiredPassword")} />
+          <Label visible={true} text={formatMessage("msgPassword")} />
         </Item>
 
         <Item>
           <div className={"link"}>
-            <Link to={"/reset-password"}>Forgot password?</Link>
+            <Link to={"/reset-password"}>
+              {formatMessage("msgForgotPassword")}
+            </Link>
           </div>
         </Item>
 
         <ButtonItem>
           <ButtonOptions
             width={"100%"}
+            height={64}
             type={"default"}
             useSubmitBehavior={true}
           >
@@ -108,19 +100,11 @@ export default function LoginForm() {
               {loading ? (
                 <LoadIndicator width={"24px"} height={"24px"} visible={true} />
               ) : (
-                "Sign In"
+                formatMessage("msgSignIn")
               )}
             </span>
           </ButtonOptions>
         </ButtonItem>
-
-        {/* <ButtonItem>
-          <ButtonOptions
-            text={"Create an account"}
-            width={"100%"}
-            onClick={onCreateAccountClick}
-          />
-        </ButtonItem> */}
       </Form>
     </form>
   );

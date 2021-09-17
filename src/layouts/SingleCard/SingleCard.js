@@ -1,9 +1,9 @@
 import React from "react";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import ScrollView from "devextreme-react/scroll-view";
 
 import {Localization} from "../../components";
-// import {useLocalization} from "../../contexts/LocalizationContext";
+import {useLocalization} from "../../contexts/LocalizationContext";
 
 import loginBg from "./img/loginBg.jpeg";
 import {ReactComponent as Logo} from "./icons/logo.svg";
@@ -19,8 +19,7 @@ const SingleCard = ({
   pageStep = "01",
   children,
 }) => {
-  // const {formatMessage} = useLocalization();
-  // formatMessage("msgStatusActive")
+  const {formatMessage} = useLocalization();
 
   const styles = {
     bgImgContainer: {
@@ -43,11 +42,9 @@ const SingleCard = ({
         <div style={styles.bgImgContainer}>
           <div className={"left-content-wrapper"}>
             <Logo className={"logo"} />
-            <h2 className={"img-title"}>Админ панель</h2>
+            <h2 className={"img-title"}>{formatMessage("msgAdminPanel")}</h2>
             <p className={"img-text"}>
-              Вы находитесь на главном экране входа в админ панель ГУБДД
-              Узбекистана. Вы можете войти в систему 3 способами: с помощью
-              выданого логина и пароля, ключа доступа и AD аутентификации.
+              {formatMessage("msgStartPageImgDescription")}
             </p>
             <AngleIcon className={"angle-icon"} />
           </div>
@@ -57,7 +54,9 @@ const SingleCard = ({
           <ul className={"toolbar"}>
             <li className={"link left-btn"}>
               {prevPage && (
-                <Link to={"/login"}>&#10094;&nbsp;&nbsp; {`Назад`}</Link>
+                <Link to={"/login"}>
+                  &#10094;&nbsp;&nbsp; {formatMessage("msgGoBack")}
+                </Link>
               )}
             </li>
 
@@ -73,7 +72,9 @@ const SingleCard = ({
           </div>
 
           <ul className={"content-footer"}>
-            <li className={"page-counter"}>{`ШАГ ${pageStep}/02`}</li>
+            <li className={"page-counter"}>{`${formatMessage(
+              "msgPageStep"
+            )} ${pageStep}/02`}</li>
             <li className={"text"}>{footerTitle}</li>
           </ul>
         </div>
@@ -83,5 +84,3 @@ const SingleCard = ({
 };
 
 export default SingleCard;
-
-// <Link to={"/reset-password"}>&#10094;&nbsp;&nbsp; {`Назад`}</Link>;

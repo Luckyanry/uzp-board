@@ -1,5 +1,5 @@
 import React, {useState, useRef, useCallback} from "react";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import Form, {
   Item,
   Label,
@@ -10,16 +10,27 @@ import Form, {
 } from "devextreme-react/form";
 import LoadIndicator from "devextreme-react/load-indicator";
 import notify from "devextreme/ui/notify";
+
 import {resetPassword} from "../../api/auth";
+import {useLocalization} from "../../contexts/LocalizationContext";
 import "./ResetPasswordForm.scss";
 
-const notificationText =
-  "We've sent a link to reset your password. Check your inbox.";
+const submitButtonAttributes = {class: "submit-button"};
 
 export default function ResetPasswordForm(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
+
+  const {formatMessage} = useLocalization();
+
+  const emailEditorOptions = {
+    stylingMode: "filled",
+    placeholder: formatMessage("msgEnterEmail"),
+    mode: "email",
+    elementAttr: {class: "form-input"},
+    height: 64,
+  };
 
   const onSubmit = useCallback(
     async (e) => {
@@ -32,30 +43,38 @@ export default function ResetPasswordForm(props) {
 
       if (result.isOk) {
         history.push("/login");
-        notify(notificationText, "success", 2500);
+        notify(formatMessage("msgResetNotificationText"), "success", 2500);
       } else {
         notify(result.message, "error", 2000);
       }
     },
+    // eslint-disable-next-line
     [history]
   );
 
   return (
     <form className={"reset-password-form"} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={loading}>
+      <Form
+        formData={formData.current}
+        disabled={loading}
+        showColonAfterLabel={false}
+        showRequiredMark={false}
+      >
         <Item
           dataField={"email"}
           editorType={"dxTextBox"}
           editorOptions={emailEditorOptions}
         >
-          <RequiredRule message="Email is required" />
-          <EmailRule message="Email is invalid" />
-          <Label visible={false} />
+          <RequiredRule message={formatMessage("msgRequiredEmail")} />
+          <EmailRule message={formatMessage("msgEmailFieldIsInvalid")} />
+          <Label visible={true} text={formatMessage("msgEmail")} />
         </Item>
+
         <ButtonItem>
           <ButtonOptions
             elementAttr={submitButtonAttributes}
             width={"100%"}
+            height={64}
             type={"default"}
             useSubmitBehavior={true}
           >
@@ -63,24 +82,12 @@ export default function ResetPasswordForm(props) {
               {loading ? (
                 <LoadIndicator width={"24px"} height={"24px"} visible={true} />
               ) : (
-                "Reset my password"
+                formatMessage("msgSendEmailBtn")
               )}
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={"login-link"}>
-            Return to <Link to={"/login"}>Sign In</Link>
-          </div>
-        </Item>
       </Form>
     </form>
   );
 }
-
-const emailEditorOptions = {
-  stylingMode: "filled",
-  placeholder: "Email",
-  mode: "email",
-};
-const submitButtonAttributes = {class: "submit-button"};
