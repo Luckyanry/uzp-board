@@ -12,6 +12,7 @@ import {Header, SideNavigationMenu, Footer} from "../../components";
 import {useScreenSize} from "../../utils/media-query";
 import {useMenuPatch} from "../../utils/patches";
 
+import {ReactComponent as Logo} from "../../icons/logo.svg";
 import "./SideNavInnerToolbar.scss";
 
 export default function SideNavInnerToolbar({title, children}) {
@@ -108,11 +109,10 @@ export default function SideNavInnerToolbar({title, children}) {
                   <Button icon="menu" stylingMode="text" onClick={toggleMenu} />
                 </Item>
               )}
-              <Item
-                location={"before"}
-                cssClass={"header-title"}
-                text={title}
-              />
+              {/* <Item location={"after"} cssClass={"header-title"} text={title} /> */}
+              <Item location={"after"} cssClass={"menu-button"}>
+                <Logo className={"logo"} />
+              </Item>
             </Toolbar>
           </SideNavigationMenu>
         </Template>

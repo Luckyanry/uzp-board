@@ -17,6 +17,7 @@ function AuthProvider(props) {
   useEffect(() => {
     (async function () {
       const result = await getUser();
+      console.log(`AuthProvider (Auth.js) result request: `, result);
       if (result.isOk) {
         setUser(result.data);
       }

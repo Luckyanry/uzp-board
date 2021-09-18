@@ -15,6 +15,9 @@ export default function UserPanel({menuMode}) {
 
   const history = useHistory();
 
+  console.log(`UserPanel user: `, user);
+  console.log(`UserPanel signOut: `, signOut);
+
   function navigateToProfile() {
     history.push("/profile");
   }

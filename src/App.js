@@ -20,7 +20,7 @@ function AppWrapper() {
   if (loading) {
     return <LoadPanel visible={true} />;
   }
-
+  console.log(`AppWrapper user: `, user);
   if (user) {
     return <Content />;
   }

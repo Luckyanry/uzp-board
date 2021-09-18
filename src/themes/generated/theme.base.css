@@ -8,13 +8,11 @@
 @import url(https://fonts.googleapis.com/earlyaccess/notokufiarabic.css);
 @font-face {
   font-family: DXIcons;
-  src: local("DevExtreme Generic Icons"), local("devextreme_generic_icons"),
-    url("../../../node_modules/devextreme/dist/css/icons/dxicons.woff2")
-      format("woff2"),
-    url("../../../node_modules/devextreme/dist/css/icons/dxicons.woff")
-      format("woff"),
-    url("../../../node_modules/devextreme/dist/css/icons/dxicons.ttf")
-      format("truetype");
+  src: local("DevExtreme Material Icons"),
+  local("devextreme_material_icons"),
+  url("../../../node_modules/devextreme/dist/css/icons/dxiconsmaterial.woff2") format("woff2"),
+  url("../../../node_modules/devextreme/dist/css/icons/dxiconsmaterial.woff") format("woff"),
+  url("../../../node_modules/devextreme/dist/css/icons/dxiconsmaterial.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   display: swap;

@@ -31,13 +31,13 @@ export default function ResetPasswordForm(props) {
     elementAttr: {class: "form-input"},
     height: 64,
   };
-
+  console.log(`ResetPasswordForm props `, props);
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       const {email} = formData.current;
       setLoading(true);
-
+      console.log(`ResetPasswordForm email: `, email);
       const result = await resetPassword(email);
       setLoading(false);
 

@@ -42,9 +42,14 @@ export default function LoginForm() {
     async (e) => {
       e.preventDefault();
       const {email, password} = formData.current;
+      console.log(`LoginForm email: `, email);
+      console.log(`LoginForm password: `, password);
+      console.log(`LoginForm formData: `, formData);
       setLoading(true);
 
       const result = await signIn(email, password);
+      console.log(`LoginForm email for signIn: `, email);
+      console.log(`LoginForm password for signIn: `, password);
       if (!result.isOk) {
         setLoading(false);
         notify(result.message, "error", 2000);

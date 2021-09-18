@@ -7,6 +7,7 @@ import {Template} from "devextreme-react/core/template";
 import Localization from "../Localization/Localization";
 import UserPanel from "../UserPanel/UserPanel";
 
+import {ReactComponent as Logo} from "../../icons/logo.svg";
 import "./Header.scss";
 
 export const Header = ({menuToggleEnabled, title, toggleMenu}) => {
@@ -25,8 +26,10 @@ export const Header = ({menuToggleEnabled, title, toggleMenu}) => {
           location={"before"}
           cssClass={"header-title"}
           text={title}
-          visible={!!title}
-        />
+          visible={true}
+        >
+          <Logo className={"logo"} />
+        </Item>
         <Item
           location={"after"}
           locateInMenu={"auto"}
