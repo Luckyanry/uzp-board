@@ -10,7 +10,7 @@ import UserPanel from "../UserPanel/UserPanel";
 import {ReactComponent as Logo} from "../../icons/logo.svg";
 import "./Header.scss";
 
-export const Header = ({menuToggleEnabled, title, toggleMenu}) => {
+export const Header = ({menuToggleEnabled, title, toggleMenu, menuStatus}) => {
   return (
     <header className={"header-component"}>
       <Toolbar className={"header-toolbar"}>
@@ -22,14 +22,16 @@ export const Header = ({menuToggleEnabled, title, toggleMenu}) => {
         >
           <Button icon="menu" stylingMode="text" onClick={toggleMenu} />
         </Item>
-        <Item
-          location={"before"}
-          cssClass={"header-title"}
-          text={title}
-          visible={true}
-        >
-          <Logo className={"logo"} />
-        </Item>
+        {menuStatus === 1 && (
+          <Item
+            location={"before"}
+            cssClass={"header-title"}
+            text={title}
+            visible={true}
+          >
+            <Logo className={"logo"} />
+          </Item>
+        )}
         <Item
           location={"after"}
           locateInMenu={"auto"}
@@ -44,7 +46,7 @@ export const Header = ({menuToggleEnabled, title, toggleMenu}) => {
         >
           <Button
             className={"user-button authorization"}
-            width={210}
+            width="auto"
             height={"100%"}
             stylingMode={"text"}
           >

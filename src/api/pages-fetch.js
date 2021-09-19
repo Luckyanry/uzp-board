@@ -4,9 +4,7 @@ import "whatwg-fetch";
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
 // import {isNotEmpty} from "../helpers/functions";
 
-const url = "https://uz.is.in.ua";
 // const url = "https://10.0.10.71";
-const baseParams = "/actions.asp?operation=do";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
 /*  
@@ -18,7 +16,16 @@ const baseParams = "/actions.asp?operation=do";
   https://ea.is.in.ua  -- "анонімний", без AD-auth
 */
 
-export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
+const baseUrl = "https://uz.is.in.ua";
+const baseParams = "/actions.asp?";
+
+export const FetchData = (
+  pageRequest,
+  sp = null,
+  db = "hbdb",
+  url = baseUrl,
+  operation = "do"
+) => {
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -59,8 +66,8 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     }
   };
 
-  const finalUrl = `${url}${baseParams}${pageRequestParams()}`;
-  const urlFromPages = `${url}${baseParams}&sp=${sp}&db=${db}`;
+  const finalUrl = `${url}${baseParams}operation=${operation}${pageRequestParams()}`;
+  const urlFromPages = `${url}${baseParams}operation=${operation}&sp=${sp}&db=${db}`;
 
   const fetchDataConstructor = (
     storeKey = "id",
@@ -173,6 +180,16 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     pageSize: 20,
   };
 
+  const signInUserData = new CustomStore({
+    key: "uid",
+    load: async (login, password) =>
+      await sendRequest(urlFromPages, {
+        schema: "dbo",
+        "@uname": login,
+        "@old": password,
+      }),
+  });
+
   async function sendRequest(url, data = {}, method = "GET") {
     const params = Object.keys(data)
       .map(
@@ -184,7 +201,6 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
       method,
       // cache: false,
       credentials: "include",
-      xhrFields: {withCredentials: true},
     };
 
     const postOptions = {
@@ -195,7 +211,6 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
       },
       // cache: false,
       credentials: "include",
-      xhrFields: {withCredentials: true},
     };
 
     if (method === "GET") {
@@ -274,6 +289,7 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
     custumMessageData,
     personFetchData,
     detailUserTemplateData,
+    signInUserData,
   };
 };
 
@@ -329,7 +345,7 @@ export const FetchData = (pageRequest, sp = null, db = "hbdb") => {
 //         "https://10.0.10.71/actions.asp?operation=do&sp=soato&db=hbdb&schema=look",
 //         {
 //           credentials: "include",
-//           xhrFields: {withCredentials: true},
+//
 //         }
 //       ).then((response) => response.json());
 //     },

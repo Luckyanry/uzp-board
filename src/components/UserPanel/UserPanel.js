@@ -8,6 +8,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import {useAuth} from "../../contexts/Auth";
 
 import "./UserPanel.scss";
+import {firstLetterToUpper} from "../../helpers/functions";
 
 export default function UserPanel({menuMode}) {
   const {user, signOut} = useAuth();
@@ -35,19 +36,18 @@ export default function UserPanel({menuMode}) {
     },
   ];
 
+  const {uname, suname} = user;
+  const userInitials = `${uname[0].toUpperCase()}${suname[0].toUpperCase()}`;
+
   return (
     <div className={"user-panel"}>
       <div className={"user-info"}>
-        <div className={"image-container"}>
-          <div
-            style={{
-              background: `url(${user.avatarUrl}) no-repeat #fff`,
-              backgroundSize: "cover",
-            }}
-            className={"user-image"}
-          />
+        <div className={"user-name"}>
+          {firstLetterToUpper(uname)} {firstLetterToUpper(suname)}
         </div>
-        <div className={"user-name"}>{user.email}</div>
+        <div className={"image-container"}>
+          <div className={"user-image"}>{userInitials}</div>
+        </div>
       </div>
 
       {menuMode === "context" && (

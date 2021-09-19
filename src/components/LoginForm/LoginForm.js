@@ -41,18 +41,17 @@ export default function LoginForm() {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      const {email, password} = formData.current;
-      console.log(`LoginForm email: `, email);
-      console.log(`LoginForm password: `, password);
-      console.log(`LoginForm formData: `, formData);
+      const {login, password} = formData.current;
+
+      console.log(`LoginForm formData.current(): `, formData.current);
       setLoading(true);
 
-      const result = await signIn(email, password);
-      console.log(`LoginForm email for signIn: `, email);
-      console.log(`LoginForm password for signIn: `, password);
+      const result = await signIn(login, password);
+      console.log(`LoginForm result for signIn: `, result);
+
       if (!result.isOk) {
         setLoading(false);
-        notify(result.message, "error", 2000);
+        notify(result.message, "error", 5000);
       }
     },
     [signIn]

@@ -48,6 +48,8 @@
   }
 
   .user-button > .dx-button-content {
+    display: flex;
     padding: 3px;
+    justify-content: flex-end;
   }
 }

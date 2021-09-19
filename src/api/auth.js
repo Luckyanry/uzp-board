@@ -1,13 +1,24 @@
 import {defaultUser} from "../utils/default-user";
+import {FetchData} from "./pages-fetch";
 
-export async function signIn(email, password) {
+const baseUrl = "https://uz.is.in.ua";
+
+export async function signIn(login = "", password = "") {
   try {
-    // Send request
-    console.log(email, password);
+    const signInUserData = FetchData(
+      "/login-form",
+      "w_CheckLogin",
+      "wisdb",
+      baseUrl,
+      "login"
+    ).signInUserData;
+
+    const result = await signInUserData._loadFunc(login, password);
+    console.log(`auth.js signIn result `, result);
 
     return {
       isOk: true,
-      data: defaultUser,
+      data: result.data[0],
     };
   } catch {
     return {
@@ -20,10 +31,12 @@ export async function signIn(email, password) {
 export async function getUser() {
   try {
     // Send request
-
+    console.log(`getUser start`);
     return {
-      isOk: true,
-      data: defaultUser,
+      // isOk: true,
+      // data: defaultUser,
+      isOk: false,
+      data: {},
     };
   } catch {
     return {

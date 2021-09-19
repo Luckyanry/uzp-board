@@ -10,6 +10,8 @@ import {FetchData} from "../api/pages-fetch";
 const LocalizationContext = React.createContext();
 const useLocalization = () => useContext(LocalizationContext);
 
+const baseUrl = "https://uzapi.is.in.ua";
+
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
   const [customMessagesData, setCustomMessagesData] = useState({});
@@ -19,23 +21,27 @@ const LocalizationProvider = ({children}) => {
   const changedMyLocalFetch = FetchData(
     "/w_changeMyLocaleTo",
     "w_changeMyLocaleTo",
-    "wisdb"
+    "wisdb",
+    baseUrl
   ).changeMyLocalToData;
 
   initMessages();
+  // locale(lang);
 
   useEffect(() => {
     const customMessages = FetchData(
       "/CustomMessages",
       "ShortDicsRecordsFlatCustomMessagesObject",
-      "hbdb"
+      "hbdb",
+      baseUrl
     ).custumMessageData;
 
     const getLangsData = async () => {
       const islangFetch = FetchData(
         "/islang",
         "islang",
-        "wisdb"
+        "wisdb",
+        baseUrl
       ).fetchColumnsSchemaData;
 
       const result = await islangFetch._loadFunc().then((res) => res.data);

@@ -14,20 +14,8 @@ function AuthProvider(props) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async function () {
-      const result = await getUser();
-      console.log(`AuthProvider (Auth.js) result request: `, result);
-      if (result.isOk) {
-        setUser(result.data);
-      }
-
-      setLoading(false);
-    })();
-  }, []);
-
-  const signIn = useCallback(async (email, password) => {
-    const result = await sendSignInRequest(email, password);
+  const signIn = useCallback(async (login, password) => {
+    const result = await sendSignInRequest(login, password);
     if (result.isOk) {
       setUser(result.data);
     }
@@ -38,6 +26,19 @@ function AuthProvider(props) {
   const signOut = useCallback(() => {
     setUser();
   }, []);
+
+  useEffect(() => {
+    (async function () {
+      const result = await getUser();
+      console.log(`AuthProvider (Auth.js) result request: `, result);
+      if (result.isOk) {
+        console.log(`Auth.js result.data`, result.data);
+        setUser(result.data);
+      }
+
+      setLoading(false);
+    })();
+  }, [signIn]);
 
   return (
     <AuthContext.Provider value={{user, signIn, signOut, loading}} {...props} />

@@ -25,11 +25,11 @@ export default function SideNavInnerToolbar({title, children}) {
   );
 
   const toggleMenu = useCallback(({event}) => {
-    setMenuStatus((prevMenuStatus) =>
-      prevMenuStatus === MenuStatus.Closed
+    setMenuStatus((prevMenuStatus) => {
+      return prevMenuStatus === MenuStatus.Closed
         ? MenuStatus.Opened
-        : MenuStatus.Closed
-    );
+        : MenuStatus.Closed;
+    });
     event.stopPropagation();
   }, []);
 
@@ -82,7 +82,11 @@ export default function SideNavInnerToolbar({title, children}) {
         template={"menu"}
       >
         <div className={"container"}>
-          <Header menuToggleEnabled={isXSmall} toggleMenu={toggleMenu} />
+          <Header
+            menuToggleEnabled={isXSmall}
+            toggleMenu={toggleMenu}
+            menuStatus={menuStatus}
+          />
           <ScrollView ref={scrollViewRef} className={"layout-body with-footer"}>
             <div className={"content"}>
               {React.Children.map(children, (item) => {
@@ -110,6 +114,7 @@ export default function SideNavInnerToolbar({title, children}) {
                 </Item>
               )}
               {/* <Item location={"after"} cssClass={"header-title"} text={title} /> */}
+
               <Item location={"after"} cssClass={"menu-button"}>
                 <Logo className={"logo"} />
               </Item>
