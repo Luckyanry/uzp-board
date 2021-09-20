@@ -1,11 +1,9 @@
 import {getFromSessionStorege, setToSessionStorege} from "../helpers/functions";
 import {FetchData} from "./pages-fetch";
-import {urlAnonymous, urlADauth, getAuthURL} from "./url-config";
+import {urlAnonymous, urlADauth} from "./url-config";
 
 export async function signIn(login = null, password = null) {
   const url = login && password ? urlAnonymous : urlADauth;
-  // getAuthURL(url);
-  console.log("auth", url);
   sessionStorage.setItem("sessionURL", url);
 
   try {
@@ -101,17 +99,9 @@ export async function createAccount(email, password) {
   }
 }
 
-export async function changePassword(email, recoveryCode) {
+export async function changePassword(password, recoveryCode) {
   try {
-    // Send request
-    console.log("email & recoveryCode ", email, recoveryCode);
-
-    const checkTokenData = FetchData(
-      "/change-password",
-      "w_CheckResetPasswordTokenExpired",
-      "wisdb",
-      urlAnonymous
-    ).signInUserData; // @resetToken
+    console.log("password & recoveryCode ", password, recoveryCode);
 
     const changePasswordData = FetchData(
       "/change-password",
@@ -120,10 +110,30 @@ export async function changePassword(email, recoveryCode) {
       urlAnonymous
     ).signInUserData;
 
-    // const result = await changePasswordData._loadFunc(
-    //   {"@resetToken": resetToken, "@pwd": newPass},
-    //   "GET"
-    // );
+    const checkTokenData = FetchData(
+      "/change-password",
+      "w_CheckResetPasswordTokenExpired",
+      "wisdb",
+      urlAnonymous
+    ).signInUserData;
+
+    const isTokenValid = await checkTokenData._loadFunc(
+      {"@resetToken": recoveryCode},
+      "POST"
+    );
+
+    if (!isTokenValid) {
+      return {
+        isOk: false,
+        message:
+          "The token has expired, please repeat the password recovery process again.",
+      };
+    }
+
+    await changePasswordData._loadFunc(
+      {"@resetToken": recoveryCode, "@pwd": password},
+      "POST"
+    );
 
     return {
       isOk: true,
@@ -131,7 +141,8 @@ export async function changePassword(email, recoveryCode) {
   } catch {
     return {
       isOk: false,
-      message: "Failed to change password",
+      message:
+        "Failed to reset password, something is wrong with request to send to server.",
     };
   }
 }

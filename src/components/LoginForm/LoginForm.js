@@ -74,8 +74,8 @@ export default function LoginForm() {
 
   return (
     <form
-      className={"login-form"}
       id="login-form-container"
+      className={"login-form"}
       onSubmit={onSubmit}
     >
       <Form

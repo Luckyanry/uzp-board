@@ -29,6 +29,7 @@ const SingleCard = ({
       background: `url("${loginBg}"), rgba(1, 68, 58, 1)`,
       backgroundBlendMode: "overlay",
       backgroundRepeat: "no-repeat",
+      backgroundSize: "103%",
     },
   };
 

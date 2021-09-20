@@ -17,7 +17,6 @@ import {
   PatternRule,
   StringLengthRule,
 } from "devextreme-react/validator";
-import Button from "devextreme-react/button";
 import ValidationSummary from "devextreme-react/validation-summary";
 // import notify from "devextreme/ui/notify";
 
@@ -27,8 +26,9 @@ import {FetchData} from "../../api/pages-fetch";
 import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
+import notify from "devextreme/ui/notify";
 
-const PasswordGenerator = ({onFormSubmit, loadingState, formData}) => {
+const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
@@ -120,8 +120,8 @@ const PasswordGenerator = ({onFormSubmit, loadingState, formData}) => {
     return passwordState;
   }
 
-  // function onFormSubmit(e) {
-  //   console.log(`inputValidation`, inputValidation());
+  // function onSubmit(e) {
+  //   inputValidation();
   //   notify(
   //     {
   //       message: formatMessage("msgSubmitNotify"),
@@ -243,17 +243,19 @@ const PasswordGenerator = ({onFormSubmit, loadingState, formData}) => {
 
   const {regExp, patternRuleErrMsg} = inputValidation();
 
-  const confirmPassword = useCallback(
-    ({value}) => value === formData.password,
-    // eslint-disable-next-line
-    []
-  );
+  // const confirmPassword = useCallback(
+  //   ({value}) => value === formData.password,
+  //   // eslint-disable-next-line
+  //   []
+  // );
+  console.log(`PG formData `, formData);
+  // console.log(`PG loadingState `, loadingState);
 
   return (
     <form
-      onSubmit={onFormSubmit}
       id="change-password-form-container"
       className={"change-password-form"}
+      onSubmit={onSubmit}
     >
       <Form
         formData={formData}
@@ -341,21 +343,15 @@ const PasswordGenerator = ({onFormSubmit, loadingState, formData}) => {
           </TextBox>
 
           <RequiredRule message="Password is required" />
-          <CustomRule
-            message={"Passwords do not match"}
-            validationCallback={confirmPassword}
-          />
+          {/* <CustomRule
+              message={"Passwords do not match"}
+              validationCallback={confirmPassword}
+            /> */}
 
           <Label visible={true} />
         </Item>
 
-        {/* <ValidationSummary id="summary" />
-          <Button
-            id="button"
-            text={formatMessage("msgSubmit")}
-            type="success"
-            useSubmitBehavior={true}
-          /> */}
+        {/* <ValidationSummary id="summary" /> */}
         <ButtonItem>
           <ButtonOptions
             width={"100%"}

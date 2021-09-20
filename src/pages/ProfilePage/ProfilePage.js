@@ -40,7 +40,6 @@ export const ProfilePage = () => {
         </div>
         <span>{notes}</span>
       </div>
-      <PasswordGenerator />
 
       <div className={"content-block dx-card responsive-paddings"}>
         <Form
@@ -78,6 +77,9 @@ export const ProfilePage = () => {
             <Label text={formatMessage("msgNotes")} />
           </Item>
         </Form>
+        <div className={"passwors-generator"}>
+          <PasswordGenerator />
+        </div>
       </div>
     </>
   );

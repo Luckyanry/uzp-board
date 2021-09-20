@@ -18,6 +18,10 @@ export default function ChangePasswordForm(props) {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      console.log(`CPF recoveryCode `, recoveryCode);
+      console.log(`CPF formData `, formData);
+      console.log(`CPF history`, history);
+
       const {password} = formData.current;
       setLoading(true);
 
@@ -25,9 +29,25 @@ export default function ChangePasswordForm(props) {
       setLoading(false);
 
       if (result.isOk) {
-        history.push("/login");
+        console.log(`result`, result);
+        // history.push("/login");
       } else {
-        notify(result.message, "error", 2000);
+        notify(
+          {
+            message: result.message,
+            position: {
+              my: "center bottom",
+              at: "center",
+              of: "#change-password-form-container",
+              offset: "0 236",
+            },
+            width: 428,
+            height: 66,
+            shading: true,
+          },
+          "error",
+          3000
+        );
       }
     },
     [history, recoveryCode]
@@ -35,7 +55,7 @@ export default function ChangePasswordForm(props) {
 
   return (
     <PasswordGenerator
-      onFormSubmit={onSubmit}
+      onSubmit={onSubmit}
       loadingState={loading}
       formData={formData.current}
     />
