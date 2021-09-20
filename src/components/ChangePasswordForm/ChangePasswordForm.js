@@ -1,16 +1,13 @@
 import React, {useState, useRef, useCallback} from "react";
 import {useHistory, useParams} from "react-router-dom";
-import Form, {
-  Item,
-  Label,
-  ButtonItem,
-  ButtonOptions,
-  RequiredRule,
-  CustomRule,
-} from "devextreme-react/form";
-import LoadIndicator from "devextreme-react/load-indicator";
+
 import notify from "devextreme/ui/notify";
+// import {formatMessage} from "devextreme/localization";
+
+import PasswordGenerator from "../PasswordGenerator/PasswordGenerator";
 import {changePassword} from "../../api/auth";
+
+import "./ChangePasswordForm.scss";
 
 export default function ChangePasswordForm(props) {
   const history = useHistory();
@@ -36,61 +33,11 @@ export default function ChangePasswordForm(props) {
     [history, recoveryCode]
   );
 
-  const confirmPassword = useCallback(
-    ({value}) => value === formData.current.password,
-    []
-  );
-
   return (
-    <form onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={loading}>
-        <Item
-          dataField={"password"}
-          editorType={"dxTextBox"}
-          editorOptions={passwordEditorOptions}
-        >
-          <RequiredRule message="Password is required" />
-          <Label visible={false} />
-        </Item>
-        <Item
-          dataField={"confirmedPassword"}
-          editorType={"dxTextBox"}
-          editorOptions={confirmedPasswordEditorOptions}
-        >
-          <RequiredRule message="Password is required" />
-          <CustomRule
-            message={"Passwords do not match"}
-            validationCallback={confirmPassword}
-          />
-          <Label visible={false} />
-        </Item>
-        <ButtonItem>
-          <ButtonOptions
-            width={"100%"}
-            type={"default"}
-            useSubmitBehavior={true}
-          >
-            <span className="dx-button-text">
-              {loading ? (
-                <LoadIndicator width={"24px"} height={"24px"} visible={true} />
-              ) : (
-                "Continue"
-              )}
-            </span>
-          </ButtonOptions>
-        </ButtonItem>
-      </Form>
-    </form>
+    <PasswordGenerator
+      onFormSubmit={onSubmit}
+      loadingState={loading}
+      formData={formData.current}
+    />
   );
 }
-
-const passwordEditorOptions = {
-  stylingMode: "outlined",
-  placeholder: "Password",
-  mode: "password",
-};
-const confirmedPasswordEditorOptions = {
-  stylingMode: "outlined",
-  placeholder: "Confirm Password",
-  mode: "password",
-};

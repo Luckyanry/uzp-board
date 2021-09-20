@@ -1,8 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
+import "./PasswordGenerator.scss";
+import Form, {
+  ButtonItem,
+  ButtonOptions,
+  CustomRule,
+  Item,
+  Label,
+} from "devextreme-react/form";
+import LoadIndicator from "devextreme-react/load-indicator";
 import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
-import Button from "devextreme-react/button";
-import ValidationSummary from "devextreme-react/validation-summary";
 import {
   Validator,
   RequiredRule,
@@ -10,17 +17,18 @@ import {
   PatternRule,
   StringLengthRule,
 } from "devextreme-react/validator";
-import notify from "devextreme/ui/notify";
+import Button from "devextreme-react/button";
+import ValidationSummary from "devextreme-react/validation-summary";
+// import notify from "devextreme/ui/notify";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 
-import visibilityOff from "./visibilityOff.svg";
-import visibility from "./visibility.svg";
-import enhancedEncryption from "./enhancedEncryption.svg";
-import "./PasswordGenerator.scss";
+import visibilityOff from "./icons/visibilityOff.svg";
+import visibility from "./icons/visibility.svg";
+import enhancedEncryption from "./icons/enhancedEncryption.svg";
 
-const PasswordGenerator = () => {
+const PasswordGenerator = ({onFormSubmit, loadingState, formData}) => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
@@ -30,6 +38,22 @@ const PasswordGenerator = () => {
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
 
   const {formatMessage} = useLocalization();
+
+  const passwordEditorOptions = {
+    stylingMode: "filled",
+    placeholder: formatMessage("msgEnterPassword"),
+    mode: "password",
+    elementAttr: {class: "form-input"},
+    height: 64,
+  };
+
+  const confirmedPasswordEditorOptions = {
+    stylingMode: "filled",
+    placeholder: formatMessage("msgConfirmPassword"),
+    mode: "password",
+    elementAttr: {class: "form-input"},
+    height: 64,
+  };
 
   const passwordButton = {
     icon: passwordVisibility,
@@ -96,22 +120,22 @@ const PasswordGenerator = () => {
     return passwordState;
   }
 
-  function onFormSubmit(e) {
-    console.log(`inputValidation`, inputValidation());
-    notify(
-      {
-        message: formatMessage("msgSubmitNotify"),
-        position: {
-          my: "center top",
-          at: "center top",
-        },
-      },
-      "success",
-      3000
-    );
+  // function onFormSubmit(e) {
+  //   console.log(`inputValidation`, inputValidation());
+  //   notify(
+  //     {
+  //       message: formatMessage("msgSubmitNotify"),
+  //       position: {
+  //         my: "center top",
+  //         at: "center top",
+  //       },
+  //     },
+  //     "success",
+  //     3000
+  //   );
 
-    e.preventDefault();
-  }
+  //   e.preventDefault();
+  // }
 
   function getRandomLower() {
     return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
@@ -219,101 +243,138 @@ const PasswordGenerator = () => {
 
   const {regExp, patternRuleErrMsg} = inputValidation();
 
+  const confirmPassword = useCallback(
+    ({value}) => value === formData.password,
+    // eslint-disable-next-line
+    []
+  );
+
   return (
-    <div className="dx-fieldset">
-      <form action="your-action" onSubmit={onFormSubmit}>
-        <div className="dx-fieldset">
-          <div className="dx-field">
-            {/* <div className="dx-field-label">
-              <h6>Password: </h6>
-            </div> */}
-            <div className="dx-field-value">
-              <TextBox
-                mode={passwordMode}
-                placeholder={formatMessage("msgEnterPassword")}
-                stylingMode="filled"
-                defaultValue={passwordState}
-                onValueChanged={onPasswordChanged}
-                value={passwordState}
-              >
-                <TextBoxButton
-                  name="msgGenerateStrongPassword"
-                  // name={formatMessage("msgGenerateStrongPassword")}
-                  location="after"
-                  options={passwordGeneratorBtn}
-                />
+    <form
+      onSubmit={onFormSubmit}
+      id="change-password-form-container"
+      className={"change-password-form"}
+    >
+      <Form
+        formData={formData}
+        disabled={loadingState}
+        showColonAfterLabel={false}
+        showRequiredMark={false}
+      >
+        <Item
+          dataField={"password"}
+          editorType={"dxTextBox"}
+          editorOptions={passwordEditorOptions}
+          cssClass={"input"}
+        >
+          <TextBox
+            mode={passwordMode}
+            placeholder={formatMessage("msgEnterPassword")}
+            stylingMode="filled"
+            defaultValue={passwordState}
+            onValueChanged={onPasswordChanged}
+            value={passwordState}
+          >
+            <TextBoxButton
+              name="msgGenerateStrongPassword"
+              // name={formatMessage("msgGeneratePassword")}
+              location="after"
+              options={passwordGeneratorBtn}
+            />
 
-                <TextBoxButton
-                  name={formatMessage("msgShowPassword")}
-                  location="after"
-                  options={passwordButton}
-                />
+            <TextBoxButton
+              name={formatMessage("msgShowPassword")}
+              location="after"
+              options={passwordButton}
+            />
 
-                <Validator>
-                  <RequiredRule
-                    message={formatMessage("msgRequiredPassword")}
-                  />
+            <Validator>
+              <RequiredRule message={formatMessage("msgRequiredPassword")} />
 
-                  <StringLengthRule
-                    message={formatMessage(
-                      "msgPwdStringLengthRuleErrMsg",
-                      minLength,
-                      maxLength
-                    )}
-                    min={minLength}
-                    max={maxLength}
-                  />
+              <StringLengthRule
+                message={formatMessage(
+                  "msgPwdStringLengthRuleErrMsg",
+                  minLength,
+                  maxLength
+                )}
+                min={minLength}
+                max={maxLength}
+              />
 
-                  <PatternRule message={patternRuleErrMsg} pattern={regExp} />
-                </Validator>
-              </TextBox>
-            </div>
-          </div>
+              <PatternRule message={patternRuleErrMsg} pattern={regExp} />
+            </Validator>
+          </TextBox>
 
-          <div className="dx-field">
-            {/* <div className="dx-field-label">
-              <h6>Confirm Password</h6>
-            </div> */}
-            <div className="dx-field-value">
-              <TextBox
-                mode={passwordMode}
-                placeholder={formatMessage("msgConfirmPassword")}
-                stylingMode="filled"
-                value={confirmPasswordState}
-                onValueChanged={onConfirmPasswordChanged}
-              >
-                <TextBoxButton
-                  name={formatMessage("msgShowConfirmedPassword")}
-                  location="after"
-                  options={passwordButton}
-                />
+          <RequiredRule message="Password is required" />
+          <Label visible={true} />
+        </Item>
 
-                <Validator>
-                  <RequiredRule
-                    message={formatMessage("msgConfirmRequiredPassword")}
-                  />
+        <Item
+          dataField={"confirmedPassword"}
+          editorType={"dxTextBox"}
+          editorOptions={confirmedPasswordEditorOptions}
+          ssClass={"input"}
+        >
+          <TextBox
+            mode={passwordMode}
+            placeholder={formatMessage("msgConfirmPassword")}
+            stylingMode="filled"
+            value={confirmPasswordState}
+            onValueChanged={onConfirmPasswordChanged}
+          >
+            <TextBoxButton
+              name={formatMessage("msgShowConfirmedPassword")}
+              location="after"
+              options={passwordButton}
+            />
 
-                  <CompareRule
-                    message={formatMessage("msgPasswordNotMatch")}
-                    comparisonTarget={passwordComparison}
-                  />
-                </Validator>
-              </TextBox>
-            </div>
-          </div>
-        </div>
+            <Validator>
+              <RequiredRule
+                message={formatMessage("msgConfirmRequiredPassword")}
+              />
 
-        <div className="dx-btn-fieldset">
-          <ValidationSummary id="summary" />
+              <CompareRule
+                message={formatMessage("msgPasswordNotMatch")}
+                comparisonTarget={passwordComparison}
+              />
+            </Validator>
+          </TextBox>
+
+          <RequiredRule message="Password is required" />
+          <CustomRule
+            message={"Passwords do not match"}
+            validationCallback={confirmPassword}
+          />
+
+          <Label visible={true} />
+        </Item>
+
+        {/* <ValidationSummary id="summary" />
           <Button
             id="button"
             text={formatMessage("msgSubmit")}
             type="success"
             useSubmitBehavior={true}
-          />
-        </div>
-      </form>
-    </div>
+          /> */}
+        <ButtonItem>
+          <ButtonOptions
+            width={"100%"}
+            type={"default"}
+            height={64}
+            useSubmitBehavior={true}
+            cssClass={"submit-btn"}
+          >
+            <span className="dx-button-text">
+              {loadingState ? (
+                <LoadIndicator width={"24px"} height={"24px"} visible={true} />
+              ) : (
+                formatMessage("msgContinue")
+              )}
+            </span>
+          </ButtonOptions>
+        </ButtonItem>
+      </Form>
+    </form>
   );
 };
 
