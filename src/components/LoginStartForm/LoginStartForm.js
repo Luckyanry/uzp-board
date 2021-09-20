@@ -1,4 +1,7 @@
-import React, {useState, useCallback} from "react";
+import React, {
+  // useState,
+  useCallback,
+} from "react";
 import {Link} from "react-router-dom";
 
 import notify from "devextreme/ui/notify";
@@ -72,20 +75,22 @@ const LoginStartForm = () => {
       </button>
 
       <button className={"form-link"}>
-        {/* <Link to={"/reset-password"}> */}
-        <div className={"link-wrapper"}>
-          <div className={"link-icon-border"}>
-            <FlashCardIcon className={"link-icon"} />
+        <Link to={"/digital-key"}>
+          <div className={"link-wrapper"}>
+            <div className={"link-icon-border"}>
+              <FlashCardIcon className={"link-icon"} />
+            </div>
+            <div className={"link-content"}>
+              <p className={"link-title"}>
+                {formatMessage("msgStartPageElKey")}
+              </p>
+              <p className={"link-desc"}>
+                {formatMessage("msgStartPageElKeyDesc")} &nbsp;&nbsp;
+              </p>
+            </div>
+            <ArrowRightIcon className={"arrow-icon"} />
           </div>
-          <div className={"link-content"}>
-            <p className={"link-title"}>{formatMessage("msgStartPageElKey")}</p>
-            <p className={"link-desc"}>
-              {formatMessage("msgStartPageElKeyDesc")} &nbsp;&nbsp;
-            </p>
-          </div>
-          <ArrowRightIcon className={"arrow-icon"} />
-        </div>
-        {/* </Link> */}
+        </Link>
       </button>
 
       <button className={"form-link"} onClick={onADauthClickHendler}>

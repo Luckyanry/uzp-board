@@ -1,0 +1,33 @@
+@import "../../themes/generated/variables.base.scss";
+
+.digital-key-form {
+  border-top: 1px solid #eeeeee;
+
+  .submit-button {
+    margin-top: 40px;
+  }
+
+  .dx-button-text {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .digital-key-btn {
+    background-color: #004f43;
+  }
+
+  .secure-text {
+    padding-top: 21px;
+    text-align: center;
+    color: #8692a6;
+  }
+
+  .secure-icon {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    vertical-align: text-bottom;
+
+    fill: #004f43;
+  }
+}
