@@ -4,6 +4,9 @@ import {urlAnonymous, urlADauth, getAuthURL} from "./url-config";
 
 export async function signIn(login = null, password = null) {
   const url = login && password ? urlAnonymous : urlADauth;
+  // getAuthURL(url);
+  console.log("auth", url);
+  sessionStorage.setItem("sessionURL", url);
 
   try {
     const signInUserData = FetchData(
@@ -19,7 +22,6 @@ export async function signIn(login = null, password = null) {
       "@old": password,
     });
     setToSessionStorege("user", result.data[0]);
-    getAuthURL(url);
 
     return {
       isOk: true,
@@ -102,7 +104,26 @@ export async function createAccount(email, password) {
 export async function changePassword(email, recoveryCode) {
   try {
     // Send request
-    console.log(email, recoveryCode);
+    console.log("email & recoveryCode ", email, recoveryCode);
+
+    const checkTokenData = FetchData(
+      "/change-password",
+      "w_CheckResetPasswordTokenExpired",
+      "wisdb",
+      urlAnonymous
+    ).signInUserData; // @resetToken
+
+    const changePasswordData = FetchData(
+      "/change-password",
+      "w_ChangePasswordByToken",
+      "wisdb",
+      urlAnonymous
+    ).signInUserData;
+
+    // const result = await changePasswordData._loadFunc(
+    //   {"@resetToken": resetToken, "@pwd": newPass},
+    //   "GET"
+    // );
 
     return {
       isOk: true,
@@ -114,12 +135,3 @@ export async function changePassword(email, recoveryCode) {
     };
   }
 }
-
-// function setToSessionStorege(key, value) {
-//   sessionStorage.setItem(key, value);
-// }
-
-// function getFromSessionStorege(key, ifIsNull) {
-//   const userData = JSON.parse(sessionStorage.getItem(key));
-//   return userData !== null ? userData : ifIsNull;
-// }

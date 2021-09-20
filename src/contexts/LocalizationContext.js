@@ -74,7 +74,7 @@ const LocalizationProvider = ({children}) => {
   function isCurrentLang(array) {
     if (array.length) {
       const result = array.find(({iscurrent}) => iscurrent);
-      const locale = localStorage.getItem("locale");
+      const locale = sessionStorage.getItem("locale");
 
       if (!locale) return;
       setToLocalStorege(result.short);
@@ -86,7 +86,7 @@ const LocalizationProvider = ({children}) => {
       const result = array.find(({isdefault}) => isdefault);
       setDefaultLang(result.short);
 
-      const locale = localStorage.getItem("locale");
+      const locale = sessionStorage.getItem("locale");
 
       if (locale) return;
       changeLocale(result.short);
@@ -94,12 +94,12 @@ const LocalizationProvider = ({children}) => {
   }
 
   function getFromLocalStorege(defaultValue) {
-    const locale = localStorage.getItem("locale");
+    const locale = sessionStorage.getItem("locale");
     return locale !== null ? locale : defaultValue;
   }
 
   function setToLocalStorege(locale) {
-    localStorage.setItem("locale", locale);
+    sessionStorage.setItem("locale", locale);
   }
 
   function changeMyLocalTo(newKey) {

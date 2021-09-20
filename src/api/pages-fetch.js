@@ -15,20 +15,24 @@ import {urlAnonymous, urlBaseParam} from "./url-config";
   https://ea.is.in.ua  -- "анонімний", без AD-auth
 */
 
-function getFromSessionStorege() {
-  const sessionURL = sessionStorage.getItem("sessionURL");
-  return sessionURL !== null
-    ? sessionURL
-    : sessionStorage.setItem("sessionURL", urlAnonymous);
-}
+// function getFromSessionStorege() {
+//   const sessionURL = sessionStorage.getItem("sessionURL");
+//   return sessionURL !== null
+//     ? sessionURL
+//     : sessionStorage.setItem("sessionURL", urlAnonymous);
+// }
 
 export const FetchData = (
   pageRequest,
   sp = null,
   db = "hbdb",
-  url = getFromSessionStorege(),
+  url = sessionStorage.getItem("sessionURL"),
   operation = "do"
 ) => {
+  console.log(`sessionStorage fetch`, sessionStorage.getItem("sessionURL"));
+  console.log(`url fetch`, (url = sessionStorage.getItem("sessionURL")));
+  const sessionURL = !url ? urlAnonymous : sessionStorage.getItem("sessionURL");
+
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
@@ -69,8 +73,8 @@ export const FetchData = (
     }
   };
 
-  const finalUrl = `${url}${urlBaseParam}operation=${operation}${pageRequestParams()}`;
-  const urlFromPages = `${url}${urlBaseParam}operation=${operation}&sp=${sp}&db=${db}`;
+  const finalUrl = `${sessionURL}${urlBaseParam}operation=${operation}${pageRequestParams()}`;
+  const urlFromPages = `${sessionURL}${urlBaseParam}operation=${operation}&sp=${sp}&db=${db}`;
 
   const fetchDataConstructor = (
     storeKey = "id",

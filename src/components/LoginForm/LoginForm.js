@@ -43,11 +43,11 @@ export default function LoginForm() {
       e.preventDefault();
       const {login, password} = formData.current;
 
-      console.log(`LoginForm formData.current(): `, formData.current);
+      // console.log(`LoginForm formData.current(): `, formData.current);
       setLoading(true);
 
       const result = await signIn(login, password);
-      console.log(`LoginForm result for signIn: `, result);
+      // console.log(`LoginForm result for signIn: `, result);
 
       if (!result.isOk) {
         setLoading(false);
