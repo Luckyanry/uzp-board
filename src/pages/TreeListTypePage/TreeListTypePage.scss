@@ -6,11 +6,15 @@
   position: relative;
 }
 
+.content-block {
+  position: relative;
+}
+
 .btn {
-  position: absolute;
-  top: 56px;
-  left: 15px;
-  z-index: 1;
+  // position: absolute;
+  // top: 100px;
+  // left: 0px;
+  z-index: 1000;
 
   background: #009688;
 }

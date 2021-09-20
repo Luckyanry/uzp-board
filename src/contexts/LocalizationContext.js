@@ -3,6 +3,7 @@ import React, {useState, useContext, useEffect} from "react";
 import {locale, loadMessages, formatMessage} from "devextreme/localization";
 import * as ruMessages from "devextreme/localization/messages/ru.json";
 import * as uzLatnMessages from "devextreme/localization/messages/uz-Latn.json";
+import * as uzCyrlMessages from "devextreme/localization/messages/uz-Cyrl.json";
 
 // import {getSystemDictionary} from "../app-localization";
 import {FetchData} from "../api/pages-fetch";
@@ -124,6 +125,7 @@ const LocalizationProvider = ({children}) => {
   function initMessages() {
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
+    loadMessages(uzCyrlMessages);
     // loadMessages(getSystemDictionary());
     loadMessages(customMessagesData);
   }
