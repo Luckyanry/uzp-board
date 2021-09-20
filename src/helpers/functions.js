@@ -18,12 +18,13 @@ function customPageAbbreviationMsg(message) {
   return `msg${firstLetterToUpper(message)}Abbreviation`;
 }
 
-function getFromSessionStorege(defaultValue) {
-  const locale = sessionStorage.getItem("locale");
-  return locale !== null ? locale : defaultValue;
+function getFromSessionStorege(key, ifIsNull) {
+  const store = JSON.parse(sessionStorage.getItem(key));
+  return store !== null ? store : ifIsNull;
 }
-function setToSessionStorege(locale) {
-  sessionStorage.setItem("locale", locale);
+
+function setToSessionStorege(key, value) {
+  sessionStorage.setItem(key, JSON.stringify(value));
 }
 
 function getLookupParamsForURL(data) {

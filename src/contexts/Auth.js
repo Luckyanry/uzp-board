@@ -16,6 +16,7 @@ function AuthProvider(props) {
 
   const signIn = useCallback(async (login, password) => {
     const result = await sendSignInRequest(login, password);
+
     if (result.isOk) {
       setUser(result.data);
     }
@@ -25,6 +26,7 @@ function AuthProvider(props) {
 
   const signOut = useCallback(() => {
     setUser();
+    sessionStorage.clear();
   }, []);
 
   useEffect(() => {

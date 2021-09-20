@@ -6,23 +6,22 @@ import * as uzLatnMessages from "devextreme/localization/messages/uz-Latn.json";
 
 // import {getSystemDictionary} from "../app-localization";
 import {FetchData} from "../api/pages-fetch";
+import {urlAnonymous} from "../api/url-config";
 
 const LocalizationContext = React.createContext();
 const useLocalization = () => useContext(LocalizationContext);
-
-const baseUrl = "https://uzapi.is.in.ua";
 
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
   const [customMessagesData, setCustomMessagesData] = useState({});
   const [defaultLang, setDefaultLang] = useState("en");
-  const [lang, setLang] = useState(getFromSessionStorege(defaultLang));
+  const [lang, setLang] = useState(getFromLocalStorege(defaultLang));
 
   const changedMyLocalFetch = FetchData(
     "/w_changeMyLocaleTo",
     "w_changeMyLocaleTo",
     "wisdb",
-    baseUrl
+    urlAnonymous
   ).changeMyLocalToData;
 
   initMessages();
@@ -33,7 +32,7 @@ const LocalizationProvider = ({children}) => {
       "/CustomMessages",
       "ShortDicsRecordsFlatCustomMessagesObject",
       "hbdb",
-      baseUrl
+      urlAnonymous
     ).custumMessageData;
 
     const getLangsData = async () => {
@@ -41,7 +40,7 @@ const LocalizationProvider = ({children}) => {
         "/islang",
         "islang",
         "wisdb",
-        baseUrl
+        urlAnonymous
       ).fetchColumnsSchemaData;
 
       const result = await islangFetch._loadFunc().then((res) => res.data);
@@ -78,7 +77,7 @@ const LocalizationProvider = ({children}) => {
       const locale = localStorage.getItem("locale");
 
       if (!locale) return;
-      setToSessionStorege(result.short);
+      setToLocalStorege(result.short);
     }
   }
 
@@ -94,12 +93,12 @@ const LocalizationProvider = ({children}) => {
     }
   }
 
-  function getFromSessionStorege(defaultValue) {
+  function getFromLocalStorege(defaultValue) {
     const locale = localStorage.getItem("locale");
     return locale !== null ? locale : defaultValue;
   }
 
-  function setToSessionStorege(locale) {
+  function setToLocalStorege(locale) {
     localStorage.setItem("locale", locale);
   }
 
@@ -111,7 +110,7 @@ const LocalizationProvider = ({children}) => {
     changeMyLocalTo(value);
     initMessages();
     setLang(value);
-    setToSessionStorege(value);
+    setToLocalStorege(value);
 
     setTimeout(() => {
       document.location.reload();

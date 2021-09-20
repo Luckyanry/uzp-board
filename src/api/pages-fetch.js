@@ -2,9 +2,8 @@ import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
-// import {isNotEmpty} from "../helpers/functions";
-
-// const url = "https://10.0.10.71";
+// import {getFromSessionStorege, setToSessionStorege} from "../helpers/functions";
+import {urlAnonymous, urlBaseParam} from "./url-config";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
 /*  
@@ -16,14 +15,18 @@ import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggl
   https://ea.is.in.ua  -- "анонімний", без AD-auth
 */
 
-const baseUrl = "https://uz.is.in.ua";
-const baseParams = "/actions.asp?";
+function getFromSessionStorege() {
+  const sessionURL = sessionStorage.getItem("sessionURL");
+  return sessionURL !== null
+    ? sessionURL
+    : sessionStorage.setItem("sessionURL", urlAnonymous);
+}
 
 export const FetchData = (
   pageRequest,
   sp = null,
   db = "hbdb",
-  url = baseUrl,
+  url = getFromSessionStorege(),
   operation = "do"
 ) => {
   const pageRequestParams = () => {
@@ -66,8 +69,8 @@ export const FetchData = (
     }
   };
 
-  const finalUrl = `${url}${baseParams}operation=${operation}${pageRequestParams()}`;
-  const urlFromPages = `${url}${baseParams}operation=${operation}&sp=${sp}&db=${db}`;
+  const finalUrl = `${url}${urlBaseParam}operation=${operation}${pageRequestParams()}`;
+  const urlFromPages = `${url}${urlBaseParam}operation=${operation}&sp=${sp}&db=${db}`;
 
   const fetchDataConstructor = (
     storeKey = "id",
@@ -182,12 +185,15 @@ export const FetchData = (
 
   const signInUserData = new CustomStore({
     key: "uid",
-    load: async (login, password) =>
-      await sendRequest(urlFromPages, {
-        schema: "dbo",
-        "@uname": login,
-        "@old": password,
-      }),
+    load: async (params, method = "GET") =>
+      await sendRequest(
+        urlFromPages,
+        {
+          schema: "dbo",
+          ...params,
+        },
+        method
+      ),
   });
 
   async function sendRequest(url, data = {}, method = "GET") {

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from "react";
+import React, {useState, useCallback} from "react";
 import {Link} from "react-router-dom";
 
 import notify from "devextreme/ui/notify";
@@ -14,7 +14,7 @@ import "./LoginStartForm.scss";
 
 const LoginStartForm = () => {
   const {signIn} = useAuth();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   // const formData = useRef({});
 
   const {formatMessage} = useLocalization();
@@ -22,20 +22,36 @@ const LoginStartForm = () => {
   const onADauthClickHendler = useCallback(
     async (e) => {
       e.preventDefault();
-      setLoading(true);
+      // setLoading(true);
 
-      const result = await signIn();
+      const result = await signIn("", "");
+      const {isOk, message} = result;
 
-      if (!result.isOk) {
-        setLoading(false);
-        notify(result.message, "error", 5000);
+      if (!isOk) {
+        // setLoading(false);
+        notify(
+          {
+            message,
+            position: {
+              my: "center bottom",
+              at: "center bottom",
+              of: "#login-start-form-container",
+              offset: "5 60",
+            },
+            width: 436,
+            height: 64,
+            shading: true,
+          },
+          "error",
+          3000
+        );
       }
     },
     [signIn]
   );
 
   return (
-    <div className={"login-start-form"}>
+    <div className={"login-start-form"} id="login-start-form-container">
       <button className={"form-link"}>
         <Link to={"/login-form"}>
           <div className={"link-wrapper"}>
@@ -56,22 +72,20 @@ const LoginStartForm = () => {
       </button>
 
       <button className={"form-link"}>
-        <Link to={"/reset-password"}>
-          <div className={"link-wrapper"}>
-            <div className={"link-icon-border"}>
-              <FlashCardIcon className={"link-icon"} />
-            </div>
-            <div className={"link-content"}>
-              <p className={"link-title"}>
-                {formatMessage("msgStartPageElKey")}
-              </p>
-              <p className={"link-desc"}>
-                {formatMessage("msgStartPageElKeyDesc")} &nbsp;&nbsp;
-              </p>
-            </div>
-            <ArrowRightIcon className={"arrow-icon"} />
+        {/* <Link to={"/reset-password"}> */}
+        <div className={"link-wrapper"}>
+          <div className={"link-icon-border"}>
+            <FlashCardIcon className={"link-icon"} />
           </div>
-        </Link>
+          <div className={"link-content"}>
+            <p className={"link-title"}>{formatMessage("msgStartPageElKey")}</p>
+            <p className={"link-desc"}>
+              {formatMessage("msgStartPageElKeyDesc")} &nbsp;&nbsp;
+            </p>
+          </div>
+          <ArrowRightIcon className={"arrow-icon"} />
+        </div>
+        {/* </Link> */}
       </button>
 
       <button className={"form-link"} onClick={onADauthClickHendler}>

@@ -1,20 +1,25 @@
-import {defaultUser} from "../utils/default-user";
+import {getFromSessionStorege, setToSessionStorege} from "../helpers/functions";
 import {FetchData} from "./pages-fetch";
+import {urlAnonymous, urlADauth, getAuthURL} from "./url-config";
 
-const baseUrl = "https://uz.is.in.ua";
+export async function signIn(login = null, password = null) {
+  const url = login && password ? urlAnonymous : urlADauth;
 
-export async function signIn(login = "", password = "") {
   try {
     const signInUserData = FetchData(
       "/login-form",
       "w_CheckLogin",
       "wisdb",
-      baseUrl,
+      url,
       "login"
     ).signInUserData;
 
-    const result = await signInUserData._loadFunc(login, password);
-    console.log(`auth.js signIn result `, result);
+    const result = await signInUserData._loadFunc({
+      "@uname": login,
+      "@old": password,
+    });
+    setToSessionStorege("user", result.data[0]);
+    getAuthURL(url);
 
     return {
       isOk: true,
@@ -30,14 +35,17 @@ export async function signIn(login = "", password = "") {
 
 export async function getUser() {
   try {
-    // Send request
-    console.log(`getUser start`);
-    return {
-      // isOk: true,
-      // data: defaultUser,
-      isOk: false,
-      data: {},
-    };
+    const result = getFromSessionStorege("user", null);
+
+    if (result) {
+      return {
+        isOk: true,
+        data: result,
+      };
+    } else
+      return {
+        isOk: false,
+      };
   } catch {
     return {
       isOk: false,
@@ -47,16 +55,30 @@ export async function getUser() {
 
 export async function resetPassword(email) {
   try {
-    // Send request
-    console.log(email);
+    const resetPasswordData = FetchData(
+      "/reset-password",
+      "w_ResetPasswordByEmail",
+      "wisdb",
+      urlAnonymous
+    ).signInUserData;
+
+    const result = await resetPasswordData._loadFunc({"@email": email}, "POST");
+
+    if (result.tokenSended) {
+      return {
+        isOk: true,
+      };
+    }
 
     return {
-      isOk: true,
+      isOk: false,
+      message: "Your email is not registered in the UAIS database!",
     };
   } catch {
     return {
       isOk: false,
-      message: "Failed to reset password",
+      message:
+        "Failed to reset password, something is wrong with request to send to server.",
     };
   }
 }
@@ -92,3 +114,12 @@ export async function changePassword(email, recoveryCode) {
     };
   }
 }
+
+// function setToSessionStorege(key, value) {
+//   sessionStorage.setItem(key, value);
+// }
+
+// function getFromSessionStorege(key, ifIsNull) {
+//   const userData = JSON.parse(sessionStorage.getItem(key));
+//   return userData !== null ? userData : ifIsNull;
+// }

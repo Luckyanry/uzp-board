@@ -51,14 +51,33 @@ export default function LoginForm() {
 
       if (!result.isOk) {
         setLoading(false);
-        notify(result.message, "error", 5000);
+        notify(
+          {
+            message: result.message,
+            position: {
+              my: "center bottom",
+              at: "center bottom",
+              of: "#login-form-container",
+              offset: "0 80",
+            },
+            width: 426,
+            height: 64,
+            shading: true,
+          },
+          "error",
+          3000
+        );
       }
     },
     [signIn]
   );
 
   return (
-    <form className={"login-form"} onSubmit={onSubmit}>
+    <form
+      className={"login-form"}
+      id="login-form-container"
+      onSubmit={onSubmit}
+    >
       <Form
         formData={formData.current}
         disabled={loading}

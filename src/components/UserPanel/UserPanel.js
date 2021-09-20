@@ -6,9 +6,9 @@ import List from "devextreme-react/list";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {useAuth} from "../../contexts/Auth";
+import {firstLetterToUpper} from "../../helpers/functions";
 
 import "./UserPanel.scss";
-import {firstLetterToUpper} from "../../helpers/functions";
 
 export default function UserPanel({menuMode}) {
   const {user, signOut} = useAuth();
