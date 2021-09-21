@@ -9,7 +9,7 @@ import {
   StringLengthRule,
 } from "devextreme-react/validator";
 import Button from "devextreme-react/button";
-import ValidationSummary from "devextreme-react/validation-summary";
+// import ValidationSummary from "devextreme-react/validation-summary";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -330,7 +330,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
             type="default"
             useSubmitBehavior={true}
           />
-          <ValidationSummary id="summary" />
+          {/* <ValidationSummary id="summary" /> */}
         </Item>
       </Form>
     </form>

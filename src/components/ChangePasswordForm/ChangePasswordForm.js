@@ -1,23 +1,21 @@
 import React, {useState, useRef, useCallback, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 
-import notify from "devextreme/ui/notify";
+import {formatMessage} from "devextreme/localization";
 
 import PasswordGenerator from "../PasswordGenerator/PasswordGenerator";
 import {changePassword} from "../../api/auth";
-import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./ChangePasswordForm.scss";
 import {FetchData} from "../../api/pages-fetch";
 import {urlAnonymous} from "../../api/url-config";
+import notify from "devextreme/ui/notify";
 
 export default function ChangePasswordForm(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
   const [token, setToken] = useState("");
-
-  const {formatMessage} = useLocalization();
 
   const onSubmit = useCallback(
     async (e) => {
@@ -30,7 +28,15 @@ export default function ChangePasswordForm(props) {
         const result = await changePassword(password, token);
         setLoading(false);
 
-        result.isOk ? history.push("/login") : notifyPopup(result.message);
+        result.isOk
+          ? history.push("/login") &&
+            notifyPopup(
+              "msgSuccessPassChange",
+              "#login-start-form-container",
+              "success",
+              3000
+            )
+          : notifyPopup(result.message);
       }
     },
     // eslint-disable-next-line
@@ -46,19 +52,7 @@ export default function ChangePasswordForm(props) {
         urlAnonymous
       ).signInUserData;
 
-      const urlSearchResult = history.location.search;
-      const checkStringForToken = urlSearchResult.includes("resetToken");
-
-      if (!checkStringForToken) {
-        setLoading(false);
-        return notifyPopup(
-          "msgErrMissedTokenOnResetForm",
-          "#change-password-form-container"
-        );
-      }
-
-      const getTokenFromUrl = urlSearchResult.substr(-36);
-      setToken(getTokenFromUrl);
+      getTokenFromUrl();
 
       if (!token) return;
 
@@ -69,49 +63,42 @@ export default function ChangePasswordForm(props) {
 
       if (isTokenValid.VBErr) {
         notifyPopup(isTokenValid.VBErr.Description);
-        return {
-          isOk: false,
-        };
       }
 
       if (!isTokenValid.tokenValid) {
+        history.push("/login");
+
         notifyPopup(
           "msgErrTokenHasExpired",
-          "#change-password-form-container",
+          "#login-start-form-container",
+          "error",
           4000
         );
-        history.push("/login");
-        return {
-          isOk: false,
-        };
       }
     }
 
     checkToken();
     // eslint-disable-next-line
-  }, [history, token]);
+  }, [token, history]);
 
-  function notifyPopup(
-    message,
-    containerId = "#login-start-form-container",
-    duration = 3000
-  ) {
-    notify(
-      {
-        message: formatMessage(message),
-        position: {
-          my: "center bottom",
-          at: "center",
-          of: containerId,
-          offset: "0 36",
-        },
-        width: 428,
-        height: 66,
-        shading: true,
-      },
-      "error",
-      duration
-    );
+  function getTokenFromUrl() {
+    const urlSearchResult = history.location.search;
+    const checkStringForToken = urlSearchResult.includes("resetToken");
+
+    if (!checkStringForToken) {
+      notifyPopup(
+        "msgErrMissedTokenOnResetForm",
+        "#change-password-form-container",
+        "error",
+        4000
+      );
+      setLoading(false);
+      history.push("/login");
+      return;
+    }
+
+    const getTokenFromUrl = urlSearchResult.substr(-36);
+    setToken(getTokenFromUrl);
   }
 
   return (
@@ -120,5 +107,29 @@ export default function ChangePasswordForm(props) {
       loadingState={loading}
       formData={formData.current}
     />
+  );
+}
+
+function notifyPopup(
+  message,
+  containerId = "#login-start-form-container",
+  type = "error",
+  duration = 3000
+) {
+  notify(
+    {
+      message: formatMessage(message),
+      position: {
+        my: "center",
+        at: "center",
+        of: containerId,
+        offset: "0 36",
+      },
+      width: 428,
+      height: 80,
+      shading: true,
+    },
+    type,
+    duration
   );
 }

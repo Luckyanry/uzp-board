@@ -282,11 +282,8 @@ export const FetchData = (
     } else {
       throw new Error(
         `
-        ScriptFile: ${data.ScriptFile},
-        Description: ${data.VBErr.Description},
-        Error Number: ${data.VBErr.Number},
-        Source: ${data.VBErr.Source},
-        Hint: ${data.hint}
+        Description: ${data.VBErr.Description}
+        Error Number: ${data.VBErr.Number}
       `
       );
     }
