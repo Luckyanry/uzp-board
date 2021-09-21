@@ -46,7 +46,7 @@ const LoginStartForm = () => {
             shading: true,
           },
           "error",
-          3000
+          5000
         );
       }
     },

@@ -25,15 +25,14 @@ export default function ChangePasswordForm(props) {
       const {password} = formData.current;
       setLoading(true);
 
-      console.log(`CPF password`, password);
-
       const urlSearchResult = history.location.search;
       const checkStringForToken = urlSearchResult.includes("resetToken");
 
       if (!checkStringForToken) {
         setLoading(false);
         return notifyPopup(
-          "Url parameters do not contain a token! Please use the link received in your email."
+          "Url parameters do not contain a token! Please use the link received in your email.",
+          "#change-password-form-container"
         );
       }
 
@@ -84,14 +83,18 @@ export default function ChangePasswordForm(props) {
     chekcToken();
   }, [token]);
 
-  function notifyPopup(message) {
+  function notifyPopup(
+    message,
+    containerId = "#login-start-form-container",
+    duration = 3000
+  ) {
     notify(
       {
         message,
         position: {
-          my: "center",
+          my: "center bottom",
           at: "center",
-          of: "#change-password-form-container",
+          of: containerId,
           offset: "0 36",
         },
         width: 428,
@@ -99,7 +102,7 @@ export default function ChangePasswordForm(props) {
         shading: true,
       },
       "error",
-      3000
+      duration
     );
   }
 

@@ -48,8 +48,8 @@ export default function ResetPasswordForm(props) {
           {
             message: formatMessage("msgResetNotificationText"),
             position: {
-              my: "center bottom",
-              at: "center bottom",
+              my: "center",
+              at: "center",
               of: "#login-start-form-container",
               offset: "5 60",
             },
@@ -58,7 +58,7 @@ export default function ResetPasswordForm(props) {
             shading: true,
           },
           "success",
-          6000
+          5000
         );
       }
 

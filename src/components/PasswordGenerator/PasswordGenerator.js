@@ -1,24 +1,21 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState, useRef, useCallback} from "react";
 
-import "./PasswordGenerator.scss";
 import Form, {
-  ButtonItem,
-  ButtonOptions,
+  // CompareRule,
   CustomRule,
   Item,
   Label,
 } from "devextreme-react/form";
-import LoadIndicator from "devextreme-react/load-indicator";
 import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
 import {
   Validator,
   RequiredRule,
-  CompareRule,
+  // CompareRule,
   PatternRule,
   StringLengthRule,
 } from "devextreme-react/validator";
+import Button from "devextreme-react/button";
 import ValidationSummary from "devextreme-react/validation-summary";
-import notify from "devextreme/ui/notify";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -26,8 +23,9 @@ import {FetchData} from "../../api/pages-fetch";
 import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
+import "./PasswordGenerator.scss";
 
-const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
+const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
@@ -35,6 +33,7 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
   const [minLength, setMinLength] = useState(8);
   const [maxLength, setMaxLength] = useState(128);
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
+  // const formData = useRef({});
 
   const {formatMessage} = useLocalization();
 
@@ -71,7 +70,7 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
     onClick: () => {
       const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
 
-      const newPassword = generatorPassword(
+      const newPassword = passwordGenerator(
         setLower,
         setUpper,
         setNumber,
@@ -109,31 +108,15 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
 
   function onPasswordChanged(e) {
     setPasswordState(e.value);
+    formData.password = e.value;
   }
 
   function onConfirmPasswordChanged(e) {
     setConfirmPasswordState(e.value);
   }
 
-  function passwordComparison() {
-    return passwordState;
-  }
-
-  // function onSubmit(e) {
-  //   inputValidation();
-  //   notify(
-  //     {
-  //       message: formatMessage("msgSubmitNotify"),
-  //       position: {
-  //         my: "center top",
-  //         at: "center top",
-  //       },
-  //     },
-  //     "success",
-  //     3000
-  //   );
-
-  //   e.preventDefault();
+  // function passwordComparison() {
+  //   return passwordState;
   // }
 
   function getRandomLower() {
@@ -149,11 +132,11 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
   }
 
   function getRandomSymbol() {
-    const symbols = `!"#$%&()*+,-./:;<=>?@[]^_{|}~`;
+    const symbols = `ˆ"'.:;!#$%&()*+-/<=>?@[]_{|}~`;
     return symbols[Math.floor(Math.random() * symbols.length)];
   }
 
-  function generatorPassword(
+  function passwordGenerator(
     lower = true,
     upper = false,
     number = false,
@@ -185,12 +168,13 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
     const finalPassword = generatedPassword.slice(0, length);
 
     setPasswordState(finalPassword);
+    formData.password = finalPassword;
     return finalPassword;
   }
 
   function inputValidation() {
     const digitsRule = "0-9";
-    const symbolRule = String.raw`\!\"\#\$\%\&\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\{\|\}\~`;
+    const symbolRule = String.raw`\ˆ\"\'\.\:\;\!\#\$\%\&\(\)\*\+\-\/\<\=\>\?\@\[\]\_\{\|\}\~`;
     const lowerLetterRule = "a-z";
     const upperLetterRule = "A-Z";
 
@@ -242,13 +226,15 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
 
   const {regExp, patternRuleErrMsg} = inputValidation();
 
-  // const confirmPassword = useCallback(
-  //   ({value}) => value === formData.password,
-  //   // eslint-disable-next-line
-  //   []
-  // );
-  console.log(`PG formData `, formData);
-  // console.log(`PG loadingState `, loadingState);
+  const confirmPassword = useCallback(
+    ({value}) => {
+      console.log(`value`, value);
+
+      return value === formData.password;
+    },
+    // eslint-disable-next-line
+    []
+  );
 
   return (
     <form
@@ -275,6 +261,7 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
             defaultValue={passwordState}
             onValueChanged={onPasswordChanged}
             value={passwordState}
+            // value={passwordState}
           >
             <TextBoxButton
               name="msgGenerateStrongPassword"
@@ -306,7 +293,6 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
             </Validator>
           </TextBox>
 
-          <RequiredRule message="Password is required" />
           <Label visible={true} />
         </Item>
 
@@ -334,40 +320,29 @@ const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
                 message={formatMessage("msgConfirmRequiredPassword")}
               />
 
-              <CompareRule
+              {/* <CompareRule
                 message={formatMessage("msgPasswordNotMatch")}
-                comparisonTarget={passwordComparison}
+                comparisonTarget={passwordState}
+              /> */}
+              <CustomRule
+                message={formatMessage("msgPasswordNotMatch")}
+                validationCallback={confirmPassword}
               />
             </Validator>
           </TextBox>
 
-          <RequiredRule message="Password is required" />
-          {/* <CustomRule
-              message={"Passwords do not match"}
-              validationCallback={confirmPassword}
-            /> */}
-
           <Label visible={true} />
         </Item>
 
-        {/* <ValidationSummary id="summary" /> */}
-        <ButtonItem>
-          <ButtonOptions
-            width={"100%"}
-            type={"default"}
-            height={64}
+        <Item>
+          <Button
+            id="button"
+            text={formatMessage("msgContinue")}
+            type="default"
             useSubmitBehavior={true}
-            cssClass={"submit-btn"}
-          >
-            <span className="dx-button-text">
-              {loadingState ? (
-                <LoadIndicator width={"24px"} height={"24px"} visible={true} />
-              ) : (
-                formatMessage("msgContinue")
-              )}
-            </span>
-          </ButtonOptions>
-        </ButtonItem>
+          />
+          <ValidationSummary id="summary" />
+        </Item>
       </Form>
     </form>
   );
