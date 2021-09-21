@@ -65,11 +65,12 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
     }
 
     async function getAPIData() {
-      const usersFetchData = FetchData(
-        pathname,
-        `${UserGroups}&@GID=${GID}`,
-        "wisdb"
-      ).detailUserTemplateData;
+      const usersFetchData =
+        UserGroups === "ISGroupObjectMembers"
+          ? FetchData(pathname, `ObjectMembers&@GID=${GID}`, "wisdb")
+              .detailUserTemplateData
+          : FetchData(pathname, `${UserGroups}&@GID=${GID}`, "wisdb")
+              .detailUserTemplateData;
 
       setAPIData(usersFetchData);
     }
