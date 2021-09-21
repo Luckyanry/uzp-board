@@ -266,20 +266,21 @@ export const FetchData = (
         totalCount: newData.length,
       };
     }
+    return data && JSON.parse(data);
 
-    if (!data.hint) {
-      return data && JSON.parse(data);
-    } else {
-      throw new Error(
-        `
-        ScriptFile: ${data.ScriptFile},
-        Description: ${data.VBErr.Description},
-        Error Number: ${data.VBErr.Number},
-        Source: ${data.VBErr.Source},
-        Hint: ${data.hint}
-      `
-      );
-    }
+    // if (!data.hint) {
+    //   return data && JSON.parse(data);
+    // } else {
+    //   throw new Error(
+    //     `
+    //     ScriptFile: ${data.ScriptFile},
+    //     Description: ${data.VBErr.Description},
+    //     Error Number: ${data.VBErr.Number},
+    //     Source: ${data.VBErr.Source},
+    //     Hint: ${data.hint}
+    //   `
+    //   );
+    // }
   }
 
   return {

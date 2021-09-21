@@ -66,10 +66,10 @@ export default function ResetPasswordForm(props) {
         {
           message: result.message,
           position: {
-            my: "center bottom",
-            at: "center bottom",
+            my: "center",
+            at: "center",
             of: "#reset-password-form-container",
-            offset: "0 80",
+            offset: "0 0",
           },
           width: 426,
           height: 64,

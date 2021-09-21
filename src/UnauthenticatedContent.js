@@ -61,7 +61,7 @@ export default function UnauthenticatedContent() {
         </SingleCard>
       </Route>
 
-      {/* <Route exact path="/change-password/:recoveryCode"> */}
+      {/* <Route path="/change-password/:recoveryCode"> */}
       <Route exact path="/change-password/">
         <SingleCard
           title={formatMessage("msgChangePasswordFormTitle")}

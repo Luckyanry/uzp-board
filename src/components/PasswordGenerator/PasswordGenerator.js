@@ -18,7 +18,7 @@ import {
   StringLengthRule,
 } from "devextreme-react/validator";
 import ValidationSummary from "devextreme-react/validation-summary";
-// import notify from "devextreme/ui/notify";
+import notify from "devextreme/ui/notify";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -26,7 +26,6 @@ import {FetchData} from "../../api/pages-fetch";
 import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
-import notify from "devextreme/ui/notify";
 
 const PasswordGenerator = ({onSubmit, loadingState, formData}) => {
   const [passwordState, setPasswordState] = useState("");

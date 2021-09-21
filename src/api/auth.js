@@ -99,9 +99,9 @@ export async function createAccount(email, password) {
   }
 }
 
-export async function changePassword(password, recoveryCode) {
+export async function changePassword(password, resetToken) {
   try {
-    console.log("password & recoveryCode ", password, recoveryCode);
+    console.log("password & rssetToken ", password, resetToken);
 
     const changePasswordData = FetchData(
       "/change-password",
@@ -110,28 +110,8 @@ export async function changePassword(password, recoveryCode) {
       urlAnonymous
     ).signInUserData;
 
-    const checkTokenData = FetchData(
-      "/change-password",
-      "w_CheckResetPasswordTokenExpired",
-      "wisdb",
-      urlAnonymous
-    ).signInUserData;
-
-    const isTokenValid = await checkTokenData._loadFunc(
-      {"@resetToken": recoveryCode},
-      "POST"
-    );
-
-    if (!isTokenValid) {
-      return {
-        isOk: false,
-        message:
-          "The token has expired, please repeat the password recovery process again.",
-      };
-    }
-
     await changePasswordData._loadFunc(
-      {"@resetToken": recoveryCode, "@pwd": password},
+      {"@resetToken": resetToken, "@pwd": password},
       "POST"
     );
 

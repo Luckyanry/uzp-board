@@ -36,10 +36,10 @@ const LoginStartForm = () => {
           {
             message,
             position: {
-              my: "center bottom",
-              at: "center bottom",
+              my: "center",
+              at: "center",
               of: "#login-start-form-container",
-              offset: "5 60",
+              offset: "5 0",
             },
             width: 436,
             height: 64,
