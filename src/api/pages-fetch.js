@@ -155,6 +155,13 @@ export const FetchData = (
     "@gid"
   );
 
+  const detailMemebersTemplateData = fetchDataConstructor(
+    "UGID",
+    urlFromPages,
+    "values",
+    "@gid"
+  );
+
   const changeMyLocalToData = new CustomStore({
     key: "short",
     update: async (newKey) =>
@@ -294,6 +301,7 @@ export const FetchData = (
     custumMessageData,
     personFetchData,
     detailUserTemplateData,
+    detailMemebersTemplateData,
     signInUserData,
   };
 };

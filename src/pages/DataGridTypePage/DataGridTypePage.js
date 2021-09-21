@@ -74,7 +74,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: false,
     width: 900,
-    height: 650,
+    height: 680,
   };
 
   useEffect(() => {
@@ -392,12 +392,17 @@ export const DataGridTypePage = ({location: {pathname}}) => {
                 <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
               </Tab>
 
-              <Tab title={formatMessage("msgMembers")} colCount={2}>
-                <UserDetailTab
-                  user={userFormData}
-                  UserGroups={"ISGroupObjectMembers"}
-                />
-              </Tab>
+              {checkIfArrIncludesValue(
+                ["roleObjects", "groupObjects"],
+                pathnameWithoutSlash
+              ) && (
+                <Tab title={formatMessage("msgMembers")} colCount={2}>
+                  <UserDetailTab
+                    user={userFormData}
+                    UserGroups={"ISGroupObjectMembers"}
+                  />
+                </Tab>
+              )}
             </TabbedItem>
           </GroupItem>
         </Form>

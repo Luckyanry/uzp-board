@@ -37,7 +37,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
     title: formatMessage("msgCreateNewItem", focusedRowTitle),
     showTitle: true,
     width: 950,
-    height: 780,
+    height: 800,
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
       const usersFetchData =
         UserGroups === "ISGroupObjectMembers"
           ? FetchData(pathname, `ObjectMembers&@GID=${GID}`, "wisdb")
-              .detailUserTemplateData
+              .detailMemebersTemplateData
           : FetchData(pathname, `${UserGroups}&@GID=${GID}`, "wisdb")
               .detailUserTemplateData;
 
@@ -229,13 +229,13 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
         />
       </Column>
 
-      <Paging defaultPageSize={10} />
+      <Paging defaultPageSize={5} />
       <Pager
         showPageSizeSelector={true}
         showNavigationButtons={true}
         showInfo={true}
         visible={true}
-        allowedPageSizes={[10, 20, 50, 100, "all"]}
+        allowedPageSizes={[5, 20, 50, 100, "all"]}
         showAllItem={true}
       />
     </DataGrid>
