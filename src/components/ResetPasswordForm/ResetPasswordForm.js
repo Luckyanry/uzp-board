@@ -51,14 +51,14 @@ export default function ResetPasswordForm(props) {
               my: "center",
               at: "center",
               of: "#login-start-form-container",
-              offset: "5 60",
+              offset: "5 0",
             },
-            width: 436,
+            width: 432,
             height: 64,
             shading: true,
           },
           "success",
-          5000
+          4000
         );
       }
 

@@ -15,8 +15,7 @@ export default function ChangePasswordForm(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
-  const [token, setToken] = useState();
-  // const {recoveryCode} = useParams();
+  const [token, setToken] = useState("");
 
   const onSubmit = useCallback(
     async (e) => {
@@ -24,6 +23,25 @@ export default function ChangePasswordForm(props) {
 
       const {password} = formData.current;
       setLoading(true);
+
+      if (token) {
+        const result = await changePassword(password, token);
+        setLoading(false);
+
+        result.isOk ? history.push("/login") : notifyPopup(result.message);
+      }
+    },
+    [history, token]
+  );
+
+  useEffect(() => {
+    async function checkToken() {
+      const checkTokenData = FetchData(
+        "/change-password",
+        "w_CheckResetPasswordTokenExpired",
+        "wisdb",
+        urlAnonymous
+      ).signInUserData;
 
       const urlSearchResult = history.location.search;
       const checkStringForToken = urlSearchResult.includes("resetToken");
@@ -38,23 +56,6 @@ export default function ChangePasswordForm(props) {
 
       const getTokenFromUrl = urlSearchResult.substr(-36);
       setToken(getTokenFromUrl);
-
-      const result = await changePassword(password, token);
-      setLoading(false);
-
-      result.isOk ? history.push("/login") : notifyPopup(result.message);
-    },
-    [history, token]
-  );
-
-  useEffect(() => {
-    async function chekcToken() {
-      const checkTokenData = FetchData(
-        "/change-password",
-        "w_CheckResetPasswordTokenExpired",
-        "wisdb",
-        urlAnonymous
-      ).signInUserData;
 
       if (!token) return;
 
@@ -80,8 +81,8 @@ export default function ChangePasswordForm(props) {
       }
     }
 
-    chekcToken();
-  }, [token]);
+    checkToken();
+  }, [history, token]);
 
   function notifyPopup(
     message,
