@@ -34,7 +34,6 @@ function AuthProvider(props) {
       const result = await getUser();
 
       if (result.isOk) {
-        // console.log(`Auth.js result.data`, result.data);
         setUser(result.data);
       }
 

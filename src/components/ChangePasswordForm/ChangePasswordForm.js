@@ -2,10 +2,10 @@ import React, {useState, useRef, useCallback, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 
 import notify from "devextreme/ui/notify";
-// import {formatMessage} from "devextreme/localization";
 
 import PasswordGenerator from "../PasswordGenerator/PasswordGenerator";
 import {changePassword} from "../../api/auth";
+import {useLocalization} from "../../contexts/LocalizationContext";
 
 import "./ChangePasswordForm.scss";
 import {FetchData} from "../../api/pages-fetch";
@@ -16,6 +16,8 @@ export default function ChangePasswordForm(props) {
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
   const [token, setToken] = useState("");
+
+  const {formatMessage} = useLocalization();
 
   const onSubmit = useCallback(
     async (e) => {
@@ -31,6 +33,7 @@ export default function ChangePasswordForm(props) {
         result.isOk ? history.push("/login") : notifyPopup(result.message);
       }
     },
+    // eslint-disable-next-line
     [history, token]
   );
 
@@ -49,7 +52,7 @@ export default function ChangePasswordForm(props) {
       if (!checkStringForToken) {
         setLoading(false);
         return notifyPopup(
-          "Url parameters do not contain a token! Please use the link received in your email.",
+          "msgErrMissedTokenOnResetForm",
           "#change-password-form-container"
         );
       }
@@ -73,8 +76,11 @@ export default function ChangePasswordForm(props) {
 
       if (!isTokenValid.tokenValid) {
         notifyPopup(
-          "The token has expired, please repeat the password recovery process again."
+          "msgErrTokenHasExpired",
+          "#change-password-form-container",
+          4000
         );
+        history.push("/login");
         return {
           isOk: false,
         };
@@ -82,6 +88,7 @@ export default function ChangePasswordForm(props) {
     }
 
     checkToken();
+    // eslint-disable-next-line
   }, [history, token]);
 
   function notifyPopup(
@@ -91,7 +98,7 @@ export default function ChangePasswordForm(props) {
   ) {
     notify(
       {
-        message,
+        message: formatMessage(message),
         position: {
           my: "center bottom",
           at: "center",

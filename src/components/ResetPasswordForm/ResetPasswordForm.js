@@ -64,7 +64,7 @@ export default function ResetPasswordForm(props) {
 
       return notify(
         {
-          message: result.message,
+          message: formatMessage(result.message),
           position: {
             my: "center",
             at: "center",

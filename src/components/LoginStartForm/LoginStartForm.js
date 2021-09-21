@@ -34,7 +34,7 @@ const LoginStartForm = () => {
         // setLoading(false);
         notify(
           {
-            message,
+            message: formatMessage(message),
             position: {
               my: "center",
               at: "center",
@@ -46,10 +46,11 @@ const LoginStartForm = () => {
             shading: true,
           },
           "error",
-          5000
+          4000
         );
       }
     },
+    // eslint-disable-next-line
     [signIn]
   );
 

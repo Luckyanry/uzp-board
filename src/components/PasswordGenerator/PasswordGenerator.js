@@ -1,16 +1,10 @@
-import React, {useEffect, useState, useRef, useCallback} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 
-import Form, {
-  // CompareRule,
-  CustomRule,
-  Item,
-  Label,
-} from "devextreme-react/form";
+import Form, {CustomRule, Item, Label} from "devextreme-react/form";
 import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
 import {
   Validator,
   RequiredRule,
-  // CompareRule,
   PatternRule,
   StringLengthRule,
 } from "devextreme-react/validator";
@@ -33,7 +27,6 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const [minLength, setMinLength] = useState(8);
   const [maxLength, setMaxLength] = useState(128);
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
-  // const formData = useRef({});
 
   const {formatMessage} = useLocalization();
 
@@ -227,11 +220,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const {regExp, patternRuleErrMsg} = inputValidation();
 
   const confirmPassword = useCallback(
-    ({value}) => {
-      console.log(`value`, value);
-
-      return value === formData.password;
-    },
+    ({value}) => value === formData.password,
     // eslint-disable-next-line
     []
   );

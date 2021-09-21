@@ -28,7 +28,7 @@ export async function signIn(login = null, password = null) {
   } catch {
     return {
       isOk: false,
-      message: "Authentication failed",
+      message: "msgErrAuthFailed",
     };
   }
 }
@@ -72,37 +72,18 @@ export async function resetPassword(email) {
 
     return {
       isOk: false,
-      message: "Your email is not registered in the UAIS database!",
+      message: "msgErrEmailNotRegInUAIS",
     };
   } catch {
     return {
       isOk: false,
-      message:
-        "Failed to reset password, something is wrong with request to send to server.",
-    };
-  }
-}
-
-export async function createAccount(email, password) {
-  try {
-    // Send request
-    console.log(email, password);
-
-    return {
-      isOk: true,
-    };
-  } catch {
-    return {
-      isOk: false,
-      message: "Failed to create account",
+      message: "msgErrFailedResetPass",
     };
   }
 }
 
 export async function changePassword(password, resetToken) {
   try {
-    console.log("password & rssetToken ", password, resetToken);
-
     const changePasswordData = FetchData(
       "/change-password",
       "w_ChangePasswordByToken",
@@ -121,8 +102,7 @@ export async function changePassword(password, resetToken) {
   } catch {
     return {
       isOk: false,
-      message:
-        "Failed to reset password, something is wrong with request to send to server.",
+      message: "msgErrFaildToResetPass",
     };
   }
 }

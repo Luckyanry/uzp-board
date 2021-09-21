@@ -5,7 +5,6 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 
 import {ReactComponent as SecureIcon} from "./icons/secureIcon.svg";
 import "./DigitalKeyForm.scss";
-import Button from "devextreme-react/button";
 
 const DigitalKeyForm = () => {
   const {formatMessage} = useLocalization();

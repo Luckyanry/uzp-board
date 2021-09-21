@@ -169,8 +169,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   }
 
   function onDataErrorEvent(e) {
-    e.error.message =
-      "Выбранный пользователь пока не имеет записи в этой категории. Создайте новую запись ... UGID | RGID | IFC.";
+    e.error.message = formatMessage("msgErrUserDetailRoleGroup");
     // console.log(`onDataErrorEvent e `, e);
   }
 

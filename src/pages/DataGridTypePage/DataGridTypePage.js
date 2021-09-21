@@ -100,27 +100,26 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     function getAPIData() {
       if (
         checkIfArrIncludesValue(
-          ["userObjects", "roleObjects", "groupObjects"],
+          ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
           pathnameWithoutSlash
         )
       ) {
         const usersFetchData = fetchDataConstructor("wisdb").usersFetchData;
+        return setAPIData(usersFetchData);
+      }
 
-        setAPIData(usersFetchData);
-      } else if (
+      if (
         checkIfArrIncludesValue(
           ["personObjects", "orgUnits", "employees", "legals"],
           pathnameWithoutSlash
         )
       ) {
         const fetchData = fetchDataConstructor("odb").personFetchData;
-
-        setAPIData(fetchData);
-      } else {
-        const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
-
-        setAPIData(fetchData);
+        return setAPIData(fetchData);
       }
+
+      const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
+      setAPIData(fetchData);
     }
 
     async function getLookDataState(
@@ -172,6 +171,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "userObjects",
         "roleObjects",
         "groupObjects",
+        "objectMembers",
         "personObjects",
         "orgUnits",
         "employees",
@@ -336,7 +336,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   function onFocusedCellChanging(e) {
     if (
       checkIfArrIncludesValue(
-        ["userObjects", "roleObjects", "groupObjects"],
+        ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
         pathnameWithoutSlash
       )
     ) {
@@ -390,6 +390,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
               <Tab title={formatMessage("msgRoles")} colCount={2}>
                 <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
+              </Tab>
+
+              <Tab title={formatMessage("msgMembers")} colCount={2}>
+                <UserDetailTab
+                  user={userFormData}
+                  UserGroups={"ISGroupObjectMembers"}
+                />
               </Tab>
             </TabbedItem>
           </GroupItem>
@@ -457,7 +464,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         <FilterRow visible={true} />
 
         {checkIfArrIncludesValue(
-          ["userObjects", "roleObjects", "groupObjects"],
+          ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
           pathnameWithoutSlash
         ) ? (
           editorCustomMarkup()

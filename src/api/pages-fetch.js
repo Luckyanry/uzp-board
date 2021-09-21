@@ -50,6 +50,8 @@ export const FetchData = (
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISRoleAccountColumnSchema`;
       case "/groupObjects":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISGroupAccountColumnSchema`;
+      case "/isGroupObjectMembers":
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISGroupObjectMembersColumnSchema`;
 
       case "/personObjects":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
@@ -266,21 +268,21 @@ export const FetchData = (
         totalCount: newData.length,
       };
     }
-    return data && JSON.parse(data);
+    // return data && JSON.parse(data);
 
-    // if (!data.hint) {
-    //   return data && JSON.parse(data);
-    // } else {
-    //   throw new Error(
-    //     `
-    //     ScriptFile: ${data.ScriptFile},
-    //     Description: ${data.VBErr.Description},
-    //     Error Number: ${data.VBErr.Number},
-    //     Source: ${data.VBErr.Source},
-    //     Hint: ${data.hint}
-    //   `
-    //   );
-    // }
+    if (!data.hint) {
+      return data && JSON.parse(data);
+    } else {
+      throw new Error(
+        `
+        ScriptFile: ${data.ScriptFile},
+        Description: ${data.VBErr.Description},
+        Error Number: ${data.VBErr.Number},
+        Source: ${data.VBErr.Source},
+        Hint: ${data.hint}
+      `
+      );
+    }
   }
 
   return {
