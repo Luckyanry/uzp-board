@@ -3,20 +3,22 @@ import {useLocalization} from "./contexts/LocalizationContext";
 export const AppNavigation = () => {
   const {formatMessage} = useLocalization();
 
-  const directoryFolder = [
+  const individualsAndLegalDir = ["personObjects", "legals"];
+  const staffDir = ["employees", "orgUnits"];
+  const userAccessControlDir = ["userObjects", "roleObjects", "groupObjects"];
+  const administrationDir = [];
+  const dictionariesDir = [
     "countries",
     "soato",
     "soogu",
-    "kspd",
     "oked",
+    "kspd",
     "mahalla",
-    "personObjects",
-    "orgUnits",
-    "employees",
-    "legals",
+    "kfs",
+    "kopf",
+    "ShortDics",
   ];
-  const opfFolder = ["kfs", "kopf"];
-  const usersDir = ["profile", "userObjects", "roleObjects", "groupObjects"];
+  // "profile",
 
   function pathCreator(pathTitle) {
     return pathTitle.map((item) => {
@@ -41,24 +43,29 @@ export const AppNavigation = () => {
       icon: "home",
     },
     {
-      text: formatMessage("msgUsersDirMenuTitle"),
-      icon: "user",
-      items: pathCreator(usersDir),
-    },
-    {
       text: formatMessage("msgDirectoryILEMenuTitle"),
-      icon: "mediumiconslayout",
-      items: pathCreator(directoryFolder),
+      icon: "toolbox",
+      items: pathCreator(individualsAndLegalDir),
     },
     {
-      text: formatMessage("msgOpfMenuTitle"),
-      icon: "product",
-      items: pathCreator(opfFolder),
+      text: formatMessage("msgStaffDirMenuTitle"),
+      icon: "group",
+      items: pathCreator(staffDir),
     },
     {
-      text: formatMessage("msgShortDicsMenuTitle"),
-      path: "/ShortDics",
-      icon: "tableproperties",
+      text: formatMessage("msgUsersDirMenuTitle"),
+      icon: "key",
+      items: pathCreator(userAccessControlDir),
+    },
+    {
+      text: formatMessage("msgAdministrationDirMenuTitle"),
+      icon: "paste",
+      items: pathCreator(administrationDir),
+    },
+    {
+      text: formatMessage("msgDictionariesDirMenuTitle"),
+      icon: "folder",
+      items: pathCreator(dictionariesDir),
     },
   ];
 };

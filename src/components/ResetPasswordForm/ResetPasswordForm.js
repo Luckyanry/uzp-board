@@ -58,7 +58,7 @@ export default function ResetPasswordForm(props) {
             shading: true,
           },
           "success",
-          4000
+          5000
         );
       }
 

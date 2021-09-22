@@ -8475,7 +8475,7 @@
   display: block;
   width: 22px;
   top: 50%;
-  margin-top: -11px;
+  margin-top: -7px;
   left: 50%;
   margin-left: -11px;
 }
@@ -11840,7 +11840,7 @@
 }
 .dx-swatch-additional .dx-slideout-menu {
   min-width: 280px;
-  max-width: 350px;
+  max-width: 360px;
 }
 .dx-swatch-additional .dx-slideout-menu .dx-list-item .dx-icon {
   float: left;

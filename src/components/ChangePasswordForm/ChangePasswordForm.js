@@ -29,13 +29,12 @@ export default function ChangePasswordForm(props) {
         setLoading(false);
 
         result.isOk
-          ? history.push("/login") &&
-            notifyPopup(
+          ? notifyPopup(
               "msgSuccessPassChange",
               "#login-start-form-container",
               "success",
-              3000
-            )
+              5000
+            ) && history.push("/login")
           : notifyPopup(result.message);
       }
     },
