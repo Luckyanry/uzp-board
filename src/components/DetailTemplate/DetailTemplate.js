@@ -11,7 +11,6 @@ import DataGrid, {
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
-// import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 import "./DetailTemplate.scss";
 
@@ -22,18 +21,16 @@ const DetailTemplate = ({data}) => {
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
-  // const [error, setError] = useState(null);
 
   const {formatMessage} = useLocalization();
-  console.log(`props`, data);
-  // const focusedRowTitle = data.data.name;
+  const focusedRowTitle = data.data.name;
 
-  // const popupOpt = {
-  //   title: formatMessage("msgCreateNewItem", focusedRowTitle),
-  //   showTitle: true,
-  //   width: 950,
-  //   height: 780,
-  // };
+  const popupOpt = {
+    title: formatMessage("msgCreateNewItem", focusedRowTitle),
+    showTitle: true,
+    width: 950,
+    height: 780,
+  };
 
   useEffect(() => {
     const idTriger = data.component._$element[0].id;
@@ -76,7 +73,6 @@ const DetailTemplate = ({data}) => {
   }, []);
 
   return (
-    // <ErrorBoundary msg={error}>
     <DataGrid
       id="grid"
       columns={APIData}
@@ -110,14 +106,14 @@ const DetailTemplate = ({data}) => {
 
       <Editing
         mode="batch"
-        // popup={popupOpt}
+        popup={popupOpt}
         allowAdding={allowAdding}
         allowDeleting={allowDeleting}
         allowUpdating={allowUpdating}
         startEditAction="dblClick"
       />
 
-      <Paging defaultPageSize={10} />
+      <Paging defaultPageSize={10} enabled={true} />
       <Pager
         showPageSizeSelector={true}
         showNavigationButtons={true}
@@ -127,7 +123,6 @@ const DetailTemplate = ({data}) => {
         showAllItem={true}
       />
     </DataGrid>
-    // </ErrorBoundary>
   );
 };
 

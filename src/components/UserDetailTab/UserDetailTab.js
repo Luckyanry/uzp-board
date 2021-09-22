@@ -13,12 +13,12 @@ import DataGrid, {
   Pager,
   StateStoring,
   Scrolling,
+  LoadPanel,
 } from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {getLookupParamsForURL} from "../../helpers/functions";
-// import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 import "./UserDetailTab.scss";
 
@@ -28,7 +28,6 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   const [lookDataState, setLookDataState] = useState([]);
 
   const {formatMessage} = useLocalization();
-  // console.log(`props => `, GID, UserName);
 
   const pathname = `/${UserGroups}`;
   const focusedRowTitle = UserName;
@@ -129,17 +128,9 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
-          showEditorAlways={false}
-          trueText={
-            dataField === "status"
-              ? formatMessage("msgStatusActive")
-              : formatMessage("msgYes")
-          }
-          falseText={
-            dataField === "status"
-              ? formatMessage("msgStatusDeactivated")
-              : formatMessage("msgNo")
-          }
+          showEditorAlways={true}
+          trueText={formatMessage("msgOn")}
+          falseText={formatMessage("msgOff")}
           {...params}
         >
           {required && <RequiredRule />}
@@ -171,11 +162,9 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
 
   function onDataErrorEvent(e) {
     e.error.message = formatMessage("msgErrUserDetailRoleGroup");
-    // console.log(`onDataErrorEvent e `, e);
   }
 
   return (
-    // <ErrorBoundary msg={error}>
     <DataGrid
       id="grid"
       // columns={columnsSchemaData}
@@ -229,17 +218,17 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
         />
       </Column>
 
-      <Paging defaultPageSize={5} />
+      <Paging defaultPageSize={5} enabled={true} />
       <Pager
         showPageSizeSelector={true}
         showNavigationButtons={true}
         showInfo={true}
         visible={true}
-        allowedPageSizes={[5, 20, 50, 100, "all"]}
+        allowedPageSizes={[5, 20, 50, "all"]}
         showAllItem={true}
       />
+      <LoadPanel enabled="true" />
     </DataGrid>
-    // </ErrorBoundary>
   );
 };
 

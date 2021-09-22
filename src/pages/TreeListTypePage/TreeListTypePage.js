@@ -9,7 +9,6 @@ import TreeList, {
   Editing,
   Column,
   RequiredRule,
-  // PatternRule,
   FormItem,
   Lookup,
   Button as TreeListButton,
@@ -69,15 +68,15 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
-    width: 1000,
-    height: 700,
+    width: 1200,
+    height: 800,
   };
 
   const popupDetailTreeListTabOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: false,
-    width: 1000,
-    height: 1000,
+    width: 1200,
+    height: 800,
   };
 
   const popupOpt = {
@@ -149,7 +148,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
-    // console.log(`e initNewRow `, e);
     e.data.status = statusToggler[0];
   }
 
@@ -197,16 +195,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
-          trueText={
-            dataField === "status"
-              ? formatMessage("msgStatusActive")
-              : formatMessage("msgYes")
-          }
-          falseText={
-            dataField === "status"
-              ? formatMessage("msgStatusDeactivated")
-              : formatMessage("msgNo")
-          }
+          trueText={formatMessage("msgStatusActive")}
+          falseText={formatMessage("msgStatusDeactivated")}
           {...params}
         >
           {required && <RequiredRule />}
@@ -248,7 +238,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   function onFocusedCellChanging(e) {
     const formData = e.rows[e.newRowIndex].data;
     const rowId = formData.id;
-    // const groupItemCaption = formData.UserName;
+
     setMasterId(rowId);
     setFormData(formData);
     setGroupItemCaption(groupItemCaption);
@@ -269,8 +259,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       <Editing
         mode="popup"
         popup={popupDetailTreeListTabOptions}
-        allowAdding={false}
-        allowDeleting={false}
+        allowAdding={true}
+        allowDeleting={true}
         allowUpdating={true}
       >
         <Form id="form" formData={formData} colCount={1} width={"100%"}>

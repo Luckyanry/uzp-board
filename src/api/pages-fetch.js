@@ -2,16 +2,13 @@ import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
-// import {getFromSessionStorege, setToSessionStorege} from "../helpers/functions";
 import {urlAnonymous, urlBaseParam} from "./url-config";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
 /*  
-  на 10.0.10.71 два сайти 
   https://uz.is.in.ua -- цей через AD-auth
   https://uzapi.is.in.ua -- цей "анонімний", без AD-auth
 
-  на 10.0.10.73 покищо один сайт
   https://ea.is.in.ua  -- "анонімний", без AD-auth
 */
 
@@ -203,18 +200,8 @@ export const FetchData = (
       ),
   });
 
-  // const ObjIdFetchData = fetchDataConstructor(
-  //   "ObjId",
-  //   urlFromPages,
-  //   "values",
-  //   "@ObjId"
-  // );
-  // "@dbName",
-  // "@objName"
-
   const custumMessageData = new CustomStore({
     key: "id",
-    // loadMode: "row",
     load: async () => await sendRequest(urlFromPages, {schema: "get"}, "POST"),
   });
 
@@ -346,61 +333,3 @@ export const FetchData = (
 };
 
 // ?experement with this article => https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/How_To/Bind_a_Lookup_Column_to_a_Custom_Data_Source/
-
-// ======== test lookup ========
-// const lookPaginateData = new CustomStore({
-//   key: "id",
-//   loadMode: "processed",
-//   load: async (loadOptions) => {
-//     console.log(`loadOptions `, loadOptions);
-
-//     let params = "";
-
-//     ["skip", "take"].forEach(function (i) {
-//       if (i in loadOptions && isNotEmpty(loadOptions[i])) {
-//         params += `&@${i}=${JSON.stringify(loadOptions[i])}`;
-//       }
-//     });
-
-//     return await sendRequest(`${urlFromPages}${params}`, {
-//       schema: "look",
-//     });
-//   },
-//   byKey: async (key) =>
-//     await sendRequest(
-//       urlFromPages,
-//       {
-//         schema: "bykey",
-//         "@id": key,
-//       },
-//       "POST"
-//     ),
-// });
-
-// const lookData = {
-//   store: lookPaginateData,
-//   paginate: true,
-//   pageSize: 50,
-
-//   // take: 10,
-//   // skip: 0,
-// };
-
-// ========== Test Lookup on client (working var.) ==========
-
-// const lookDataOnClient = {
-//   store: new CustomStore({
-//     key: "id",
-//     loadMode: "raw",
-//     load: async () => {
-//       return await fetch(
-//         "https://10.0.10.71/actions.asp?operation=do&sp=soato&db=hbdb&schema=look",
-//         {
-//           credentials: "include",
-//
-//         }
-//       ).then((response) => response.json());
-//     },
-//   }),
-//   paginate: true,
-// };

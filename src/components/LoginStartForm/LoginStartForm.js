@@ -17,9 +17,6 @@ import "./LoginStartForm.scss";
 
 const LoginStartForm = () => {
   const {signIn} = useAuth();
-  // const [loading, setLoading] = useState(false);
-  // const formData = useRef({});
-
   const {formatMessage} = useLocalization();
 
   const onADauthClickHendler = useCallback(
@@ -86,7 +83,7 @@ const LoginStartForm = () => {
                 {formatMessage("msgStartPageElKey")}
               </p>
               <p className={"link-desc"}>
-                {formatMessage("msgStartPageElKeyDesc")} &nbsp;&nbsp;
+                {formatMessage("msgStartPageElKeyDesc")}
               </p>
             </div>
             <ArrowRightIcon className={"arrow-icon"} />

@@ -11,7 +11,6 @@ import DataGrid, {
   MasterDetail,
   Column,
   RequiredRule,
-  // PatternRule,
   FormItem,
   Lookup,
   Button,
@@ -79,8 +78,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupUsersPageOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: false,
-    width: 900,
-    height: 680,
+    width: 1200,
+    height: 800,
   };
 
   useEffect(() => {
@@ -213,42 +212,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           required: true,
           width: "100%",
         },
-        // {
-        //   dataField: "short_name_rus",
-        //   caption: "msgShortNameRus",
-        //   visible: false,
-        //   width: "100%",
-        // },
-        // {
-        //   dataField: "short_name_uzcyr",
-        //   caption: "msgShortNameUzcyr",
-        //   visible: false,
-        //   width: "100%",
-        // },
-        // {
-        //   dataField: "short_name_uzlat",
-        //   caption: "msgShortNameUzlat",
-        //   visible: false,
-        //   width: "100%",
-        // },
-        // {
-        //   dataField: "short_name_karlat",
-        //   caption: "msgShortNameKarlat",
-        //   visible: false,
-        //   width: "100%",
-        // },
-        // {
-        //   dataField: "short_name_eng",
-        //   caption: "msgShortNameEng",
-        //   visible: false,
-        //   width: "100%",
-        // },
-        // {
-        //   dataField: "class",
-        //   caption: "msgClass",
-        //   width: 100,
-        //   alignment: "center",
-        // },
         {
           dataField: "metaid",
           caption: "msgAsChildOf",
@@ -299,12 +262,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           trueText={
             dataField === "status"
               ? formatMessage("msgStatusActive")
-              : formatMessage("msgYes")
+              : formatMessage("msgOn")
           }
           falseText={
             dataField === "status"
               ? formatMessage("msgStatusDeactivated")
-              : formatMessage("msgNo")
+              : formatMessage("msgOff")
           }
           {...params}
         >
@@ -531,7 +494,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           />
         </Column>
 
-        <Paging defaultPageSize={10} />
+        <Paging defaultPageSize={10} enabled={true} />
         <Pager
           showPageSizeSelector={true}
           showNavigationButtons={true}
