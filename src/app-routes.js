@@ -19,6 +19,7 @@ const dataGridPagesPath = [
   "employees",
   "legals",
   "recordLog",
+  "fieldLog",
 ];
 
 const treeListPagesPath = [
@@ -28,6 +29,7 @@ const treeListPagesPath = [
   "kopf",
   "oked",
   "auditSettingsMaster",
+  "auditSettings",
 ];
 
 const routes = [

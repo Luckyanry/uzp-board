@@ -5,6 +5,7 @@ export {Footer} from "./Footer/Footer";
 export {default as DetailTemplate} from "./DetailTemplate/DetailTemplate";
 export {default as DetailUserTemplate} from "./DetailUserTemplate/DetailUserTemplate";
 export {default as UserDetailTab} from "./UserDetailTab/UserDetailTab";
+export {default as DetailTreeListTab} from "./DetailTreeListTab/DetailTreeListTab";
 export {default as PasswordGenerator} from "./PasswordGenerator/PasswordGenerator";
 
 export {StatusLangToggler} from "./StatusLangToggler/StatusLangToggler";

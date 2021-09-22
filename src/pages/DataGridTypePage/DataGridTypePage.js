@@ -21,6 +21,7 @@ import DataGrid, {
   LoadPanel,
   StateStoring,
 } from "devextreme-react/data-grid";
+
 import {
   SimpleItem,
   GroupItem,
@@ -46,12 +47,17 @@ import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
+  // const [columnsDetailSchemaData, setColumnsDetailSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
   const [userID, setUserID] = useState("");
   const [userFormData, setUserFormData] = useState(null);
   const [userGroupItemCaption, setUserGroupItemCaption] = useState("");
+
+  const [allowAdding, setAllowAdding] = useState(true);
+  const [allowDeleting, setAllowDeleting] = useState(true);
+  const [allowUpdating, setAllowUpdating] = useState(true);
 
   const {formatMessage} = useLocalization();
 
@@ -120,6 +126,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       if (checkIfArrIncludesValue(["recordLog"], pathnameWithoutSlash)) {
         const fetchData = fetchDataConstructor("wisdb").usersFetchData;
+        setAllowAdding(false);
+        setAllowDeleting(false);
+        setAllowUpdating(false);
+
         return setAPIData(fetchData);
       }
 
@@ -181,6 +191,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "orgUnits",
         "employees",
         "legals",
+        "recordLog",
       ],
       pathnameWithoutSlash
     ) && (murkupCollection = columnsSchemaData);
@@ -202,42 +213,42 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           required: true,
           width: "100%",
         },
-        {
-          dataField: "short_name_rus",
-          caption: "msgShortNameRus",
-          visible: false,
-          width: "100%",
-        },
-        {
-          dataField: "short_name_uzcyr",
-          caption: "msgShortNameUzcyr",
-          visible: false,
-          width: "100%",
-        },
-        {
-          dataField: "short_name_uzlat",
-          caption: "msgShortNameUzlat",
-          visible: false,
-          width: "100%",
-        },
-        {
-          dataField: "short_name_karlat",
-          caption: "msgShortNameKarlat",
-          visible: false,
-          width: "100%",
-        },
-        {
-          dataField: "short_name_eng",
-          caption: "msgShortNameEng",
-          visible: false,
-          width: "100%",
-        },
-        {
-          dataField: "class",
-          caption: "msgClass",
-          width: 100,
-          alignment: "center",
-        },
+        // {
+        //   dataField: "short_name_rus",
+        //   caption: "msgShortNameRus",
+        //   visible: false,
+        //   width: "100%",
+        // },
+        // {
+        //   dataField: "short_name_uzcyr",
+        //   caption: "msgShortNameUzcyr",
+        //   visible: false,
+        //   width: "100%",
+        // },
+        // {
+        //   dataField: "short_name_uzlat",
+        //   caption: "msgShortNameUzlat",
+        //   visible: false,
+        //   width: "100%",
+        // },
+        // {
+        //   dataField: "short_name_karlat",
+        //   caption: "msgShortNameKarlat",
+        //   visible: false,
+        //   width: "100%",
+        // },
+        // {
+        //   dataField: "short_name_eng",
+        //   caption: "msgShortNameEng",
+        //   visible: false,
+        //   width: "100%",
+        // },
+        // {
+        //   dataField: "class",
+        //   caption: "msgClass",
+        //   width: 100,
+        //   alignment: "center",
+        // },
         {
           dataField: "metaid",
           caption: "msgAsChildOf",
@@ -443,6 +454,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       </h2>
 
       <DataGrid
+        id={pathnameWithoutSlash}
         dataSource={APIData}
         // keyExpr="id"
         repaintChangesOnly={true}
@@ -495,15 +507,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           <Editing
             mode="popup"
             popup={popupGeneralOptions}
-            allowAdding={true}
-            allowDeleting={true}
-            allowUpdating={true}
+            allowAdding={allowAdding}
+            allowDeleting={allowDeleting}
+            allowUpdating={allowUpdating}
           />
         )}
 
         {customMarkupRender()}
 
-        {pathnameWithoutSlash === "ShortDics" && (
+        {(pathnameWithoutSlash === "ShortDics" ||
+          pathnameWithoutSlash === "recordLog") && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
 

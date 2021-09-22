@@ -19,10 +19,13 @@ const DetailTemplate = ({data}) => {
   const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
+  const [allowAdding, setAllowAdding] = useState(true);
+  const [allowDeleting, setAllowDeleting] = useState(true);
+  const [allowUpdating, setAllowUpdating] = useState(true);
   // const [error, setError] = useState(null);
 
   const {formatMessage} = useLocalization();
-  // console.log(`props`, data);
+  console.log(`props`, data);
   // const focusedRowTitle = data.data.name;
 
   // const popupOpt = {
@@ -33,14 +36,42 @@ const DetailTemplate = ({data}) => {
   // };
 
   useEffect(() => {
-    const shortDicsRecords = FetchData(
-      "/ShortDicsRecords",
-      `ShortDicsRecords&@tid=${data.data.id}`,
-      "hbdb"
-    ).fetchColumnsSchemaData;
+    const idTriger = data.component._$element[0].id;
+    console.log(`idTriger`, idTriger);
+    if (idTriger === "ShortDics") {
+      const shortDicsRecords = FetchData(
+        "/ShortDicsRecords",
+        `ShortDicsRecords&@tid=${data.data.id}`,
+        "hbdb"
+      ).fetchColumnsSchemaData;
 
-    setAPIData(data.data.columnsjson.columns);
-    setShortDicsRecordsDataState(shortDicsRecords);
+      setAPIData(data.data.columnsjson.columns);
+      setShortDicsRecordsDataState(shortDicsRecords);
+    }
+
+    if (idTriger === "recordLog") {
+      const detailFieldLogShcema = FetchData(
+        "/recordLog",
+        `ShortDicsRecordsFlat&@name=FieldLogColumnSchema`,
+        "hbdb"
+      ).fetchColumnsSchemaData;
+
+      detailFieldLogShcema
+        ._loadFunc()
+        .then((result) => setAPIData(result.data));
+
+      const fieldLog = FetchData(
+        "/fieldLog",
+        `FieldLog&@LogGID=${data.data.GID}`,
+        "wisdb"
+      ).usersFetchData;
+
+      setAllowAdding(false);
+      setAllowDeleting(false);
+      setAllowUpdating(false);
+
+      setShortDicsRecordsDataState(fieldLog);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,9 +111,9 @@ const DetailTemplate = ({data}) => {
       <Editing
         mode="batch"
         // popup={popupOpt}
-        allowAdding={true}
-        allowDeleting={true}
-        allowUpdating={true}
+        allowAdding={allowAdding}
+        allowDeleting={allowDeleting}
+        allowUpdating={allowUpdating}
         startEditAction="dblClick"
       />
 

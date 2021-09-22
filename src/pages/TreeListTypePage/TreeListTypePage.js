@@ -17,18 +17,29 @@ import TreeList, {
   Pager,
   LoadPanel,
   StateStoring,
+  Form,
 } from "devextreme-react/tree-list";
+import {
+  SimpleItem,
+  Tab,
+  TabbedItem,
+  TabPanelOptions,
+  GroupItem,
+} from "devextreme-react/form";
 import Button from "devextreme-react/button";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
+
 import {
   checkIfArrIncludesValue,
   createCustomMsg,
   customPageAbbreviationMsg,
   getLookupParamsForURL,
 } from "../../helpers/functions";
+
+import DatailTreeListTab from "../../components/DetailTreeListTab/DetailTreeListTab";
 
 import "./TreeListTypePage.scss";
 
@@ -41,6 +52,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     useState("msgExpandAllRows");
   // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
 
+  const [masterId, setMasterId] = useState("");
+  const [formData, setFormData] = useState(null);
+  const [groupItemCaption, setGroupItemCaption] = useState("");
+
   const {formatMessage} = useLocalization();
 
   const pathnameWithoutSlash = pathname.split("/")[1];
@@ -50,6 +65,20 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   );
 
   const statusToggler = StatusLangToggler().statusToggler();
+
+  const popupGeneralOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: true,
+    width: 1000,
+    height: 700,
+  };
+
+  const popupDetailTreeListTabOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: false,
+    width: 1000,
+    height: 1000,
+  };
 
   const popupOpt = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
@@ -216,6 +245,65 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
+  function onFocusedCellChanging(e) {
+    const formData = e.rows[e.newRowIndex].data;
+    const rowId = formData.id;
+    // const groupItemCaption = formData.UserName;
+    setMasterId(rowId);
+    setFormData(formData);
+    setGroupItemCaption(groupItemCaption);
+  }
+
+  function customSimpleItemMarkup(formData) {
+    if (!formData) {
+      return;
+    }
+
+    return Object.keys(formData).map((item, idx) => {
+      return <SimpleItem key={idx} dataField={item} />;
+    });
+  }
+
+  function editorCustomMarkup() {
+    return masterId ? (
+      <Editing
+        mode="popup"
+        popup={popupDetailTreeListTabOptions}
+        allowAdding={false}
+        allowDeleting={false}
+        allowUpdating={true}
+      >
+        <Form id="form" formData={formData} colCount={1} width={"100%"}>
+          <GroupItem caption={groupItemCaption}>
+            <TabbedItem>
+              <TabPanelOptions deferRendering={true} />
+
+              <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
+                {customSimpleItemMarkup(formData)}
+              </Tab>
+
+              <Tab title={formatMessage("msgGroups")} colCount={2}>
+                <DatailTreeListTab
+                  masterId={masterId}
+                  DetailTreeListPath={"auditSettings"}
+                  formData={formData}
+                />
+              </Tab>
+            </TabbedItem>
+          </GroupItem>
+        </Form>
+      </Editing>
+    ) : (
+      <Editing
+        mode="popup"
+        popup={popupGeneralOptions}
+        allowAdding={true}
+        allowDeleting={true}
+        allowUpdating={true}
+      />
+    );
+  }
+
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>
@@ -252,10 +340,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         virtualModeEnabled={true}
         // functions
+        // remoteOperations={{}}
         autoExpandAll={toggler}
         onInitNewRow={initNewRow}
         // onEditorPreparing={onEditorPreparing}
-        // onFocusedCellChanging={onFocusedCellChanging}
+        onFocusedCellChanging={onFocusedCellChanging}
         // onToolbarPreparing={onToolbarPreparing}
       >
         <Scrolling mode="standard" />
@@ -276,13 +365,17 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           storageKey="storage"
         />
 
-        <Editing
-          mode="popup"
-          popup={popupOpt}
-          allowAdding={true}
-          allowUpdating={true}
-          allowDeleting={true}
-        />
+        {pathnameWithoutSlash === "auditSettingsMaster" ? (
+          editorCustomMarkup()
+        ) : (
+          <Editing
+            mode="popup"
+            popup={popupOpt}
+            allowAdding={true}
+            allowUpdating={true}
+            allowDeleting={true}
+          />
+        )}
 
         {customMarkupRender()}
 

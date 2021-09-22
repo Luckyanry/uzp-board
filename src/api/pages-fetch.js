@@ -66,6 +66,8 @@ export const FetchData = (
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=AuditSettingsMasterColumnSchema`;
       case "/recordLog":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=RecordLogColumnSchema`;
+      case "/fieldLog":
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=FieldLogColumnSchema`;
 
       default:
         return "/home";
@@ -153,6 +155,13 @@ export const FetchData = (
     "@oid"
   );
 
+  const gidFetchData = fetchDataConstructor(
+    "gid",
+    urlFromPages,
+    "@jvalues",
+    "@oid"
+  );
+
   const detailUserTemplateData = fetchDataConstructor(
     "RGID",
     urlFromPages,
@@ -176,6 +185,32 @@ export const FetchData = (
         "POST"
       ),
   });
+
+  const ObjIdFetchData = new CustomStore({
+    key: "ObjId",
+    load: () => sendRequest(urlFromPages, {schema: "get"}),
+    update: async (ObjId, dbName, objName, values) =>
+      await sendRequest(
+        urlFromPages,
+        {
+          schema: "upd",
+          "@ObjId": ObjId,
+          "@dbName": dbName,
+          "@objName": objName,
+          values: JSON.stringify(values),
+        },
+        "POST"
+      ),
+  });
+
+  // const ObjIdFetchData = fetchDataConstructor(
+  //   "ObjId",
+  //   urlFromPages,
+  //   "values",
+  //   "@ObjId"
+  // );
+  // "@dbName",
+  // "@objName"
 
   const custumMessageData = new CustomStore({
     key: "id",
@@ -305,6 +340,8 @@ export const FetchData = (
     detailUserTemplateData,
     detailMemebersTemplateData,
     signInUserData,
+    gidFetchData,
+    ObjIdFetchData,
   };
 };
 
