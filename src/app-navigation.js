@@ -6,7 +6,8 @@ export const AppNavigation = () => {
   const individualsAndLegalDir = ["personObjects", "legals"];
   const staffDir = ["employees", "orgUnits"];
   const userAccessControlDir = ["userObjects", "roleObjects", "groupObjects"];
-  const administrationDir = [];
+  // const administrationDir = [];
+  // const auditSubDir = ["auditSettings", "logUserActions"];
   const dictionariesDir = [
     "countries",
     "soato",
@@ -60,8 +61,24 @@ export const AppNavigation = () => {
     {
       text: formatMessage("msgAdministrationDirMenuTitle"),
       icon: "paste",
-      items: pathCreator(administrationDir),
-    },
+      items: [
+        {
+          text: formatMessage("msgAuditingAndLoggingUserActions"),
+          items: [
+            {
+              icon: "tips",
+              text: formatMessage("msgAuditSettings"),
+              path: "/auditSettingsMaster",
+            },
+            {
+              icon: "tips",
+              text: formatMessage("msgLogUserActions"),
+              path: "/recordLog",
+            },
+          ],
+        },
+      ],
+    }, // pathCreator(administrationDir)
     {
       text: formatMessage("msgDictionariesDirMenuTitle"),
       icon: "folder",

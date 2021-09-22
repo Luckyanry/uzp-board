@@ -18,8 +18,17 @@ const dataGridPagesPath = [
   "orgUnits",
   "employees",
   "legals",
+  "recordLog",
 ];
-const treeListPagesPath = ["soato", "kspd", "kfs", "kopf", "oked"];
+
+const treeListPagesPath = [
+  "soato",
+  "kspd",
+  "kfs",
+  "kopf",
+  "oked",
+  "auditSettingsMaster",
+];
 
 const routes = [
   {

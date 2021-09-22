@@ -24,6 +24,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
 import {
+  checkIfArrIncludesValue,
   createCustomMsg,
   customPageAbbreviationMsg,
   getLookupParamsForURL,
@@ -78,8 +79,14 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
 
     function getAPIData() {
-      const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
+      if (
+        checkIfArrIncludesValue(["auditSettingsMaster"], pathnameWithoutSlash)
+      ) {
+        const fetchData = fetchDataConstructor("logdb").fetchColumnsSchemaData;
+        return setAPIData(fetchData);
+      }
 
+      const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
       setAPIData(fetchData);
     }
 

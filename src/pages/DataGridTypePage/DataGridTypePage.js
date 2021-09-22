@@ -118,6 +118,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         return setAPIData(fetchData);
       }
 
+      if (checkIfArrIncludesValue(["recordLog"], pathnameWithoutSlash)) {
+        const fetchData = fetchDataConstructor("wisdb").usersFetchData;
+        return setAPIData(fetchData);
+      }
+
       const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
       setAPIData(fetchData);
     }
@@ -384,13 +389,26 @@ export const DataGridTypePage = ({location: {pathname}}) => {
                 {customSimpleItemMarkup(userFormData)}
               </Tab>
 
-              <Tab title={formatMessage("msgGroups")} colCount={2}>
-                <UserDetailTab user={userFormData} UserGroups={"UserGroups"} />
-              </Tab>
+              {checkIfArrIncludesValue(
+                ["roleObjects", "userObjects"],
+                pathnameWithoutSlash
+              ) && (
+                <Tab title={formatMessage("msgGroups")} colCount={2}>
+                  <UserDetailTab
+                    user={userFormData}
+                    UserGroups={"UserGroups"}
+                  />
+                </Tab>
+              )}
 
-              <Tab title={formatMessage("msgRoles")} colCount={2}>
-                <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
-              </Tab>
+              {checkIfArrIncludesValue(
+                ["groupObjects", "userObjects"],
+                pathnameWithoutSlash
+              ) && (
+                <Tab title={formatMessage("msgRoles")} colCount={2}>
+                  <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
+                </Tab>
+              )}
 
               {checkIfArrIncludesValue(
                 ["roleObjects", "groupObjects"],

@@ -62,6 +62,11 @@ export const FetchData = (
       case "/legals":
         return `&db=${db}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
 
+      case "/auditSettingsMaster":
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=AuditSettingsMasterColumnSchema`;
+      case "/recordLog":
+        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=RecordLogColumnSchema`;
+
       default:
         return "/home";
     }
