@@ -54,23 +54,18 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
     }
 
     async function getAPIData() {
-      const getFetchData = FetchData(
+      const loadFetchData = FetchData(
         pathname,
         `AuditSettings&@masterid=${masterId}`,
         "wisdb"
-      ).ObjIdFetchData;
+      ).loadObjIdData();
 
-      setAPIData(getFetchData);
+      loadFetchData.then((res) => setAPIData(res.data));
     }
 
     getColumnsSchemaData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function updateFetch(ObjId, dbName, objName, values) {
-    // console.log(`objName`, objName);
-    APIData._updateFunc(ObjId, dbName, objName, values);
-  }
 
   function customMarkupRender() {
     return columnsSchemaData.map((item, idx) => {
@@ -120,7 +115,11 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   }
 
   function updateRow(e) {
-    updateFetch(
+    FetchData(
+      pathname,
+      `AuditSettings&@masterid=${masterId}`,
+      "wisdb"
+    ).updateObjIdData(
       e.oldData.ObjId,
       e.oldData.dbName,
       e.oldData.objName,
@@ -136,7 +135,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       rootValue={0}
       keyExpr="ObjId"
       parentIdExpr="PObjId"
-      // repaintChangesOnly={true}
+      repaintChangesOnly={true}
       // remoteOperations={false}
       // rows
       focusedRowEnabled={true}

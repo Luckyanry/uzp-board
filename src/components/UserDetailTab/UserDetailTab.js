@@ -173,6 +173,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
       remoteOperations={false}
       // rows
       focusedRowEnabled={true}
+      showRowLines={true}
       // columns
       showColumnLines={true}
       columnMinWidth={80}

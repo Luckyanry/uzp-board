@@ -183,23 +183,6 @@ export const FetchData = (
       ),
   });
 
-  const ObjIdFetchData = new CustomStore({
-    key: "ObjId",
-    load: () => sendRequest(urlFromPages, {schema: "get"}),
-    update: async (ObjId, dbName, objName, values) =>
-      await sendRequest(
-        urlFromPages,
-        {
-          schema: "upd",
-          "@ObjId": ObjId,
-          "@dbName": dbName,
-          "@objName": objName,
-          values: JSON.stringify(values),
-        },
-        "POST"
-      ),
-  });
-
   const custumMessageData = new CustomStore({
     key: "id",
     load: async () => await sendRequest(urlFromPages, {schema: "get"}, "POST"),
@@ -227,6 +210,20 @@ export const FetchData = (
         method
       ),
   });
+
+  const loadObjIdData = () => sendRequest(urlFromPages, {schema: "get"});
+  const updateObjIdData = async (ObjId, dbName, objName, values) =>
+    await sendRequest(
+      urlFromPages,
+      {
+        schema: "upd",
+        "@ObjId": ObjId,
+        "@dbName": dbName,
+        "@objName": objName,
+        values: JSON.stringify(values),
+      },
+      "POST"
+    );
 
   async function sendRequest(url, data = {}, method = "GET") {
     const params = Object.keys(data)
@@ -328,7 +325,8 @@ export const FetchData = (
     detailMemebersTemplateData,
     signInUserData,
     gidFetchData,
-    ObjIdFetchData,
+    loadObjIdData,
+    updateObjIdData,
   };
 };
 

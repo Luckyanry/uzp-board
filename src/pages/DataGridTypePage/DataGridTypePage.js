@@ -424,6 +424,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         remoteOperations={false}
         // rows
         focusedRowEnabled={true}
+        showRowLines={true}
         // focusedRowIndex={0}
         // columns
         showColumnLines={true}
