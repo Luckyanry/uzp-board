@@ -227,7 +227,7 @@ const DetailUserTemplate = ({data}) => {
               />
             </Column>
 
-            <Paging defaultPageSize={10} />
+            <Paging defaultPageSize={10} enabled={true} />
             <Pager
               showPageSizeSelector={true}
               showNavigationButtons={true}

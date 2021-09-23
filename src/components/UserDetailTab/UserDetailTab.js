@@ -128,7 +128,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
-          showEditorAlways={true}
+          showEditorAlways={false}
           trueText={formatMessage("msgOn")}
           falseText={formatMessage("msgOff")}
           {...params}

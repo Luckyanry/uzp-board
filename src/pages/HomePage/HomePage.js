@@ -27,7 +27,7 @@ import "./HomePage.scss";
 
 const buttonOptions = [
   {
-    pathTo: "/employees",
+    pathTo: "/personObjects",
     btnTitle: "msgHomeBtnTitleEmployees",
     btnDesc: "msgHomeBtnDescEmployees",
     Icon: UserIcon,

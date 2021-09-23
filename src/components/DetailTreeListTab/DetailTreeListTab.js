@@ -68,6 +68,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   }, []);
 
   function updateFetch(ObjId, dbName, objName, values) {
+    // console.log(`objName`, objName);
     APIData._updateFunc(ObjId, dbName, objName, values);
   }
 
