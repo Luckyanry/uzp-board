@@ -21,3 +21,5 @@ export {default as SideNavigationMenu} from "./SideNavigationMenu/SideNavigation
 export {default as ResetPasswordForm} from "./ResetPasswordForm/ResetPasswordForm";
 export {default as ChangePasswordForm} from "./ChangePasswordForm/ChangePasswordForm";
 export {default as DigitalKeyForm} from "./DigitalKeyForm/DigitalKeyForm";
+
+export {default as CustomButton} from "./CustomButton/CustomButton";

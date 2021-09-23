@@ -268,11 +268,11 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             <TabbedItem>
               <TabPanelOptions deferRendering={true} />
 
-              <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
+              <Tab title={formatMessage("msgTabAuditGeneral")} colCount={2}>
                 {customSimpleItemMarkup(formData)}
               </Tab>
 
-              <Tab title={formatMessage("msgGroups")} colCount={2}>
+              <Tab title={formatMessage("msgTabAuditObjDB")} colCount={2}>
                 <DatailTreeListTab
                   masterId={masterId}
                   DetailTreeListPath={"auditSettings"}
