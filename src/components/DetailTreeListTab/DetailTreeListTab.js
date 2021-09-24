@@ -54,13 +54,13 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
     }
 
     async function getAPIData() {
-      const loadFetchData = FetchData(
+      const loadFetchData = await FetchData(
         pathname,
         `AuditSettings&@masterid=${masterId}`,
         "wisdb"
       ).loadObjIdData();
 
-      loadFetchData.then((res) => setAPIData(res.data));
+      setAPIData(loadFetchData.data);
     }
 
     getColumnsSchemaData();

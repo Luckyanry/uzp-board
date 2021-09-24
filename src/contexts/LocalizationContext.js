@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext, useEffect, createContext} from "react";
 
 import {locale, loadMessages, formatMessage} from "devextreme/localization";
 import * as ruMessages from "devextreme/localization/messages/ru.json";
@@ -9,59 +9,58 @@ import * as uzCyrlMessages from "devextreme/localization/messages/uz-Cyrl.json";
 import {FetchData} from "../api/pages-fetch";
 import {urlAnonymous} from "../api/url-config";
 
-const LocalizationContext = React.createContext();
+const LocalizationContext = createContext();
 const useLocalization = () => useContext(LocalizationContext);
 
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
   const [customMessagesData, setCustomMessagesData] = useState({});
-  const [defaultLang, setDefaultLang] = useState("en");
-  const [lang, setLang] = useState(getFromLocalStorege(defaultLang));
-
-  const changedMyLocalFetch = FetchData(
-    "/w_changeMyLocaleTo",
-    "w_changeMyLocaleTo",
-    "wisdb",
-    urlAnonymous
-  ).changeMyLocalToData;
+  const [defaultLang, setDefaultLang] = useState();
+  const [lang, setLang] = useState(getFromLocalStorage(defaultLang));
 
   initMessages();
   // locale(lang);
 
   useEffect(() => {
-    const customMessages = FetchData(
-      "/CustomMessages",
-      "ShortDicsRecordsFlatCustomMessagesObject",
-      "hbdb",
-      urlAnonymous
-    ).custumMessageData;
-
+    console.log(`useEffect start`);
     const getLangsData = async () => {
-      const islangFetch = FetchData(
+      const loadLangsData = FetchData(
         "/islang",
         "islang",
         "wisdb",
         urlAnonymous
       ).fetchColumnsSchemaData;
 
-      const result = await islangFetch._loadFunc().then((res) => res.data);
+      const result = await loadLangsData._loadFunc().then((res) => res.data);
 
       isEnabledLang(result);
-      isCurrentLang(result);
       isDefaultLang(result);
+      isCurrentLang(result);
+
+      await getCustomMessages();
     };
 
     const getCustomMessages = async () => {
-      await customMessages
-        ._loadFunc()
-        .then((res) => setCustomMessagesData({[lang]: res}));
+      const customMessages = FetchData(
+        "/CustomMessages",
+        "ShortDicsRecordsFlatCustomMessagesObject",
+        "hbdb",
+        urlAnonymous
+      ).loadCustumMessageData();
+
+      lang &&
+        (await customMessages.then((res) =>
+          setCustomMessagesData({[lang]: res})
+        ));
     };
 
-    getCustomMessages();
     getLangsData();
+    // getCustomMessages();
 
-    initMessages();
+    // initMessages();
     locale(lang);
+    console.log(`locale(lang)`, lang);
+    console.log(`useEffect end`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
@@ -75,9 +74,14 @@ const LocalizationProvider = ({children}) => {
   function isCurrentLang(array) {
     if (array.length) {
       const result = array.find(({iscurrent}) => iscurrent);
-      const locale = sessionStorage.getItem("locale");
 
-      if (!locale) return;
+      const storage = localStorage.getItem("language");
+      if (!storage) return;
+      console.log(`isCurrentLang`);
+
+      locale(result.short);
+      setLang(result.short);
+      // initMessages();
       setToLocalStorege(result.short);
     }
   }
@@ -87,42 +91,60 @@ const LocalizationProvider = ({children}) => {
       const result = array.find(({isdefault}) => isdefault);
       setDefaultLang(result.short);
 
-      const locale = sessionStorage.getItem("locale");
+      const storage = localStorage.getItem("language");
+      if (storage) return;
+      console.log("isDefaultLang");
 
-      if (locale) return;
+      setLang(result.short);
+      locale(result.short);
+      // initMessages();
       changeLocale(result.short);
     }
   }
 
-  function getFromLocalStorege(defaultValue) {
-    const locale = sessionStorage.getItem("locale");
-    return locale !== null ? locale : defaultValue;
+  function getFromLocalStorage(defaultValue) {
+    console.log("getFromLocalStorage");
+    // initMessages();
+    const storage = localStorage.getItem("language");
+    return storage !== null ? storage : defaultValue;
   }
 
-  function setToLocalStorege(locale) {
-    sessionStorage.setItem("locale", locale);
+  function setToLocalStorege(language) {
+    console.log("setToLocalStorege");
+    localStorage.setItem("language", language);
   }
 
-  function changeMyLocalTo(newKey) {
-    changedMyLocalFetch._updateFunc(newKey);
+  async function changeMyLocalTo(newKey) {
+    console.log("changeMyLocalTo");
+    await FetchData(
+      "/w_changeMyLocaleTo",
+      "w_changeMyLocaleTo",
+      "wisdb",
+      urlAnonymous
+    ).changeMyLocalToData(newKey);
   }
 
   function changeLocale(value) {
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+
     changeMyLocalTo(value);
-    initMessages();
     setLang(value);
     setToLocalStorege(value);
 
-    setTimeout(() => {
-      document.location.reload();
-    }, 500);
+    // locale(value);
+
+    console.log("changeLocale");
   }
 
   function changeLocaleHendler(e) {
+    console.log("changeLocaleHendler");
     changeLocale(e.value);
   }
 
   function initMessages() {
+    console.log("initMessages");
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
     loadMessages(uzCyrlMessages);

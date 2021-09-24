@@ -173,21 +173,6 @@ export const FetchData = (
     "@gid"
   );
 
-  const changeMyLocalToData = new CustomStore({
-    key: "short",
-    update: async (newKey) =>
-      await sendRequest(
-        urlFromPages,
-        {schema: "dbo", "@newkey": newKey},
-        "POST"
-      ),
-  });
-
-  const custumMessageData = new CustomStore({
-    key: "id",
-    load: async () => await sendRequest(urlFromPages, {schema: "get"}, "POST"),
-  });
-
   const lookData = {
     store: new CustomStore({
       key: "id",
@@ -211,7 +196,15 @@ export const FetchData = (
       ),
   });
 
-  const loadObjIdData = () => sendRequest(urlFromPages, {schema: "get"});
+  const loadCustumMessageData = async () =>
+    await sendRequest(urlFromPages, {schema: "get"}, "POST");
+
+  const changeMyLocalToData = async (newKey) =>
+    await sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST");
+
+  const loadObjIdData = async () =>
+    await sendRequest(urlFromPages, {schema: "get"});
+
   const updateObjIdData = async (ObjId, dbName, objName, values) =>
     await sendRequest(
       urlFromPages,
@@ -317,14 +310,14 @@ export const FetchData = (
     fetchColumnsSchemaData,
     fetchData,
     lookData,
-    changeMyLocalToData,
     usersFetchData,
-    custumMessageData,
     personFetchData,
     detailUserTemplateData,
     detailMemebersTemplateData,
     signInUserData,
     gidFetchData,
+    loadCustumMessageData,
+    changeMyLocalToData,
     loadObjIdData,
     updateObjIdData,
   };
