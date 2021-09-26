@@ -14,9 +14,9 @@ const useLocalization = () => useContext(LocalizationContext);
 
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
-  const [customMessagesData, setCustomMessagesData] = useState({});
   const [defaultLang, setDefaultLang] = useState();
   const [lang, setLang] = useState(getFromLocalStorage(defaultLang));
+  const [customMessagesData, setCustomMessagesData] = useState({});
 
   initMessages();
   // locale(lang);
@@ -48,27 +48,26 @@ const LocalizationProvider = ({children}) => {
         urlAnonymous
       ).loadCustumMessageData();
 
-      lang &&
-        (await customMessages.then((res) =>
-          setCustomMessagesData({[lang]: res})
-        ));
+      await customMessages.then((res) =>
+        setCustomMessagesData(() => ({[lang]: res}))
+      );
       // console.log(`customMessages`, customMessages);
     };
 
     getLangsData();
     // getCustomMessages();
 
-    // initMessages();
     locale(lang);
     // console.log(`locale(lang)`, lang);
     // console.log(`useEffect end`);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
   function isEnabledLang(array) {
     if (array.length) {
       const result = array.filter(({isenabled}) => isenabled);
-      setLangData(result);
+      setLangData(() => result);
     }
   }
 
@@ -77,12 +76,10 @@ const LocalizationProvider = ({children}) => {
       const result = array.find(({iscurrent}) => iscurrent);
 
       const storage = localStorage.getItem("language");
+
       if (!storage) return;
       // console.log(`isCurrentLang`);
-
-      locale(result.short);
-      setLang(result.short);
-      // initMessages();
+      setLang(() => result.short);
       setToLocalStorege(result.short);
     }
   }
@@ -96,9 +93,6 @@ const LocalizationProvider = ({children}) => {
       if (storage) return;
       // console.log("isDefaultLang");
 
-      setLang(result.short);
-      locale(result.short);
-      // initMessages();
       changeLocale(result.short);
     }
   }
@@ -123,15 +117,14 @@ const LocalizationProvider = ({children}) => {
       "wisdb",
       urlAnonymous
     ).changeMyLocalToData(newKey);
+
+    window.location.reload();
   }
 
   function changeLocale(value) {
     changeMyLocalTo(value);
-    setLang(value);
+    setLang(() => value);
     setToLocalStorege(value);
-    // locale(value);
-
-    window.location.reload();
   }
 
   function changeLocaleHendler(e) {
