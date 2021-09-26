@@ -22,7 +22,7 @@ const LocalizationProvider = ({children}) => {
   // locale(lang);
 
   useEffect(() => {
-    console.log(`useEffect start`);
+    // console.log(`useEffect start`);
     const getLangsData = async () => {
       const loadLangsData = FetchData(
         "/islang",
@@ -52,6 +52,7 @@ const LocalizationProvider = ({children}) => {
         (await customMessages.then((res) =>
           setCustomMessagesData({[lang]: res})
         ));
+      // console.log(`customMessages`, customMessages);
     };
 
     getLangsData();
@@ -59,8 +60,8 @@ const LocalizationProvider = ({children}) => {
 
     // initMessages();
     locale(lang);
-    console.log(`locale(lang)`, lang);
-    console.log(`useEffect end`);
+    // console.log(`locale(lang)`, lang);
+    // console.log(`useEffect end`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
@@ -77,7 +78,7 @@ const LocalizationProvider = ({children}) => {
 
       const storage = localStorage.getItem("language");
       if (!storage) return;
-      console.log(`isCurrentLang`);
+      // console.log(`isCurrentLang`);
 
       locale(result.short);
       setLang(result.short);
@@ -93,7 +94,7 @@ const LocalizationProvider = ({children}) => {
 
       const storage = localStorage.getItem("language");
       if (storage) return;
-      console.log("isDefaultLang");
+      // console.log("isDefaultLang");
 
       setLang(result.short);
       locale(result.short);
@@ -103,19 +104,19 @@ const LocalizationProvider = ({children}) => {
   }
 
   function getFromLocalStorage(defaultValue) {
-    console.log("getFromLocalStorage");
+    // console.log("getFromLocalStorage");
     // initMessages();
     const storage = localStorage.getItem("language");
     return storage !== null ? storage : defaultValue;
   }
 
   function setToLocalStorege(language) {
-    console.log("setToLocalStorege");
+    // console.log("setToLocalStorege");
     localStorage.setItem("language", language);
   }
 
   async function changeMyLocalTo(newKey) {
-    console.log("changeMyLocalTo");
+    // console.log("changeMyLocalTo");
     await FetchData(
       "/w_changeMyLocaleTo",
       "w_changeMyLocaleTo",
@@ -126,12 +127,11 @@ const LocalizationProvider = ({children}) => {
 
   function changeLocale(value) {
     setTimeout(() => {
+      changeMyLocalTo(value);
+      setLang(value);
+      setToLocalStorege(value);
       window.location.reload();
     }, 500);
-
-    changeMyLocalTo(value);
-    setLang(value);
-    setToLocalStorege(value);
 
     // locale(value);
 
@@ -139,12 +139,12 @@ const LocalizationProvider = ({children}) => {
   }
 
   function changeLocaleHendler(e) {
-    console.log("changeLocaleHendler");
+    // console.log("changeLocaleHendler");
     changeLocale(e.value);
   }
 
   function initMessages() {
-    console.log("initMessages");
+    // console.log("initMessages");
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
     loadMessages(uzCyrlMessages);

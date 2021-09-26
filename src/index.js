@@ -1,4 +1,4 @@
-import React from "react";
+import React, {StrictMode} from "react";
 import ReactDOM from "react-dom";
 // import {BrowserRouter} from "react-router-dom";
 import {createStore, compose, applyMiddleware} from "redux";
@@ -24,13 +24,13 @@ const store = createStore(
 );
 
 const app = (
-  <React.StrictMode>
+  <StrictMode>
     {/* <BrowserRouter> */}
     <Provider store={store}>
       <App />
     </Provider>
     {/* </BrowserRouter> */}
-  </React.StrictMode>
+  </StrictMode>
 );
 
 ReactDOM.render(app, document.getElementById("root"));

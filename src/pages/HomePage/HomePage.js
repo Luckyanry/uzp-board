@@ -1,5 +1,3 @@
-import React from "react";
-
 import {formatMessage} from "devextreme/localization";
 
 import {CustomButton} from "../../components";
@@ -131,17 +129,17 @@ const buttonOptions = [
 ];
 
 export const HomePage = () => {
+  const elements = buttonOptions.map((item, idx) => (
+    <li className="item" key={idx}>
+      <CustomButton key={idx} {...item} />
+    </li>
+  ));
+
   return (
     <div className={"home-container"}>
       <h2 className={"home-title"}>{formatMessage("msgHomeHeaderTitle")}</h2>
 
-      <ul className="list">
-        {buttonOptions.map((item, idx) => (
-          <li className="item" key={idx}>
-            <CustomButton item={item} />
-          </li>
-        ))}
-      </ul>
+      <ul className="list">{elements}</ul>
     </div>
   );
 };

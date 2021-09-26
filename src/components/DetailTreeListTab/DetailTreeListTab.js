@@ -59,7 +59,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         `AuditSettings&@masterid=${masterId}`,
         "wisdb"
       ).loadObjIdData();
-
+      console.log(`loadFetchData`, loadFetchData);
       setAPIData(loadFetchData.data);
     }
 
