@@ -126,16 +126,12 @@ const LocalizationProvider = ({children}) => {
   }
 
   function changeLocale(value) {
-    setTimeout(() => {
-      changeMyLocalTo(value);
-      setLang(value);
-      setToLocalStorege(value);
-      window.location.reload();
-    }, 500);
-
+    changeMyLocalTo(value);
+    setLang(value);
+    setToLocalStorege(value);
     // locale(value);
 
-    console.log("changeLocale");
+    window.location.reload();
   }
 
   function changeLocaleHendler(e) {
