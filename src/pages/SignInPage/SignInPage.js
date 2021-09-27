@@ -9,9 +9,9 @@ import loginBg from "./img/loginBg.jpeg";
 import {ReactComponent as Logo} from "./icons/logo.svg";
 import {ReactComponent as AngleIcon} from "./icons/angleIcon.svg";
 
-import "./SingleCard.scss";
+import "./SignInPage.scss";
 
-const SingleCard = ({
+const SignInPage = ({
   title,
   description,
   prevPage = false,
@@ -43,15 +43,18 @@ const SingleCard = ({
         <div style={styles.bgImgContainer}>
           <div className={"left-content-wrapper"}>
             <Logo className={"logo"} />
+
             <h2 className={"img-title"}>{formatMessage("msgAdminPanel")}</h2>
+
             <p className={"img-text"}>
               {formatMessage("msgStartPageImgDescription")}
             </p>
+
             <AngleIcon className={"angle-icon"} />
           </div>
         </div>
 
-        <div className={"content"}>
+        <div id="content" className={"content"}>
           <ul className={"toolbar"}>
             <li className={"link left-btn"}>
               {prevPage && (
@@ -84,4 +87,4 @@ const SingleCard = ({
   );
 };
 
-export default SingleCard;
+export default SignInPage;

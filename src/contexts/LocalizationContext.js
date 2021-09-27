@@ -19,10 +19,8 @@ const LocalizationProvider = ({children}) => {
   const [customMessagesData, setCustomMessagesData] = useState({});
 
   initMessages();
-  // locale(lang);
 
   useEffect(() => {
-    // console.log(`useEffect start`);
     const getLangsData = async () => {
       const loadLangsData = FetchData(
         "/islang",
@@ -37,10 +35,10 @@ const LocalizationProvider = ({children}) => {
       isDefaultLang(result);
       isCurrentLang(result);
 
-      await getCustomMessages();
+      getCustomMessages();
     };
 
-    const getCustomMessages = async () => {
+    const getCustomMessages = () => {
       const customMessages = FetchData(
         "/CustomMessages",
         "ShortDicsRecordsFlatCustomMessagesObject",
@@ -48,18 +46,14 @@ const LocalizationProvider = ({children}) => {
         urlAnonymous
       ).loadCustumMessageData();
 
-      await customMessages.then((res) =>
+      customMessages.then((res) =>
         setCustomMessagesData(() => ({[lang]: res}))
       );
-      // console.log(`customMessages`, customMessages);
     };
 
     getLangsData();
     // getCustomMessages();
-
     locale(lang);
-    // console.log(`locale(lang)`, lang);
-    // console.log(`useEffect end`);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
@@ -75,10 +69,10 @@ const LocalizationProvider = ({children}) => {
     if (array.length) {
       const result = array.find(({iscurrent}) => iscurrent);
 
-      const storage = localStorage.getItem("language");
+      const storage = sessionStorage.getItem("language");
 
       if (!storage) return;
-      // console.log(`isCurrentLang`);
+
       setLang(() => result.short);
       setToLocalStorege(result.short);
     }
@@ -89,28 +83,24 @@ const LocalizationProvider = ({children}) => {
       const result = array.find(({isdefault}) => isdefault);
       setDefaultLang(result.short);
 
-      const storage = localStorage.getItem("language");
+      const storage = sessionStorage.getItem("language");
+
       if (storage) return;
-      // console.log("isDefaultLang");
 
       changeLocale(result.short);
     }
   }
 
   function getFromLocalStorage(defaultValue) {
-    // console.log("getFromLocalStorage");
-    // initMessages();
-    const storage = localStorage.getItem("language");
+    const storage = sessionStorage.getItem("language");
     return storage !== null ? storage : defaultValue;
   }
 
   function setToLocalStorege(language) {
-    // console.log("setToLocalStorege");
-    localStorage.setItem("language", language);
+    sessionStorage.setItem("language", language);
   }
 
   async function changeMyLocalTo(newKey) {
-    // console.log("changeMyLocalTo");
     await FetchData(
       "/w_changeMyLocaleTo",
       "w_changeMyLocaleTo",
@@ -128,17 +118,15 @@ const LocalizationProvider = ({children}) => {
   }
 
   function changeLocaleHendler(e) {
-    // console.log("changeLocaleHendler");
     changeLocale(e.value);
   }
 
   function initMessages() {
-    // console.log("initMessages");
+    loadMessages(customMessagesData);
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
     loadMessages(uzCyrlMessages);
     // loadMessages(getSystemDictionary());
-    loadMessages(customMessagesData);
   }
 
   return (

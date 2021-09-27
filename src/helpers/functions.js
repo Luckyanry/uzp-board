@@ -19,8 +19,8 @@ function customPageAbbreviationMsg(message) {
 }
 
 function getFromSessionStorege(key, ifIsNull) {
-  const store = JSON.parse(sessionStorage.getItem(key));
-  return store !== null ? store : ifIsNull;
+  const storage = JSON.parse(sessionStorage.getItem(key));
+  return storage !== null ? storage : ifIsNull;
 }
 
 function setToSessionStorege(key, value) {

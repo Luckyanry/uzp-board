@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import {Popup, Position, ToolbarItem} from "devextreme-react/popup";
 
 import "./ErrorBoundary.scss";
@@ -6,46 +6,39 @@ import "./ErrorBoundary.scss";
 class ErrorBoundary extends Component {
   closeButtonOptions = null;
 
-  constructor(props) {
-    super(props);
+  state = {
+    error: false,
+    currentAPIMsg: {},
+    popupVisible: true,
+  };
 
-    this.state = {
-      hasError: false,
-      currentAPIMsg: {},
-      popupVisible: true,
-    };
-
-    this.showInfo = this.showInfo.bind(this);
-    this.hideInfo = this.hideInfo.bind(this);
-
-    this.closeButtonOptions = {
-      text: "Close",
-      onClick: this.hideInfo,
-    };
-  }
+  closeButtonOptions = {
+    text: "Close",
+    onClick: this.hideInfo,
+  };
 
   componentDidCatch(error, errorInfo) {
     console.log(error, errorInfo);
 
-    this.setState({hasError: true});
+    this.setState({error: true});
   }
 
-  showInfo(message) {
+  showInfo = (message) => {
     this.setState({
       currentAPIMsg: message,
       popupVisible: true,
     });
-  }
+  };
 
-  hideInfo() {
+  hideInfo = () => {
     this.setState({
       currentAPIMsg: {},
       popupVisible: false,
     });
-  }
+  };
 
   render() {
-    if (this.state.hasError) {
+    if (this.state.error) {
       console.log(`this.porps is error `, this.porps.msg);
 
       return (

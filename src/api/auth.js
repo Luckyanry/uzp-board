@@ -13,22 +13,28 @@ export async function signIn(login = null, password = null) {
       "wisdb",
       url,
       "login"
-    ).signInUserData;
-
-    const result = await signInUserData._loadFunc({
+    ).signInUserData({
       "@uname": login,
       "@old": password,
     });
+
+    // const result = await signInUserData._loadFunc({
+    //   "@uname": login,
+    //   "@old": password,
+    // });
+    const result = await signInUserData;
+
     setToSessionStorege("user", result.data[0]);
 
     return {
       isOk: true,
       data: result.data[0],
     };
-  } catch {
+  } catch (err) {
     return {
       isOk: false,
       message: "msgErrAuthFailed",
+      errorAPIMsg: err,
     };
   }
 }
@@ -60,9 +66,10 @@ export async function resetPassword(email) {
       "w_ResetPasswordByEmail",
       "wisdb",
       urlAnonymous
-    ).signInUserData;
+    ).signInUserData({"@email": email}, "POST");
 
-    const result = await resetPasswordData._loadFunc({"@email": email}, "POST");
+    // const result = await resetPasswordData._loadFunc({"@email": email}, "POST");
+    const result = await resetPasswordData;
 
     if (result.tokenSended) {
       return {
@@ -84,17 +91,17 @@ export async function resetPassword(email) {
 
 export async function changePassword(password, resetToken) {
   try {
-    const changePasswordData = FetchData(
+    await FetchData(
       "/change-password",
       "w_ChangePasswordByToken",
       "wisdb",
       urlAnonymous
-    ).signInUserData;
+    ).signInUserData({"@resetToken": resetToken, "@pwd": password}, "POST");
 
-    await changePasswordData._loadFunc(
-      {"@resetToken": resetToken, "@pwd": password},
-      "POST"
-    );
+    // await changePasswordData._loadFunc(
+    //   {"@resetToken": resetToken, "@pwd": password},
+    //   "POST"
+    // );
 
     return {
       isOk: true,

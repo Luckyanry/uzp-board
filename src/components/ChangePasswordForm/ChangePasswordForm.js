@@ -11,7 +11,7 @@ import {FetchData} from "../../api/pages-fetch";
 import {urlAnonymous} from "../../api/url-config";
 import notify from "devextreme/ui/notify";
 
-export default function ChangePasswordForm(props) {
+export default function ChangePasswordForm() {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
@@ -28,14 +28,18 @@ export default function ChangePasswordForm(props) {
         const result = await changePassword(password, token);
         setLoading(false);
 
-        result.isOk
-          ? notifyPopup(
-              "msgSuccessPassChange",
-              "#login-start-form-container",
-              "success",
-              5000
-            ) && history.push("/login")
-          : notifyPopup(result.message);
+        if (result.isOk) {
+          notifyPopup(
+            "msgSuccessPassChange",
+            "#login-start-form-container",
+            "success",
+            3000
+          );
+
+          return history.push("/login");
+        }
+
+        notifyPopup(result.message);
       }
     },
     // eslint-disable-next-line
@@ -49,16 +53,13 @@ export default function ChangePasswordForm(props) {
         "w_CheckResetPasswordTokenExpired",
         "wisdb",
         urlAnonymous
-      ).signInUserData;
+      ).signInUserData({"@resetToken": token}, "POST");
 
       getTokenFromUrl();
 
       if (!token) return;
 
-      const isTokenValid = await checkTokenData._loadFunc(
-        {"@resetToken": token},
-        "POST"
-      );
+      const isTokenValid = await checkTokenData;
 
       if (isTokenValid.VBErr) {
         notifyPopup(isTokenValid.VBErr.Description);
@@ -124,7 +125,7 @@ function notifyPopup(
         of: containerId,
         offset: "0 36",
       },
-      width: 428,
+      width: 426,
       height: 80,
       shading: true,
     },

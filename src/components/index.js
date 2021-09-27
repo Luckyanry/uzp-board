@@ -1,4 +1,3 @@
-export {default as ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
 export {Header} from "./Header/Header";
 export {Footer} from "./Footer/Footer";
 
@@ -23,3 +22,6 @@ export {default as ChangePasswordForm} from "./ChangePasswordForm/ChangePassword
 export {default as DigitalKeyForm} from "./DigitalKeyForm/DigitalKeyForm";
 
 export {default as CustomButton} from "./CustomButton/CustomButton";
+export {default as ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
+export {default as ErrorPopup} from "./ErrorPopup/ErrorPopup";
+export {default as Spinner} from "./Spinner/Spinner";

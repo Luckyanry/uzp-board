@@ -25,53 +25,53 @@ export const FetchData = (
   const pageRequestParams = () => {
     switch (pageRequest) {
       case "/soogu":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=SooguColumnSchema`;
+        return `SooguColumnSchema`;
       case "/soato":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=SoatoColumnSchema`;
+        return `SoatoColumnSchema`;
       case "/countries":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=CountriesColumnSchema`;
+        return `CountriesColumnSchema`;
       case "/kopf":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KopfColumnSchema`;
+        return `KopfColumnSchema`;
       case "/kfs":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KfsColumnSchema`;
+        return `KfsColumnSchema`;
       case "/kspd":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=KspdColumnSchema`;
+        return `KspdColumnSchema`;
       case "/oked":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=OkedSchema`;
+        return `OkedSchema`;
       case "/mahalla":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=MahallaColumnSchema`;
+        return `MahallaColumnSchema`;
 
       case "/userObjects":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISUserAccountColumnSchema`;
+        return `ISUserAccountColumnSchema`;
       case "/roleObjects":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISRoleAccountColumnSchema`;
+        return `ISRoleAccountColumnSchema`;
       case "/groupObjects":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISGroupAccountColumnSchema`;
+        return `ISGroupAccountColumnSchema`;
       case "/isGroupObjectMembers":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=ISGroupObjectMembersColumnSchema`;
+        return `ISGroupObjectMembersColumnSchema`;
 
       case "/personObjects":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=PersonObjectColumnSchema`;
+        return `PersonObjectColumnSchema`;
       case "/orgUnits":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=OrgUnitObjectColumnSchema`;
+        return `OrgUnitObjectColumnSchema`;
       case "/employees":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=EmployeeObjectColumnSchema`;
+        return `EmployeeObjectColumnSchema`;
       case "/legals":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=LegalObjectColumnSchema`;
+        return `LegalObjectColumnSchema`;
 
       case "/auditSettingsMaster":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=AuditSettingsMasterColumnSchema`;
+        return `AuditSettingsMasterColumnSchema`;
       case "/recordLog":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=RecordLogColumnSchema`;
+        return `RecordLogColumnSchema`;
       case "/fieldLog":
-        return `&db=${db}&sp=ShortDicsRecordsFlat&@name=FieldLogColumnSchema`;
+        return `FieldLogColumnSchema`;
 
       default:
         return "/home";
     }
   };
 
-  const finalUrl = `${sessionURL}${urlBaseParam}operation=${operation}${pageRequestParams()}`;
+  const finalUrl = `${sessionURL}${urlBaseParam}operation=${operation}&sp=ShortDicsRecordsFlat&@name=${pageRequestParams()}&db=${db}`;
   const urlFromPages = `${sessionURL}${urlBaseParam}operation=${operation}&sp=${sp}&db=${db}`;
 
   const fetchDataConstructor = (
@@ -183,18 +183,8 @@ export const FetchData = (
     pageSize: 20,
   };
 
-  const signInUserData = new CustomStore({
-    key: "uid",
-    load: async (params, method = "GET") =>
-      await sendRequest(
-        urlFromPages,
-        {
-          schema: "dbo",
-          ...params,
-        },
-        method
-      ),
-  });
+  const signInUserData = async (params, method = "GET") =>
+    await sendRequest(urlFromPages, {schema: "dbo", ...params}, method);
 
   const loadCustumMessageData = async () =>
     await sendRequest(urlFromPages, {schema: "get"}, "POST");
@@ -294,15 +284,14 @@ export const FetchData = (
     }
     // return data && JSON.parse(data);
 
-    if (!data.hint) {
+    if (!data.JSONErrorMessage) {
       return data && JSON.parse(data);
     } else {
-      throw new Error(
-        `
-        Description: ${data.VBErr.Description}
-        Error Number: ${data.VBErr.Number}
-      `
-      );
+      throw data;
+      // `
+      //   Description: ${data.VBErr.Description}
+      //   Error Number: ${data.VBErr.Number}
+      // `
     }
   }
 
@@ -324,3 +313,16 @@ export const FetchData = (
 };
 
 // ?experement with this article => https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/How_To/Bind_a_Lookup_Column_to_a_Custom_Data_Source/
+
+// const signInUserData = new CustomStore({
+//   key: "uid",
+//   load: async (params, method = "GET") =>
+//     await sendRequest(
+//       urlFromPages,
+//       {
+//         schema: "dbo",
+//         ...params,
+//       },
+//       method
+//     ),
+// });

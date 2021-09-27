@@ -1,6 +1,6 @@
 import React from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
-import {SingleCard} from "./layouts";
+import {SignInPage} from "./pages";
 import {
   LoginForm,
   ResetPasswordForm,
@@ -17,16 +17,16 @@ export default function UnauthenticatedContent() {
   return (
     <Switch>
       <Route exact path="/login">
-        <SingleCard
+        <SignInPage
           title={formatMessage("msgLoginStartFormTitle")}
           description={formatMessage("msgLoginStartFormDesc")}
         >
           <LoginStartForm />
-        </SingleCard>
+        </SignInPage>
       </Route>
 
       <Route exact path="/login-form">
-        <SingleCard
+        <SignInPage
           title={formatMessage("msgLoginFormTitle")}
           description={formatMessage("msgLoginFormDesc")}
           prevPage={true}
@@ -34,11 +34,11 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <LoginForm />
-        </SingleCard>
+        </SignInPage>
       </Route>
 
       <Route exact path="/reset-password">
-        <SingleCard
+        <SignInPage
           title={formatMessage("msgResetPasswordFormTitle")}
           description={formatMessage("msgResetPasswordFormDesc")}
           prevPage={true}
@@ -46,11 +46,11 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <ResetPasswordForm />
-        </SingleCard>
+        </SignInPage>
       </Route>
 
       <Route exact path="/digital-key">
-        <SingleCard
+        <SignInPage
           title={formatMessage("msgDigitalKeyFormTitle")}
           description={formatMessage("msgDigitalKeyFormDesc")}
           prevPage={true}
@@ -58,11 +58,11 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <DigitalKeyForm />
-        </SingleCard>
+        </SignInPage>
       </Route>
 
       <Route exact path="/change-password/">
-        <SingleCard
+        <SignInPage
           title={formatMessage("msgChangePasswordFormTitle")}
           description={formatMessage("msgChangePasswordFormDesc")}
           prevPage={true}
@@ -70,7 +70,7 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <ChangePasswordForm />
-        </SingleCard>
+        </SignInPage>
       </Route>
 
       <Redirect to={"/login"} />
