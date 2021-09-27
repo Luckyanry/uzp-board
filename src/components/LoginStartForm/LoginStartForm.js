@@ -49,17 +49,17 @@ const LoginStartForm = () => {
 
       const result = await signIn("", "");
       const {isOk, message, errorAPIMsg} = result;
+      console.log(`errorAPIMsg`, errorAPIMsg);
       setToSessionStorege("error", errorAPIMsg);
+      setLoading(false);
 
       if (!isOk) {
-        setLoading(false);
         setErrorStatus(true);
         setErrorTitle(formatMessage(message));
 
         return;
       }
 
-      setLoading(false);
       window.location.reload();
     },
     // eslint-disable-next-line

@@ -31,6 +31,7 @@ export async function signIn(login = null, password = null) {
       data: result.data[0],
     };
   } catch (err) {
+    console.log(`err signIn `, typeof err);
     return {
       isOk: false,
       message: "msgErrAuthFailed",
@@ -48,13 +49,15 @@ export async function getUser() {
         isOk: true,
         data: result,
       };
-    } else
+    } else {
       return {
         isOk: false,
       };
-  } catch {
+    }
+  } catch (err) {
     return {
       isOk: false,
+      errorAPIMsg: err,
     };
   }
 }
@@ -68,10 +71,9 @@ export async function resetPassword(email) {
       urlAnonymous
     ).signInUserData({"@email": email}, "POST");
 
-    // const result = await resetPasswordData._loadFunc({"@email": email}, "POST");
-    const result = await resetPasswordData;
+    const {tokenSended} = await resetPasswordData;
 
-    if (result.tokenSended) {
+    if (tokenSended) {
       return {
         isOk: true,
       };
@@ -81,10 +83,11 @@ export async function resetPassword(email) {
       isOk: false,
       message: "msgErrEmailNotRegInUAIS",
     };
-  } catch {
+  } catch (err) {
     return {
       isOk: false,
       message: "msgErrFailedResetPass",
+      errorAPIMsg: err,
     };
   }
 }
@@ -106,10 +109,11 @@ export async function changePassword(password, resetToken) {
     return {
       isOk: true,
     };
-  } catch {
+  } catch (err) {
     return {
       isOk: false,
       message: "msgErrFaildToResetPass",
+      errorAPIMsg: err,
     };
   }
 }

@@ -27,11 +27,12 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
       title={errorTitle}
       dragEnabled={true}
       container=".dx-viewport"
-      width={500}
+      width={600}
       height={"auto"}
       // shadingColor="rgba(0, 0, 0, 0.4)"
     >
       <Position at="center" my="center" of={popupPositionOf} />
+      <h3 className={"error-title"}>{errorTitle}</h3>
       <p className={"error-text"}>
         ScriptFile: <span className={"error-desc"}>{ScriptFile}</span>&nbsp;
       </p>

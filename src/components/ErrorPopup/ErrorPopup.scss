@@ -7,6 +7,13 @@
   margin: 10px;
 }
 
+.error-title {
+  margin-bottom: 30px;
+
+  text-align: center;
+  color: red;
+}
+
 .error-text {
   font-weight: 700;
   font-size: 16px;
@@ -25,4 +32,7 @@
 
 .dx-popup-title .dx-closebutton .dx-icon {
   color: #333;
+  white-space: wrap;
+  overflow-wrap: break-all;
+  height: max-content;
 }

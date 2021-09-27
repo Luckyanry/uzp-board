@@ -13,13 +13,19 @@ import notify from "devextreme/ui/notify";
 
 import {resetPassword} from "../../api/auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {setToSessionStorege} from "../../helpers/functions";
+import {ErrorPopup, Spinner} from "..";
+
 import "./ResetPasswordForm.scss";
 
 const submitButtonAttributes = {class: "submit-button"};
 
-export default function ResetPasswordForm(props) {
-  const history = useHistory();
+export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [errorTitle, setErrorTitle] = useState();
+
+  const history = useHistory();
   const formData = useRef({});
 
   const {formatMessage} = useLocalization();
@@ -35,53 +41,115 @@ export default function ResetPasswordForm(props) {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-
-      const {email} = formData.current;
       setLoading(true);
 
-      const result = await resetPassword(email);
-      setLoading(false);
+      const {email} = formData.current;
 
-      if (result.isOk) {
-        history.push("/login");
+      const result = await resetPassword(email);
+      const {isOk, message, errorAPIMsg} = result;
+
+      setToSessionStorege("error", errorAPIMsg);
+      setLoading(false);
+      console.log(`errorAPIMsg `, errorAPIMsg);
+      if (!isOk && errorAPIMsg) {
+        setErrorStatus(true);
+        setErrorTitle(formatMessage(message));
+
+        return;
+      }
+
+      if (!isOk && !errorAPIMsg) {
         return notify(
           {
-            message: formatMessage("msgResetNotificationText"),
+            message: formatMessage(message),
             position: {
               my: "center",
               at: "center",
-              of: "#login-start-form-container",
-              offset: "5 0",
+              of: "#reset-password-form-container",
+              offset: "0 0",
             },
-            width: 432,
+            width: 426,
             height: 64,
             shading: true,
           },
-          "success",
-          5000
+          "error",
+          3000
         );
       }
 
-      return notify(
+      history.push("/login");
+
+      notify(
         {
-          message: formatMessage(result.message),
+          message: formatMessage("msgResetNotificationText"),
           position: {
             my: "center",
             at: "center",
-            of: "#reset-password-form-container",
+            of: "#login-start-form-container",
             offset: "0 0",
           },
-          width: 426,
+          width: 428,
           height: 64,
           shading: true,
         },
-        "error",
-        3000
+        "success",
+        4000
       );
     },
     // eslint-disable-next-line
     [history]
   );
+
+  const View = () => (
+    <Form
+      formData={formData.current}
+      disabled={loading}
+      showColonAfterLabel={false}
+      showRequiredMark={false}
+    >
+      <Item
+        dataField={"email"}
+        editorType={"dxTextBox"}
+        editorOptions={emailEditorOptions}
+      >
+        <RequiredRule message={formatMessage("msgRequiredEmail")} />
+        <EmailRule message={formatMessage("msgEmailFieldIsInvalid")} />
+        <Label visible={true} text={formatMessage("msgEmail")} />
+      </Item>
+
+      <ButtonItem>
+        <ButtonOptions
+          elementAttr={submitButtonAttributes}
+          width={"100%"}
+          height={64}
+          type={"default"}
+          useSubmitBehavior={true}
+        >
+          <span className="dx-button-text">
+            {loading ? (
+              <LoadIndicator width={"24px"} height={"24px"} visible={true} />
+            ) : (
+              formatMessage("msgSendEmailBtn")
+            )}
+          </span>
+        </ButtonOptions>
+      </ButtonItem>
+    </Form>
+  );
+
+  const content = !(loading || errorStatus) ? <View /> : null;
+
+  const errorMessage = errorStatus ? (
+    <ErrorPopup
+      errorState={errorStatus}
+      errorTitle={errorTitle}
+      popupPositionOf={"#reset-password-form-container"}
+    />
+  ) : null;
+
+  const spinner = loading ? (
+    <Spinner loadingState={loading} positionOf={"#content"} />
+  ) : null;
 
   return (
     <form
@@ -89,40 +157,9 @@ export default function ResetPasswordForm(props) {
       className={"reset-password-form"}
       onSubmit={onSubmit}
     >
-      <Form
-        formData={formData.current}
-        disabled={loading}
-        showColonAfterLabel={false}
-        showRequiredMark={false}
-      >
-        <Item
-          dataField={"email"}
-          editorType={"dxTextBox"}
-          editorOptions={emailEditorOptions}
-        >
-          <RequiredRule message={formatMessage("msgRequiredEmail")} />
-          <EmailRule message={formatMessage("msgEmailFieldIsInvalid")} />
-          <Label visible={true} text={formatMessage("msgEmail")} />
-        </Item>
-
-        <ButtonItem>
-          <ButtonOptions
-            elementAttr={submitButtonAttributes}
-            width={"100%"}
-            height={64}
-            type={"default"}
-            useSubmitBehavior={true}
-          >
-            <span className="dx-button-text">
-              {loading ? (
-                <LoadIndicator width={"24px"} height={"24px"} visible={true} />
-              ) : (
-                formatMessage("msgSendEmailBtn")
-              )}
-            </span>
-          </ButtonOptions>
-        </ButtonItem>
-      </Form>
+      {errorMessage}
+      {spinner}
+      {content}
     </form>
   );
 }

@@ -282,16 +282,23 @@ export const FetchData = (
         totalCount: newData.length,
       };
     }
-    // return data && JSON.parse(data);
 
-    if (!data.JSONErrorMessage) {
-      return data && JSON.parse(data);
-    } else {
+    if (typeof data === "object") {
+      if (!data.JSONErrorMessage) {
+        return data && JSON.parse(data);
+      }
+
       throw data;
-      // `
-      //   Description: ${data.VBErr.Description}
-      //   Error Number: ${data.VBErr.Number}
-      // `
+    }
+
+    if (typeof data === "string") {
+      const errorCheck = JSON.parse(data).JSONErrorMessage;
+
+      if (!errorCheck) {
+        return data && JSON.parse(data);
+      }
+
+      throw JSON.parse(data);
     }
   }
 
