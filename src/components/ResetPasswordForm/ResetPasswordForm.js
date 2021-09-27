@@ -50,7 +50,7 @@ export default function ResetPasswordForm() {
 
       setToSessionStorege("error", errorAPIMsg);
       setLoading(false);
-      console.log(`errorAPIMsg `, errorAPIMsg);
+
       if (!isOk && errorAPIMsg) {
         setErrorStatus(true);
         setErrorTitle(formatMessage(message));

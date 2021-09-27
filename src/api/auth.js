@@ -31,7 +31,6 @@ export async function signIn(login = null, password = null) {
       data: result.data[0],
     };
   } catch (err) {
-    console.log(`err signIn `, typeof err);
     return {
       isOk: false,
       message: "msgErrAuthFailed",
