@@ -4,7 +4,7 @@ import {Popup, Position} from "devextreme-react/popup";
 import "./ErrorPopup.scss";
 import {getFromSessionStorege} from "../../helpers/functions";
 
-const ErrorPopup = ({errorState, errorTitle}) => {
+const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
   const [isPopupVisible, setPopupVisibility] = useState(errorState);
 
   const togglePopup = () => {
@@ -30,7 +30,7 @@ const ErrorPopup = ({errorState, errorTitle}) => {
       width={500}
       height={"auto"}
     >
-      <Position at="center" my="center" of="#login-start-form-container" />
+      <Position at="center" my="center" of={popupPositionOf} />
       <p className={"error-text"}>
         ScriptFile: <span className={"error-desc"}>{ScriptFile}</span>&nbsp;
       </p>

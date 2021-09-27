@@ -47,7 +47,7 @@ const LoginStartForm = () => {
       e.preventDefault();
       setLoading(true);
 
-      const result = await signIn("3", "");
+      const result = await signIn("", "");
       const {isOk, message, errorAPIMsg} = result;
       setToSessionStorege("error", errorAPIMsg);
 
@@ -75,9 +75,15 @@ const LoginStartForm = () => {
   ));
 
   const content = !(loading || errorStatus) ? elements : null;
+
   const errorMessage = errorStatus ? (
-    <ErrorPopup errorState={errorStatus} errorTitle={errorTitle} />
+    <ErrorPopup
+      errorState={errorStatus}
+      errorTitle={errorTitle}
+      popupPositionOf={"#login-start-form-container"}
+    />
   ) : null;
+
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
   ) : null;
