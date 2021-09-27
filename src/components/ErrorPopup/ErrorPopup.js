@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {Popup, Position} from "devextreme-react/popup";
 
-import "./ErrorPopup.scss";
 import {getFromSessionStorege} from "../../helpers/functions";
+import "./ErrorPopup.scss";
 
 const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
   const [isPopupVisible, setPopupVisibility] = useState(errorState);
@@ -21,14 +21,15 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
     <Popup
       visible={isPopupVisible}
       onHiding={togglePopup}
-      dragEnabled={true}
       closeOnOutsideClick={true}
       showCloseButton={true}
       showTitle={true}
       title={errorTitle}
+      dragEnabled={true}
       container=".dx-viewport"
       width={500}
       height={"auto"}
+      // shadingColor="rgba(0, 0, 0, 0.4)"
     >
       <Position at="center" my="center" of={popupPositionOf} />
       <p className={"error-text"}>
