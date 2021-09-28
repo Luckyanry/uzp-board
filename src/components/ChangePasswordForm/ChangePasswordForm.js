@@ -78,7 +78,6 @@ export default function ChangePasswordForm() {
         setLoading(false);
 
         if (isTokenValid.VBErr) {
-          console.log(`isTokenValid.VBErr`, isTokenValid.VBErr);
           notifyPopup(isTokenValid.VBErr.Description);
         }
 

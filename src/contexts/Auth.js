@@ -6,28 +6,32 @@ import React, {
   useCallback,
 } from "react";
 import {getUser, signIn as sendSignInRequest} from "../api/auth";
-import {Spinner} from "../components";
+// import {Spinner} from "../components";
 
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(false);
 
   const signIn = useCallback(async (login, password) => {
-    setLoading(true);
+    try {
+      // setLoading(true);
 
-    const result = await sendSignInRequest(login, password);
-    const {isOk, data} = result;
+      const result = await sendSignInRequest(login, password);
+      const {isOk, data} = result;
 
-    setLoading(false);
+      // setLoading(false);
 
-    if (isOk) {
-      setUser(() => data);
+      if (isOk) {
+        setUser(() => data);
+      }
+
+      return result;
+    } catch (error) {
+      console.log(`error signIn `, error);
     }
-
-    return result;
   }, []);
 
   const signOut = useCallback(() => {
@@ -38,11 +42,11 @@ function AuthProvider(props) {
 
   useEffect(() => {
     (async function () {
-      setLoading(true);
+      // setLoading(true);
       const result = await getUser();
       const {isOk, data} = result;
 
-      setLoading(false);
+      // setLoading(false);
 
       if (isOk) {
         setUser(() => data);
@@ -50,11 +54,13 @@ function AuthProvider(props) {
     })();
   }, [signIn]);
 
-  return loading ? (
-    <Spinner loadingState={loading} positionOf={"#content"} />
-  ) : (
-    <AuthContext.Provider value={{user, signIn, signOut, loading}} {...props} />
-  );
+  return <AuthContext.Provider value={{user, signIn, signOut}} {...props} />;
 }
 
 export {AuthProvider, useAuth};
+
+// return loading ? (
+//   <Spinner loadingState={loading} positionOf={"#content"} />
+// ) : (
+//   <AuthContext.Provider value={{user, signIn, signOut, loading}} {...props} />
+// );

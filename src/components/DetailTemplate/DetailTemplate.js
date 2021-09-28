@@ -11,16 +11,23 @@ import DataGrid, {
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
+import {ErrorPopup, Spinner} from "..";
 
 import "./DetailTemplate.scss";
+import {setToSessionStorege} from "../../helpers/functions";
 
 const DetailTemplate = ({data}) => {
   const [APIData, setAPIData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
+
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
+
+  const [loading, setLoading] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [errorTitle, setErrorTitle] = useState();
 
   const {formatMessage} = useLocalization();
   const focusedRowTitle = data.data.name;
@@ -36,43 +43,63 @@ const DetailTemplate = ({data}) => {
     const idTriger = data.component._$element[0].id;
 
     if (idTriger === "ShortDics") {
+      setLoading(true);
       const shortDicsRecords = FetchData(
         "/ShortDicsRecords",
         `ShortDicsRecords&@tid=${data.data.id}`,
-        "hbdb"
+        "bdb"
       ).fetchColumnsSchemaData;
 
-      setAPIData(data.data.columnsjson.columns);
-      setShortDicsRecordsDataState(shortDicsRecords);
+      try {
+        setAPIData(data.data.columnsjson.columns);
+        setShortDicsRecordsDataState(shortDicsRecords);
+        setLoading(false);
+      } catch (error) {
+        console.log(`error `, error);
+        setLoading(false);
+        setToSessionStorege("error", error);
+
+        setErrorStatus(true);
+        setErrorTitle(formatMessage("msgErrServer"));
+      }
     }
 
     if (idTriger === "recordLog") {
-      const detailFieldLogShcema = FetchData(
-        "/recordLog",
-        `ShortDicsRecordsFlat&@name=FieldLogColumnSchema`,
-        "hbdb"
-      ).fetchColumnsSchemaData;
+      try {
+        setLoading(true);
 
-      detailFieldLogShcema
-        ._loadFunc()
-        .then((result) => setAPIData(result.data));
+        const detailFieldLogShcema = FetchData(
+          "/recordLog",
+          `ShortDicsRecordsFlat&@name=FieldLogColumnSchema`,
+          "hbdb"
+        ).fetchColumnsSchemaData;
 
-      const fieldLog = FetchData(
-        "/fieldLog",
-        `FieldLog&@LogGID=${data.data.GID}`,
-        "wisdb"
-      ).usersFetchData;
+        detailFieldLogShcema._loadFunc().then(({data}) => setAPIData(data));
 
-      setAllowAdding(false);
-      setAllowDeleting(false);
-      setAllowUpdating(false);
+        const fieldLog = FetchData(
+          "/fieldLog",
+          `FieldLog&@LogGID=${data.data.GID}`,
+          "wisdb"
+        ).usersFetchData;
 
-      setShortDicsRecordsDataState(fieldLog);
+        setAllowAdding(false);
+        setAllowDeleting(false);
+        setAllowUpdating(false);
+
+        setShortDicsRecordsDataState(fieldLog);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setToSessionStorege("error", error);
+
+        setErrorStatus(true);
+        setErrorTitle(formatMessage("msgErrServerFetch"));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  const View = () => (
     <DataGrid
       id="grid"
       columns={APIData}
@@ -123,6 +150,28 @@ const DetailTemplate = ({data}) => {
         showAllItem={true}
       />
     </DataGrid>
+  );
+
+  const content = !(loading || errorStatus) ? <View /> : null;
+
+  const errorMessage = errorStatus ? (
+    <ErrorPopup
+      errorState={errorStatus}
+      errorTitle={errorTitle}
+      popupPositionOf={"#detail-template"}
+    />
+  ) : null;
+
+  const spinner = loading ? (
+    <Spinner loadingState={loading} positionOf={"#content"} />
+  ) : null;
+
+  return (
+    <div id={"detail-template"}>
+      {errorMessage}
+      {spinner}
+      {content}
+    </div>
   );
 };
 

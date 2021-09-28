@@ -247,6 +247,7 @@ export const FetchData = (
             });
         }
       } catch (err) {
+        console.log(`err GET `, err);
         throw err;
       }
     }
@@ -265,6 +266,7 @@ export const FetchData = (
           });
       }
     } catch (err) {
+      console.log(`err POST `, err);
       throw err;
     }
   }
@@ -282,12 +284,12 @@ export const FetchData = (
         totalCount: newData.length,
       };
     }
-
     if (typeof data === "object") {
       if (!data.JSONErrorMessage) {
+        console.log(`responseData object ok `, typeof data);
         return data && JSON.parse(data);
       }
-
+      console.log(`responseData object err `, typeof data);
       throw data;
     }
 
@@ -295,9 +297,10 @@ export const FetchData = (
       const errorCheck = JSON.parse(data).JSONErrorMessage;
 
       if (!errorCheck) {
+        console.log(`responseData string ok `, typeof data);
         return data && JSON.parse(data);
       }
-
+      console.log(`responseData string err `, typeof data);
       throw JSON.parse(data);
     }
   }

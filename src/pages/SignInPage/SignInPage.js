@@ -4,7 +4,7 @@ import ScrollView from "devextreme-react/scroll-view";
 import {Localization} from "../../components";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
-import loginBg from "./img/loginBg.jpeg";
+import loginBgHD from "./img/loginBgHD.jpeg";
 import {ReactComponent as Logo} from "./icons/logo.svg";
 import {ReactComponent as AngleIcon} from "./icons/angleIcon.svg";
 
@@ -24,9 +24,8 @@ const SignInPage = ({
     bgImgContainer: {
       display: "inline-block",
       maxWidth: "40%",
-      minHeight: "100%",
-      // background: `url("${loginBg}"), rgba(1, 68, 58, 1)`,
-      background: `url("${loginBg}") 60% 50% / 100vh no-repeat, rgb(1, 68, 58)`,
+      minHeight: "100vh",
+      background: `url("${loginBgHD}") 50% 0% / 212vh no-repeat, rgb(1, 68, 58)`,
       backgroundBlendMode: "overlay",
     },
   };
