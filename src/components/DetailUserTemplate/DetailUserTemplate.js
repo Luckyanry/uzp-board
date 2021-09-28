@@ -41,7 +41,7 @@ const DetailUserTemplate = ({data}) => {
   };
 
   useEffect(() => {
-    async function getColumnsSchemaData() {
+    (async function () {
       const fetchColumnsSchemaData = FetchData(
         pathname,
         "ShortDicsRecordsFlat&@name=DisplayUserRolesColumnSchema",
@@ -63,7 +63,7 @@ const DetailUserTemplate = ({data}) => {
           getLookDataState(sp, db, dataField)
         );
       }
-    }
+    })();
 
     async function getAPIData() {
       const usersFetchData = FetchData(
@@ -95,7 +95,6 @@ const DetailUserTemplate = ({data}) => {
       );
     }
 
-    getColumnsSchemaData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

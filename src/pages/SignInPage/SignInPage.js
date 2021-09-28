@@ -23,12 +23,11 @@ const SignInPage = ({
   const styles = {
     bgImgContainer: {
       display: "inline-block",
-      maxWidth: "574px",
+      maxWidth: "40%",
       minHeight: "100%",
-      background: `url("${loginBg}"), rgba(1, 68, 58, 1)`,
+      // background: `url("${loginBg}"), rgba(1, 68, 58, 1)`,
+      background: `url("${loginBg}") 60% 50% / 100vh no-repeat, rgb(1, 68, 58)`,
       backgroundBlendMode: "overlay",
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "103%",
     },
   };
 

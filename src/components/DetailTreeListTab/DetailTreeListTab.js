@@ -38,7 +38,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   };
 
   useEffect(() => {
-    async function getColumnsSchemaData() {
+    (async function () {
       const fetchColumnsSchemaData = FetchData(
         pathname,
         `ShortDicsRecordsFlat&@name=${DetailTreeListPath}ColumnSchema`,
@@ -51,7 +51,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
 
       setColumnsSchemaData(result);
       getAPIData();
-    }
+    })();
 
     async function getAPIData() {
       const loadFetchData = await FetchData(
@@ -59,11 +59,9 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         `AuditSettings&@masterid=${masterId}`,
         "wisdb"
       ).loadObjIdData();
-      console.log(`loadFetchData`, loadFetchData);
+
       setAPIData(loadFetchData.data);
     }
-
-    getColumnsSchemaData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

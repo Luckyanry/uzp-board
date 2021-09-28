@@ -34,7 +34,7 @@ const DetailTemplate = ({data}) => {
 
   useEffect(() => {
     const idTriger = data.component._$element[0].id;
-    console.log(`idTriger`, idTriger);
+
     if (idTriger === "ShortDics") {
       const shortDicsRecords = FetchData(
         "/ShortDicsRecords",
