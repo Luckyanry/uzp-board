@@ -2,6 +2,7 @@ import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
 
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
+import {setToSessionStorege} from "../helpers/functions";
 import {urlAnonymous, urlBaseParam} from "./url-config";
 // const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
 
@@ -52,6 +53,7 @@ export const FetchData = (
 
       case "/personObjects":
         return `PersonObjectColumnSchema`;
+
       case "/orgUnits":
         return `OrgUnitObjectColumnSchema`;
       case "/employees":
@@ -126,6 +128,9 @@ export const FetchData = (
         ajaxOptions.credentials = "include";
         ajaxOptions.xhrFields = {withCredentials: true};
       },
+      // errorHandler: (error) => {
+      //   console.log("CustomStore error ", error);
+      // },
     });
   };
 
@@ -208,6 +213,9 @@ export const FetchData = (
       "POST"
     );
 
+  const fetchFormSchemaData = async () =>
+    await sendRequest(urlFromPages, {schema: "get"});
+
   async function sendRequest(url, data = {}, method = "GET") {
     const params = Object.keys(data)
       .map(
@@ -286,10 +294,11 @@ export const FetchData = (
     }
     if (typeof data === "object") {
       if (!data.JSONErrorMessage) {
-        console.log(`responseData object ok `, typeof data);
-        return data && JSON.parse(data);
+        // return data && JSON.parse(data);
+        return data;
       }
-      console.log(`responseData object err `, typeof data);
+      console.log(`responseData object err `, data);
+      setToSessionStorege("error", data);
       throw data;
     }
 
@@ -297,10 +306,10 @@ export const FetchData = (
       const errorCheck = JSON.parse(data).JSONErrorMessage;
 
       if (!errorCheck) {
-        console.log(`responseData string ok `, typeof data);
+        // console.log(`responseData string ok `, typeof data);
         return data && JSON.parse(data);
       }
-      console.log(`responseData string err `, typeof data);
+      // console.log(`responseData string err `, typeof data);
       throw JSON.parse(data);
     }
   }
@@ -313,12 +322,13 @@ export const FetchData = (
     personFetchData,
     detailUserTemplateData,
     detailMemebersTemplateData,
-    signInUserData,
     gidFetchData,
+    signInUserData,
     loadCustumMessageData,
     changeMyLocalToData,
     loadObjIdData,
     updateObjIdData,
+    fetchFormSchemaData,
   };
 };
 

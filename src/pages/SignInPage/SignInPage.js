@@ -9,6 +9,7 @@ import {ReactComponent as Logo} from "./icons/logo.svg";
 import {ReactComponent as AngleIcon} from "./icons/angleIcon.svg";
 
 import "./SignInPage.scss";
+import {setToSessionStorege} from "../../helpers/functions";
 
 const SignInPage = ({
   title,
@@ -19,6 +20,7 @@ const SignInPage = ({
   children,
 }) => {
   const {formatMessage} = useLocalization();
+  setToSessionStorege("error", "");
 
   const styles = {
     bgImgContainer: {

@@ -175,6 +175,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         allowAdding={false}
         allowDeleting={false}
         allowUpdating={true}
+        useIcons={true}
         startEditAction="dblClick"
       />
 

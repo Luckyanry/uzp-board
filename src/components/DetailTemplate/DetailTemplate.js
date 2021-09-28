@@ -14,7 +14,10 @@ import {FetchData} from "../../api/pages-fetch";
 import {ErrorPopup, Spinner} from "..";
 
 import "./DetailTemplate.scss";
-import {setToSessionStorege} from "../../helpers/functions";
+import {
+  getFromSessionStorege,
+  setToSessionStorege,
+} from "../../helpers/functions";
 
 const DetailTemplate = ({data}) => {
   const [APIData, setAPIData] = useState(null);
@@ -44,57 +47,56 @@ const DetailTemplate = ({data}) => {
 
     if (idTriger === "ShortDics") {
       setLoading(true);
+
       const shortDicsRecords = FetchData(
         "/ShortDicsRecords",
         `ShortDicsRecords&@tid=${data.data.id}`,
-        "bdb"
+        "hbdb"
       ).fetchColumnsSchemaData;
 
-      try {
-        setAPIData(data.data.columnsjson.columns);
-        setShortDicsRecordsDataState(shortDicsRecords);
-        setLoading(false);
-      } catch (error) {
-        console.log(`error `, error);
-        setLoading(false);
-        setToSessionStorege("error", error);
+      setAPIData(data.data.columnsjson.columns);
+      setShortDicsRecordsDataState(shortDicsRecords);
+      setLoading(false);
 
+      const res = getFromSessionStorege("error", null);
+      if (res.JSONErrorMessage) {
         setErrorStatus(true);
-        setErrorTitle(formatMessage("msgErrServer"));
+        setErrorTitle(formatMessage("msgErrServerFetch"));
       }
     }
 
     if (idTriger === "recordLog") {
-      try {
-        setLoading(true);
+      setLoading(true);
 
-        const detailFieldLogShcema = FetchData(
-          "/recordLog",
-          `ShortDicsRecordsFlat&@name=FieldLogColumnSchema`,
-          "hbdb"
-        ).fetchColumnsSchemaData;
+      const detailFieldLogShcema = FetchData(
+        "/recordLog",
+        `ShortDicsRecordsFlat&@name=FieldLogColumnSchema`,
+        "hbdb"
+      ).fetchColumnsSchemaData;
 
-        detailFieldLogShcema._loadFunc().then(({data}) => setAPIData(data));
+      detailFieldLogShcema
+        ._loadFunc()
+        .then(({data}) => setAPIData(data))
+        .catch((error) => {
+          setLoading(false);
+          setToSessionStorege("error", error);
 
-        const fieldLog = FetchData(
-          "/fieldLog",
-          `FieldLog&@LogGID=${data.data.GID}`,
-          "wisdb"
-        ).usersFetchData;
+          setErrorStatus(true);
+          setErrorTitle(formatMessage("msgErrServerFetch"));
+        });
 
-        setAllowAdding(false);
-        setAllowDeleting(false);
-        setAllowUpdating(false);
+      const fieldLog = FetchData(
+        "/fieldLog",
+        `FieldLog&@LogGID=${data.data.GID}`,
+        "wisdb"
+      ).usersFetchData;
 
-        setShortDicsRecordsDataState(fieldLog);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        setToSessionStorege("error", error);
+      setAllowAdding(false);
+      setAllowDeleting(false);
+      setAllowUpdating(false);
 
-        setErrorStatus(true);
-        setErrorTitle(formatMessage("msgErrServerFetch"));
-      }
+      setShortDicsRecordsDataState(fieldLog);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -138,6 +140,7 @@ const DetailTemplate = ({data}) => {
         allowDeleting={allowDeleting}
         allowUpdating={allowUpdating}
         startEditAction="dblClick"
+        useIcons={true}
       />
 
       <Paging defaultPageSize={10} enabled={true} />

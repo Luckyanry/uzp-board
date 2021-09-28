@@ -207,6 +207,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={false}
+        useIcons={true}
         startEditAction="dblClick"
       />
 

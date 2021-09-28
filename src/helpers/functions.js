@@ -27,6 +27,10 @@ function setToSessionStorege(key, value) {
   sessionStorage.setItem(key, JSON.stringify(value));
 }
 
+function removeSessionStorege(key) {
+  sessionStorage.removeItem(key);
+}
+
 function getLookupParamsForURL(data) {
   const findLookup = data.filter(({lookup}) => lookup);
 
@@ -50,5 +54,6 @@ export {
   customPageAbbreviationMsg,
   getFromSessionStorege,
   setToSessionStorege,
+  removeSessionStorege,
   getLookupParamsForURL,
 };

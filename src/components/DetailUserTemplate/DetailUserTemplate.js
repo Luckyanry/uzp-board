@@ -211,6 +211,7 @@ const DetailUserTemplate = ({data}) => {
               allowAdding={true}
               allowDeleting={true}
               allowUpdating={true}
+              useIcons={true}
             />
 
             {customMarkupRender()}

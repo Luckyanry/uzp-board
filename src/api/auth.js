@@ -41,7 +41,7 @@ export async function signIn(login = null, password = null) {
 
 export async function getUser() {
   try {
-    const result = getFromSessionStorege("user", null);
+    const result = getFromSessionStorege("user", "");
 
     if (result) {
       return {

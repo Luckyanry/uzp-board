@@ -29,6 +29,8 @@ import {
   Tab,
 } from "devextreme-react/form";
 
+import TextArea from "devextreme-react/text-area";
+
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {
@@ -48,6 +50,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   // const [columnsDetailSchemaData, setColumnsDetailSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
+  const [formSchemaData, setFormSchemaData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
   const [userID, setUserID] = useState("");
@@ -71,8 +74,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
-    width: 1000,
-    height: 700,
+    width: 1300,
+    height: 800,
+    // fullScreen: true,
   };
 
   const popupUsersPageOptions = {
@@ -86,14 +90,34 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     async function getColumnsSchemaData() {
       const fetchColumnsSchemaData = fetchDataConstructor("hbdb").fetchData;
 
-      const result = await fetchColumnsSchemaData
+      const columns = await fetchColumnsSchemaData
         ._loadFunc()
         .then((res) => res.data);
 
-      setColumnsSchemaData(result);
+      setColumnsSchemaData(columns);
+
+      if (
+        checkIfArrIncludesValue(
+          ["personObjects", "legals"],
+          pathnameWithoutSlash
+        )
+      ) {
+        const checkSpParam =
+          pathnameWithoutSlash === "personObjects"
+            ? "PersonObject"
+            : "LegalObject";
+
+        const fetchFormSchemaData = FetchData(
+          pathname,
+          `ShortDicsRecordsFlat&@name=${checkSpParam}FormSchema`
+        ).fetchFormSchemaData();
+
+        await fetchFormSchemaData.then((res) => setFormSchemaData(res.data[0]));
+      }
+
       getAPIData();
 
-      const lookupParamsForURL = getLookupParamsForURL(result);
+      const lookupParamsForURL = getLookupParamsForURL(columns);
 
       if (lookupParamsForURL.length) {
         lookupParamsForURL.map(({sp, db, dataField}) =>
@@ -120,6 +144,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         )
       ) {
         const fetchData = fetchDataConstructor("odb").personFetchData;
+
         return setAPIData(fetchData);
       }
 
@@ -170,6 +195,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
+    // e.data.pid = 1;
     e.data.status = statusToggler[0];
     setUserID("");
   }
@@ -187,9 +213,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "groupObjects",
         "objectMembers",
         "personObjects",
+        "legals",
         "orgUnits",
         "employees",
-        "legals",
         "recordLog",
       ],
       pathnameWithoutSlash
@@ -319,12 +345,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         pathnameWithoutSlash
       )
     ) {
-      // console.log(`onFocusedCellAction e `, e);
-
       const userFormData = e.rows[e.newRowIndex].data;
       const rowId = userFormData.GID;
       const groupItemCaption = userFormData.UserName;
-      // console.log(`onFocusedCellChanging userFormData`, userFormData);
 
       setUserID(rowId);
       setUserFormData(userFormData);
@@ -354,6 +377,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
+        useIcons={true}
       >
         <Form id="form" formData={userFormData} colCount={1} width={"100%"}>
           <GroupItem caption={userGroupItemCaption}>
@@ -406,6 +430,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
+        useIcons={true}
       />
     );
   }
@@ -474,6 +499,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             allowAdding={allowAdding}
             allowDeleting={allowDeleting}
             allowUpdating={allowUpdating}
+            form={
+              checkIfArrIncludesValue(
+                ["personObjects", "legals"],
+                pathnameWithoutSlash
+              )
+                ? formSchemaData
+                : null
+            }
+            useIcons={true}
           />
         )}
 

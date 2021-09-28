@@ -136,7 +136,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       setLookDataState((prev) =>
         dataField ? [...prev, {[dataField]: lookData}] : lookData
       );
-      console.log(`lookData `, lookData);
+      // console.log(`lookData `, lookData);
     }
 
     getColumnsSchemaData();
@@ -148,6 +148,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
+    console.log(`e `, e);
+    console.log(`lookDataState`, lookDataState);
+    e.data.pid = 2;
+    e.data.id = 3;
     e.data.status = statusToggler[0];
   }
 
@@ -262,6 +266,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
+        useIcons={true}
       >
         <Form id="form" formData={formData} colCount={1} width={"100%"}>
           <GroupItem caption={groupItemCaption}>
@@ -290,6 +295,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         allowAdding={true}
         allowDeleting={true}
         allowUpdating={true}
+        useIcons={true}
       />
     );
   }
@@ -309,6 +315,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       />
 
       <TreeList
+        id="tree-list"
         dataSource={APIData}
         rootValue={0}
         keyExpr="id"
@@ -364,6 +371,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             allowAdding={true}
             allowUpdating={true}
             allowDeleting={true}
+            useIcons={true}
           />
         )}
 

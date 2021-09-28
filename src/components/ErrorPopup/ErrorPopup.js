@@ -1,7 +1,10 @@
 import {useState} from "react";
 import {Popup, Position} from "devextreme-react/popup";
 
-import {getFromSessionStorege} from "../../helpers/functions";
+import {
+  getFromSessionStorege,
+  setToSessionStorege,
+} from "../../helpers/functions";
 import "./ErrorPopup.scss";
 
 const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
@@ -9,13 +12,14 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
 
   const togglePopup = () => {
     setPopupVisibility(!isPopupVisible);
-    window.location.reload();
+    setToSessionStorege("error", "");
+    // window.location.reload();
   };
 
   const {
     ScriptFile,
     VBErr: {Description, Number, Source},
-  } = getFromSessionStorege("error", null);
+  } = getFromSessionStorege("error", "");
 
   return (
     <Popup
