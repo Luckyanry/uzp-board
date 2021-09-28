@@ -326,7 +326,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         focusedRowEnabled={true}
         rowAlternationEnabled={false}
         // columns
-        showColumnLines={true}
+        showColumnLines={false}
         columnMinWidth={60}
         columnAutoWidth={true}
         columnHidingEnabled={false}

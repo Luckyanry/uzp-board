@@ -8,12 +8,15 @@
 }
 
 .app .content {
+  padding: 0 20px;
   line-height: 1.5;
 
   h2 {
-    font-size: 30px;
     margin-top: 20px;
     margin-bottom: 20px;
+
+    font-size: 24px;
+    font-weight: 700;
   }
 }
 
@@ -112,21 +115,25 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   padding-bottom: 6px;
 }
 
-.dx-texteditor-container {
+.dx-texteditor-container,
+.dx-datagrid-container {
   display: flex;
   position: relative;
-  overflow: hidden;
   width: 100%;
-  height: 46px;
+  height: 40px;
+
+  box-shadow: 0px 1px 3px rgb(0 0 0 / 12%);
+  overflow: hidden;
 }
 
-.dx-texteditor-input {
-  padding: 12px 16px;
+.dx-texteditor-input,
+.dx-datagrid-input {
+  padding: 10px 16px;
 }
 
 .dx-popup-bottom .dx-button {
   min-width: 211px;
-  height: 47px;
+  height: 40px;
 
   font-size: 16px;
   font-weight: 500;
@@ -139,8 +146,8 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   border-radius: 4.37883px;
 }
 
-.dx-button.dx-button-normal.dx-button-mode-contained.dx-widget.dx-button-has-text.dx-state-hover {
-  background-color: #006555;
+.dx-button.dx-state-hover {
+  filter: brightness(90%);
 }
 
 .dx-popup-bottom.dx-toolbar {
@@ -153,16 +160,20 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 12px 18px;
+  padding: 9px 18px;
 }
 
 .dx-popup-bottom.dx-toolbar .dx-toolbar-items-container {
-  height: 46px;
+  height: 40px;
   overflow: visible;
 }
 
 .dx-placeholder::before {
   padding: 12px 16px;
+}
+
+.dx-field-item-content.dx-field-item-content-location-right {
+  position: relative;
 }
 
 .dx-show-invalid-badge.dx-textbox.dx-texteditor.dx-editor-outlined.dx-texteditor-empty.dx-widget.dx-state-focused {
@@ -173,7 +184,6 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   padding-top: 19px;
   margin-top: 6px;
   padding-bottom: 40px;
-  border: none;
 }
 
 .dx-layout-manager .dx-field-item:not(.dx-first-row) {
@@ -196,7 +206,124 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   padding-right: 24px;
 }
 
-.dx-form-group-with-caption.dx-form-group.dx-group-colcount-3 {
-  border-top: 1px solid #ecf0f2;
-  position: relative;
+// .dx-form-group-with-caption.dx-form-group.dx-group-colcount-3 {
+//   border-top: 1px solid #ecf0f2;
+//   position: relative;
+// }
+
+// .dx-datagrid.dx-gridbase-container,
+// .dx-treelist-container.dx-gridbase-container {
+// padding: 20px;
+
+//   background: #ffffff;
+//   box-shadow: 0px 2px 12px rgba(37, 51, 66, 0.15);
+//   border-radius: 8px;
+// }
+
+.dx-datagrid.dx-gridbase-container,
+.dx-treelist-container.dx-gridbase-container {
+  // padding: 20px;
+
+  background: transparent;
+  border-radius: 8px;
+}
+
+.dx-datagrid-rowsview.dx-scrollable.dx-visibility-change-handler.dx-scrollable-both.dx-scrollable-native.dx-scrollable-native-generic,
+.dx-treelist-rowsview.dx-scrollable.dx-visibility-change-handler.dx-scrollable-both.dx-scrollable-native.dx-scrollable-native-generic {
+  border: none;
+}
+
+.dx-datagrid-header-panel,
+.dx-treelist-header-panel {
+  background-color: transparent;
+  border: none;
+}
+
+// tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-row-alt.dx-state-hover {
+//   background-color: rgba(254, 202, 32, 0.1);
+// }
+
+// tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-state-hover {
+//   background-color: rgba(254, 202, 32, 0.1);
+// }
+
+// tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-row-alt {
+//   background-color: rgba(254, 202, 32, 0.1);
+// }
+
+tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-row-focused.dx-cell-focus-disabled {
+  background-color: rgba(254, 202, 32, 0.08);
+}
+
+td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid-drag-action {
+  background: transparent;
+}
+
+//
+
+.dx-button-mode-contained {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-color: #fff;
+  color: #00937c;
+  // box-shadow: 0px 1px 3px rgb(0 0 0 / 12%);
+  border-radius: 5px;
+  line-height: 61px;
+}
+
+.dx-toolbar-text-auto-hide .dx-button .dx-button-content {
+  padding: 10px;
+}
+
+.dx-pager .dx-pages .dx-page {
+  width: 30px;
+  padding: 7px 10px;
+  // color: #fff;
+}
+
+.dx-toolbar {
+  background: transparent;
+}
+
+.dx-pager .dx-page-sizes .dx-selection,
+.dx-pager .dx-pages .dx-selection {
+  cursor: inherit;
+  text-shadow: none;
+  color: #fff;
+  border-color: transparent;
+  background-color: #00937c;
+}
+
+.dx-dropdowneditor-icon {
+  width: 38px;
+}
+
+.dx-datagrid-rowsview
+  .dx-row-focused.dx-data-row
+  .dx-command-edit:not(.dx-focused)
+  .dx-link,
+.dx-datagrid-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused),
+.dx-datagrid-rowsview .dx-row-focused.dx-data-row > tr > td:not(.dx-focused) {
+  background-color: rgba(254, 202, 32, 0.1);
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.dx-treelist-rowsview
+  .dx-row-focused.dx-data-row
+  .dx-command-edit:not(.dx-focused)
+  .dx-link,
+.dx-treelist-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused),
+.dx-treelist-rowsview .dx-row-focused.dx-data-row > tr > td:not(.dx-focused) {
+  background-color: rgba(254, 202, 32, 0.1);
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.dx-treelist-rowsview.dx-scrollable.dx-visibility-change-handler.dx-scrollable-both.dx-scrollable-native.dx-scrollable-native-generic,
+.dx-datagrid-rowsview.dx-scrollable.dx-visibility-change-handler.dx-scrollable-both.dx-scrollable-native.dx-scrollable-native-generic {
+  background: #fff;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }

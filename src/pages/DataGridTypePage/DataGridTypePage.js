@@ -447,12 +447,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // keyExpr="id"
         repaintChangesOnly={true}
         remoteOperations={false}
+        showBorders={false}
         // rows
         focusedRowEnabled={true}
         showRowLines={true}
+        // rowAlternationEnabled={true}
         // focusedRowIndex={0}
         // columns
-        showColumnLines={true}
+        showColumnLines={false}
         columnMinWidth={80}
         columnAutoWidth={true}
         columnHidingEnabled={false}
