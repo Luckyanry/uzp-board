@@ -74,9 +74,17 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const popupGeneralOptions = {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: true,
-    width: 1300,
+    width: 1200,
     height: 800,
     // fullScreen: true,
+  };
+
+  const popupPersonAndLegalOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: true,
+    width: 1300,
+    height: 800,
+    fullScreen: true,
   };
 
   const popupUsersPageOptions = {
@@ -455,7 +463,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // focusedRowIndex={0}
         // columns
         showColumnLines={false}
-        columnMinWidth={80}
+        // columnMinWidth={80}
         columnAutoWidth={true}
         columnHidingEnabled={false}
         allowColumnResizing={true}
@@ -472,7 +480,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       >
         <Scrolling mode="standard" useNative="true" />
         <SearchPanel visible={true} width={250} />
-        <HeaderFilter visible={true} allowSearch={true} />
+        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
         <ColumnChooser
           enabled={true}
           allowSearch={true}
@@ -497,7 +505,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         ) : (
           <Editing
             mode="popup"
-            popup={popupGeneralOptions}
+            popup={
+              checkIfArrIncludesValue(
+                ["personObjects", "legals"],
+                pathnameWithoutSlash
+              )
+                ? popupPersonAndLegalOptions
+                : popupGeneralOptions
+            }
             allowAdding={allowAdding}
             allowDeleting={allowDeleting}
             allowUpdating={allowUpdating}

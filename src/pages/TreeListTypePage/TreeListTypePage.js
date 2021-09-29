@@ -346,7 +346,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       >
         <Scrolling mode="standard" />
         <SearchPanel visible={true} />
-        <HeaderFilter visible={true} allowSearch={true} />
+        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
         <ColumnChooser
           enabled={true}
           allowSearch={true}
