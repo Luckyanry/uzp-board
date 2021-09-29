@@ -8,7 +8,7 @@
 }
 
 .app .content {
-  padding: 0 20px;
+  // padding: 0 20px;
   line-height: 1.5;
 
   h2 {
@@ -120,7 +120,7 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   display: flex;
   position: relative;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
 
   box-shadow: 0px 1px 3px rgb(0 0 0 / 12%);
   overflow: hidden;
@@ -222,7 +222,7 @@ label.dx-field-item-label.dx-field-item-label-location-left {
 
 .dx-datagrid.dx-gridbase-container,
 .dx-treelist-container.dx-gridbase-container {
-  // padding: 20px;
+  padding: 0 20px;
 
   background: transparent;
   border-radius: 8px;
