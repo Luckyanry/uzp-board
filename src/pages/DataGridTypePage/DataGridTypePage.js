@@ -296,12 +296,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           trueText={
             dataField === "status"
               ? formatMessage("msgStatusActive")
-              : formatMessage("msgOn")
+              : formatMessage("msgYes")
           }
           falseText={
             dataField === "status"
               ? formatMessage("msgStatusDeactivated")
-              : formatMessage("msgOff")
+              : formatMessage("msgNo")
           }
           {...params}
         >

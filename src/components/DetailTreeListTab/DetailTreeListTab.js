@@ -95,8 +95,16 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
           minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
-          trueText={formatMessage("msgOn")}
-          falseText={formatMessage("msgOff")}
+          trueText={
+            dataField === "status"
+              ? formatMessage("msgStatusActive")
+              : formatMessage("msgYes")
+          }
+          falseText={
+            dataField === "status"
+              ? formatMessage("msgStatusDeactivated")
+              : formatMessage("msgNo")
+          }
           cellTemplate={dataField === "icon" ? "iconTemplate" : null}
           {...params}
         >

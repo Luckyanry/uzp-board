@@ -129,8 +129,16 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
           minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
-          trueText={formatMessage("msgOn")}
-          falseText={formatMessage("msgOff")}
+          trueText={
+            dataField === "status"
+              ? formatMessage("msgStatusActive")
+              : formatMessage("msgYes")
+          }
+          falseText={
+            dataField === "status"
+              ? formatMessage("msgStatusDeactivated")
+              : formatMessage("msgNo")
+          }
           {...params}
         >
           {required && <RequiredRule />}
