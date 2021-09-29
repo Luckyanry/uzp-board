@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import "devextreme/data/odata/store";
 import DataGrid, {
   SearchPanel,
-  HeaderFilter,
+  // HeaderFilter,
   FilterRow,
   Scrolling,
   ColumnChooser,
@@ -463,7 +463,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // focusedRowIndex={0}
         // columns
         showColumnLines={false}
-        // columnMinWidth={80}
+        // columnMinWidth={130}
         columnAutoWidth={true}
         columnHidingEnabled={false}
         allowColumnResizing={true}

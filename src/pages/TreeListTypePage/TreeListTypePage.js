@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import TreeList, {
   SearchPanel,
-  HeaderFilter,
+  // HeaderFilter,
   FilterRow,
   Scrolling,
   ColumnChooser,
@@ -17,6 +17,7 @@ import TreeList, {
   LoadPanel,
   StateStoring,
   Form,
+  // ToolbarItem,
 } from "devextreme-react/tree-list";
 import {
   SimpleItem,
@@ -25,7 +26,6 @@ import {
   TabPanelOptions,
   GroupItem,
 } from "devextreme-react/form";
-import Button from "devextreme-react/button";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -148,20 +148,17 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function initNewRow(e) {
-    console.log(`e `, e);
-    console.log(`lookDataState`, lookDataState);
-    e.data.pid = 2;
-    e.data.id = 3;
     e.data.status = statusToggler[0];
   }
 
-  function clickHandler() {
-    setToggler((toggler) => !toggler);
+  function clickHandler(e) {
     setExpandRowsBtnText(() =>
       expandRowsBtnText === "msgMinimisedAllRows"
         ? "msgExpandAllRows"
         : "msgMinimisedAllRows"
     );
+
+    setToggler((toggler) => !toggler);
 
     if (toggler) {
       window.location.reload();
@@ -300,19 +297,24 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     );
   }
 
+  function onToolbarPreparing(e) {
+    e.toolbarOptions.items.unshift({
+      location: "after",
+      widget: "dxButton",
+      options: {
+        icon: "hierarchy",
+        width: "max-content",
+        text: formatMessage(expandRowsBtnText),
+        onClick: clickHandler,
+      },
+    });
+  }
+
   return (
     <div className="page-wrapper">
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
-
-      <Button
-        className="btn"
-        icon="hierarchy"
-        stylingMode="outlined"
-        text={formatMessage(expandRowsBtnText)}
-        onClick={clickHandler}
-      />
 
       <TreeList
         id="tree-list"
@@ -342,6 +344,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         onInitNewRow={initNewRow}
         // onEditorPreparing={onEditorPreparing}
         onFocusedCellChanging={onFocusedCellChanging}
+        onToolbarPreparing={onToolbarPreparing}
         // onToolbarPreparing={onToolbarPreparing}
       >
         <Scrolling mode="standard" />

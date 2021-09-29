@@ -171,11 +171,12 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
       dataSource={APIData}
       repaintChangesOnly={true}
       remoteOperations={false}
+      // showBorders={true}
       // rows
       focusedRowEnabled={true}
       showRowLines={true}
       // columns
-      showColumnLines={true}
+      showColumnLines={false}
       columnMinWidth={80}
       columnAutoWidth={true}
       columnHidingEnabled={false}
