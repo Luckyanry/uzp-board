@@ -6,6 +6,8 @@ export async function signIn(login = null, password = null) {
   const url = login && password ? urlAnonymous : urlADauth;
   sessionStorage.setItem("sessionURL", url);
 
+  const getPrefLocaleFromStorage = sessionStorage.getItem("language");
+
   try {
     const signInUserData = FetchData(
       "/login-form",
@@ -16,6 +18,7 @@ export async function signIn(login = null, password = null) {
     ).signInUserData({
       "@uname": login,
       "@old": password,
+      "@prefLocale": getPrefLocaleFromStorage,
     });
 
     // const result = await signInUserData._loadFunc({
@@ -23,7 +26,7 @@ export async function signIn(login = null, password = null) {
     //   "@old": password,
     // });
     const result = await signInUserData;
-
+    // console.log(`prefLocale`, prefLocale);
     setToSessionStorege("user", result.data[0]);
 
     return {
