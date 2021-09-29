@@ -107,6 +107,7 @@ export const FetchData = (
           "POST"
         ),
       remove: (key) => {
+        // const newKey =
         return sendRequest(
           urlType,
           {

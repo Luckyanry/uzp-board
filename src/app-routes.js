@@ -54,9 +54,7 @@ function pathCreator(pathTitle, component) {
   });
 }
 
-export default routes.map((route) => {
-  return {
-    ...route,
-    component: withNavigationWatcher(route.component),
-  };
-});
+export default routes.map((route) => ({
+  ...route,
+  component: withNavigationWatcher(route.component),
+}));

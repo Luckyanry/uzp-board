@@ -4,7 +4,7 @@ const NavigationContext = createContext({});
 const useNavigation = () => useContext(NavigationContext);
 
 function NavigationProvider(props) {
-  const [navigationData, setNavigationData] = useState({});
+  const [navigationData, setNavigationData] = useState();
 
   return (
     <NavigationContext.Provider
@@ -18,6 +18,8 @@ function withNavigationWatcher(Component) {
   return function (props) {
     const {path} = props.match;
     const {setNavigationData} = useNavigation();
+
+    sessionStorage.setItem("currentPath", path);
 
     useEffect(() => {
       setNavigationData({currentPath: path});

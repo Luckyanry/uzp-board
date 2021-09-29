@@ -18,11 +18,16 @@ export default function Content() {
         {routes.map(({path, component}) => (
           <Route exact key={path} path={path} component={component} />
         ))}
-        <Redirect to={"/home"} />
+        <Redirect to={getFromSessionStorege("currentPath", "/home")} />
       </Switch>
       <Footer>
         © {formatMessage(AppInfo.title)} Inc., {new Date().getFullYear()}
       </Footer>
     </SideNavBarLayout>
   );
+}
+
+function getFromSessionStorege(key, ifIsNull) {
+  const storage = sessionStorage.getItem(key);
+  return storage !== null ? storage : ifIsNull;
 }

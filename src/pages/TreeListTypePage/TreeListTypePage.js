@@ -388,7 +388,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
         {customMarkupRender()}
 
-        <Column type="buttons" width={80}>
+        <Column type="buttons" width={110}>
           <TreeListButton
             name="add"
             hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
