@@ -273,6 +273,14 @@ td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid
   line-height: 61px;
 }
 
+.dx-calendar-navigator
+  .dx-calendar-caption-button.dx-button
+  .dx-button-content {
+  width: 218px;
+  padding: 2px 15px 4px;
+  color: #00937c;
+}
+
 .dx-toolbar-text-auto-hide .dx-button .dx-button-content {
   padding: 10px;
 }
@@ -297,7 +305,11 @@ td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid
 }
 
 .dx-dropdowneditor-icon {
-  width: 38px;
+  width: 40px;
+}
+
+.dx-datebox-calendar .dx-dropdowneditor-icon {
+  width: 40px;
 }
 
 .dx-datagrid-rowsview
