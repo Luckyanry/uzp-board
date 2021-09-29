@@ -67,7 +67,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
       const usersFetchData =
         UserGroups === "ISGroupObjectMembers"
           ? FetchData(pathname, `ObjectMembers&@GID=${GID}`, "wisdb")
-              .detailMemebersTemplateData
+              .detailUserTemplateData
           : FetchData(pathname, `${UserGroups}&@GID=${GID}`, "wisdb")
               .detailUserTemplateData;
 
@@ -165,11 +165,17 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   }
 
   function initNewRow(e) {
+    if (UserGroups === "ISGroupObjectMembers") {
+      e.data.RGID = GID;
+      return;
+    }
+
     e.data.UGID = GID;
   }
 
   function onDataErrorEvent(e) {
-    e.error.message = formatMessage("msgErrUserDetailRoleGroup");
+    // e.error.message = formatMessage("msgErrUserDetailRoleGroup");
+    console.dir(e);
   }
 
   return (

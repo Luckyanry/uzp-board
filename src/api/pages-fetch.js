@@ -106,15 +106,16 @@ export const FetchData = (
           },
           "POST"
         ),
-      remove: (key) =>
-        sendRequest(
+      remove: (key) => {
+        return sendRequest(
           urlType,
           {
             schema: "del",
-            [keyType]: key,
+            [keyType]: typeof key !== "string" ? JSON.stringify(key) : key,
           },
           "POST"
-        ),
+        );
+      },
       byKey: (key) =>
         sendRequest(
           urlType,
@@ -157,26 +158,26 @@ export const FetchData = (
     "@oid"
   );
 
-  const gidFetchData = fetchDataConstructor(
-    "gid",
-    urlFromPages,
-    "@jvalues",
-    "@oid"
-  );
+  // const gidFetchData = fetchDataConstructor(
+  //   "gid",
+  //   urlFromPages,
+  //   "@jvalues",
+  //   "@oid"
+  // );
 
   const detailUserTemplateData = fetchDataConstructor(
-    "RGID",
+    ["RGID", "UGID", "IFC"],
     urlFromPages,
     "values",
-    "@gid"
+    "values"
   );
 
-  const detailMemebersTemplateData = fetchDataConstructor(
-    "UGID",
-    urlFromPages,
-    "values",
-    "@gid"
-  );
+  // const detailMemebersTemplateData = fetchDataConstructor(
+  //   "UGID",
+  //   urlFromPages,
+  //   "values",
+  //   "@gid"
+  // );
 
   const lookData = {
     store: new CustomStore({
@@ -283,7 +284,7 @@ export const FetchData = (
     let newData = null;
 
     if (Array.isArray(data)) {
-      data[0].status
+      data.length && data[0].status
         ? (newData = StatusLangToggler().statusBooleanToString(data))
         : (newData = data);
 
@@ -292,6 +293,7 @@ export const FetchData = (
         totalCount: newData.length,
       };
     }
+
     if (typeof data === "object") {
       if (!data.JSONErrorMessage) {
         // return data && JSON.parse(data);
@@ -321,8 +323,7 @@ export const FetchData = (
     usersFetchData,
     personFetchData,
     detailUserTemplateData,
-    detailMemebersTemplateData,
-    gidFetchData,
+    // detailMemebersTemplateData,
     signInUserData,
     loadCustumMessageData,
     changeMyLocalToData,
