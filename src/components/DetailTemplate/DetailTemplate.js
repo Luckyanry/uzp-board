@@ -7,6 +7,7 @@ import DataGrid, {
   Paging,
   Pager,
   StateStoring,
+  LoadPanel,
 } from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -18,6 +19,7 @@ import {
   getFromSessionStorege,
   setToSessionStorege,
 } from "../../helpers/functions";
+import spinnerIcon from "../Spinner/icons/spinner.svg";
 
 const DetailTemplate = ({data}) => {
   const [APIData, setAPIData] = useState(null);
@@ -58,7 +60,7 @@ const DetailTemplate = ({data}) => {
       setShortDicsRecordsDataState(shortDicsRecords);
       setLoading(false);
 
-      const res = getFromSessionStorege("error", null);
+      const res = getFromSessionStorege("error", "");
       if (res.JSONErrorMessage) {
         setErrorStatus(true);
         setErrorTitle(formatMessage("msgErrServerFetch"));
@@ -151,6 +153,16 @@ const DetailTemplate = ({data}) => {
         visible={true}
         allowedPageSizes={[10, 20, 50, 100, "all"]}
         showAllItem={true}
+      />
+      <LoadPanel
+        deferRendering={true}
+        enabled="true"
+        shading={false}
+        showPane={false}
+        width={400}
+        height={140}
+        message={formatMessage("msgLoadingMessage")}
+        indicatorSrc={spinnerIcon}
       />
     </DataGrid>
   );

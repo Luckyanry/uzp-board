@@ -28,6 +28,7 @@ function AuthProvider(props) {
   const signOut = useCallback(() => {
     setUser();
     sessionStorage.clear();
+    window.location.href = "#/login";
     window.location.reload();
   }, []);
 

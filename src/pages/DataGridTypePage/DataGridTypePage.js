@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
 
 import "devextreme/data/odata/store";
 import DataGrid, {
@@ -45,6 +44,7 @@ import {StatusLangToggler} from "../../components";
 import {DetailTemplate} from "../../components";
 import {UserDetailTab} from "../../components";
 
+import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./DataGridTypePage.scss";
 
 export const DataGridTypePage = ({location: {pathname}}) => {
@@ -556,7 +556,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowedPageSizes={[10, 20, 50, 100, "all"]}
           showAllItem={true}
         />
-        <LoadPanel enabled="true" />
+        <LoadPanel
+          deferRendering={true}
+          enabled="true"
+          shading={false}
+          showPane={false}
+          width={400}
+          height={140}
+          message={formatMessage("msgLoadingMessage")}
+          indicatorSrc={spinner}
+        />
       </DataGrid>
     </>
   );

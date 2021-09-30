@@ -11,6 +11,7 @@ import TreeList, {
   Pager,
   StateStoring,
   Scrolling,
+  LoadPanel,
 } from "devextreme-react/tree-list";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -19,8 +20,9 @@ import {FetchData} from "../../api/pages-fetch";
 // import Database_16x from "./icons/Database_16x.png";
 // import DatabaseStoredProcedures_16x from "./icons/DatabaseStoredProcedures_16x.png";
 // import Table_16x from "./icons/Table_16x.png";
+
+import spinner from "../Spinner/icons/spinner.svg";
 import "./DetailTreeListTab.scss";
-import {LoadPanel} from "devextreme-react/data-grid";
 
 const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -198,7 +200,16 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         showAllItem={true}
         visible={true}
       />
-      <LoadPanel enabled="true" />
+      <LoadPanel
+        deferRendering={true}
+        enabled="true"
+        shading={false}
+        showPane={false}
+        width={400}
+        height={140}
+        message={formatMessage("msgLoadingMessage")}
+        indicatorSrc={spinner}
+      />
     </TreeList>
   );
 };

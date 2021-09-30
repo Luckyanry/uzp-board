@@ -21,7 +21,20 @@ const LocalizationProvider = ({children}) => {
   initMessages();
 
   useEffect(() => {
-    const getLangsData = async () => {
+    const getCustomMessages = () => {
+      const customMessages = FetchData(
+        "/CustomMessages",
+        "ShortDicsRecordsFlatCustomMessagesObject",
+        "hbdb",
+        urlAnonymous
+      ).loadCustumMessageData();
+
+      customMessages.then((res) =>
+        setCustomMessagesData(() => ({[lang]: res}))
+      );
+    };
+
+    (async () => {
       const loadLangsData = FetchData(
         "/islang",
         "islang",
@@ -36,25 +49,16 @@ const LocalizationProvider = ({children}) => {
       isCurrentLang(result);
 
       getCustomMessages();
-    };
+    })();
 
-    const getCustomMessages = () => {
-      const customMessages = FetchData(
-        "/CustomMessages",
-        "ShortDicsRecordsFlatCustomMessagesObject",
-        "hbdb",
-        urlAnonymous
-      ).loadCustumMessageData();
-
-      customMessages.then((res) =>
-        setCustomMessagesData(() => ({[lang]: res}))
-      );
-    };
-
-    getLangsData();
+    // getLangsData();
     // getCustomMessages();
     locale(lang);
 
+    return () => {
+      // setDefaultLang();
+      setCustomMessagesData({});
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 

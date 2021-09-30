@@ -20,6 +20,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {getLookupParamsForURL} from "../../helpers/functions";
 
+import spinner from "../Spinner/icons/spinner.svg";
 import "./UserDetailTab.scss";
 
 const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
@@ -244,7 +245,16 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
         allowedPageSizes={[5, 20, 50, "all"]}
         showAllItem={true}
       />
-      <LoadPanel enabled="true" />
+      <LoadPanel
+        deferRendering={true}
+        enabled="true"
+        shading={false}
+        showPane={false}
+        width={400}
+        height={140}
+        message={formatMessage("msgLoadingMessage")}
+        indicatorSrc={spinner}
+      />
     </DataGrid>
   );
 };

@@ -21,12 +21,8 @@ export async function signIn(login = null, password = null) {
       "@prefLocale": getPrefLocaleFromStorage,
     });
 
-    // const result = await signInUserData._loadFunc({
-    //   "@uname": login,
-    //   "@old": password,
-    // });
     const result = await signInUserData;
-    // console.log(`prefLocale`, prefLocale);
+
     setToSessionStorege("user", result.data[0]);
 
     return {

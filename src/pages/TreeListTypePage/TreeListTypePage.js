@@ -40,6 +40,7 @@ import {
 
 import DatailTreeListTab from "../../components/DetailTreeListTab/DetailTreeListTab";
 
+import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./TreeListTypePage.scss";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
@@ -412,7 +413,16 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           showAllItem={true}
           visible={true}
         />
-        <LoadPanel enabled="true" />
+        <LoadPanel
+          deferRendering={true}
+          enabled="true"
+          shading={true}
+          showPane={false}
+          width={400}
+          height={140}
+          message={formatMessage("msgLoadingMessage")}
+          indicatorSrc={spinner}
+        />
       </TreeList>
     </div>
   );
