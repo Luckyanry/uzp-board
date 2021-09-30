@@ -257,7 +257,7 @@ export const FetchData = (
             });
         }
       } catch (err) {
-        console.log(`err GET `, err);
+        // console.log(`err GET `, err);
         throw err;
       }
     }
@@ -276,7 +276,7 @@ export const FetchData = (
           });
       }
     } catch (err) {
-      console.log(`err POST `, err);
+      // console.log(`err POST `, err);w
       throw err;
     }
   }
@@ -300,7 +300,7 @@ export const FetchData = (
         // return data && JSON.parse(data);
         return data;
       }
-      console.log(`responseData object err `, data);
+      // console.log(`responseData object err `, data);
       setToSessionStorege("error", data);
       throw data;
     }
@@ -347,4 +347,10 @@ export const FetchData = (
 //       },
 //       method
 //     ),
+// });
+
+// const loadCustumMessageData = new CustomStore({
+//   key: "id",
+//   loadMode: "row",
+//   load: async () => await sendRequest(urlFromPages, {schema: "get"}, "POST"),
 // });

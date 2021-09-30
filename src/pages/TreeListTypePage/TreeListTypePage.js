@@ -417,6 +417,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           deferRendering={true}
           enabled="true"
           shading={true}
+          // shadingColor={"rgba(0, 0, 0, 0.5)"}
           showPane={false}
           width={400}
           height={140}

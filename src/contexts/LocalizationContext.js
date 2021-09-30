@@ -55,10 +55,10 @@ const LocalizationProvider = ({children}) => {
     // getCustomMessages();
     locale(lang);
 
-    return () => {
-      // setDefaultLang();
-      setCustomMessagesData({});
-    };
+    // return () => {
+    //   // setDefaultLang();
+    //   setCustomMessagesData({});
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
