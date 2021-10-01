@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import Form, {
   Item,
@@ -8,7 +8,6 @@ import Form, {
   RequiredRule,
   EmailRule,
 } from "devextreme-react/form";
-import LoadIndicator from "devextreme-react/load-indicator";
 import notify from "devextreme/ui/notify";
 
 import {resetPassword} from "../../api/auth";
@@ -24,6 +23,7 @@ export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [errorTitle, setErrorTitle] = useState();
+  const [email, setEmail] = useState(null);
 
   const history = useHistory();
   const formData = useRef({});
@@ -38,67 +38,79 @@ export default function ResetPasswordForm() {
     height: 64,
   };
 
-  const onSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      setLoading(true);
+  useEffect(() => {
+    let ignore = false;
 
-      const {email} = formData.current;
+    email &&
+      (async () => {
+        setLoading(true);
 
-      const result = await resetPassword(email);
-      const {isOk, message, errorAPIMsg} = result;
+        const result = await resetPassword(email);
+        const {isOk, message, errorAPIMsg} = result;
 
-      setToSessionStorege("error", errorAPIMsg);
-      setLoading(false);
+        if (!ignore) {
+          setToSessionStorege("error", errorAPIMsg);
+          setLoading(false);
+        }
 
-      if (!isOk && errorAPIMsg) {
-        setErrorStatus(true);
-        setErrorTitle(formatMessage(message));
+        if (!isOk && errorAPIMsg && !ignore) {
+          setLoading(false);
+          setErrorStatus(true);
+          setErrorTitle(formatMessage(message));
 
-        return;
-      }
+          return;
+        }
 
-      if (!isOk && !errorAPIMsg) {
-        return notify(
+        if (!isOk && !errorAPIMsg) {
+          return notify(
+            {
+              message: formatMessage(message),
+              position: {
+                my: "center",
+                at: "center",
+                of: "#reset-password-form-container",
+                offset: "0 0",
+              },
+              width: 426,
+              height: 64,
+              shading: true,
+            },
+            "error",
+            3000
+          );
+        }
+
+        history.push("/login");
+
+        notify(
           {
-            message: formatMessage(message),
+            message: formatMessage("msgResetNotificationText"),
             position: {
               my: "center",
               at: "center",
-              of: "#reset-password-form-container",
+              of: "#login-start-form-container",
               offset: "0 0",
             },
-            width: 426,
+            width: 428,
             height: 64,
             shading: true,
           },
-          "error",
-          3000
+          "success",
+          4000
         );
-      }
+      })();
 
-      history.push("/login");
+    return () => {
+      ignore = true;
+    };
+  }, [email, history, formatMessage]);
 
-      notify(
-        {
-          message: formatMessage("msgResetNotificationText"),
-          position: {
-            my: "center",
-            at: "center",
-            of: "#login-start-form-container",
-            offset: "0 0",
-          },
-          width: 428,
-          height: 64,
-          shading: true,
-        },
-        "success",
-        4000
-      );
-    },
-    // eslint-disable-next-line
-    [history]
-  );
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const {email} = formData.current;
+
+    setEmail(email);
+  };
 
   const View = () => (
     <Form
@@ -126,11 +138,7 @@ export default function ResetPasswordForm() {
           useSubmitBehavior={true}
         >
           <span className="dx-button-text">
-            {loading ? (
-              <LoadIndicator width={"24px"} height={"24px"} visible={true} />
-            ) : (
-              formatMessage("msgSendEmailBtn")
-            )}
+            {formatMessage("msgSendEmailBtn")}
           </span>
         </ButtonOptions>
       </ButtonItem>
@@ -155,7 +163,7 @@ export default function ResetPasswordForm() {
     <form
       id="reset-password-form-container"
       className={"reset-password-form"}
-      onSubmit={onSubmit}
+      onSubmit={onFormSubmit}
     >
       {errorMessage}
       {spinner}

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Form, {
   Item,
@@ -7,7 +7,6 @@ import Form, {
   ButtonOptions,
   RequiredRule,
 } from "devextreme-react/form";
-import LoadIndicator from "devextreme-react/load-indicator";
 // import notify from "devextreme/ui/notify";
 
 import {useAuth} from "../../contexts/Auth";
@@ -53,23 +52,17 @@ export default function LoginForm() {
       (async () => {
         setLoading(true);
 
-        const result = await signIn(login, password); // email, password
+        const result = await signIn(login, password);
         const {isOk, message, errorAPIMsg} = result;
 
-        if (!ignore) {
-          setToSessionStorege("error", errorAPIMsg);
-          setLoading(false);
-        }
-
         if (!isOk && !ignore) {
+          setToSessionStorege("error", errorAPIMsg);
           setLoading(false);
           setErrorStatus(true);
           setErrorTitle(formatMessage(message));
 
           return;
         }
-
-        // window.location.reload();
       })();
 
     return () => {
@@ -127,13 +120,7 @@ export default function LoginForm() {
           type={"default"}
           useSubmitBehavior={true}
         >
-          <span className="dx-button-text">
-            {loading ? (
-              <LoadIndicator width={"24px"} height={"24px"} visible={true} />
-            ) : (
-              formatMessage("msgSignIn")
-            )}
-          </span>
+          <span className="dx-button-text">{formatMessage("msgSignIn")}</span>
         </ButtonOptions>
       </ButtonItem>
     </Form>

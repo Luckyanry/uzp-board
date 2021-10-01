@@ -53,7 +53,7 @@ const LoginStartForm = () => {
       (async () => {
         setLoading(true);
 
-        const result = await signIn(login, password); // email, password
+        const result = await signIn(login, password);
         const {isOk, message, errorAPIMsg} = result;
 
         if (!isOk && !ignore) {
