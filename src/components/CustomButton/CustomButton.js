@@ -22,7 +22,7 @@ const CustomButton = ({pathTo, btnTitle, btnDesc, Icon, onClick = null}) => {
   );
 
   return (
-    <button className={"form-link"} onClick={pathTo ? null : (e) => onClick(e)}>
+    <button className={"form-link"} onClick={!pathTo ? onClick : null}>
       {pathTo ? <Link to={pathTo}>{linkMarkup}</Link> : linkMarkup}
     </button>
   );

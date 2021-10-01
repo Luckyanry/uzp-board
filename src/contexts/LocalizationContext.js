@@ -15,7 +15,7 @@ const useLocalization = () => useContext(LocalizationContext);
 const LocalizationProvider = ({children}) => {
   const [langData, setLangData] = useState([]);
   const [defaultLang, setDefaultLang] = useState();
-  const [lang, setLang] = useState(getFromLocalStorage(defaultLang));
+  const [lang, setLang] = useState(getFromLocalStorage(defaultLang)); // неможна викликати функцію в хуку
   const [customMessagesData, setCustomMessagesData] = useState({});
 
   initMessages();

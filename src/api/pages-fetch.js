@@ -300,7 +300,7 @@ export const FetchData = (
         // return data && JSON.parse(data);
         return data;
       }
-      // console.log(`responseData object err `, data);
+      console.log(`responseData object err `, data);
       setToSessionStorege("error", data);
       throw data;
     }
@@ -312,7 +312,7 @@ export const FetchData = (
         // console.log(`responseData string ok `, typeof data);
         return data && JSON.parse(data);
       }
-      // console.log(`responseData string err `, typeof data);
+      console.log(`responseData string err `, typeof data);
       throw JSON.parse(data);
     }
   }

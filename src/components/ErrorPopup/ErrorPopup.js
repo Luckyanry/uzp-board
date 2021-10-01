@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Popup, Position} from "devextreme-react/popup";
 
 import {
-  getFromSessionStorege,
+  // getFromSessionStorege,
   setToSessionStorege,
 } from "../../helpers/functions";
 import "./ErrorPopup.scss";
@@ -15,6 +15,11 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
     setToSessionStorege("error", "");
     // window.location.reload();
   };
+
+  function getFromSessionStorege(key, ifIsNull) {
+    const storage = JSON.parse(sessionStorage.getItem(key));
+    return storage !== null ? storage : ifIsNull;
+  }
 
   const {
     ScriptFile,

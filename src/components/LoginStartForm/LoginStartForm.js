@@ -1,4 +1,4 @@
-import {useState, useCallback} from "react";
+import {useState, useEffect} from "react";
 // import notify from "devextreme/ui/notify";
 
 import {useAuth} from "../../contexts/Auth";
@@ -13,68 +13,82 @@ import {ReactComponent as WindowIcon} from "./icons/windowIconGreen.svg";
 
 import "./LoginStartForm.scss";
 
+const buttonOptions = [
+  {
+    pathTo: "/login-form",
+    btnTitle: "msgStartPageLoginPass",
+    btnDesc: "msgStartPageLogPassDesc",
+    Icon: UserIcon,
+  },
+  {
+    pathTo: "/digital-key",
+    btnTitle: "msgStartPageElKey",
+    btnDesc: "msgStartPageElKeyDesc",
+    Icon: FlashCardIcon,
+  },
+  {
+    pathTo: "",
+    btnTitle: "msgStartPageAuthAD",
+    btnDesc: "msgStartPageAuthADDesc",
+    Icon: WindowIcon,
+  },
+];
+
 const LoginStartForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [errorTitle, setErrorTitle] = useState();
+  const [login, setLogin] = useState(null);
+  const [password, setPassword] = useState(null);
 
   const {signIn} = useAuth();
   const {formatMessage} = useLocalization();
 
-  const buttonOptions = [
-    {
-      pathTo: "/login-form",
-      btnTitle: "msgStartPageLoginPass",
-      btnDesc: "msgStartPageLogPassDesc",
-      Icon: UserIcon,
-    },
-    {
-      pathTo: "/digital-key",
-      btnTitle: "msgStartPageElKey",
-      btnDesc: "msgStartPageElKeyDesc",
-      Icon: FlashCardIcon,
-    },
-    {
-      pathTo: "",
-      btnTitle: "msgStartPageAuthAD",
-      btnDesc: "msgStartPageAuthADDesc",
-      Icon: WindowIcon,
-    },
-  ];
+  useEffect(() => {
+    let ignore = false;
 
-  const onADAuthClickHendler = useCallback(
-    async (e) => {
-      e.preventDefault();
-      setLoading(true);
+    login === "" &&
+      (async () => {
+        setLoading(true);
 
-      const result = await signIn("", "");
-      const {isOk, message, errorAPIMsg} = result;
+        const result = await signIn(login, password); // email, password
+        const {isOk, message, errorAPIMsg} = result;
 
-      setToSessionStorege("error", errorAPIMsg);
-      setLoading(false);
+        if (!ignore) {
+          setToSessionStorege("error", errorAPIMsg);
+          setLoading(false);
+        }
 
-      if (!isOk) {
-        setErrorStatus(true);
-        setErrorTitle(formatMessage(message));
+        if (!isOk && !ignore) {
+          setErrorStatus(true);
+          setErrorTitle(formatMessage(message));
 
-        return;
-      }
+          return;
+        }
 
-      window.location.reload();
-    },
-    // eslint-disable-next-line
-    [signIn]
-  );
+        // window.location.reload();
+      })();
 
-  const elements = buttonOptions.map((item, idx) => (
+    return () => {
+      ignore = true;
+    };
+  }, [login, password, signIn, formatMessage]);
+
+  const buttons = buttonOptions.map((item, idx) => (
     <CustomButton
       key={idx}
       {...item}
-      onClick={!item.pathTo && onADAuthClickHendler}
+      onClick={
+        !item.pathTo &&
+        (() => {
+          setLogin("");
+          setPassword("");
+        })
+      }
     />
   ));
 
-  const content = !(loading || errorStatus) ? elements : null;
+  const content = !(loading || errorStatus) ? buttons : null;
 
   const errorMessage = errorStatus ? (
     <ErrorPopup
