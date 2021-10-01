@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from "react";
+import React, {useState, useRef, useCallback, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Form, {
   Item,
@@ -12,19 +12,21 @@ import LoadIndicator from "devextreme-react/load-indicator";
 
 import {useAuth} from "../../contexts/Auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
-
-import "./LoginForm.scss";
 import {setToSessionStorege} from "../../helpers/functions";
 import {ErrorPopup, Spinner} from "..";
+
+import "./LoginForm.scss";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [errorTitle, setErrorTitle] = useState();
 
+  const [login, setLogin] = useState(null);
+  const [password, setPassword] = useState(null);
+
   const {signIn} = useAuth();
   const formData = useRef({});
-
   const {formatMessage} = useLocalization();
 
   const loginEditorOptions = {
@@ -43,30 +45,45 @@ export default function LoginForm() {
     height: 64,
   };
 
-  const onSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      setLoading(true);
+  useEffect(() => {
+    let ignore = false;
 
-      const {login, password} = formData.current;
+    login &&
+      password &&
+      (async () => {
+        setLoading(true);
 
-      const result = await signIn(login, password);
-      const {isOk, message, errorAPIMsg} = result;
-      setToSessionStorege("error", errorAPIMsg);
+        const result = await signIn(login, password); // email, password
+        const {isOk, message, errorAPIMsg} = result;
 
-      if (!isOk) {
-        setLoading(false);
-        setErrorStatus(true);
-        setErrorTitle(formatMessage(message));
+        if (!ignore) {
+          setToSessionStorege("error", errorAPIMsg);
+          setLoading(false);
+        }
 
-        return;
-      }
+        if (!isOk && !ignore) {
+          setLoading(false);
+          setErrorStatus(true);
+          setErrorTitle(formatMessage(message));
 
-      setLoading(false);
-    },
-    // eslint-disable-next-line
-    [signIn]
-  );
+          return;
+        }
+
+        // window.location.reload();
+      })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [login, password, signIn, formatMessage]);
+
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const {login, password} = formData.current;
+
+    setLogin(login);
+    setPassword(password);
+  };
 
   const View = () => (
     <Form
@@ -140,7 +157,7 @@ export default function LoginForm() {
     <form
       id="login-form-container"
       className={"login-form"}
-      onSubmit={onSubmit}
+      onSubmit={onFormSubmit}
     >
       {errorMessage}
       {spinner}

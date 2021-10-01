@@ -38,6 +38,7 @@ const LoginStartForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [errorTitle, setErrorTitle] = useState();
+
   const [login, setLogin] = useState(null);
   const [password, setPassword] = useState(null);
 
@@ -48,18 +49,16 @@ const LoginStartForm = () => {
     let ignore = false;
 
     login === "" &&
+      password === "" &&
       (async () => {
         setLoading(true);
 
         const result = await signIn(login, password); // email, password
         const {isOk, message, errorAPIMsg} = result;
 
-        if (!ignore) {
+        if (!isOk && !ignore) {
           setToSessionStorege("error", errorAPIMsg);
           setLoading(false);
-        }
-
-        if (!isOk && !ignore) {
           setErrorStatus(true);
           setErrorTitle(formatMessage(message));
 
@@ -74,18 +73,13 @@ const LoginStartForm = () => {
     };
   }, [login, password, signIn, formatMessage]);
 
+  const onHendleClick = () => {
+    setLogin("");
+    setPassword("");
+  };
+
   const buttons = buttonOptions.map((item, idx) => (
-    <CustomButton
-      key={idx}
-      {...item}
-      onClick={
-        !item.pathTo &&
-        (() => {
-          setLogin("");
-          setPassword("");
-        })
-      }
-    />
+    <CustomButton key={idx} {...item} onClick={!item.pathTo && onHendleClick} />
   ));
 
   const content = !(loading || errorStatus) ? buttons : null;
