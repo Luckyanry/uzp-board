@@ -20,7 +20,6 @@ import DataGrid, {
   LoadPanel,
   StateStoring,
 } from "devextreme-react/data-grid";
-
 import {
   SimpleItem,
   GroupItem,
@@ -28,7 +27,7 @@ import {
   TabPanelOptions,
   Tab,
 } from "devextreme-react/form";
-
+// eslint-disable-next-line
 import TextArea from "devextreme-react/text-area";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -39,7 +38,6 @@ import {
   customPageAbbreviationMsg,
   getLookupParamsForURL,
 } from "../../helpers/functions";
-
 import {StatusLangToggler} from "../../components";
 import {DetailTemplate} from "../../components";
 import {UserDetailTab} from "../../components";

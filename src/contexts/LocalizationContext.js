@@ -62,6 +62,29 @@ const LocalizationProvider = ({children}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
+  // useEffect(() => {
+  //   const getCustomMessages = () => {
+  //     const customMessages = FetchData(
+  //       "/CustomMessages",
+  //       "ShortDicsRecordsFlatCustomMessagesObject",
+  //       "hbdb",
+  //       urlAnonymous
+  //     ).loadCustumMessageData();
+
+  //     customMessages.then((res) =>
+  //       setCustomMessagesData(() => ({[lang]: res}))
+  //     );
+  //   };
+
+  //   locale(lang);
+
+  //   // return () => {
+  //   //   // setDefaultLang();
+  //   //   setCustomMessagesData({});
+  //   // };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [lang]);
+
   function isEnabledLang(array) {
     if (array.length) {
       const result = array.filter(({isenabled}) => isenabled);

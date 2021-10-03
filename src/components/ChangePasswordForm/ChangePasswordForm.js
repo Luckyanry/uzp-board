@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 
 import {formatMessage} from "devextreme/localization";
@@ -18,25 +18,26 @@ export default function ChangePasswordForm() {
   const [errorStatus, setErrorStatus] = useState(false);
   const [errorTitle, setErrorTitle] = useState();
   const [token, setToken] = useState("");
+  const [password, setPassword] = useState(null);
 
   const history = useHistory();
   const formData = useRef({});
 
-  const onSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
+  useEffect(() => {
+    let ignore = false;
+
+    // password &&
+    const test = async () => {
       setLoading(true);
 
-      const {password} = formData.current;
-
-      if (token) {
+      if (token && !ignore) {
         const result = await changePassword(password, token);
         const {isOk, message, errorAPIMsg} = result;
 
         setToSessionStorege("error", errorAPIMsg);
         setLoading(false);
 
-        if (isOk) {
+        if (isOk && !ignore) {
           notifyPopup(
             "msgSuccessPassChange",
             "#login-start-form-container",
@@ -49,15 +50,21 @@ export default function ChangePasswordForm() {
 
         setErrorStatus(true);
         setErrorTitle(formatMessage(message));
-        // notifyPopup(message);
       }
-    },
-    // eslint-disable-next-line
-    [history, token]
-  );
+    };
+
+    password && test();
+
+    return () => {
+      ignore = true;
+      test();
+    };
+  }, [token, password, history]);
 
   useEffect(() => {
-    async function checkToken() {
+    let ignore = false;
+
+    const checkResetPasswordTokenExpired = async () => {
       const checkTokenData = FetchData(
         "/change-password",
         "w_CheckResetPasswordTokenExpired",
@@ -66,9 +73,9 @@ export default function ChangePasswordForm() {
       ).signInUserData({"@resetToken": token}, "POST");
       setLoading(true);
 
-      getTokenFromUrl();
+      !ignore && getTokenFromUrl();
 
-      if (!token) {
+      if (!token && !ignore) {
         setLoading(false);
         return;
       }
@@ -77,11 +84,11 @@ export default function ChangePasswordForm() {
         const isTokenValid = await checkTokenData;
         setLoading(false);
 
-        if (isTokenValid.VBErr) {
+        if (isTokenValid.VBErr && !ignore) {
           notifyPopup(isTokenValid.VBErr.Description);
         }
 
-        if (!isTokenValid.tokenValid) {
+        if (!isTokenValid.tokenValid && !ignore) {
           history.push("/login");
 
           notifyPopup(
@@ -98,32 +105,42 @@ export default function ChangePasswordForm() {
         setErrorStatus(true);
         setErrorTitle(formatMessage("msgErrFaildToResetPass"));
       }
+    };
+
+    checkResetPasswordTokenExpired();
+
+    function getTokenFromUrl() {
+      const urlSearchResult = history.location.search;
+      const checkStringForToken = urlSearchResult.includes("resetToken");
+
+      if (!checkStringForToken) {
+        notifyPopup(
+          "msgErrMissedTokenOnResetForm",
+          "#change-password-form-container",
+          "error",
+          4000
+        );
+
+        setLoading(false);
+        history.push("/login");
+        return;
+      }
+
+      const getToken = urlSearchResult.substr(-36);
+      setToken(getToken);
     }
 
-    checkToken();
-    // eslint-disable-next-line
+    return () => {
+      checkResetPasswordTokenExpired();
+      ignore = true;
+    };
   }, [token, history]);
 
-  function getTokenFromUrl() {
-    const urlSearchResult = history.location.search;
-    const checkStringForToken = urlSearchResult.includes("resetToken");
+  const onSubmit = () => {
+    const {password} = formData.current;
 
-    if (!checkStringForToken) {
-      notifyPopup(
-        "msgErrMissedTokenOnResetForm",
-        "#change-password-form-container",
-        "error",
-        4000
-      );
-
-      setLoading(false);
-      history.push("/login");
-      return;
-    }
-
-    const getTokenFromUrl = urlSearchResult.substr(-36);
-    setToken(getTokenFromUrl);
-  }
+    setPassword(password);
+  };
 
   function notifyPopup(
     message,

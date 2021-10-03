@@ -82,22 +82,27 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   };
 
   useEffect(() => {
-    const dictionaryByName = FetchData(
-      "/DictionaryByName",
-      "ShortDicsRecords&@name=PasswordPolicies",
-      "hbdb"
-    ).fetchColumnsSchemaData;
+    const getPasswordPolicies = async () => {
+      const dictionaryByName = FetchData(
+        "/DictionaryByName",
+        "ShortDicsRecords&@name=PasswordPolicies"
+      ).passwordPolicies();
+      console.log(`object`);
+      await dictionaryByName
+        .then((res) => res.data)
+        .then((arr) => {
+          setMinLength(arr[0].jvson.MinPasswordLength);
+          setMaxLength(arr[0].jvson.MaxPasswordLength);
+          setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
+        });
+    };
 
-    dictionaryByName
-      ._loadFunc()
-      .then((res) => res.data)
-      .then((arr) => {
-        setMinLength(arr[0].jvson.MinPasswordLength);
-        setMaxLength(arr[0].jvson.MaxPasswordLength);
-        setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    minLength && maxLength && minCharacterGroups && getPasswordPolicies();
+
+    return () => {
+      getPasswordPolicies();
+    };
+  }, [minLength, maxLength, minCharacterGroups]);
 
   function onPasswordChanged(e) {
     setPasswordState(e.value);

@@ -4,14 +4,6 @@ import "whatwg-fetch";
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
 import {setToSessionStorege} from "../helpers/functions";
 import {urlAnonymous, urlBaseParam} from "./url-config";
-// const errorTestParam = "w_testDepthiRiseErrors"; // API for error test
-
-/*  
-  https://uz.is.in.ua -- цей через AD-auth
-  https://uzapi.is.in.ua -- цей "анонімний", без AD-auth
-
-  https://ea.is.in.ua  -- "анонімний", без AD-auth
-*/
 
 export const FetchData = (
   pageRequest,
@@ -128,7 +120,6 @@ export const FetchData = (
         ),
       onBeforeSend: function (method, ajaxOptions) {
         ajaxOptions.credentials = "include";
-        ajaxOptions.xhrFields = {withCredentials: true};
       },
       // errorHandler: (error) => {
       //   console.log("CustomStore error ", error);
@@ -193,13 +184,16 @@ export const FetchData = (
   const signInUserData = async (params, method = "GET") =>
     await sendRequest(urlFromPages, {schema: "dbo", ...params}, method);
 
+  const loadObjIdData = async () =>
+    await sendRequest(urlFromPages, {schema: "get"});
+
   const loadCustumMessageData = async () =>
     await sendRequest(urlFromPages, {schema: "get"}, "POST");
 
   const changeMyLocalToData = async (newKey) =>
     await sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST");
 
-  const loadObjIdData = async () =>
+  const passwordPolicies = async () =>
     await sendRequest(urlFromPages, {schema: "get"});
 
   const updateObjIdData = async (ObjId, dbName, objName, values) =>
@@ -242,46 +236,45 @@ export const FetchData = (
     };
 
     if (method === "GET") {
-      try {
-        const response = await fetch(`${url}&${params}`, getOptions);
+      const response = await fetch(`${url}&${params}`, getOptions);
 
-        if (response.ok) {
-          return await response
-            .json()
-            .then(
-              (data) => responseData(data),
-              (error) => console.log(`error`, error.message)
-            )
-            .catch((err) => {
-              throw err;
-            });
-        }
-      } catch (err) {
-        // console.log(`err GET `, err);
-        throw err;
+      if (response.ok) {
+        return await response
+          .json()
+          .then((data) => responseData(data))
+          .catch((err) => {
+            console.error(`
+              ${err}, 
+              ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
+              Fetch into url: ${url}
+              Method: GET
+              ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
+              ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
+            `);
+          });
       }
     }
 
-    try {
-      const response = await fetch(url, postOptions);
-      if (response.ok) {
-        return await response
-          .text()
-          .then(
-            (data) => responseData(data),
-            (error) => console.log(`error`, error.message)
-          )
-          .catch((err) => {
-            throw err;
-          });
-      }
-    } catch (err) {
-      // console.log(`err POST `, err);w
-      throw err;
+    const response = await fetch(url, postOptions);
+
+    if (response.ok) {
+      return await response
+        .text()
+        .then((data) => responseData(data))
+        .catch((err) => {
+          console.error(`
+            ${err}, 
+            ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
+            Fetch into url: ${url}
+            Method: POST
+            ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
+            ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
+          `);
+        });
     }
   }
 
-  async function responseData(data) {
+  function responseData(data) {
     let newData = null;
 
     if (Array.isArray(data)) {
@@ -296,13 +289,16 @@ export const FetchData = (
     }
 
     if (typeof data === "object") {
-      if (!data.JSONErrorMessage) {
+      const errorCheck = data.JSONErrorMessage;
+
+      if (!errorCheck) {
+        console.log(`data => `, data);
         // return data && JSON.parse(data);
         return data;
       }
-      console.log(`responseData object err `, data);
+      console.error(`responseData object err `, data, typeof data);
       setToSessionStorege("error", data);
-      throw data;
+      throw data.VBErr.Description;
     }
 
     if (typeof data === "string") {
@@ -312,7 +308,7 @@ export const FetchData = (
         // console.log(`responseData string ok `, typeof data);
         return data && JSON.parse(data);
       }
-      console.log(`responseData string err `, typeof data);
+      console.error(`responseData string err `, typeof data);
       throw JSON.parse(data);
     }
   }
@@ -325,6 +321,7 @@ export const FetchData = (
     personFetchData,
     detailUserTemplateData,
     // detailMemebersTemplateData,
+    passwordPolicies,
     signInUserData,
     loadCustumMessageData,
     changeMyLocalToData,
