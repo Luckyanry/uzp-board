@@ -141,7 +141,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     }
 
     getColumnsSchemaData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   function fetchDataConstructor(dataBase) {
@@ -376,6 +376,16 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
         {pathnameWithoutSlash === "auditSettingsMaster" ? (
           editorCustomMarkup()
+        ) : pathnameWithoutSlash === "soato" ? (
+          <Editing
+            mode="batch"
+            popup={popupOpt}
+            allowAdding={true}
+            allowUpdating={true}
+            allowDeleting={true}
+            useIcons={true}
+            startEditAction="dblClick"
+          />
         ) : (
           <Editing
             mode="popup"

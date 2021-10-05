@@ -85,9 +85,11 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
     const getPasswordPolicies = async () => {
       const dictionaryByName = FetchData(
         "/DictionaryByName",
-        "ShortDicsRecords&@name=PasswordPolicies"
+        "ShortDicsRecords&@name=PasswordPolicies",
+        "hbdb"
       ).passwordPolicies();
       console.log(`object`);
+
       await dictionaryByName
         .then((res) => res.data)
         .then((arr) => {

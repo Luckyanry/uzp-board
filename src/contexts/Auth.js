@@ -5,6 +5,8 @@ import React, {
   useContext,
   useCallback,
 } from "react";
+import {useHistory} from "react-router-dom";
+
 import {getUser, signIn as sendSignInRequest} from "../api/auth";
 
 const AuthContext = createContext({});
@@ -12,6 +14,19 @@ const useAuth = () => useContext(AuthContext);
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
+
+  const history = useHistory();
+
+  useEffect(() => {
+    (async function () {
+      const result = await getUser();
+      const {isOk, data} = result;
+
+      if (isOk) {
+        setUser(() => data);
+      }
+    })();
+  }, []);
 
   const signIn = useCallback(async (login, password) => {
     const result = await sendSignInRequest(login, password);
@@ -28,20 +43,9 @@ function AuthProvider(props) {
   const signOut = useCallback(() => {
     setUser();
     sessionStorage.clear();
-    window.location.href = "#/login";
+    history.push("/login");
     window.location.reload();
-  }, []);
-
-  useEffect(() => {
-    (async function () {
-      const result = await getUser();
-      const {isOk, data} = result;
-
-      if (isOk) {
-        setUser(() => data);
-      }
-    })();
-  }, [signIn]);
+  }, [history]);
 
   return <AuthContext.Provider value={{user, signIn, signOut}} {...props} />;
 }

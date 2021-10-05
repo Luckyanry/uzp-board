@@ -172,8 +172,8 @@ const DetailTemplate = ({data}) => {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      errorTitle={errorTitle}
       popupPositionOf={"#detail-template"}
+      errorTitle={errorTitle}
     />
   ) : null;
 

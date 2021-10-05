@@ -179,8 +179,8 @@ export default function ChangePasswordForm() {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      errorTitle={errorTitle}
       popupPositionOf={"#change-password-form"}
+      errorTitle={errorTitle}
     />
   ) : null;
 

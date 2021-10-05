@@ -184,16 +184,13 @@ export const FetchData = (
   const signInUserData = async (params, method = "GET") =>
     await sendRequest(urlFromPages, {schema: "dbo", ...params}, method);
 
-  const loadObjIdData = async () =>
-    await sendRequest(urlFromPages, {schema: "get"});
-
   const loadCustumMessageData = async () =>
     await sendRequest(urlFromPages, {schema: "get"}, "POST");
 
   const changeMyLocalToData = async (newKey) =>
     await sendRequest(urlFromPages, {schema: "dbo", "@newkey": newKey}, "POST");
 
-  const passwordPolicies = async () =>
+  const loadObjIdData = async () =>
     await sendRequest(urlFromPages, {schema: "get"});
 
   const updateObjIdData = async (ObjId, dbName, objName, values) =>
@@ -208,6 +205,9 @@ export const FetchData = (
       },
       "POST"
     );
+
+  const passwordPolicies = async () =>
+    await sendRequest(urlFromPages, {schema: "get"}); // різниця
 
   const fetchFormSchemaData = async () =>
     await sendRequest(urlFromPages, {schema: "get"});

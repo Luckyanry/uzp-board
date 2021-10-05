@@ -150,8 +150,8 @@ export default function ResetPasswordForm() {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      errorTitle={errorTitle}
       popupPositionOf={"#reset-password-form-container"}
+      errorTitle={errorTitle}
     />
   ) : null;
 

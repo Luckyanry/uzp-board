@@ -131,8 +131,8 @@ export default function LoginForm() {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      errorTitle={errorTitle}
       popupPositionOf={"#login-form-container"}
+      errorTitle={errorTitle}
     />
   ) : null;
 

@@ -6,11 +6,13 @@ import {
   setToSessionStorege,
 } from "../../helpers/functions";
 import "./ErrorPopup.scss";
+import {formatMessage} from "devextreme/localization";
 
 const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
   const [isPopupVisible, setPopupVisibility] = useState(errorState);
 
   const togglePopup = () => {
+    console.log(`popup `);
     setPopupVisibility(!isPopupVisible);
     setToSessionStorege("error", "");
     // window.location.reload();
@@ -21,10 +23,13 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
     return storage !== null ? storage : ifIsNull;
   }
 
+  const test = getFromSessionStorege("error", "");
+
+  console.log(`test `, test);
   const {
     ScriptFile,
     VBErr: {Description, Number, Source},
-  } = getFromSessionStorege("error", "");
+  } = Object.keys(test).length > 0 ? test : "";
 
   return (
     <Popup
@@ -33,7 +38,7 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
       closeOnOutsideClick={true}
       showCloseButton={true}
       showTitle={true}
-      title={errorTitle}
+      title={!errorTitle ? formatMessage("msgErrServerFetch") : errorTitle}
       dragEnabled={true}
       container=".dx-viewport"
       width={600}
@@ -41,7 +46,9 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
       // shadingColor="rgba(0, 0, 0, 0.4)"
     >
       <Position at="center" my="center" of={popupPositionOf} />
-      <h3 className={"error-title"}>{errorTitle}</h3>
+      <h3 className={"error-title"}>
+        {!errorTitle ? formatMessage("msgErrServerFetch") : errorTitle}
+      </h3>
       <p className={"error-text"}>
         ScriptFile: <span className={"error-desc"}>{ScriptFile}</span>&nbsp;
       </p>

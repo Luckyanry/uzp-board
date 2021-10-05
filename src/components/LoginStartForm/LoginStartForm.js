@@ -57,6 +57,7 @@ const LoginStartForm = () => {
         const {isOk, message, errorAPIMsg} = result;
 
         if (!isOk && !ignore) {
+          console.log("LoginStartForm err ");
           setToSessionStorege("error", errorAPIMsg);
           setLoading(false);
           setErrorStatus(true);
@@ -87,8 +88,8 @@ const LoginStartForm = () => {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      errorTitle={errorTitle}
       popupPositionOf={"#login-start-form-container"}
+      errorTitle={errorTitle}
     />
   ) : null;
 

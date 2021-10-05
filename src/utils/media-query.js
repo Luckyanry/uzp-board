@@ -41,9 +41,9 @@ const smallMedia = window.matchMedia(
   "(min-width: 600px) and (max-width: 959.99px)"
 );
 const mediumMedia = window.matchMedia(
-  "(min-width: 960px) and (max-width: 1440px)"
+  "(min-width: 960px) and (max-width: 2560px)"
 );
-const largeMedia = window.matchMedia("(min-width: 1441px)");
+const largeMedia = window.matchMedia("(min-width: 2561px)");
 
 [xSmallMedia, smallMedia, mediumMedia, largeMedia].forEach((media) => {
   media.addListener((e) => {

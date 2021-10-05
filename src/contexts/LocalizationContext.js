@@ -8,82 +8,128 @@ import * as uzCyrlMessages from "devextreme/localization/messages/uz-Cyrl.json";
 // import {getSystemDictionary} from "../app-localization";
 import {FetchData} from "../api/pages-fetch";
 import {urlAnonymous} from "../api/url-config";
+import {ErrorPopup, Spinner} from "../components";
 
 const LocalizationContext = createContext();
 const useLocalization = () => useContext(LocalizationContext);
 
 const LocalizationProvider = ({children}) => {
+  const [loading, setLoading] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(null);
+
   const [langData, setLangData] = useState([]);
-  const [defaultLang, setDefaultLang] = useState();
-  const [lang, setLang] = useState(getFromLocalStorage(defaultLang)); // неможна викликати функцію в хуку
+  const [defaultLang, setDefaultLang] = useState("en");
+  const [lang, setLang] = useState(getFromLocalStorage(defaultLang));
+  // const [lang, setLang] = useState("en");
   const [customMessagesData, setCustomMessagesData] = useState({});
+  const [newLocalKey, setNewLocalKey] = useState(null);
 
   initMessages();
 
   useEffect(() => {
-    const getCustomMessages = () => {
-      const customMessages = FetchData(
-        "/CustomMessages",
-        "ShortDicsRecordsFlatCustomMessagesObject",
-        "hbdb",
-        urlAnonymous
-      ).loadCustumMessageData();
+    let ignore = false;
+    setLoading(true);
 
-      customMessages.then((res) =>
-        setCustomMessagesData(() => ({[lang]: res}))
-      );
+    !ignore &&
+      (async () => {
+        const loadLangsData = FetchData(
+          "/islang",
+          "islang",
+          "wisdb",
+          urlAnonymous
+        ).fetchColumnsSchemaData;
+
+        const result = await loadLangsData
+          ._loadFunc()
+          .then((res) => res.data)
+          .catch((err) => {
+            // console.log(`islang err `, err);
+            setErrorStatus(err);
+          });
+
+        isEnabledLang(result);
+        isDefaultLang(result);
+        isCurrentLang(result);
+      })();
+
+    // !ignore &&
+    //   (async () => {
+    //     const customMessages = FetchData(
+    //       "/CustomMessages",
+    //       "ShortDicsRecordsFlatCustomMessagesObject",
+    //       "hbdb",
+    //       urlAnonymous
+    //     ).loadCustumMessageData();
+
+    //     customMessages
+    //       .then((res) => setCustomMessagesData(() => ({[lang]: res})))
+    //       .catch((err) => {
+    //         // console.log(`CustomMessages err `, err);
+    //         setErrorStatus(err);
+    //       });
+    //   })();
+
+    // locale(lang);
+    setLoading(false);
+
+    return () => {
+      ignore = true;
     };
+    // eslint-disable-next-line
+  }, []);
 
-    (async () => {
-      const loadLangsData = FetchData(
-        "/islang",
-        "islang",
-        "wisdb",
-        urlAnonymous
-      ).fetchColumnsSchemaData;
+  useEffect(() => {
+    let ignore = false;
+    setLoading(true);
 
-      const result = await loadLangsData._loadFunc().then((res) => res.data);
+    !ignore &&
+      (async () => {
+        const customMessages = FetchData(
+          "/CustomMessages",
+          "ShortDicsRecordsFlatCustomMessagesObject",
+          "hbdb",
+          urlAnonymous
+        ).loadCustumMessageData();
 
-      isEnabledLang(result);
-      isDefaultLang(result);
-      isCurrentLang(result);
+        customMessages
+          .then((res) => setCustomMessagesData(() => ({[lang]: res})))
+          .catch((err) => {
+            // console.log(`CustomMessages err `, err);
+            setErrorStatus(err);
+          });
+      })();
 
-      getCustomMessages();
-    })();
-
-    // getLangsData();
-    // getCustomMessages();
     locale(lang);
+    setLoading(false);
 
-    // return () => {
-    //   // setDefaultLang();
-    //   setCustomMessagesData({});
-    // };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      ignore = true;
+    };
   }, [lang]);
 
-  // useEffect(() => {
-  //   const getCustomMessages = () => {
-  //     const customMessages = FetchData(
-  //       "/CustomMessages",
-  //       "ShortDicsRecordsFlatCustomMessagesObject",
-  //       "hbdb",
-  //       urlAnonymous
-  //     ).loadCustumMessageData();
+  useEffect(() => {
+    let ignore = false;
+    setLoading(true);
 
-  //     customMessages.then((res) =>
-  //       setCustomMessagesData(() => ({[lang]: res}))
-  //     );
-  //   };
+    newLocalKey &&
+      !ignore &&
+      (async () => {
+        await FetchData(
+          "/w_changeMyLocaleTo",
+          "w_changeMyLocaleTo",
+          "wisdb",
+          urlAnonymous
+        ).changeMyLocalToData(newLocalKey);
 
-  //   locale(lang);
+        setTimeout(() => window.location.reload(), 350);
+      })();
 
-  //   // return () => {
-  //   //   // setDefaultLang();
-  //   //   setCustomMessagesData({});
-  //   // };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [lang]);
+    setLoading(false);
+
+    return () => {
+      ignore = true;
+    };
+  }, [newLocalKey]);
 
   function isEnabledLang(array) {
     if (array.length) {
@@ -94,14 +140,14 @@ const LocalizationProvider = ({children}) => {
 
   function isCurrentLang(array) {
     if (array.length) {
-      const result = array.find(({iscurrent}) => iscurrent);
+      const {short} = array.find(({iscurrent}) => iscurrent);
 
       const storage = sessionStorage.getItem("language");
 
       if (!storage) return;
 
-      setLang(() => result.short);
-      setToLocalStorege(result.short);
+      setLang(() => short);
+      setToLocalStorege(short);
     }
   }
 
@@ -127,19 +173,8 @@ const LocalizationProvider = ({children}) => {
     sessionStorage.setItem("language", language);
   }
 
-  async function changeMyLocalTo(newKey) {
-    await FetchData(
-      "/w_changeMyLocaleTo",
-      "w_changeMyLocaleTo",
-      "wisdb",
-      urlAnonymous
-    ).changeMyLocalToData(newKey);
-
-    window.location.reload();
-  }
-
   function changeLocale(value) {
-    changeMyLocalTo(value);
+    setNewLocalKey(value);
     setLang(() => value);
     setToLocalStorege(value);
   }
@@ -156,19 +191,33 @@ const LocalizationProvider = ({children}) => {
     // loadMessages(getSystemDictionary());
   }
 
+  const errorMessage = errorStatus ? (
+    <ErrorPopup errorState={errorStatus} popupPositionOf={"#root"} />
+  ) : null;
+
+  const spinner = loading ? (
+    <Spinner loadingState={loading} positionOf={"#content"} />
+  ) : null;
+
   return (
-    <LocalizationContext.Provider
-      value={{
-        lang,
-        langData,
-        changeLocaleHendler,
-        locale,
-        loadMessages,
-        formatMessage,
-      }}
-    >
-      {children}
-    </LocalizationContext.Provider>
+    <>
+      {errorMessage}
+      {spinner}
+      {!(loading || errorStatus) && (
+        <LocalizationContext.Provider
+          value={{
+            lang,
+            langData,
+            changeLocaleHendler,
+            locale,
+            loadMessages,
+            formatMessage,
+          }}
+        >
+          {children}
+        </LocalizationContext.Provider>
+      )}
+    </>
   );
 };
 
