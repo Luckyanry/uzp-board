@@ -75,8 +75,7 @@ const DetailTemplate = ({data: {data, component}}) => {
         .then(({data}) => setAPIData(data))
         .catch((error) => {
           setToSessionStorege("error", error);
-
-          setErrorStatus(true);
+          setErrorStatus(error);
           setErrorTitle(formatMessage("msgErrServerFetch"));
         });
 
@@ -98,7 +97,7 @@ const DetailTemplate = ({data: {data, component}}) => {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      popupPositionOf={"#detail-template"}
+      popupPositionOf={`#${component._$element[0].id}`}
       errorTitle={errorTitle}
     />
   ) : null;
@@ -109,7 +108,7 @@ const DetailTemplate = ({data: {data, component}}) => {
 
       {!errorMessage && (
         <DataGrid
-          id="grid"
+          id={component._$element[0].id}
           columns={APIData}
           dataSource={shortDicsRecordsDataState}
           repaintChangesOnly={true}

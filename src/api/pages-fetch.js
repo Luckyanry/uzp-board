@@ -1,5 +1,6 @@
 import CustomStore from "devextreme/data/custom_store";
 import "whatwg-fetch";
+// import {getErrorData} from "../components/ErrorPopup/ErrorPopup";
 
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
 import {setToSessionStorege} from "../helpers/functions";
@@ -150,26 +151,12 @@ export const FetchData = (
     "@oid"
   );
 
-  // const gidFetchData = fetchDataConstructor(
-  //   "gid",
-  //   urlFromPages,
-  //   "@jvalues",
-  //   "@oid"
-  // );
-
   const detailUserTemplateData = fetchDataConstructor(
     ["RGID", "UGID", "IFC"],
     urlFromPages,
     "values",
     "values"
   );
-
-  // const detailMemebersTemplateData = fetchDataConstructor(
-  //   "UGID",
-  //   urlFromPages,
-  //   "values",
-  //   "@gid"
-  // );
 
   const lookData = {
     store: new CustomStore({
@@ -296,8 +283,10 @@ export const FetchData = (
         // return data && JSON.parse(data);
         return data;
       }
-      console.error(`responseData object err `, data, typeof data);
+      console.error(`responseData object err `, data);
       setToSessionStorege("error", data);
+      // getErrorData(data);
+
       throw data.VBErr.Description;
     }
 

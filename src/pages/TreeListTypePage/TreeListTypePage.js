@@ -328,7 +328,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   const errorMessage = errorStatus ? (
-    <ErrorPopup errorState={errorStatus} popupPositionOf={"#tree-list"} />
+    <ErrorPopup
+      errorState={errorStatus}
+      popupPositionOf={`#${pathnameWithoutSlash}`}
+    />
   ) : null;
 
   return (
@@ -340,7 +343,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
       {!errorMessage && (
         <TreeList
-          id="tree-list"
+          id={pathnameWithoutSlash}
           dataSource={APIData}
           rootValue={0}
           keyExpr="id"

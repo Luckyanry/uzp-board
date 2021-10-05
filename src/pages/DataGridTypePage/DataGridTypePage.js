@@ -36,6 +36,7 @@ import {
   checkIfArrIncludesValue,
   createCustomMsg,
   customPageAbbreviationMsg,
+  getFromSessionStorege,
   getLookupParamsForURL,
 } from "../../helpers/functions";
 import {ErrorPopup, StatusLangToggler} from "../../components";
@@ -130,8 +131,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           .catch((err) => setErrorStatus(err));
       }
 
-      getAPIData();
-
       const lookupParamsForURL = getLookupParamsForURL(columns);
 
       if (lookupParamsForURL.length) {
@@ -139,6 +138,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           getLookDataState(sp, db, dataField)
         );
       }
+
+      getAPIData();
     }
 
     function getAPIData() {
@@ -153,6 +154,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           pathnameWithoutSlash,
           "wisdb"
         ).usersFetchData;
+
+        const res = getFromSessionStorege("error", "");
+        if (res.JSONErrorMessage) {
+          setErrorStatus(true);
+        }
+
         return setAPIData(usersFetchData);
       }
 
@@ -171,7 +178,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         return setAPIData(fetchData);
       }
 
-      if (checkIfArrIncludesValue(["recordLog"], pathnameWithoutSlash)) {
+      if (pathnameWithoutSlash === "recordLog") {
         const fetchData = FetchData(
           pathname,
           pathnameWithoutSlash,
@@ -182,6 +189,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         setAllowDeleting(false);
         setAllowUpdating(false);
 
+        const res = getFromSessionStorege("error", "");
+        if (res.JSONErrorMessage) {
+          setErrorStatus(true);
+        }
+
         return setAPIData(fetchData);
       }
 
@@ -190,7 +202,13 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         pathnameWithoutSlash,
         "hbdb"
       ).fetchColumnsSchemaData;
-      setAPIData(fetchData);
+
+      const res = getFromSessionStorege("error", "");
+      if (res.JSONErrorMessage) {
+        setErrorStatus(true);
+      }
+
+      return setAPIData(fetchData);
     }
 
     async function getLookDataState(
@@ -466,7 +484,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      popupPositionOf={`#${pathnameWithoutSlash}`}
+      popupPositionOf={`#data-grid`}
+      // popupPositionOf={`#${pathnameWithoutSlash}`}
     />
   ) : null;
 
@@ -479,7 +498,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       {!errorMessage && (
         <DataGrid
-          id={pathnameWithoutSlash}
+          id={"data-grid"}
           dataSource={APIData}
           // keyExpr="id"
           repaintChangesOnly={true}
@@ -503,7 +522,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           // functions
           onInitNewRow={initNewRow}
           onFocusedCellChanging={onFocusedCellChanging}
-
           // onContentReady={selectFirstRow}
           // onOptionChanged={handleOptionChange}
         >

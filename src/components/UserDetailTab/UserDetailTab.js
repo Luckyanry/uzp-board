@@ -34,6 +34,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   const {formatMessage} = useLocalization();
 
   const pathname = `/${UserGroups}`;
+  const pathnameWithoutSlash = pathname.split("/")[1];
   const focusedRowTitle = UserName;
 
   const popupOpt = {
@@ -184,7 +185,10 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   }
 
   const errorMessage = errorStatus ? (
-    <ErrorPopup errorState={errorStatus} popupPositionOf={"#grid"} />
+    <ErrorPopup
+      errorState={errorStatus}
+      popupPositionOf={`#${pathnameWithoutSlash}`}
+    />
   ) : null;
 
   return (
@@ -193,7 +197,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
 
       {!errorMessage && (
         <DataGrid
-          id="grid"
+          id={pathnameWithoutSlash}
           // columns={columnsSchemaData}
           dataSource={APIData}
           repaintChangesOnly={true}

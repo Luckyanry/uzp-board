@@ -33,7 +33,6 @@ function AppWrapper() {
         indicatorSrc={spinner}
       />
     );
-    // return <Spinner loadingState={loading} positionOf={"#content"} />;
   }
 
   if (user) {

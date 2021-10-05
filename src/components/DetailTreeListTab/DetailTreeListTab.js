@@ -33,6 +33,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   const {formatMessage} = useLocalization();
 
   const pathname = `/${DetailTreeListPath}`;
+  const pathnameWithoutSlash = pathname.split("/")[1];
 
   const popupOpt = {
     title: formatMessage("msgCreateNewItem"),
@@ -138,7 +139,10 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   }
 
   const errorMessage = errorStatus ? (
-    <ErrorPopup errorState={errorStatus} popupPositionOf={"#grid"} />
+    <ErrorPopup
+      errorState={errorStatus}
+      popupPositionOf={`#${pathnameWithoutSlash}`}
+    />
   ) : null;
 
   return (
@@ -147,7 +151,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
 
       {!errorMessage && (
         <TreeList
-          id="grid"
+          id={pathnameWithoutSlash}
           // columns={columnsSchemaData}
           dataSource={APIData}
           rootValue={0}
