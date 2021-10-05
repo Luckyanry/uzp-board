@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 
 import TreeList, {
   SearchPanel,
-  // HeaderFilter,
   FilterRow,
   Scrolling,
   ColumnChooser,
@@ -17,7 +16,6 @@ import TreeList, {
   LoadPanel,
   StateStoring,
   Form,
-  // ToolbarItem,
 } from "devextreme-react/tree-list";
 import {
   SimpleItem,
@@ -30,7 +28,8 @@ import {
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
-
+import DatailTreeListTab from "../../components/DetailTreeListTab/DetailTreeListTab";
+import {ErrorPopup} from "../../components";
 import {
   checkIfArrIncludesValue,
   createCustomMsg,
@@ -38,16 +37,15 @@ import {
   getLookupParamsForURL,
 } from "../../helpers/functions";
 
-import DatailTreeListTab from "../../components/DetailTreeListTab/DetailTreeListTab";
-
 import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./TreeListTypePage.scss";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
-  const [toggler, setToggler] = useState(false);
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState([]);
   const [lookDataState, setLookDataState] = useState([]);
+
+  const [toggler, setToggler] = useState(false);
   const [expandRowsBtnText, setExpandRowsBtnText] =
     useState("msgExpandAllRows");
   // const [expandedRowKeys, setExpandedRowKeys] = useState([1, 3, 5]);
@@ -55,6 +53,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [masterId, setMasterId] = useState("");
   const [formData, setFormData] = useState(null);
   const [groupItemCaption, setGroupItemCaption] = useState("");
+
+  const [errorStatus, setErrorStatus] = useState(null);
 
   const {formatMessage} = useLocalization();
 
@@ -88,12 +88,17 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   };
 
   useEffect(() => {
-    async function getColumnsSchemaData() {
-      const fetchColumnsSchemaData = fetchDataConstructor("hbdb").fetchData;
+    (async () => {
+      const fetchColumnsSchemaData = FetchData(
+        pathname,
+        pathnameWithoutSlash,
+        "hbdb"
+      ).fetchData;
 
       const result = await fetchColumnsSchemaData
         ._loadFunc()
-        .then((res) => res.data);
+        .then((res) => res.data)
+        .catch((err) => setErrorStatus(err));
 
       setColumnsSchemaData(result);
       getAPIData();
@@ -105,19 +110,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           getLookDataState(sp, db, dataField)
         );
       }
-    }
-
-    function getAPIData() {
-      if (
-        checkIfArrIncludesValue(["auditSettingsMaster"], pathnameWithoutSlash)
-      ) {
-        const fetchData = fetchDataConstructor("logdb").fetchColumnsSchemaData;
-        return setAPIData(fetchData);
-      }
-
-      const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
-      setAPIData(fetchData);
-    }
+    })();
 
     async function getLookDataState(
       lookupSpForURL,
@@ -132,21 +125,36 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
       await lookData.store
         ._loadFunc()
-        .then((res) => (lookData.store.__rawData = [...res.data]));
+        .then((res) => (lookData.store.__rawData = [...res.data]))
+        .catch((err) => setErrorStatus(err));
 
       setLookDataState((prev) =>
         dataField ? [...prev, {[dataField]: lookData}] : lookData
       );
-      // console.log(`lookData `, lookData);
     }
 
-    getColumnsSchemaData();
-    // eslint-disable-next-line
-  }, []);
+    function getAPIData() {
+      if (
+        checkIfArrIncludesValue(["auditSettingsMaster"], pathnameWithoutSlash)
+      ) {
+        const fetchData = FetchData(
+          pathname,
+          pathnameWithoutSlash,
+          "logdb"
+        ).fetchColumnsSchemaData;
 
-  function fetchDataConstructor(dataBase) {
-    return FetchData(pathname, pathnameWithoutSlash, dataBase);
-  }
+        return setAPIData(fetchData);
+      }
+
+      const fetchData = FetchData(
+        pathname,
+        pathnameWithoutSlash,
+        "hbdb"
+      ).fetchColumnsSchemaData;
+
+      setAPIData(fetchData);
+    }
+  }, [pathname, pathnameWithoutSlash]);
 
   function initNewRow(e) {
     e.data.status = statusToggler[0];
@@ -319,122 +327,129 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
+  const errorMessage = errorStatus ? (
+    <ErrorPopup errorState={errorStatus} popupPositionOf={"#tree-list"} />
+  ) : null;
+
   return (
-    <div className="page-wrapper">
+    <div id="treelist-page-wrapper" className="page-wrapper">
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
+      {errorMessage}
 
-      <TreeList
-        id="tree-list"
-        dataSource={APIData}
-        rootValue={0}
-        keyExpr="id"
-        parentIdExpr="pid"
-        // defaultExpandedRowKeys={[1, 3, 5]}
-        // rows
-        showRowLines={true}
-        focusedRowEnabled={true}
-        rowAlternationEnabled={false}
-        // columns
-        showColumnLines={false}
-        columnMinWidth={60}
-        columnAutoWidth={true}
-        columnHidingEnabled={false}
-        allowColumnResizing={true}
-        allowColumnReordering={true}
-        // appearance
-        hoverStateEnabled={true}
-        wordWrapEnabled={true}
-        virtualModeEnabled={true}
-        // functions
-        // remoteOperations={{}}
-        autoExpandAll={toggler}
-        onInitNewRow={initNewRow}
-        // onEditorPreparing={onEditorPreparing}
-        onFocusedCellChanging={onFocusedCellChanging}
-        onToolbarPreparing={onToolbarPreparing}
-        // onToolbarPreparing={onToolbarPreparing}
-      >
-        <Scrolling mode="standard" />
-        <SearchPanel visible={true} />
-        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
-        <ColumnChooser
-          enabled={true}
-          allowSearch={true}
-          width={300}
-          height={365}
-          title={formatMessage("msgColomnChooser")}
-          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-        />
-        <FilterRow visible={true} />
-        <StateStoring
-          enabled={false}
-          type="localStorage"
-          storageKey="storage"
-        />
+      {!errorMessage && (
+        <TreeList
+          id="tree-list"
+          dataSource={APIData}
+          rootValue={0}
+          keyExpr="id"
+          parentIdExpr="pid"
+          // defaultExpandedRowKeys={[1, 3, 5]}
+          // rows
+          showRowLines={true}
+          focusedRowEnabled={true}
+          rowAlternationEnabled={false}
+          // columns
+          showColumnLines={false}
+          columnMinWidth={60}
+          columnAutoWidth={true}
+          columnHidingEnabled={false}
+          allowColumnResizing={true}
+          allowColumnReordering={true}
+          // appearance
+          hoverStateEnabled={true}
+          wordWrapEnabled={true}
+          virtualModeEnabled={true}
+          // functions
+          // remoteOperations={{}}
+          autoExpandAll={toggler}
+          onInitNewRow={initNewRow}
+          // onEditorPreparing={onEditorPreparing}
+          onFocusedCellChanging={onFocusedCellChanging}
+          onToolbarPreparing={onToolbarPreparing}
+          // onToolbarPreparing={onToolbarPreparing}
+        >
+          <Scrolling mode="standard" />
+          <SearchPanel visible={true} />
+          {/* <HeaderFilter visible={true} allowSearch={true} /> */}
+          <ColumnChooser
+            enabled={true}
+            allowSearch={true}
+            width={300}
+            height={365}
+            title={formatMessage("msgColomnChooser")}
+            emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+          />
+          <FilterRow visible={true} />
+          <StateStoring
+            enabled={false}
+            type="localStorage"
+            storageKey="storage"
+          />
 
-        {pathnameWithoutSlash === "auditSettingsMaster" ? (
-          editorCustomMarkup()
-        ) : pathnameWithoutSlash === "soato" ? (
-          <Editing
-            mode="batch"
-            popup={popupOpt}
-            allowAdding={true}
-            allowUpdating={true}
-            allowDeleting={true}
-            useIcons={true}
-            startEditAction="dblClick"
-          />
-        ) : (
-          <Editing
-            mode="popup"
-            popup={popupOpt}
-            allowAdding={true}
-            allowUpdating={true}
-            allowDeleting={true}
-            useIcons={true}
-          />
-        )}
+          {pathnameWithoutSlash === "auditSettingsMaster" ? (
+            editorCustomMarkup()
+          ) : pathnameWithoutSlash === "soato" ? (
+            <Editing
+              mode="batch"
+              popup={popupOpt}
+              allowAdding={true}
+              allowUpdating={true}
+              allowDeleting={true}
+              useIcons={true}
+              startEditAction="dblClick"
+            />
+          ) : (
+            <Editing
+              mode="popup"
+              popup={popupOpt}
+              allowAdding={true}
+              allowUpdating={true}
+              allowDeleting={true}
+              useIcons={true}
+            />
+          )}
 
-        {customMarkupRender()}
+          {customMarkupRender()}
 
-        <Column type="buttons" width={110}>
-          <TreeListButton
-            name="add"
-            hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
-          />
-          <TreeListButton
-            name="edit"
-            hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
-          />
-          <TreeListButton
-            name="delete"
-            hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
-          />
-        </Column>
+          <Column type="buttons" width={110}>
+            <TreeListButton
+              name="add"
+              hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
+            />
+            <TreeListButton
+              name="edit"
+              hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
+            />
+            <TreeListButton
+              name="delete"
+              hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
+            />
+          </Column>
 
-        <Paging defaultPageSize={10} enabled={true} />
-        <Pager
-          showPageSizeSelector={true}
-          showInfo={true}
-          showNavigationButtons={true}
-          allowedPageSizes={[10, 20, 50, 100, "all"]}
-          showAllItem={true}
-          visible={true}
-        />
-        <LoadPanel
-          deferRendering={true}
-          enabled="true"
-          shading={true}
-          // shadingColor={"rgba(0, 0, 0, 0.5)"}
-          showPane={false}
-          width={400}
-          height={140}
-          message={formatMessage("msgLoadingMessage")}
-          indicatorSrc={spinner}
-        />
-      </TreeList>
+          <Paging defaultPageSize={10} enabled={true} />
+          <Pager
+            showPageSizeSelector={true}
+            showInfo={true}
+            showNavigationButtons={true}
+            allowedPageSizes={[10, 20, 50, 100, "all"]}
+            showAllItem={true}
+            visible={true}
+          />
+          <LoadPanel
+            deferRendering={true}
+            enabled="true"
+            shading={true}
+            // shadingColor={"rgba(0, 0, 0, 0.5)"}
+            showPane={false}
+            width={400}
+            height={140}
+            message={formatMessage("msgLoadingMessage")}
+            indicatorSrc={spinner}
+          />
+        </TreeList>
+      )}
     </div>
   );
 };
@@ -662,3 +677,61 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 // allowEditing={allowEditing}
 // {...params}
 // >
+
+// ===========================================
+// useEffect(() => {
+//   async function getColumnsSchemaData() {
+//     const fetchColumnsSchemaData = fetchDataConstructor("hbdb").fetchData;
+
+//     const result = await fetchColumnsSchemaData
+//       ._loadFunc()
+//       .then((res) => res.data);
+
+//     setColumnsSchemaData(result);
+//     getAPIData();
+
+//     const lookupParamsForURL = getLookupParamsForURL(result);
+
+//     if (lookupParamsForURL.length) {
+//       lookupParamsForURL.map(({sp, db, dataField}) =>
+//         getLookDataState(sp, db, dataField)
+//       );
+//     }
+//   }
+
+//   function getAPIData() {
+//     if (
+//       checkIfArrIncludesValue(["auditSettingsMaster"], pathnameWithoutSlash)
+//     ) {
+//       const fetchData = fetchDataConstructor("logdb").fetchColumnsSchemaData;
+//       return setAPIData(fetchData);
+//     }
+
+//     const fetchData = fetchDataConstructor("hbdb").fetchColumnsSchemaData;
+//     setAPIData(fetchData);
+//   }
+
+//   async function getLookDataState(
+//     lookupSpForURL,
+//     lookupDBForURL,
+//     dataField = null
+//   ) {
+//     const lookData = FetchData(
+//       pathname,
+//       lookupSpForURL,
+//       lookupDBForURL
+//     ).lookData;
+
+//     await lookData.store
+//       ._loadFunc()
+//       .then((res) => (lookData.store.__rawData = [...res.data]));
+
+//     setLookDataState((prev) =>
+//       dataField ? [...prev, {[dataField]: lookData}] : lookData
+//     );
+//     // console.log(`lookData `, lookData);
+//   }
+
+//   getColumnsSchemaData();
+//   // eslint-disable-next-line
+// }, []);

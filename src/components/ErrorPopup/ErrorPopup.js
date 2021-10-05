@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Popup, Position} from "devextreme-react/popup";
 
 import {
-  // getFromSessionStorege,
+  getFromSessionStorege,
   setToSessionStorege,
 } from "../../helpers/functions";
 import "./ErrorPopup.scss";
@@ -12,20 +12,13 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
   const [isPopupVisible, setPopupVisibility] = useState(errorState);
 
   const togglePopup = () => {
-    console.log(`popup `);
     setPopupVisibility(!isPopupVisible);
     setToSessionStorege("error", "");
     // window.location.reload();
   };
 
-  function getFromSessionStorege(key, ifIsNull) {
-    const storage = JSON.parse(sessionStorage.getItem(key));
-    return storage !== null ? storage : ifIsNull;
-  }
-
   const test = getFromSessionStorege("error", "");
 
-  console.log(`test `, test);
   const {
     ScriptFile,
     VBErr: {Description, Number, Source},
@@ -50,17 +43,28 @@ const ErrorPopup = ({errorState, errorTitle, popupPositionOf}) => {
         {!errorTitle ? formatMessage("msgErrServerFetch") : errorTitle}
       </h3>
       <p className={"error-text"}>
-        ScriptFile: <span className={"error-desc"}>{ScriptFile}</span>&nbsp;
+        URL: <span className={"error-desc"}>{window.location.href}</span>
       </p>
-      <p className={"error-text"}>
-        Description: <span className={"error-desc"}>{Description}</span>
-      </p>
-      <p className={"error-text"}>
-        Error Number: <span className={"error-desc"}>{Number}</span>
-      </p>
-      <p className={"error-text"}>
-        Source: <span className={"error-desc"}>{Source}</span>
-      </p>
+      {ScriptFile && (
+        <p className={"error-text"}>
+          ScriptFile: <span className={"error-desc"}>{ScriptFile}</span>&nbsp;
+        </p>
+      )}
+      {Description && (
+        <p className={"error-text"}>
+          Description: <span className={"error-desc"}>{Description}</span>
+        </p>
+      )}
+      {Number && (
+        <p className={"error-text"}>
+          Error Number: <span className={"error-desc"}>{Number}</span>
+        </p>
+      )}
+      {Source && (
+        <p className={"error-text"}>
+          Source: <span className={"error-desc"}>{Source}</span>
+        </p>
+      )}
     </Popup>
   );
 };

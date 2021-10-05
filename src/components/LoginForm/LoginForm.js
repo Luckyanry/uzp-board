@@ -57,10 +57,10 @@ export default function LoginForm() {
 
         if (!isOk && !ignore) {
           setToSessionStorege("error", errorAPIMsg);
-          setLoading(false);
           setErrorStatus(true);
           setErrorTitle(formatMessage(message));
 
+          setLoading(false);
           return;
         }
       })();

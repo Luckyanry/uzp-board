@@ -18,15 +18,20 @@ import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
 import "./PasswordGenerator.scss";
+import {ErrorPopup, Spinner} from "..";
 
 const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const [passwordState, setPasswordState] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
+
   const [minLength, setMinLength] = useState(8);
   const [maxLength, setMaxLength] = useState(128);
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
+
+  const [loading, setLoading] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
 
   const {formatMessage} = useLocalization();
 
@@ -82,13 +87,14 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   };
 
   useEffect(() => {
+    setLoading(true);
+
     const getPasswordPolicies = async () => {
       const dictionaryByName = FetchData(
         "/DictionaryByName",
         "ShortDicsRecords&@name=PasswordPolicies",
         "hbdb"
       ).passwordPolicies();
-      console.log(`object`);
 
       await dictionaryByName
         .then((res) => res.data)
@@ -96,7 +102,11 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
           setMinLength(arr[0].jvson.MinPasswordLength);
           setMaxLength(arr[0].jvson.MaxPasswordLength);
           setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
-        });
+        })
+        .catch((err) => setErrorStatus(err));
+
+      setLoading(false);
+      return;
     };
 
     minLength && maxLength && minCharacterGroups && getPasswordPolicies();
@@ -114,10 +124,6 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   function onConfirmPasswordChanged(e) {
     setConfirmPasswordState(e.value);
   }
-
-  // function passwordComparison() {
-  //   return passwordState;
-  // }
 
   function getRandomLower() {
     return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
@@ -228,9 +234,130 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
 
   const confirmPassword = useCallback(
     ({value}) => value === formData.password,
-    // eslint-disable-next-line
-    []
+
+    [formData.password]
   );
+
+  const View = () => (
+    <Form
+      formData={formData}
+      disabled={loadingState}
+      showColonAfterLabel={false}
+      showRequiredMark={false}
+    >
+      <Item
+        dataField={"password"}
+        editorType={"dxTextBox"}
+        editorOptions={passwordEditorOptions}
+        cssClass={"input"}
+      >
+        <TextBox
+          mode={passwordMode}
+          placeholder={formatMessage("msgEnterPassword")}
+          stylingMode="filled"
+          defaultValue={passwordState}
+          onValueChanged={onPasswordChanged}
+          value={passwordState}
+          // value={passwordState}
+        >
+          <TextBoxButton
+            name="msgGenerateStrongPassword"
+            // name={formatMessage("msgGeneratePassword")}
+            location="after"
+            options={passwordGeneratorBtn}
+          />
+
+          <TextBoxButton
+            name={formatMessage("msgShowPassword")}
+            location="after"
+            options={passwordButton}
+          />
+
+          <Validator>
+            <RequiredRule message={formatMessage("msgRequiredPassword")} />
+
+            <StringLengthRule
+              message={formatMessage(
+                "msgPwdStringLengthRuleErrMsg",
+                minLength,
+                maxLength
+              )}
+              min={minLength}
+              max={maxLength}
+            />
+
+            <PatternRule message={patternRuleErrMsg} pattern={regExp} />
+          </Validator>
+        </TextBox>
+
+        <Label visible={true} />
+      </Item>
+
+      <Item
+        dataField={"confirmedPassword"}
+        editorType={"dxTextBox"}
+        editorOptions={confirmedPasswordEditorOptions}
+        ssClass={"input"}
+      >
+        <TextBox
+          mode={passwordMode}
+          placeholder={formatMessage("msgConfirmPassword")}
+          stylingMode="filled"
+          value={confirmPasswordState}
+          onValueChanged={onConfirmPasswordChanged}
+        >
+          <TextBoxButton
+            name={formatMessage("msgShowConfirmedPassword")}
+            location="after"
+            options={passwordButton}
+          />
+
+          <Validator>
+            <RequiredRule
+              message={formatMessage("msgConfirmRequiredPassword")}
+            />
+
+            {/* <CompareRule
+                message={formatMessage("msgPasswordNotMatch")}
+                comparisonTarget={passwordState}
+              /> */}
+            <CustomRule
+              message={formatMessage("msgPasswordNotMatch")}
+              validationCallback={confirmPassword}
+            />
+          </Validator>
+        </TextBox>
+
+        <Label visible={true} />
+      </Item>
+
+      <Item>
+        <Button
+          id="button"
+          text={formatMessage("msgContinue")}
+          type="default"
+          useSubmitBehavior={true}
+        />
+        {/* <ValidationSummary id="summary" /> */}
+      </Item>
+    </Form>
+  );
+
+  const content = !(loading || errorStatus) ? <View /> : null;
+
+  const errorMessage = errorStatus ? (
+    <ErrorPopup
+      errorState={errorStatus}
+      popupPositionOf={"#change-password-form-container"}
+    />
+  ) : null;
+
+  const spinner = loading ? (
+    <Spinner
+      loadingState={loading}
+      positionOf={"#change-password-form-container"}
+    />
+  ) : null;
 
   return (
     <form
@@ -238,108 +365,9 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
       className={"change-password-form"}
       onSubmit={onSubmit}
     >
-      <Form
-        formData={formData}
-        disabled={loadingState}
-        showColonAfterLabel={false}
-        showRequiredMark={false}
-      >
-        <Item
-          dataField={"password"}
-          editorType={"dxTextBox"}
-          editorOptions={passwordEditorOptions}
-          cssClass={"input"}
-        >
-          <TextBox
-            mode={passwordMode}
-            placeholder={formatMessage("msgEnterPassword")}
-            stylingMode="filled"
-            defaultValue={passwordState}
-            onValueChanged={onPasswordChanged}
-            value={passwordState}
-            // value={passwordState}
-          >
-            <TextBoxButton
-              name="msgGenerateStrongPassword"
-              // name={formatMessage("msgGeneratePassword")}
-              location="after"
-              options={passwordGeneratorBtn}
-            />
-
-            <TextBoxButton
-              name={formatMessage("msgShowPassword")}
-              location="after"
-              options={passwordButton}
-            />
-
-            <Validator>
-              <RequiredRule message={formatMessage("msgRequiredPassword")} />
-
-              <StringLengthRule
-                message={formatMessage(
-                  "msgPwdStringLengthRuleErrMsg",
-                  minLength,
-                  maxLength
-                )}
-                min={minLength}
-                max={maxLength}
-              />
-
-              <PatternRule message={patternRuleErrMsg} pattern={regExp} />
-            </Validator>
-          </TextBox>
-
-          <Label visible={true} />
-        </Item>
-
-        <Item
-          dataField={"confirmedPassword"}
-          editorType={"dxTextBox"}
-          editorOptions={confirmedPasswordEditorOptions}
-          ssClass={"input"}
-        >
-          <TextBox
-            mode={passwordMode}
-            placeholder={formatMessage("msgConfirmPassword")}
-            stylingMode="filled"
-            value={confirmPasswordState}
-            onValueChanged={onConfirmPasswordChanged}
-          >
-            <TextBoxButton
-              name={formatMessage("msgShowConfirmedPassword")}
-              location="after"
-              options={passwordButton}
-            />
-
-            <Validator>
-              <RequiredRule
-                message={formatMessage("msgConfirmRequiredPassword")}
-              />
-
-              {/* <CompareRule
-                message={formatMessage("msgPasswordNotMatch")}
-                comparisonTarget={passwordState}
-              /> */}
-              <CustomRule
-                message={formatMessage("msgPasswordNotMatch")}
-                validationCallback={confirmPassword}
-              />
-            </Validator>
-          </TextBox>
-
-          <Label visible={true} />
-        </Item>
-
-        <Item>
-          <Button
-            id="button"
-            text={formatMessage("msgContinue")}
-            type="default"
-            useSubmitBehavior={true}
-          />
-          {/* <ValidationSummary id="summary" /> */}
-        </Item>
-      </Form>
+      {errorMessage}
+      {spinner}
+      {content}
     </form>
   );
 };

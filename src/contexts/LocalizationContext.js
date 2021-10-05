@@ -50,27 +50,42 @@ const LocalizationProvider = ({children}) => {
         isEnabledLang(result);
         isDefaultLang(result);
         isCurrentLang(result);
+
+        setLoading(false);
       })();
 
-    // !ignore &&
-    //   (async () => {
-    //     const customMessages = FetchData(
-    //       "/CustomMessages",
-    //       "ShortDicsRecordsFlatCustomMessagesObject",
-    //       "hbdb",
-    //       urlAnonymous
-    //     ).loadCustumMessageData();
+    function isEnabledLang(array) {
+      if (array.length) {
+        const result = array.filter(({isenabled}) => isenabled);
+        setLangData(() => result);
+      }
+    }
 
-    //     customMessages
-    //       .then((res) => setCustomMessagesData(() => ({[lang]: res})))
-    //       .catch((err) => {
-    //         // console.log(`CustomMessages err `, err);
-    //         setErrorStatus(err);
-    //       });
-    //   })();
+    function isCurrentLang(array) {
+      if (array.length) {
+        const {short} = array.find(({iscurrent}) => iscurrent);
 
-    // locale(lang);
-    setLoading(false);
+        const storage = sessionStorage.getItem("language");
+
+        if (!storage) return;
+
+        setLang(() => short);
+        setToLocalStorege(short);
+      }
+    }
+
+    function isDefaultLang(array) {
+      if (array.length) {
+        const result = array.find(({isdefault}) => isdefault);
+        setDefaultLang(result.short);
+
+        const storage = sessionStorage.getItem("language");
+
+        if (storage) return;
+
+        changeLocale(result.short);
+      }
+    }
 
     return () => {
       ignore = true;
@@ -130,39 +145,6 @@ const LocalizationProvider = ({children}) => {
       ignore = true;
     };
   }, [newLocalKey]);
-
-  function isEnabledLang(array) {
-    if (array.length) {
-      const result = array.filter(({isenabled}) => isenabled);
-      setLangData(() => result);
-    }
-  }
-
-  function isCurrentLang(array) {
-    if (array.length) {
-      const {short} = array.find(({iscurrent}) => iscurrent);
-
-      const storage = sessionStorage.getItem("language");
-
-      if (!storage) return;
-
-      setLang(() => short);
-      setToLocalStorege(short);
-    }
-  }
-
-  function isDefaultLang(array) {
-    if (array.length) {
-      const result = array.find(({isdefault}) => isdefault);
-      setDefaultLang(result.short);
-
-      const storage = sessionStorage.getItem("language");
-
-      if (storage) return;
-
-      changeLocale(result.short);
-    }
-  }
 
   function getFromLocalStorage(defaultValue) {
     const storage = sessionStorage.getItem("language");
