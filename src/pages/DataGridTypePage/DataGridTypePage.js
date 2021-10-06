@@ -349,6 +349,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
           {lookup && pathnameWithoutSlash === "ShortDics" && (
             <Lookup
+              searchMode={"startswith"}
               dataSource={lookDataState}
               valueExpr="id"
               displayExpr="className"
@@ -364,6 +365,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               // dataSource={{...item[dataField], ...lookup.dataSource}}
               return (
                 <Lookup
+                  searchMode={"startswith"}
                   key={i + dataField}
                   {...lookup}
                   dataSource={item[dataField]}
@@ -371,7 +373,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               );
             })}
 
-          {dataField === "status" && <Lookup dataSource={statusToggler} />}
+          {dataField === "status" && (
+            <Lookup searchMode={"startswith"} dataSource={statusToggler} />
+          )}
 
           {/* {dataField === "code" && (
             <PatternRule
@@ -484,7 +488,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const errorMessage = errorStatus ? (
     <ErrorPopup
       errorState={errorStatus}
-      popupPositionOf={`#data-grid`}
+      popupPositionOf={`#${pathnameWithoutSlash}}`}
       // popupPositionOf={`#${pathnameWithoutSlash}`}
     />
   ) : null;
@@ -498,7 +502,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       {!errorMessage && (
         <DataGrid
-          id={"data-grid"}
+          id={pathnameWithoutSlash}
           dataSource={APIData}
           // keyExpr="id"
           repaintChangesOnly={true}

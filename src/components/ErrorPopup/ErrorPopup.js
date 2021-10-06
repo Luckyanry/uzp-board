@@ -47,6 +47,7 @@ const ErrorPopup = ({errorState, popupPositionOf = "#root", errorTitle}) => {
   const markup = () => {
     // console.log(`in errorObj `, errorObj);
     const {
+      JSONErrorMessage,
       ScriptFile,
       VBErr: {Description, Number, Source},
     } = errorObj;
@@ -56,6 +57,13 @@ const ErrorPopup = ({errorState, popupPositionOf = "#root", errorTitle}) => {
         <p className={"error-text"}>
           URL: <span className={"error-desc"}>{window.location.href}</span>
         </p>
+        {JSONErrorMessage && (
+          <p className={"error-text"}>
+            JSONErrorMessage:{" "}
+            <span className={"error-desc"}>{JSONErrorMessage}</span>
+            &nbsp;
+          </p>
+        )}
         {ScriptFile && (
           <p className={"error-text"}>
             ScriptFile: <span className={"error-desc"}>{ScriptFile}</span>

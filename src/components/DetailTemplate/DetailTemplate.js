@@ -12,11 +12,11 @@ import DataGrid, {
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
-import {ErrorPopup} from "..";
+// import {ErrorPopup} from "..";
 
 import "./DetailTemplate.scss";
 import {
-  getFromSessionStorege,
+  // getFromSessionStorege,
   setToSessionStorege,
 } from "../../helpers/functions";
 import spinnerIcon from "../Spinner/icons/spinner.svg";
@@ -30,8 +30,8 @@ const DetailTemplate = ({data: {data, component}}) => {
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
 
-  const [errorStatus, setErrorStatus] = useState(false);
-  const [errorTitle, setErrorTitle] = useState();
+  // const [errorStatus, setErrorStatus] = useState(false);
+  // const [errorTitle, setErrorTitle] = useState();
 
   const {formatMessage} = useLocalization();
   const focusedRowTitle = data.name;
@@ -56,11 +56,11 @@ const DetailTemplate = ({data: {data, component}}) => {
       setAPIData(data.columnsjson.columns);
       setShortDicsRecordsDataState(shortDicsRecords);
 
-      const res = getFromSessionStorege("error", "");
-      if (res.JSONErrorMessage) {
-        setErrorStatus(true);
-        setErrorTitle(formatMessage("msgErrServerFetch"));
-      }
+      // const res = getFromSessionStorege("error", "");
+      // if (res.JSONErrorMessage) {
+      //   setErrorStatus(true);
+      //   setErrorTitle(formatMessage("msgErrServerFetch"));
+      // }
     }
 
     if (idTriger === "recordLog") {
@@ -75,8 +75,8 @@ const DetailTemplate = ({data: {data, component}}) => {
         .then(({data}) => setAPIData(data))
         .catch((error) => {
           setToSessionStorege("error", error);
-          setErrorStatus(error);
-          setErrorTitle(formatMessage("msgErrServerFetch"));
+          // setErrorStatus(error);
+          // setErrorTitle(formatMessage("msgErrServerFetch"));
         });
 
       const fieldLog = FetchData(
@@ -94,85 +94,81 @@ const DetailTemplate = ({data: {data, component}}) => {
     // eslint-disable-next-line
   }, []);
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={`#${component._$element[0].id}`}
-      errorTitle={errorTitle}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={`#detail-template-grid`}
+  //     errorTitle={errorTitle}
+  //   />
+  // ) : null;
 
   return (
     <div id={"detail-template"}>
-      {errorMessage}
+      <DataGrid
+        id={"detail-template-grid"}
+        columns={APIData}
+        dataSource={shortDicsRecordsDataState}
+        repaintChangesOnly={true}
+        remoteOperations={false}
+        // rows
+        focusedRowEnabled={true}
+        // columns
+        showColumnLines={true}
+        columnMinWidth={60}
+        columnAutoWidth={true}
+        columnHidingEnabled={false}
+        allowColumnResizing={true}
+        allowColumnReordering={true}
+        // appearance
+        hoverStateEnabled={true}
+        wordWrapEnabled={true}
+        // functions
+      >
+        <ColumnChooser
+          enabled={true}
+          allowSearch={true}
+          width={300}
+          height={320}
+          title={formatMessage("msgColomnChooser")}
+          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+        />
 
-      {!errorMessage && (
-        <DataGrid
-          id={component._$element[0].id}
-          columns={APIData}
-          dataSource={shortDicsRecordsDataState}
-          repaintChangesOnly={true}
-          remoteOperations={false}
-          // rows
-          focusedRowEnabled={true}
-          // columns
-          showColumnLines={true}
-          columnMinWidth={60}
-          columnAutoWidth={true}
-          columnHidingEnabled={false}
-          allowColumnResizing={true}
-          allowColumnReordering={true}
-          // appearance
-          hoverStateEnabled={true}
-          wordWrapEnabled={true}
-          // functions
-        >
-          <ColumnChooser
-            enabled={true}
-            allowSearch={true}
-            width={300}
-            height={320}
-            title={formatMessage("msgColomnChooser")}
-            emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-          />
+        <StateStoring
+          enabled={false}
+          type="localStorage"
+          storageKey="storage"
+        />
 
-          <StateStoring
-            enabled={false}
-            type="localStorage"
-            storageKey="storage"
-          />
+        <Editing
+          mode="batch"
+          popup={popupOpt}
+          allowAdding={allowAdding}
+          allowDeleting={allowDeleting}
+          allowUpdating={allowUpdating}
+          startEditAction="dblClick"
+          useIcons={true}
+        />
 
-          <Editing
-            mode="batch"
-            popup={popupOpt}
-            allowAdding={allowAdding}
-            allowDeleting={allowDeleting}
-            allowUpdating={allowUpdating}
-            startEditAction="dblClick"
-            useIcons={true}
-          />
-
-          <Paging defaultPageSize={10} enabled={true} />
-          <Pager
-            showPageSizeSelector={true}
-            showNavigationButtons={true}
-            showInfo={true}
-            visible={true}
-            allowedPageSizes={[10, 20, 50, 100, "all"]}
-            showAllItem={true}
-          />
-          <LoadPanel
-            deferRendering={true}
-            enabled="true"
-            shading={false}
-            showPane={false}
-            width={400}
-            height={140}
-            message={formatMessage("msgLoadingMessage")}
-            indicatorSrc={spinnerIcon}
-          />
-        </DataGrid>
-      )}
+        <Paging defaultPageSize={10} enabled={true} />
+        <Pager
+          showPageSizeSelector={true}
+          showNavigationButtons={true}
+          showInfo={true}
+          visible={true}
+          allowedPageSizes={[10, 20, 50, 100, "all"]}
+          showAllItem={true}
+        />
+        <LoadPanel
+          deferRendering={true}
+          enabled="true"
+          shading={false}
+          showPane={false}
+          width={400}
+          height={140}
+          message={formatMessage("msgLoadingMessage")}
+          indicatorSrc={spinnerIcon}
+        />
+      </DataGrid>
     </div>
   );
 };

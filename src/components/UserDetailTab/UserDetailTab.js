@@ -159,6 +159,7 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
               // dataSource={{...item[dataField], ...lookup.dataSource}}
               return (
                 <Lookup
+                  searchMode={"startswith"}
                   key={i + dataField}
                   {...lookup}
                   dataSource={item[dataField]}

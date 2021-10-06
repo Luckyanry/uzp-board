@@ -1,4 +1,5 @@
 import CustomStore from "devextreme/data/custom_store";
+import {alert} from "devextreme/ui/dialog";
 import "whatwg-fetch";
 // import {getErrorData} from "../components/ErrorPopup/ErrorPopup";
 
@@ -221,28 +222,54 @@ export const FetchData = (
       // cache: false,
       credentials: "include",
     };
-
+    // debugger;
     if (method === "GET") {
       const response = await fetch(`${url}&${params}`, getOptions);
+      console.dir(response);
+      console.log("header ", response.headers.get("content-type"));
 
       if (response.ok) {
         return await response
           .json()
           .then((data) => responseData(data))
           .catch((err) => {
-            console.error(`
-              ${err}, 
+            // console.dir(err);
+            alert(
+              `
+              ${err} 
               ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
               Fetch into url: ${url}
               Method: GET
               ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
               ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
-            `);
+            `,
+              "ERROR!"
+            );
+
+            console.error(`
+                ${err} 
+                ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
+                Fetch into url: ${url}
+                Method: GET
+                ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
+                ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
+              `);
           });
+      } else {
+        return await response
+          .json()
+          .then((data) =>
+            alert(
+              "<font color='red'><b>" + data.JSONErrorMessage + "</b></font>",
+              "ERROR!"
+            )
+          )
+          .catch((err) => console.log(`err else catch `, err));
       }
     }
 
     const response = await fetch(url, postOptions);
+    console.log("response POST ", response);
 
     if (response.ok) {
       return await response
@@ -250,7 +277,7 @@ export const FetchData = (
         .then((data) => responseData(data))
         .catch((err) => {
           console.error(`
-            ${err}, 
+            ${err} 
             ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
             Fetch into url: ${url}
             Method: POST
@@ -258,6 +285,12 @@ export const FetchData = (
             ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
           `);
         });
+    } else {
+      console.dir(response);
+      // alert(
+      //   "<font color='red'><b>" + JSONErrorMessage + "</b></font>",
+      //   "ERROR!"
+      // );
     }
   }
 
@@ -284,6 +317,10 @@ export const FetchData = (
         return data;
       }
       console.error(`responseData object err `, data);
+      alert(
+        "<font color='red'><b>" + data.VBErr.Description + "</b></font>",
+        "ERROR!"
+      );
       setToSessionStorege("error", data);
       // getErrorData(data);
 

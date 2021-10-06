@@ -234,6 +234,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
               return (
                 <Lookup
+                  searchMode={"startswith"}
                   key={i + dataField}
                   {...lookup}
                   dataSource={item[dataField]}
@@ -241,7 +242,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
               );
             })}
 
-          {dataField === "status" && <Lookup dataSource={statusToggler} />}
+          {dataField === "status" && (
+            <Lookup searchMode={"startswith"} dataSource={statusToggler} />
+          )}
           {/* {dataField === "code" && (
             <PatternRule
               message={formatMessage(message, localPageAbbreviation)}
