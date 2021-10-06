@@ -22,14 +22,14 @@ import {getLookupParamsForURL} from "../../helpers/functions";
 
 import spinner from "../Spinner/icons/spinner.svg";
 import "./UserDetailTab.scss";
-import {ErrorPopup} from "..";
+// import {ErrorPopup} from "..";
 
 const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
-  const [errorStatus, setErrorStatus] = useState(null);
+  // const [errorStatus, setErrorStatus] = useState(null);
 
   const {formatMessage} = useLocalization();
 
@@ -54,8 +54,8 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
 
       const result = await fetchColumnsSchemaData
         ._loadFunc()
-        .then((res) => res.data)
-        .catch((err) => setErrorStatus(err));
+        .then((res) => res.data);
+      // .catch((err) => setErrorStatus(err));
 
       setColumnsSchemaData(result);
       getAPIData();
@@ -93,8 +93,8 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
 
       await lookData.store
         ._loadFunc()
-        .then((res) => (lookData.store.__rawData = [...res.data]))
-        .catch((err) => setErrorStatus(err));
+        .then((res) => (lookData.store.__rawData = [...res.data]));
+      // .catch((err) => setErrorStatus(err));
 
       setLookDataState((prev) =>
         dataField ? [...prev, {[dataField]: lookData}] : lookData
@@ -185,99 +185,99 @@ const UserDetailTab = ({user: {GID, UserName}, UserGroups}) => {
     // console.dir(e);
   }
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={`#${pathnameWithoutSlash}`}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={`#${pathnameWithoutSlash}`}
+  //   />
+  // ) : null;
 
   return (
     <>
-      {errorMessage}
+      {/* {errorMessage}
 
-      {!errorMessage && (
-        <DataGrid
-          id={pathnameWithoutSlash}
-          // columns={columnsSchemaData}
-          dataSource={APIData}
-          repaintChangesOnly={true}
-          remoteOperations={false}
-          // showBorders={true}
-          // rows
-          focusedRowEnabled={true}
-          showRowLines={true}
-          // columns
-          showColumnLines={false}
-          columnMinWidth={80}
-          columnAutoWidth={true}
-          columnHidingEnabled={false}
-          allowColumnResizing={true}
-          allowColumnReordering={true}
-          // appearance
-          hoverStateEnabled={true}
-          wordWrapEnabled={true}
-          showBorders={true}
-          // functions
-          onInitNewRow={initNewRow}
-          onDataErrorOccurred={onDataErrorEvent}
-        >
-          <ColumnChooser
-            enabled={true}
-            allowSearch={true}
-            width={300}
-            height={320}
-            title={formatMessage("msgColomnChooser")}
-            emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-          />
-          <Scrolling mode="standard" useNative="true" />
-          <StateStoring
-            enabled={false}
-            type="localStorage"
-            storageKey="storage"
-          />
+      {!errorMessage && ( */}
+      <DataGrid
+        id={pathnameWithoutSlash}
+        // columns={columnsSchemaData}
+        dataSource={APIData}
+        repaintChangesOnly={true}
+        remoteOperations={false}
+        // showBorders={true}
+        // rows
+        focusedRowEnabled={true}
+        showRowLines={true}
+        // columns
+        showColumnLines={false}
+        columnMinWidth={80}
+        columnAutoWidth={true}
+        columnHidingEnabled={false}
+        allowColumnResizing={true}
+        allowColumnReordering={true}
+        // appearance
+        hoverStateEnabled={true}
+        wordWrapEnabled={true}
+        showBorders={true}
+        // functions
+        onInitNewRow={initNewRow}
+        onDataErrorOccurred={onDataErrorEvent}
+      >
+        <ColumnChooser
+          enabled={true}
+          allowSearch={true}
+          width={300}
+          height={320}
+          title={formatMessage("msgColomnChooser")}
+          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+        />
+        <Scrolling mode="standard" useNative="true" />
+        <StateStoring
+          enabled={false}
+          type="localStorage"
+          storageKey="storage"
+        />
 
-          <Editing
-            mode="batch"
-            // mode="popup"
-            popup={popupOpt}
-            allowAdding={true}
-            allowDeleting={true}
-            allowUpdating={false}
-            useIcons={true}
-            startEditAction="dblClick"
-          />
+        <Editing
+          mode="batch"
+          // mode="popup"
+          popup={popupOpt}
+          allowAdding={true}
+          allowDeleting={true}
+          allowUpdating={false}
+          useIcons={true}
+          startEditAction="dblClick"
+        />
 
-          {customMarkupRender()}
+        {customMarkupRender()}
 
-          <Column type="buttons">
-            <Button
-              name="delete"
-              hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
-            />
-          </Column>
+        <Column type="buttons">
+          <Button
+            name="delete"
+            hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
+          />
+        </Column>
 
-          <Paging defaultPageSize={5} enabled={true} />
-          <Pager
-            showPageSizeSelector={true}
-            showNavigationButtons={true}
-            showInfo={true}
-            visible={true}
-            allowedPageSizes={[5, 20, 50, "all"]}
-            showAllItem={true}
-          />
-          <LoadPanel
-            deferRendering={true}
-            enabled="true"
-            shading={false}
-            showPane={false}
-            width={400}
-            height={140}
-            message={formatMessage("msgLoadingMessage")}
-            indicatorSrc={spinner}
-          />
-        </DataGrid>
-      )}
+        <Paging defaultPageSize={5} enabled={true} />
+        <Pager
+          showPageSizeSelector={true}
+          showNavigationButtons={true}
+          showInfo={true}
+          visible={true}
+          allowedPageSizes={[5, 20, 50, "all"]}
+          showAllItem={true}
+        />
+        <LoadPanel
+          deferRendering={true}
+          enabled="true"
+          shading={false}
+          showPane={false}
+          width={400}
+          height={140}
+          message={formatMessage("msgLoadingMessage")}
+          indicatorSrc={spinner}
+        />
+      </DataGrid>
+      {/* )} */}
     </>
   );
 };

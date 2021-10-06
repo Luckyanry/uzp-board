@@ -13,7 +13,10 @@ import notify from "devextreme/ui/notify";
 import {resetPassword} from "../../api/auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {setToSessionStorege} from "../../helpers/functions";
-import {ErrorPopup, Spinner} from "..";
+import {
+  // ErrorPopup,
+  Spinner,
+} from "..";
 
 import "./ResetPasswordForm.scss";
 
@@ -22,7 +25,7 @@ const submitButtonAttributes = {class: "submit-button"};
 export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
-  const [errorTitle, setErrorTitle] = useState();
+  // const [errorTitle, setErrorTitle] = useState();
   const [email, setEmail] = useState(null);
 
   const history = useHistory();
@@ -56,7 +59,7 @@ export default function ResetPasswordForm() {
         if (!isOk && errorAPIMsg && !ignore) {
           setLoading(false);
           setErrorStatus(true);
-          setErrorTitle(formatMessage(message));
+          // setErrorTitle(formatMessage(message));
 
           return;
         }
@@ -147,13 +150,13 @@ export default function ResetPasswordForm() {
 
   const content = !(loading || errorStatus) ? <View /> : null;
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={"#reset-password-form-container"}
-      errorTitle={errorTitle}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={"#reset-password-form-container"}
+  //     errorTitle={errorTitle}
+  //   />
+  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -165,7 +168,7 @@ export default function ResetPasswordForm() {
       className={"reset-password-form"}
       onSubmit={onFormSubmit}
     >
-      {errorMessage}
+      {/* {errorMessage} */}
       {spinner}
       {content}
     </form>

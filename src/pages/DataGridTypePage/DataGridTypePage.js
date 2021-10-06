@@ -36,12 +36,15 @@ import {
   checkIfArrIncludesValue,
   createCustomMsg,
   customPageAbbreviationMsg,
-  getFromSessionStorege,
+  // getFromSessionStorege,
   getLookupParamsForURL,
 } from "../../helpers/functions";
-import {ErrorPopup, StatusLangToggler} from "../../components";
-import {DetailTemplate} from "../../components";
-import {UserDetailTab} from "../../components";
+import {
+  StatusLangToggler,
+  DetailTemplate,
+  UserDetailTab,
+} from "../../components";
+// import {ErrorPopup} from "../../components";
 
 import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./DataGridTypePage.scss";
@@ -60,7 +63,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
 
-  const [errorStatus, setErrorStatus] = useState(null);
+  // const [errorStatus, setErrorStatus] = useState(null);
 
   const {formatMessage} = useLocalization();
 
@@ -105,8 +108,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       const columns = await fetchColumnsSchemaData
         ._loadFunc()
-        .then((res) => res.data)
-        .catch((err) => setErrorStatus(err));
+        .then((res) => res.data);
+      // .catch((err) => setErrorStatus(err));
 
       setColumnsSchemaData(columns);
 
@@ -126,9 +129,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           `ShortDicsRecordsFlat&@name=${checkSpParam}FormSchema`
         ).fetchFormSchemaData();
 
-        await fetchFormSchemaData
-          .then((res) => setFormSchemaData(res.data[0]))
-          .catch((err) => setErrorStatus(err));
+        await fetchFormSchemaData.then((res) => setFormSchemaData(res.data[0]));
+        // .catch((err) => setErrorStatus(err));
       }
 
       const lookupParamsForURL = getLookupParamsForURL(columns);
@@ -155,10 +157,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           "wisdb"
         ).usersFetchData;
 
-        const res = getFromSessionStorege("error", "");
-        if (res.JSONErrorMessage) {
-          setErrorStatus(true);
-        }
+        // const res = getFromSessionStorege("error", "");
+        // if (res.JSONErrorMessage) {
+        //   setErrorStatus(true);
+        // }
 
         return setAPIData(usersFetchData);
       }
@@ -189,10 +191,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         setAllowDeleting(false);
         setAllowUpdating(false);
 
-        const res = getFromSessionStorege("error", "");
-        if (res.JSONErrorMessage) {
-          setErrorStatus(true);
-        }
+        // const res = getFromSessionStorege("error", "");
+        // if (res.JSONErrorMessage) {
+        //   setErrorStatus(true);
+        // }
 
         return setAPIData(fetchData);
       }
@@ -203,10 +205,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "hbdb"
       ).fetchColumnsSchemaData;
 
-      const res = getFromSessionStorege("error", "");
-      if (res.JSONErrorMessage) {
-        setErrorStatus(true);
-      }
+      // const res = getFromSessionStorege("error", "");
+      // if (res.JSONErrorMessage) {
+      //   setErrorStatus(true);
+      // }
 
       return setAPIData(fetchData);
     }
@@ -224,8 +226,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
       await lookData.store
         ._loadFunc()
-        .then((res) => (lookData.store.__rawData = [...res.data]))
-        .catch((err) => setErrorStatus(err));
+        .then((res) => (lookData.store.__rawData = [...res.data]));
+      // .catch((err) => setErrorStatus(err));
 
       setLookDataState((prev) =>
         dataField ? [...prev, {[dataField]: lookData}] : lookData
@@ -485,139 +487,139 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     );
   }
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={`#${pathnameWithoutSlash}}`}
-      // popupPositionOf={`#${pathnameWithoutSlash}`}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={`#${pathnameWithoutSlash}}`}
+  //     // popupPositionOf={`#${pathnameWithoutSlash}`}
+  //   />
+  // ) : null;
 
   return (
     <>
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
-      {errorMessage}
+      {/* {errorMessage}
 
-      {!errorMessage && (
-        <DataGrid
-          id={pathnameWithoutSlash}
-          dataSource={APIData}
-          // keyExpr="id"
-          repaintChangesOnly={true}
-          remoteOperations={false}
-          showBorders={false}
-          // rows
-          focusedRowEnabled={true}
-          showRowLines={true}
-          // rowAlternationEnabled={true}
-          // focusedRowIndex={0}
-          // columns
-          showColumnLines={false}
-          // columnMinWidth={130}
-          columnAutoWidth={true}
-          columnHidingEnabled={false}
-          allowColumnResizing={true}
-          allowColumnReordering={true}
-          // appearance
-          hoverStateEnabled={true}
-          wordWrapEnabled={true}
-          // functions
-          onInitNewRow={initNewRow}
-          onFocusedCellChanging={onFocusedCellChanging}
-          // onContentReady={selectFirstRow}
-          // onOptionChanged={handleOptionChange}
-        >
-          <Scrolling mode="standard" useNative="true" />
-          <SearchPanel visible={true} width={250} />
-          {/* <HeaderFilter visible={true} allowSearch={true} /> */}
-          <ColumnChooser
-            enabled={true}
-            allowSearch={true}
-            width={300}
-            height={320}
-            title={formatMessage("msgColomnChooser")}
-            emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+      {!errorMessage && ( */}
+      <DataGrid
+        id={pathnameWithoutSlash}
+        dataSource={APIData}
+        // keyExpr="id"
+        repaintChangesOnly={true}
+        remoteOperations={false}
+        showBorders={false}
+        // rows
+        focusedRowEnabled={true}
+        showRowLines={true}
+        // rowAlternationEnabled={true}
+        // focusedRowIndex={0}
+        // columns
+        showColumnLines={false}
+        // columnMinWidth={130}
+        columnAutoWidth={true}
+        columnHidingEnabled={false}
+        allowColumnResizing={true}
+        allowColumnReordering={true}
+        // appearance
+        hoverStateEnabled={true}
+        wordWrapEnabled={true}
+        // functions
+        onInitNewRow={initNewRow}
+        onFocusedCellChanging={onFocusedCellChanging}
+        // onContentReady={selectFirstRow}
+        // onOptionChanged={handleOptionChange}
+      >
+        <Scrolling mode="standard" useNative="true" />
+        <SearchPanel visible={true} width={250} />
+        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
+        <ColumnChooser
+          enabled={true}
+          allowSearch={true}
+          width={300}
+          height={320}
+          title={formatMessage("msgColomnChooser")}
+          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+        />
+        <StateStoring
+          enabled={false}
+          type="localStorage"
+          storageKey="storage"
+        />
+
+        <FilterRow visible={true} />
+
+        {checkIfArrIncludesValue(
+          ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
+          pathnameWithoutSlash
+        ) ? (
+          editorCustomMarkup()
+        ) : (
+          <Editing
+            mode="popup"
+            popup={
+              checkIfArrIncludesValue(
+                ["personObjects", "legals"],
+                pathnameWithoutSlash
+              )
+                ? popupPersonAndLegalOptions
+                : popupGeneralOptions
+            }
+            allowAdding={allowAdding}
+            allowDeleting={allowDeleting}
+            allowUpdating={allowUpdating}
+            form={
+              checkIfArrIncludesValue(
+                ["personObjects", "legals"],
+                pathnameWithoutSlash
+              )
+                ? formSchemaData
+                : null
+            }
+            useIcons={true}
           />
-          <StateStoring
-            enabled={false}
-            type="localStorage"
-            storageKey="storage"
+        )}
+
+        {customMarkupRender()}
+
+        {(pathnameWithoutSlash === "ShortDics" ||
+          pathnameWithoutSlash === "recordLog") && (
+          <MasterDetail enabled={true} component={DetailTemplate} />
+        )}
+
+        <Column type="buttons" width={110}>
+          <Button
+            name="edit"
+            hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
           />
-
-          <FilterRow visible={true} />
-
-          {checkIfArrIncludesValue(
-            ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
-            pathnameWithoutSlash
-          ) ? (
-            editorCustomMarkup()
-          ) : (
-            <Editing
-              mode="popup"
-              popup={
-                checkIfArrIncludesValue(
-                  ["personObjects", "legals"],
-                  pathnameWithoutSlash
-                )
-                  ? popupPersonAndLegalOptions
-                  : popupGeneralOptions
-              }
-              allowAdding={allowAdding}
-              allowDeleting={allowDeleting}
-              allowUpdating={allowUpdating}
-              form={
-                checkIfArrIncludesValue(
-                  ["personObjects", "legals"],
-                  pathnameWithoutSlash
-                )
-                  ? formSchemaData
-                  : null
-              }
-              useIcons={true}
-            />
-          )}
-
-          {customMarkupRender()}
-
-          {(pathnameWithoutSlash === "ShortDics" ||
-            pathnameWithoutSlash === "recordLog") && (
-            <MasterDetail enabled={true} component={DetailTemplate} />
-          )}
-
-          <Column type="buttons" width={110}>
-            <Button
-              name="edit"
-              hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
-            />
-            <Button
-              name="delete"
-              hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
-            />
-          </Column>
-
-          <Paging defaultPageSize={10} enabled={true} />
-          <Pager
-            showPageSizeSelector={true}
-            showNavigationButtons={true}
-            showInfo={true}
-            visible={true}
-            allowedPageSizes={[10, 20, 50, 100, "all"]}
-            showAllItem={true}
+          <Button
+            name="delete"
+            hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
-          <LoadPanel
-            deferRendering={true}
-            enabled="true"
-            shading={false}
-            showPane={false}
-            width={400}
-            height={140}
-            message={formatMessage("msgLoadingMessage")}
-            indicatorSrc={spinner}
-          />
-        </DataGrid>
-      )}
+        </Column>
+
+        <Paging defaultPageSize={10} enabled={true} />
+        <Pager
+          showPageSizeSelector={true}
+          showNavigationButtons={true}
+          showInfo={true}
+          visible={true}
+          allowedPageSizes={[10, 20, 50, 100, "all"]}
+          showAllItem={true}
+        />
+        <LoadPanel
+          deferRendering={true}
+          enabled="true"
+          shading={false}
+          showPane={false}
+          width={400}
+          height={140}
+          message={formatMessage("msgLoadingMessage")}
+          indicatorSrc={spinner}
+        />
+      </DataGrid>
+      {/* )} */}
     </>
   );
 };

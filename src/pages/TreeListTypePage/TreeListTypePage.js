@@ -29,7 +29,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
 import DatailTreeListTab from "../../components/DetailTreeListTab/DetailTreeListTab";
-import {ErrorPopup} from "../../components";
+// import {ErrorPopup} from "../../components";
 import {
   checkIfArrIncludesValue,
   createCustomMsg,
@@ -54,7 +54,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [formData, setFormData] = useState(null);
   const [groupItemCaption, setGroupItemCaption] = useState("");
 
-  const [errorStatus, setErrorStatus] = useState(null);
+  // const [errorStatus, setErrorStatus] = useState(null);
 
   const {formatMessage} = useLocalization();
 
@@ -97,8 +97,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
       const result = await fetchColumnsSchemaData
         ._loadFunc()
-        .then((res) => res.data)
-        .catch((err) => setErrorStatus(err));
+        .then((res) => res.data);
+      // .catch((err) => setErrorStatus(err));
 
       setColumnsSchemaData(result);
       getAPIData();
@@ -125,8 +125,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
       await lookData.store
         ._loadFunc()
-        .then((res) => (lookData.store.__rawData = [...res.data]))
-        .catch((err) => setErrorStatus(err));
+        .then((res) => (lookData.store.__rawData = [...res.data]));
+      // .catch((err) => setErrorStatus(err));
 
       setLookDataState((prev) =>
         dataField ? [...prev, {[dataField]: lookData}] : lookData
@@ -330,132 +330,132 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={`#${pathnameWithoutSlash}`}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={`#${pathnameWithoutSlash}`}
+  //   />
+  // ) : null;
 
   return (
     <div id="treelist-page-wrapper" className="page-wrapper">
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
-      {errorMessage}
+      {/* {errorMessage}
 
-      {!errorMessage && (
-        <TreeList
-          id={pathnameWithoutSlash}
-          dataSource={APIData}
-          rootValue={0}
-          keyExpr="id"
-          parentIdExpr="pid"
-          // defaultExpandedRowKeys={[1, 3, 5]}
-          // rows
-          showRowLines={true}
-          focusedRowEnabled={true}
-          rowAlternationEnabled={false}
-          // columns
-          showColumnLines={false}
-          columnMinWidth={60}
-          columnAutoWidth={true}
-          columnHidingEnabled={false}
-          allowColumnResizing={true}
-          allowColumnReordering={true}
-          // appearance
-          hoverStateEnabled={true}
-          wordWrapEnabled={true}
-          virtualModeEnabled={true}
-          // functions
-          // remoteOperations={{}}
-          autoExpandAll={toggler}
-          onInitNewRow={initNewRow}
-          // onEditorPreparing={onEditorPreparing}
-          onFocusedCellChanging={onFocusedCellChanging}
-          onToolbarPreparing={onToolbarPreparing}
-          // onToolbarPreparing={onToolbarPreparing}
-        >
-          <Scrolling mode="standard" />
-          <SearchPanel visible={true} />
-          {/* <HeaderFilter visible={true} allowSearch={true} /> */}
-          <ColumnChooser
-            enabled={true}
-            allowSearch={true}
-            width={300}
-            height={365}
-            title={formatMessage("msgColomnChooser")}
-            emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+      {!errorMessage && ( */}
+      <TreeList
+        id={pathnameWithoutSlash}
+        dataSource={APIData}
+        rootValue={0}
+        keyExpr="id"
+        parentIdExpr="pid"
+        // defaultExpandedRowKeys={[1, 3, 5]}
+        // rows
+        showRowLines={true}
+        focusedRowEnabled={true}
+        rowAlternationEnabled={false}
+        // columns
+        showColumnLines={false}
+        columnMinWidth={60}
+        columnAutoWidth={true}
+        columnHidingEnabled={false}
+        allowColumnResizing={true}
+        allowColumnReordering={true}
+        // appearance
+        hoverStateEnabled={true}
+        wordWrapEnabled={true}
+        virtualModeEnabled={true}
+        // functions
+        // remoteOperations={{}}
+        autoExpandAll={toggler}
+        onInitNewRow={initNewRow}
+        // onEditorPreparing={onEditorPreparing}
+        onFocusedCellChanging={onFocusedCellChanging}
+        onToolbarPreparing={onToolbarPreparing}
+        // onToolbarPreparing={onToolbarPreparing}
+      >
+        <Scrolling mode="standard" />
+        <SearchPanel visible={true} />
+        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
+        <ColumnChooser
+          enabled={true}
+          allowSearch={true}
+          width={300}
+          height={365}
+          title={formatMessage("msgColomnChooser")}
+          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+        />
+        <FilterRow visible={true} />
+        <StateStoring
+          enabled={false}
+          type="localStorage"
+          storageKey="storage"
+        />
+
+        {pathnameWithoutSlash === "auditSettingsMaster" ? (
+          editorCustomMarkup()
+        ) : pathnameWithoutSlash === "soato" ? (
+          <Editing
+            mode="batch"
+            popup={popupOpt}
+            allowAdding={true}
+            allowUpdating={true}
+            allowDeleting={true}
+            useIcons={true}
+            startEditAction="dblClick"
           />
-          <FilterRow visible={true} />
-          <StateStoring
-            enabled={false}
-            type="localStorage"
-            storageKey="storage"
+        ) : (
+          <Editing
+            mode="popup"
+            popup={popupOpt}
+            allowAdding={true}
+            allowUpdating={true}
+            allowDeleting={true}
+            useIcons={true}
           />
+        )}
 
-          {pathnameWithoutSlash === "auditSettingsMaster" ? (
-            editorCustomMarkup()
-          ) : pathnameWithoutSlash === "soato" ? (
-            <Editing
-              mode="batch"
-              popup={popupOpt}
-              allowAdding={true}
-              allowUpdating={true}
-              allowDeleting={true}
-              useIcons={true}
-              startEditAction="dblClick"
-            />
-          ) : (
-            <Editing
-              mode="popup"
-              popup={popupOpt}
-              allowAdding={true}
-              allowUpdating={true}
-              allowDeleting={true}
-              useIcons={true}
-            />
-          )}
+        {customMarkupRender()}
 
-          {customMarkupRender()}
-
-          <Column type="buttons" width={110}>
-            <TreeListButton
-              name="add"
-              hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
-            />
-            <TreeListButton
-              name="edit"
-              hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
-            />
-            <TreeListButton
-              name="delete"
-              hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
-            />
-          </Column>
-
-          <Paging defaultPageSize={10} enabled={true} />
-          <Pager
-            showPageSizeSelector={true}
-            showInfo={true}
-            showNavigationButtons={true}
-            allowedPageSizes={[10, 20, 50, 100, "all"]}
-            showAllItem={true}
-            visible={true}
+        <Column type="buttons" width={110}>
+          <TreeListButton
+            name="add"
+            hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
           />
-          <LoadPanel
-            deferRendering={true}
-            enabled="true"
-            shading={true}
-            // shadingColor={"rgba(0, 0, 0, 0.5)"}
-            showPane={false}
-            width={400}
-            height={140}
-            message={formatMessage("msgLoadingMessage")}
-            indicatorSrc={spinner}
+          <TreeListButton
+            name="edit"
+            hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
           />
-        </TreeList>
-      )}
+          <TreeListButton
+            name="delete"
+            hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
+          />
+        </Column>
+
+        <Paging defaultPageSize={10} enabled={true} />
+        <Pager
+          showPageSizeSelector={true}
+          showInfo={true}
+          showNavigationButtons={true}
+          allowedPageSizes={[10, 20, 50, 100, "all"]}
+          showAllItem={true}
+          visible={true}
+        />
+        <LoadPanel
+          deferRendering={true}
+          enabled="true"
+          shading={true}
+          // shadingColor={"rgba(0, 0, 0, 0.5)"}
+          showPane={false}
+          width={400}
+          height={140}
+          message={formatMessage("msgLoadingMessage")}
+          indicatorSrc={spinner}
+        />
+      </TreeList>
+      {/* )} */}
     </div>
   );
 };

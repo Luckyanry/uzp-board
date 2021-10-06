@@ -8,7 +8,11 @@ import {changePassword} from "../../api/auth";
 import {FetchData} from "../../api/pages-fetch";
 import {urlAnonymous} from "../../api/url-config";
 import {setToSessionStorege} from "../../helpers/functions";
-import {ErrorPopup, Spinner, PasswordGenerator} from "..";
+import {
+  // ErrorPopup,
+  Spinner,
+  PasswordGenerator,
+} from "..";
 // import PasswordGenerator from "../PasswordGenerator/PasswordGenerator";
 
 import "./ChangePasswordForm.scss";
@@ -16,7 +20,7 @@ import "./ChangePasswordForm.scss";
 export default function ChangePasswordForm() {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
-  const [errorTitle, setErrorTitle] = useState();
+  // const [errorTitle, setErrorTitle] = useState();
   const [token, setToken] = useState("");
   const [password, setPassword] = useState(null);
 
@@ -32,7 +36,11 @@ export default function ChangePasswordForm() {
 
       if (token && !ignore) {
         const result = await changePassword(password, token);
-        const {isOk, message, errorAPIMsg} = result;
+        const {
+          isOk,
+          // message,
+          errorAPIMsg,
+        } = result;
 
         setToSessionStorege("error", errorAPIMsg);
         setLoading(false);
@@ -49,7 +57,7 @@ export default function ChangePasswordForm() {
         }
 
         setErrorStatus(true);
-        setErrorTitle(formatMessage(message));
+        // setErrorTitle(formatMessage(message));
       }
     };
 
@@ -103,7 +111,7 @@ export default function ChangePasswordForm() {
         setToSessionStorege("error", error);
 
         setErrorStatus(true);
-        setErrorTitle(formatMessage("msgErrFaildToResetPass"));
+        // setErrorTitle(formatMessage("msgErrFaildToResetPass"));
       }
     };
 
@@ -176,13 +184,13 @@ export default function ChangePasswordForm() {
 
   const content = !(loading || errorStatus) ? <View /> : null;
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={"#change-password-form"}
-      errorTitle={errorTitle}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={"#change-password-form"}
+  //     errorTitle={errorTitle}
+  //   />
+  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -190,7 +198,7 @@ export default function ChangePasswordForm() {
 
   return (
     <div id="change-password-form">
-      {errorMessage}
+      {/* {errorMessage} */}
       {spinner}
       {content}
     </div>

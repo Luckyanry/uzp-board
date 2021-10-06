@@ -18,7 +18,10 @@ import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
 import "./PasswordGenerator.scss";
-import {ErrorPopup, Spinner} from "..";
+import {
+  // ErrorPopup,
+  Spinner,
+} from "..";
 
 const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const [passwordState, setPasswordState] = useState("");
@@ -345,12 +348,12 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
 
   const content = !(loading || errorStatus) ? <View /> : null;
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={"#change-password-form-container"}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={"#change-password-form-container"}
+  //   />
+  // ) : null;
 
   const spinner = loading ? (
     <Spinner
@@ -365,7 +368,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
       className={"change-password-form"}
       onSubmit={onSubmit}
     >
-      {errorMessage}
+      {/* {errorMessage} */}
       {spinner}
       {content}
     </form>

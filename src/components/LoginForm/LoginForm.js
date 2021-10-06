@@ -12,14 +12,17 @@ import Form, {
 import {useAuth} from "../../contexts/Auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {setToSessionStorege} from "../../helpers/functions";
-import {ErrorPopup, Spinner} from "..";
+import {
+  // ErrorPopup,
+  Spinner,
+} from "..";
 
 import "./LoginForm.scss";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
-  const [errorTitle, setErrorTitle] = useState();
+  // const [errorTitle, setErrorTitle] = useState();
 
   const [login, setLogin] = useState(null);
   const [password, setPassword] = useState(null);
@@ -53,12 +56,16 @@ export default function LoginForm() {
         setLoading(true);
 
         const result = await signIn(login, password);
-        const {isOk, message, errorAPIMsg} = result;
+        const {
+          isOk,
+          // message,
+          errorAPIMsg,
+        } = result;
 
         if (!isOk && !ignore) {
           setToSessionStorege("error", errorAPIMsg);
           setErrorStatus(true);
-          setErrorTitle(formatMessage(message));
+          // setErrorTitle(formatMessage(message));
 
           setLoading(false);
           return;
@@ -128,13 +135,13 @@ export default function LoginForm() {
 
   const content = !(loading || errorStatus) ? <View /> : null;
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={"#login-form-container"}
-      errorTitle={errorTitle}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={"#login-form-container"}
+  //     errorTitle={errorTitle}
+  //   />
+  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -146,7 +153,7 @@ export default function LoginForm() {
       className={"login-form"}
       onSubmit={onFormSubmit}
     >
-      {errorMessage}
+      {/* {errorMessage} */}
       {spinner}
       {content}
     </form>

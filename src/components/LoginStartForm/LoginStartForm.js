@@ -3,7 +3,11 @@ import {useState, useEffect} from "react";
 
 import {useAuth} from "../../contexts/Auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {CustomButton, Spinner, ErrorPopup} from "..";
+import {
+  CustomButton,
+  Spinner,
+  // ErrorPopup
+} from "..";
 
 import {setToSessionStorege} from "../../helpers/functions";
 
@@ -37,7 +41,7 @@ const buttonOptions = [
 const LoginStartForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
-  const [errorTitle, setErrorTitle] = useState();
+  // const [errorTitle, setErrorTitle] = useState();
 
   const [login, setLogin] = useState(null);
   const [password, setPassword] = useState(null);
@@ -54,14 +58,18 @@ const LoginStartForm = () => {
         setLoading(true);
 
         const result = await signIn(login, password);
-        const {isOk, message, errorAPIMsg} = result;
+        const {
+          isOk,
+          // message,
+          errorAPIMsg,
+        } = result;
 
         if (!isOk && !ignore) {
           console.log("LoginStartForm err ");
           setToSessionStorege("error", errorAPIMsg);
           setLoading(false);
           setErrorStatus(true);
-          setErrorTitle(formatMessage(message));
+          // setErrorTitle(formatMessage(message));
 
           return;
         }
@@ -85,13 +93,13 @@ const LoginStartForm = () => {
 
   const content = !(loading || errorStatus) ? buttons : null;
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup
-      errorState={errorStatus}
-      popupPositionOf={"#login-start-form-container"}
-      errorTitle={errorTitle}
-    />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup
+  //     errorState={errorStatus}
+  //     popupPositionOf={"#login-start-form-container"}
+  //     errorTitle={errorTitle}
+  //   />
+  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -99,7 +107,7 @@ const LoginStartForm = () => {
 
   return (
     <div className={"login-start-form"} id="login-start-form-container">
-      {errorMessage}
+      {/* {errorMessage} */}
       {spinner}
       {content}
     </div>

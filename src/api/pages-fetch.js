@@ -1,10 +1,11 @@
 import CustomStore from "devextreme/data/custom_store";
 import {alert} from "devextreme/ui/dialog";
+import {formatMessage} from "devextreme/localization";
 import "whatwg-fetch";
 // import {getErrorData} from "../components/ErrorPopup/ErrorPopup";
 
 import {StatusLangToggler} from "../components/StatusLangToggler/StatusLangToggler";
-import {setToSessionStorege} from "../helpers/functions";
+// import {setToSessionStorege} from "../helpers/functions";
 import {urlAnonymous, urlBaseParam} from "./url-config";
 
 export const FetchData = (
@@ -225,72 +226,36 @@ export const FetchData = (
     // debugger;
     if (method === "GET") {
       const response = await fetch(`${url}&${params}`, getOptions);
-      console.dir(response);
-      console.log("header ", response.headers.get("content-type"));
 
       if (response.ok) {
         return await response
           .json()
           .then((data) => responseData(data))
           .catch((err) => {
-            // console.dir(err);
-            alert(
-              `
-              ${err} 
-              ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
-              Fetch into url: ${url}
-              Method: GET
-              ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
-              ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
-            `,
-              "ERROR!"
-            );
-
-            console.error(`
-                ${err} 
-                ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
-                Fetch into url: ${url}
-                Method: GET
-                ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
-                ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
-              `);
+            isJSONBrokeError(err);
+            consoleError(err, "GET");
           });
       } else {
-        return await response
-          .json()
-          .then((data) =>
-            alert(
-              "<font color='red'><b>" + data.JSONErrorMessage + "</b></font>",
-              "ERROR!"
-            )
-          )
-          .catch((err) => console.log(`err else catch `, err));
+        return await response.json().then((error) => {
+          isServerError(error, response.status);
+        });
       }
     }
 
     const response = await fetch(url, postOptions);
-    console.log("response POST ", response);
 
     if (response.ok) {
       return await response
         .text()
         .then((data) => responseData(data))
         .catch((err) => {
-          console.error(`
-            ${err} 
-            ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
-            Fetch into url: ${url}
-            Method: POST
-            ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
-            ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
-          `);
+          isJSONBrokeError(err);
+          consoleError(err, "POST");
         });
     } else {
-      console.dir(response);
-      // alert(
-      //   "<font color='red'><b>" + JSONErrorMessage + "</b></font>",
-      //   "ERROR!"
-      // );
+      return await response
+        .text()
+        .then((error) => isServerError(JSON.parse(error), response.status));
     }
   }
 
@@ -309,34 +274,96 @@ export const FetchData = (
     }
 
     if (typeof data === "object") {
-      const errorCheck = data.JSONErrorMessage;
+      const errorCheck = Object.keys(data).includes("JSONErrorMessage");
 
-      if (!errorCheck) {
-        console.log(`data => `, data);
-        // return data && JSON.parse(data);
-        return data;
-      }
+      if (!errorCheck) return data;
+
       console.error(`responseData object err `, data);
-      alert(
-        "<font color='red'><b>" + data.VBErr.Description + "</b></font>",
-        "ERROR!"
-      );
-      setToSessionStorege("error", data);
-      // getErrorData(data);
+      JSONErrorMessage(data);
+      // setToSessionStorege("error", data);
 
       throw data.VBErr.Description;
     }
 
     if (typeof data === "string") {
-      const errorCheck = JSON.parse(data).JSONErrorMessage;
+      const errorCheck = Object.keys(JSON.parse(data)).includes(
+        "JSONErrorMessage"
+      );
 
-      if (!errorCheck) {
-        // console.log(`responseData string ok `, typeof data);
-        return data && JSON.parse(data);
-      }
-      console.error(`responseData string err `, typeof data);
+      if (!errorCheck) return data && JSON.parse(data);
+
+      console.error(`responseData string err `, JSON.parse(data));
+      JSONErrorMessage(JSON.parse(data));
+
       throw JSON.parse(data);
     }
+  }
+
+  function isServerError(error, status) {
+    return alert(
+      `
+        <font color='red'><b>Error Status:</b></font> ${status}
+        <br>
+        <font color='red'><b>${error.JSONErrorMessage}</b></font>
+      `,
+      `${formatMessage("msgErrServerFetch")}`
+    );
+  }
+
+  function isJSONBrokeError(error) {
+    const isJSONTypeBrokeErr = Object.keys(error).includes("message");
+
+    return (
+      isJSONTypeBrokeErr &&
+      alert(
+        `<font color='red'><b>${error.message}</b></font>`,
+        `${formatMessage("msgJSONBrokeErr")}`
+      )
+    );
+  }
+
+  function JSONErrorMessage(error) {
+    return alert(
+      `
+        <font color='red'><b>${error.JSONErrorMessage}</b></font>
+        <br>
+        <br>
+        ${
+          error.VBErr
+            ? `<font color='red'><b>Description:</b></font> ${error.VBErr.Description}`
+            : ""
+        }
+        <br>
+        <font color='red'><b>Fetch into url:</b></font> ${url}
+        <br>
+        <font color='red'><b>Method:</b></font> GET
+        <br>
+        ${
+          error.VBErr
+            ? `<font color='red'><b>Error Number:</b></font> ${error.VBErr.Number}`
+            : ""
+        }
+        <br>
+        ${
+          error.VBErr
+            ? `<font color='red'><b>Source:</b></font> ${error.VBErr.Source}`
+            : ""
+        }
+      `,
+      `${formatMessage("msgError")}`
+    );
+  }
+
+  function consoleError(err, method) {
+    return console.error(`
+    ${err}
+
+    ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
+    Fetch into url: ${url}
+    Method: ${method}
+    ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
+    ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
+  `);
   }
 
   return {
@@ -346,7 +373,6 @@ export const FetchData = (
     usersFetchData,
     personFetchData,
     detailUserTemplateData,
-    // detailMemebersTemplateData,
     passwordPolicies,
     signInUserData,
     loadCustumMessageData,

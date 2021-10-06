@@ -8,7 +8,10 @@ import * as uzCyrlMessages from "devextreme/localization/messages/uz-Cyrl.json";
 // import {getSystemDictionary} from "../app-localization";
 import {FetchData} from "../api/pages-fetch";
 import {urlAnonymous} from "../api/url-config";
-import {ErrorPopup, Spinner} from "../components";
+import {
+  // ErrorPopup,
+  Spinner,
+} from "../components";
 
 const LocalizationContext = createContext();
 const useLocalization = () => useContext(LocalizationContext);
@@ -173,9 +176,9 @@ const LocalizationProvider = ({children}) => {
     // loadMessages(getSystemDictionary());
   }
 
-  const errorMessage = errorStatus ? (
-    <ErrorPopup errorState={errorStatus} popupPositionOf={"#root"} />
-  ) : null;
+  // const errorMessage = errorStatus ? (
+  //   <ErrorPopup errorState={errorStatus} popupPositionOf={"#root"} />
+  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -183,7 +186,7 @@ const LocalizationProvider = ({children}) => {
 
   return (
     <>
-      {errorMessage}
+      {/* {errorMessage} */}
       {spinner}
       {!(loading || errorStatus) && (
         <LocalizationContext.Provider
