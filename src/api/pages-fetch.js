@@ -195,6 +195,18 @@ export const FetchData = (
       "POST"
     );
 
+  const updateObjectPermissionsData = async (ObjId, GID, New) =>
+    await sendRequest(
+      urlFromPages,
+      {
+        schema: "upd",
+        "@ObjId": ObjId,
+        "@GID": GID,
+        "@New": New,
+      },
+      "POST"
+    );
+
   const passwordPolicies = async () =>
     await sendRequest(urlFromPages, {schema: "get"}); // різниця
 
@@ -380,6 +392,7 @@ export const FetchData = (
     loadObjIdData,
     updateObjIdData,
     fetchFormSchemaData,
+    updateObjectPermissionsData,
   };
 };
 

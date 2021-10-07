@@ -62,6 +62,14 @@ export const AppNavigation = () => {
       text: formatMessage("msgAdministrationDirMenuTitle"),
       icon: "paste",
       items: [
+        // {
+        //   text: formatMessage("msgPortalStructureEditor"),
+        //   path: "/portalStructureEditor",
+        // },
+        // {
+        //   text: formatMessage("msgRightsEditor"),
+        //   path: "/objectPermissions",
+        // },
         {
           text: formatMessage("msgAuditingAndLoggingUserActions"),
           items: [
@@ -77,6 +85,10 @@ export const AppNavigation = () => {
             },
           ],
         },
+        // {
+        //   text: formatMessage("msgErrorLog"),
+        //   path: "/errorLog",
+        // },
       ],
     }, // pathCreator(administrationDir)
     {

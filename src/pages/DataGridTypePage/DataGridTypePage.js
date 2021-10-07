@@ -43,6 +43,7 @@ import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
+  // DetailTreeListTab,
 } from "../../components";
 // import {ErrorPopup} from "../../components";
 
@@ -95,7 +96,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     title: formatMessage("msgCreateNewItem", localPageAbbreviation),
     showTitle: false,
     width: 1200,
-    height: 800,
+    height: 850,
   };
 
   useEffect(() => {
@@ -444,10 +445,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
                 pathnameWithoutSlash
               ) && (
                 <Tab title={formatMessage("msgGroups")} colCount={2}>
-                  <UserDetailTab
-                    user={userFormData}
-                    UserGroups={"UserGroups"}
-                  />
+                  <UserDetailTab user={userFormData} fetchName={"UserGroups"} />
                 </Tab>
               )}
 
@@ -456,7 +454,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
                 pathnameWithoutSlash
               ) && (
                 <Tab title={formatMessage("msgRoles")} colCount={2}>
-                  <UserDetailTab user={userFormData} UserGroups={"UserRoles"} />
+                  <UserDetailTab user={userFormData} fetchName={"UserRoles"} />
                 </Tab>
               )}
 
@@ -467,7 +465,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
                 <Tab title={formatMessage("msgMembers")} colCount={2}>
                   <UserDetailTab
                     user={userFormData}
-                    UserGroups={"ISGroupObjectMembers"}
+                    fetchName={"ISGroupObjectMembers"}
+                  />
+                </Tab>
+              )}
+
+              {pathnameWithoutSlash === "roleObjects" && (
+                <Tab title={formatMessage("msgPermissionsTab")} colCount={2}>
+                  <UserDetailTab
+                    user={userFormData}
+                    fetchName={"ObjectPermissions"}
                   />
                 </Tab>
               )}

@@ -30,6 +30,7 @@ const treeListPagesPath = [
   "oked",
   "auditSettingsMaster",
   "auditSettings",
+  // "objectPermissions",
 ];
 
 const routes = [

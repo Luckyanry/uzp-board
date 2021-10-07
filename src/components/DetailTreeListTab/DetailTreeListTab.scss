@@ -3,3 +3,15 @@
   font-size: 14px;
   font-weight: bold;
 }
+
+img {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+.img,
+.name {
+  display: inline-block;
+  vertical-align: middle;
+}

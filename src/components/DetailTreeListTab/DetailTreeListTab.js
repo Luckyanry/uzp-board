@@ -13,15 +13,15 @@ import TreeList, {
   Scrolling,
   LoadPanel,
 } from "devextreme-react/tree-list";
+import {Template} from "devextreme-react/core/template";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 // import {ErrorPopup} from "..";
 
-// import Database_16x from "./icons/Database_16x.png";
-// import DatabaseStoredProcedures_16x from "./icons/DatabaseStoredProcedures_16x.png";
-// import Table_16x from "./icons/Table_16x.png";
-
+import databaseIcon from "./icons/databaseIcon.svg";
+import tableIcon from "./icons/tableIcon.svg";
+import terminalIcon from "./icons/terminalIcon.svg";
 import spinner from "../Spinner/icons/spinner.svg";
 import "./DetailTreeListTab.scss";
 
@@ -100,6 +100,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
           minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
+          fixed={dataField === "objName" ? true : false}
           trueText={
             dataField === "status"
               ? formatMessage("msgStatusActive")
@@ -110,7 +111,8 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
               ? formatMessage("msgStatusDeactivated")
               : formatMessage("msgNo")
           }
-          cellTemplate={dataField === "icon" ? "iconTemplate" : null}
+          // cellRender={dataField === "icon" ? cellRender : null}
+          cellTemplate={dataField === "objName" ? "objAuditTemplate" : null}
           {...params}
         >
           {required && <RequiredRule />}
@@ -119,6 +121,33 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         </Column>
       );
     });
+  }
+
+  function cellRender({data: {icon, objName}}) {
+    console.log("cellRender => ", icon, objName);
+
+    const icons =
+      (icon === "Database_16x.png" && databaseIcon) ||
+      (icon === "DatabaseStoredProcedures_16x.png" && terminalIcon) ||
+      (icon === "Table_16x.png" && tableIcon);
+
+    const styles = {
+      bgIcon: {
+        display: "inline-block",
+        width: "16px",
+        height: "16px",
+        background: `url("${icons}") 0% 0% / 100% no-repeat`,
+      },
+    };
+
+    return (
+      <>
+        <div className="img" style={styles.bgIcon} />
+        &nbsp;&nbsp;
+        <span className="name">{objName}</span>
+      </>
+    );
+    // return <img src={icon} alt={data.value} />;
   }
 
   function onDataErrorEvent(e) {
@@ -146,91 +175,82 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   // ) : null;
 
   return (
-    <>
-      {/* {errorMessage}
+    <TreeList
+      id={pathnameWithoutSlash}
+      // columns={columnsSchemaData}
+      dataSource={APIData}
+      rootValue={0}
+      keyExpr="ObjId"
+      parentIdExpr="PObjId"
+      repaintChangesOnly={true}
+      // remoteOperations={false}
+      // rows
+      focusedRowEnabled={true}
+      showRowLines={true}
+      rowAlternationEnabled={false}
+      showBorders={true}
+      // columns
+      showColumnLines={true}
+      // columnMinWidth={80}
+      columnAutoWidth={true}
+      columnHidingEnabled={false}
+      allowColumnResizing={true}
+      allowColumnReordering={true}
+      // appearance
+      hoverStateEnabled={true}
+      wordWrapEnabled={true}
+      virtualModeEnabled={true}
+      autoExpandAll={false}
+      // functions
+      onDataErrorOccurred={onDataErrorEvent}
+      onRowUpdating={updateRow}
+    >
+      <Scrolling mode="standard" useNative="true" />
+      <StateStoring enabled={false} type="localStorage" storageKey="storage" />
+      <ColumnChooser
+        enabled={true}
+        allowSearch={true}
+        width={300}
+        height={320}
+        title={formatMessage("msgColomnChooser")}
+        emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+      />
 
-      {!errorMessage && ( */}
-      <TreeList
-        id={pathnameWithoutSlash}
-        // columns={columnsSchemaData}
-        dataSource={APIData}
-        rootValue={0}
-        keyExpr="ObjId"
-        parentIdExpr="PObjId"
-        repaintChangesOnly={true}
-        // remoteOperations={false}
-        // rows
-        focusedRowEnabled={true}
-        showRowLines={true}
-        rowAlternationEnabled={false}
-        showBorders={true}
-        // columns
-        showColumnLines={true}
-        columnMinWidth={80}
-        columnAutoWidth={true}
-        columnHidingEnabled={false}
-        allowColumnResizing={true}
-        allowColumnReordering={true}
-        // appearance
-        hoverStateEnabled={true}
-        wordWrapEnabled={true}
-        virtualModeEnabled={true}
-        autoExpandAll={false}
-        // functions
-        onDataErrorOccurred={onDataErrorEvent}
-        onRowUpdating={updateRow}
-        // onFocusedCellChanging={onFocusedCellChanging}
-      >
-        <Scrolling mode="standard" useNative="true" />
-        <StateStoring
-          enabled={false}
-          type="localStorage"
-          storageKey="storage"
-        />
-        <ColumnChooser
-          enabled={true}
-          allowSearch={true}
-          width={300}
-          height={320}
-          title={formatMessage("msgColomnChooser")}
-          emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-        />
+      <Editing
+        mode="batch"
+        // mode="popup"
+        popup={popupOpt}
+        allowAdding={false}
+        allowDeleting={false}
+        allowUpdating={true}
+        useIcons={true}
+        startEditAction="dblClick"
+      />
 
-        <Editing
-          mode="batch"
-          // mode="popup"
-          popup={popupOpt}
-          allowAdding={false}
-          allowDeleting={false}
-          allowUpdating={true}
-          useIcons={true}
-          startEditAction="dblClick"
-        />
+      {customMarkupRender()}
 
-        {customMarkupRender()}
+      <Template name="objAuditTemplate" render={cellRender} />
 
-        <Paging defaultPageSize={10} enabled={true} />
-        <Pager
-          showPageSizeSelector={true}
-          showInfo={true}
-          showNavigationButtons={true}
-          allowedPageSizes={[10, 20, 50, 100, "all"]}
-          showAllItem={true}
-          visible={true}
-        />
-        <LoadPanel
-          deferRendering={true}
-          enabled="true"
-          shading={false}
-          showPane={false}
-          width={400}
-          height={140}
-          message={formatMessage("msgLoadingMessage")}
-          indicatorSrc={spinner}
-        />
-      </TreeList>
-      {/* )} */}
-    </>
+      <Paging defaultPageSize={10} enabled={true} />
+      <Pager
+        showPageSizeSelector={true}
+        showInfo={true}
+        showNavigationButtons={true}
+        allowedPageSizes={[10, 20, 50, "all"]}
+        showAllItem={true}
+        visible={true}
+      />
+      <LoadPanel
+        deferRendering={true}
+        enabled="true"
+        shading={false}
+        showPane={false}
+        width={400}
+        height={140}
+        message={formatMessage("msgLoadingMessage")}
+        indicatorSrc={spinner}
+      />
+    </TreeList>
   );
 };
 
