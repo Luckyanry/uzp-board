@@ -150,9 +150,9 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
     // return <img src={icon} alt={data.value} />;
   }
 
-  function onDataErrorEvent(e) {
-    e.error.message = formatMessage("msgErrUserDetailRoleGroup");
-  }
+  // function onDataErrorEvent(e) {
+  //   e.error.message = formatMessage("msgErrUserDetailRoleGroup");
+  // }
 
   function updateRow(e) {
     FetchData(
@@ -202,7 +202,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       virtualModeEnabled={true}
       autoExpandAll={false}
       // functions
-      onDataErrorOccurred={onDataErrorEvent}
+      // onDataErrorOccurred={onDataErrorEvent}
       onRowUpdating={updateRow}
     >
       <Scrolling mode="standard" useNative="true" />

@@ -169,11 +169,11 @@ const LocalizationProvider = ({children}) => {
   }
 
   function initMessages() {
+    // loadMessages(getSystemDictionary());
     loadMessages(customMessagesData);
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
     loadMessages(uzCyrlMessages);
-    // loadMessages(getSystemDictionary());
   }
 
   // const errorMessage = errorStatus ? (

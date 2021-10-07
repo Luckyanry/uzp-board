@@ -1,5 +1,7 @@
 const dictionary = {
   en: {
+    msgErrServerFetch: "The request parameter is invalid.",
+
     msgProjectTitle: "UZP",
     msgLanguage: "Language",
     msgId: "ID",
@@ -147,6 +149,8 @@ const dictionary = {
       "The 'Code {0}' field must contain a maximum of 5 digits!",
   },
   ru: {
+    msgErrServerFetch: "Параметр запроса имеет неверное значение.",
+
     msgProjectTitle: "ЕАИС",
     msgLanguage: "Язык",
     msgId: "ID",

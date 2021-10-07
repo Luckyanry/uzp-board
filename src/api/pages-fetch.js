@@ -226,17 +226,7 @@ export const FetchData = (
       credentials: "include",
     };
 
-    const postOptions = {
-      method,
-      body: params,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      },
-      // cache: false,
-      credentials: "include",
-    };
-    // debugger;
-    if (method === "GET") {
+    if (method) {
       const response = await fetch(`${url}&${params}`, getOptions);
 
       if (response.ok) {
@@ -252,22 +242,6 @@ export const FetchData = (
           isServerError(error, response.status);
         });
       }
-    }
-
-    const response = await fetch(url, postOptions);
-
-    if (response.ok) {
-      return await response
-        .text()
-        .then((data) => responseData(data))
-        .catch((err) => {
-          isJSONBrokeError(err);
-          consoleError(err, "POST");
-        });
-    } else {
-      return await response
-        .text()
-        .then((error) => isServerError(JSON.parse(error), response.status));
     }
   }
 
@@ -293,32 +267,78 @@ export const FetchData = (
       console.error(`responseData object err `, data);
       JSONErrorMessage(data);
       // setToSessionStorege("error", data);
-
-      throw data.VBErr.Description;
-    }
-
-    if (typeof data === "string") {
-      const errorCheck = Object.keys(JSON.parse(data)).includes(
-        "JSONErrorMessage"
-      );
-
-      if (!errorCheck) return data && JSON.parse(data);
-
-      console.error(`responseData string err `, JSON.parse(data));
-      JSONErrorMessage(JSON.parse(data));
-
-      throw JSON.parse(data);
     }
   }
 
   function isServerError(error, status) {
     return alert(
       `
+        <font color='red'><b>${error.JSONErrorMessage}</b></font>
+        <br>
+        <br>
         <font color='red'><b>Error Status:</b></font> ${status}
         <br>
-        <font color='red'><b>${error.JSONErrorMessage}</b></font>
+        ${
+          error.E500Category
+            ? `<font color='red'><b>Category::</b></font> ${error.E500Category}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500Description
+            ? `<font color='red'><b>Description:</b></font> ${error.E500Description}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500File
+            ? `<font color='red'><b>File:</b></font> ${error.E500File}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500Line
+            ? `<font color='red'><b>Line:</b></font> ${error.E500Line}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500Column
+            ? `<font color='red'><b>Column:</b></font> ${error.E500Column}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500Number
+            ? `<font color='red'><b>Number:</b></font> ${error.E500Number}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500Source
+            ? `<font color='red'><b>Source:</b></font> ${error.E500Source}`
+            : ""
+        }
+        <br>
+        ${
+          error.ScriptFile
+            ? `<font color='red'><b>ScriptFile:</b></font> ${error.ScriptFile}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500ASPCode
+            ? `<font color='red'><b>ASPCode:</b></font> ${error.E500ASPCode}`
+            : ""
+        }
+        <br>
+        ${
+          error.E500ASPDescription
+            ? `<font color='red'><b>ASPDescription:</b></font> ${error.E500ASPDescription}`
+            : ""
+        }
       `,
-      `${formatMessage("msgErrServerFetch")}`
+      `Server Error!`
     );
   }
 
@@ -326,24 +346,36 @@ export const FetchData = (
     const isJSONTypeBrokeErr = Object.keys(error).includes("message");
 
     return (
-      isJSONTypeBrokeErr &&
+      !isJSONTypeBrokeErr &&
       alert(
-        `<font color='red'><b>${error.message}</b></font>`,
-        `${formatMessage("msgJSONBrokeErr")}`
+        `<font color='red'><b>${error.message}</b></font>
+        <br>
+        <br>
+        ${
+          error.stack
+            ? `<font color='red'><b>Description:</b></font> ${error.stack}`
+            : ""
+        }
+        `,
+        `${
+          formatMessage("msgJSONBrokeErr")
+            ? formatMessage("msgJSONBrokeErr")
+            : "Error! JSON type is incorrect."
+        }`
       )
     );
   }
 
-  function JSONErrorMessage(error) {
+  function JSONErrorMessage({JSONErrorMessage, VBErr, ADOErrors}) {
     return alert(
       `
-        <font color='red'><b>${error.JSONErrorMessage}</b></font>
+        <font color='red'><b>${JSONErrorMessage}</b></font>
         <br>
         <br>
         ${
-          error.VBErr
-            ? `<font color='red'><b>Description:</b></font> ${error.VBErr.Description}`
-            : ""
+          VBErr.Description
+            ? `<font color='red'><b>Description:</b></font> ${VBErr.Description}`
+            : `<font color='red'><b>Description:</b></font> ${ADOErrors[0].Description}`
         }
         <br>
         <font color='red'><b>Fetch into url:</b></font> ${url}
@@ -351,18 +383,22 @@ export const FetchData = (
         <font color='red'><b>Method:</b></font> GET
         <br>
         ${
-          error.VBErr
-            ? `<font color='red'><b>Error Number:</b></font> ${error.VBErr.Number}`
+          VBErr.Number
+            ? `<font color='red'><b>Error Number:</b></font> ${VBErr.Number}`
             : ""
         }
         <br>
         ${
-          error.VBErr
-            ? `<font color='red'><b>Source:</b></font> ${error.VBErr.Source}`
+          VBErr.Source
+            ? `<font color='red'><b>Source:</b></font> ${VBErr.Source}`
             : ""
         }
       `,
-      `${formatMessage("msgError")}`
+      `${
+        formatMessage("msgError")
+          ? formatMessage("msgError")
+          : "Backend Server Error!"
+      }`
     );
   }
 
@@ -370,11 +406,11 @@ export const FetchData = (
     return console.error(`
     ${err}
 
-    ${err.VBErr ? `Description: ${err.VBErr.Description}` : ""}
+    ${err.VBErr.Description ? `Description: ${err.VBErr.Description}` : ""}
     Fetch into url: ${url}
     Method: ${method}
-    ${err.VBErr ? `Error Number: ${err.VBErr.Number}` : ""}
-    ${err.VBErr ? `Source: ${err.VBErr.Source}` : ""}
+    ${err.VBErr.Number ? `Error Number: ${err.VBErr.Number}` : ""}
+    ${err.VBErr.Source ? `Source: ${err.VBErr.Source}` : ""}
   `);
   }
 
@@ -416,3 +452,79 @@ export const FetchData = (
 //   loadMode: "row",
 //   load: async () => await sendRequest(urlFromPages, {schema: "get"}, "POST"),
 // });
+
+// =================================
+
+// const postOptions = {
+//   method,
+//   body: params,
+//   headers: {
+//     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+//   },
+//   // cache: false,
+//   credentials: "include",
+// };
+// debugger;
+
+// const response = await fetch(url, postOptions);
+
+// if (response.ok) {
+//   return await response
+//     .text()
+//     .then((data) => responseData(data))
+//     .catch((err) => {
+//       isJSONBrokeError(err);
+//       consoleError(err, "POST");
+//     });
+// } else {
+//   return await response
+//     .text()
+//     .then((error) => isServerError(JSON.parse(error), response.status));
+// }
+
+// ================================
+// if (typeof data === "string") {
+//   const errorCheck = Object.keys(JSON.parse(data)).includes(
+//     "JSONErrorMessage"
+//   );
+
+//   if (!errorCheck) return data && JSON.parse(data);
+
+//   console.error(`responseData string err `, JSON.parse(data));
+//   JSONErrorMessage(JSON.parse(data));
+// }
+
+// ==================================
+// function errorMarkup(ADOErrors) {
+//   if (!ADOErrors) return;
+//   console.log(`ADOErrors`, ADOErrors);
+//   return ADOErrors.map(
+//     ({Description, NativeError, Number, SQLState, Source}, idx) => (
+//       <Fragment key={idx}>
+//         <p>
+//           {/* <font color="red">
+//             <b>Description:</b>
+//           </font> */}
+//           {Description}
+//         </p>
+
+//         {/* <font color="red">
+//           <b>NativeError:</b>
+//         </font>
+//         {NativeError}
+//         <font color="red">
+//           <b>Number:</b>
+//         </font>
+//         {Number}
+//         <font color="red">
+//           <b>SQLState:</b>
+//         </font>
+//         {SQLState}
+//         <font color="red">
+//           <b>Source:</b>
+//         </font>
+//         {Source} */}
+//       </Fragment>
+//     )
+//   );
+// }

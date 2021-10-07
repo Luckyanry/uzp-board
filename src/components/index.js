@@ -24,3 +24,5 @@ export {default as CustomButton} from "./CustomButton/CustomButton";
 export {default as ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
 export {default as ErrorPopup} from "./ErrorPopup/ErrorPopup";
 export {default as Spinner} from "./Spinner/Spinner";
+
+export {default as IconsCellRenderTemplate} from "./IconsCellRenderTemplate/IconsCellRenderTemplate";
