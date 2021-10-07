@@ -104,7 +104,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       const fetchColumnsSchemaData = FetchData(
         pathname,
         pathnameWithoutSlash,
-        "hbd"
+        "hbdb"
       ).fetchData;
 
       const columns = await fetchColumnsSchemaData

@@ -17,11 +17,9 @@ import {Template} from "devextreme-react/core/template";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
+import {IconsCellRenderTemplate} from "..";
 // import {ErrorPopup} from "..";
 
-import databaseIcon from "./icons/databaseIcon.svg";
-import tableIcon from "./icons/tableIcon.svg";
-import terminalIcon from "./icons/terminalIcon.svg";
 import spinner from "../Spinner/icons/spinner.svg";
 import "./DetailTreeListTab.scss";
 
@@ -111,7 +109,6 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
               ? formatMessage("msgStatusDeactivated")
               : formatMessage("msgNo")
           }
-          // cellRender={dataField === "icon" ? cellRender : null}
           cellTemplate={dataField === "objName" ? "objAuditTemplate" : null}
           {...params}
         >
@@ -122,37 +119,6 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       );
     });
   }
-
-  function cellRender({data: {icon, objName}}) {
-    console.log("cellRender => ", icon, objName);
-
-    const icons =
-      (icon === "Database_16x.png" && databaseIcon) ||
-      (icon === "DatabaseStoredProcedures_16x.png" && terminalIcon) ||
-      (icon === "Table_16x.png" && tableIcon);
-
-    const styles = {
-      bgIcon: {
-        display: "inline-block",
-        width: "16px",
-        height: "16px",
-        background: `url("${icons}") 0% 0% / 100% no-repeat`,
-      },
-    };
-
-    return (
-      <>
-        <div className="img" style={styles.bgIcon} />
-        &nbsp;&nbsp;
-        <span className="name">{objName}</span>
-      </>
-    );
-    // return <img src={icon} alt={data.value} />;
-  }
-
-  // function onDataErrorEvent(e) {
-  //   e.error.message = formatMessage("msgErrUserDetailRoleGroup");
-  // }
 
   function updateRow(e) {
     FetchData(
@@ -202,7 +168,6 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       virtualModeEnabled={true}
       autoExpandAll={false}
       // functions
-      // onDataErrorOccurred={onDataErrorEvent}
       onRowUpdating={updateRow}
     >
       <Scrolling mode="standard" useNative="true" />
@@ -229,7 +194,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
 
       {customMarkupRender()}
 
-      <Template name="objAuditTemplate" render={cellRender} />
+      <Template name="objAuditTemplate" render={IconsCellRenderTemplate} />
 
       <Paging defaultPageSize={10} enabled={true} />
       <Pager

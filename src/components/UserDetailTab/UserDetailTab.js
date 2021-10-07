@@ -16,11 +16,15 @@ import DataGrid, {
   LoadPanel,
 } from "devextreme-react/data-grid";
 import TreeList from "devextreme-react/tree-list";
+// import {Button} from "devextreme-react/button";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {getLookupParamsForURL} from "../../helpers/functions";
 
+import grant from "./icons/grant.svg";
+import deny from "./icons/deny.svg";
+import inherite from "./icons/inherite.svg";
 import spinner from "../Spinner/icons/spinner.svg";
 import "./UserDetailTab.scss";
 // import {ErrorPopup} from "..";
@@ -162,6 +166,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
+          hidingPriority={dataField === "Description" ? 0 : null}
           trueText={
             dataField === "status"
               ? formatMessage("msgStatusActive")
@@ -183,7 +188,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;
 
-              // dataSource={{...item[dataField], ...lookup.dataSource}}
               return (
                 <Lookup
                   searchMode={"startswith"}
@@ -204,22 +208,135 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       return;
     }
 
-    e.data.UGID = GID;
+    fetchName !== "ObjectPermissions" && (e.data.UGID = GID);
   }
 
-  function updateRow(e) {
-    console.log(`updateRow e `, e);
-    fetchName === "ObjectPermissions" &&
-      FetchData(
-        pathname,
-        `ObjectPermissions`,
-        "wisdb"
-      ).updateObjectPermissionsData(
-        e.oldData.ObjId,
-        e.oldData.GID,
-        e.oldData.New
-      );
+  function renderBtn(e, value) {
+    const result = FetchData(
+      pathname,
+      `ObjectPermissions`,
+      "wisdb"
+    ).updateObjectPermissionsData(e.row.data.ObjId, GID, value);
+
+    result.then(({data}) => {
+      e.component
+        .getDataSource()
+        .store()
+        .push([
+          {
+            type: "update",
+            data: data[0],
+            key: e.row.data.ObjId,
+          },
+        ]);
+    });
   }
+
+  const TreeListMarkup = () => (
+    <TreeList
+      id={pathnameWithoutSlash}
+      // columns={columnsSchemaData}
+      dataSource={APIData}
+      rootValue={0}
+      keyExpr="ObjId"
+      parentIdExpr="PObjId"
+      repaintChangesOnly={true}
+      // remoteOperations={false}
+      // rows
+      focusedRowEnabled={true}
+      showRowLines={true}
+      rowAlternationEnabled={false}
+      showBorders={true}
+      // columns
+      showColumnLines={true}
+      // columnMinWidth={80}
+      columnAutoWidth={true}
+      columnHidingEnabled={true}
+      allowColumnResizing={true}
+      allowColumnReordering={true}
+      // appearance
+      hoverStateEnabled={true}
+      wordWrapEnabled={true}
+      virtualModeEnabled={true}
+      autoExpandAll={false}
+      // functions
+      // onRowUpdating={updateRow}
+      // onFocusedCellChanging={onFocusedCellChanging}
+    >
+      <Scrolling mode="standard" useNative="true" />
+      <StateStoring enabled={false} type="localStorage" storageKey="storage" />
+      <ColumnChooser
+        enabled={true}
+        allowSearch={true}
+        width={300}
+        height={320}
+        title={formatMessage("msgColomnChooser")}
+        emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
+      />
+
+      <Editing
+        mode="batch"
+        // mode="popup"
+        popup={popupOpt}
+        allowAdding={false}
+        allowDeleting={false}
+        allowUpdating={true}
+        useIcons={true}
+        startEditAction="dblClick"
+      />
+
+      {customMarkupRender()}
+
+      <Column type="buttons">
+        <Button
+          icon={inherite}
+          cssClass={"btn-icon"}
+          name="inherite"
+          hint={"inherite btn"}
+          onClick={(e) => renderBtn(e, 2)}
+          visible={(e) => e.row.data.OType !== 6}
+        />
+
+        <Button
+          icon={deny}
+          cssClass={"btn-icon"}
+          name="deny"
+          hint={"deny btn"}
+          onClick={(e) => renderBtn(e, 0)}
+          visible={(e) => e.row.data.OType !== 6}
+        />
+
+        <Button
+          icon={grant}
+          cssClass={"btn-icon"}
+          name="grant"
+          hint={"grant btn"}
+          onClick={(e) => renderBtn(e, 1)}
+          visible={(e) => e.row.data.OType !== 6}
+        />
+      </Column>
+
+      <Paging defaultPageSize={10} enabled={true} />
+      <Pager
+        showPageSizeSelector={true}
+        showInfo={true}
+        showNavigationButtons={true}
+        allowedPageSizes={[10, 20, 50, "all"]}
+        showAllItem={true}
+        visible={true}
+      />
+      <LoadPanel
+        deferRendering={true}
+        enabled="true"
+        shading={false}
+        showPane={false}
+        width={400}
+        height={140}
+        message={formatMessage("msgLoadingMessage")}
+        indicatorSrc={spinner}
+      />
+    </TreeList>
+  );
 
   const DataGridMarkup = () => (
     <DataGrid
@@ -298,96 +415,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       />
     </DataGrid>
   );
-
-  const TreeListMarkup = () => (
-    <TreeList
-      id={pathnameWithoutSlash}
-      // columns={columnsSchemaData}
-      dataSource={APIData}
-      rootValue={0}
-      keyExpr="ObjId"
-      parentIdExpr="PObjId"
-      repaintChangesOnly={true}
-      // remoteOperations={false}
-      // rows
-      focusedRowEnabled={true}
-      showRowLines={true}
-      rowAlternationEnabled={false}
-      showBorders={true}
-      // columns
-      showColumnLines={true}
-      // columnMinWidth={80}
-      columnAutoWidth={true}
-      columnHidingEnabled={false}
-      allowColumnResizing={true}
-      allowColumnReordering={true}
-      // appearance
-      hoverStateEnabled={true}
-      wordWrapEnabled={true}
-      virtualModeEnabled={true}
-      autoExpandAll={false}
-      // functions
-      onRowUpdating={updateRow}
-    >
-      <Scrolling mode="standard" useNative="true" />
-      <StateStoring enabled={false} type="localStorage" storageKey="storage" />
-      <ColumnChooser
-        enabled={true}
-        allowSearch={true}
-        width={300}
-        height={320}
-        title={formatMessage("msgColomnChooser")}
-        emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
-      />
-
-      <Editing
-        mode="batch"
-        // mode="popup"
-        popup={popupOpt}
-        allowAdding={false}
-        allowDeleting={false}
-        allowUpdating={true}
-        useIcons={true}
-        startEditAction="dblClick"
-      />
-
-      {customMarkupRender()}
-
-      {/* <Column type="buttons">
-        <Button
-          name="delete"
-          hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
-        />
-      </Column> */}
-
-      <Paging defaultPageSize={10} enabled={true} />
-      <Pager
-        showPageSizeSelector={true}
-        showInfo={true}
-        showNavigationButtons={true}
-        allowedPageSizes={[10, 20, 50, "all"]}
-        showAllItem={true}
-        visible={true}
-      />
-      <LoadPanel
-        deferRendering={true}
-        enabled="true"
-        shading={false}
-        showPane={false}
-        width={400}
-        height={140}
-        message={formatMessage("msgLoadingMessage")}
-        indicatorSrc={spinner}
-      />
-    </TreeList>
-  );
-
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={`#${pathnameWithoutSlash}`}
-  //   />
-  // ) : null;
 
   return fetchName === "ObjectPermissions" ? (
     <TreeListMarkup />
