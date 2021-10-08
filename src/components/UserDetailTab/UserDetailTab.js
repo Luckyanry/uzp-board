@@ -246,18 +246,28 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       data: {InhType, InheritedName},
     } = props;
 
-    const icons =
-      (InhType === 0 && object) ||
-      (InhType === 1 && group) ||
-      (InhType === 3 && system) ||
-      (InhType === 2 && role);
+    const icons = () => {
+      switch (InhType) {
+        case 0:
+          return object;
+        case 1:
+          return group;
+        case 2:
+          return system;
+        case 3:
+          return role;
+
+        default:
+          return;
+      }
+    };
 
     const styles = {
       bgIcon: {
         display: "inline-block",
         width: "20px",
         height: "16px",
-        background: `url("${icons}") 0% 0% / 100% no-repeat`,
+        background: `url("${icons()}") 0% 0% / 100% no-repeat`,
       },
     };
 

@@ -23,29 +23,57 @@ const IconsCellRenderTemplate = (props) => {
     data: {icon, objName},
   } = props;
 
-  const objAuditIcons =
-    (icon === "Database_16x.png" && databaseIcon) ||
-    (icon === "DatabaseStoredProcedures_16x.png" && terminalIcon) ||
-    (icon === "Table_16x.png" && tableIcon);
+  const objAuditIcons = () => {
+    switch (icon) {
+      case "Database_16x.png":
+        return databaseIcon;
+      case "DatabaseStoredProcedures_16x.png":
+        return terminalIcon;
+      case "Table_16x.png":
+        return tableIcon;
+
+      default:
+        return;
+    }
+  };
 
   const {
     data: {OType, aName},
   } = props;
 
-  const objPermissionsicons =
-    (OType === 0 && objectOff0) ||
-    (OType === 1 && objectOn1) ||
-    (OType === 2 && objectEmpty2) ||
-    (OType === 3 && containerOff3) ||
-    (OType === 4 && containerOn4) ||
-    (OType === 5 && containerEmpty5) ||
-    (OType === 6 && folder) ||
-    (OType === 7 && roleOff7) ||
-    (OType === 8 && roleOn8) ||
-    (OType === 9 && roleEmpty9) ||
-    (OType === 10 && groupOff10) ||
-    (OType === 11 && groupOn11) ||
-    (OType === 12 && groupEmpty12);
+  const objPermissionsicons = () => {
+    switch (OType) {
+      case 0:
+        return objectOff0;
+      case 1:
+        return objectOn1;
+      case 2:
+        return objectEmpty2;
+      case 3:
+        return containerOff3;
+      case 4:
+        return containerOn4;
+      case 5:
+        return containerEmpty5;
+      case 6:
+        return folder;
+      case 7:
+        return roleOff7;
+      case 8:
+        return roleOn8;
+      case 9:
+        return roleEmpty9;
+      case 10:
+        return groupOff10;
+      case 11:
+        return groupOn11;
+      case 12:
+        return groupEmpty12;
+
+      default:
+        return;
+    }
+  };
 
   const styles = {
     bgIcon: {
@@ -53,7 +81,7 @@ const IconsCellRenderTemplate = (props) => {
       width: "16px",
       height: "16px",
       background: `url("${
-        icon ? objAuditIcons : objPermissionsicons
+        icon ? objAuditIcons() : objPermissionsicons()
       }") 0% 0% / 100% no-repeat`,
     },
   };
