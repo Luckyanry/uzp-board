@@ -85,10 +85,10 @@ export const AppNavigation = () => {
             },
           ],
         },
-        // {
-        //   text: formatMessage("msgErrorLog"),
-        //   path: "/errorLog",
-        // },
+        {
+          text: formatMessage("msgErrorLog"),
+          path: "/errorLog",
+        },
       ],
     }, // pathCreator(administrationDir)
     {

@@ -21,7 +21,7 @@ import {Template} from "devextreme-react/core/template";
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {getLookupParamsForURL} from "../../helpers/functions";
-import {IconsCellRenderTemplate} from "..";
+// import {IconsCellRenderTemplate} from "..";
 
 import grant from "./icons/grant.svg";
 import deny from "./icons/deny.svg";
@@ -30,6 +30,19 @@ import object from "./icons/object.svg";
 import group from "./icons/group.svg";
 import role from "./icons/role.svg";
 import system from "./icons/system.svg";
+import objectOff0 from "./icons/objectOff0.svg";
+import objectOn1 from "./icons/objectOn1.svg";
+import objectEmpty2 from "./icons/objectEmpty2.svg";
+import containerOff3 from "./icons/containerOff3.svg";
+import containerOn4 from "./icons/containerOn4.svg";
+import containerEmpty5 from "./icons/containerEmpty5.svg";
+import folder from "./icons/folder.svg";
+import roleOff7 from "./icons/roleOff7.svg";
+import roleOn8 from "./icons/roleOn8.svg";
+import roleEmpty9 from "./icons/roleEmpty9.svg";
+import groupOff10 from "./icons/groupOff10.svg";
+import groupOn11 from "./icons/groupOn11.svg";
+import groupEmpty12 from "./icons/groupEmpty12.svg";
 import spinner from "../Spinner/icons/spinner.svg";
 import "./UserDetailTab.scss";
 
@@ -246,36 +259,93 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       data: {InhType, InheritedName},
     } = props;
 
-    const icons = () => {
+    const styles = (icon) => ({
+      bgIcon: {
+        display: "inline-block",
+        width: "20px",
+        height: "16px",
+        background: `url("${icon}") 0% 0% / 100% no-repeat`,
+      },
+    });
+
+    const icon = () => {
       switch (InhType) {
         case 0:
-          return object;
+          return styles(object).bgIcon;
         case 1:
-          return group;
+          return styles(group).bgIcon;
         case 2:
-          return system;
+          return styles(system).bgIcon;
         case 3:
-          return role;
+          return styles(role).bgIcon;
 
         default:
           return;
       }
     };
 
-    const styles = {
+    return (
+      <>
+        <div className="img" style={icon()} />
+        &nbsp;&nbsp;
+        <span className="name">{InheritedName}</span>
+      </>
+    );
+  }
+
+  function aNameCellRenderTemplate(props) {
+    const {
+      data: {OType, aName},
+    } = props;
+
+    const styles = (icon) => ({
       bgIcon: {
         display: "inline-block",
-        width: "20px",
+        width: "16px",
         height: "16px",
-        background: `url("${icons()}") 0% 0% / 100% no-repeat`,
+        background: `url("${icon}") 0% 0% / 100% no-repeat`,
       },
+    });
+
+    const icon = () => {
+      switch (OType) {
+        case 0:
+          return styles(objectOff0).bgIcon;
+        case 1:
+          return styles(objectOn1).bgIcon;
+        case 2:
+          return styles(objectEmpty2).bgIcon;
+        case 3:
+          return styles(containerOff3).bgIcon;
+        case 4:
+          return styles(containerOn4).bgIcon;
+        case 5:
+          return styles(containerEmpty5).bgIcon;
+        case 6:
+          return styles(folder).bgIcon;
+        case 7:
+          return styles(roleOff7).bgIcon;
+        case 8:
+          return styles(roleOn8).bgIcon;
+        case 9:
+          return styles(roleEmpty9).bgIcon;
+        case 10:
+          return styles(groupOff10).bgIcon;
+        case 11:
+          return styles(groupOn11).bgIcon;
+        case 12:
+          return styles(groupEmpty12).bgIcon;
+
+        default:
+          return;
+      }
     };
 
     return (
       <>
-        <div className="img" style={styles.bgIcon} />
+        <div className="img" style={icon()} />
         &nbsp;&nbsp;
-        <span className="name">{InheritedName}</span>
+        <span className="name">{aName}</span>
       </>
     );
   }
@@ -372,7 +442,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       <Template
         name="objPermissionsOTypeTemplate"
-        render={IconsCellRenderTemplate}
+        render={aNameCellRenderTemplate}
       />
 
       <Paging defaultPageSize={10} enabled={true} />

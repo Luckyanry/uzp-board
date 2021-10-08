@@ -62,6 +62,8 @@ export const FetchData = (
         return `RecordLogColumnSchema`;
       case "/fieldLog":
         return `FieldLogColumnSchema`;
+      case "/errorLog":
+        return `isyseventsColumnSchema`;
 
       default:
         return "/home";
@@ -208,7 +210,7 @@ export const FetchData = (
     );
 
   const passwordPolicies = async () =>
-    await sendRequest(urlFromPages, {schema: "get"}); // різниця
+    await sendRequest(urlFromPages, {schema: "get"});
 
   const fetchFormSchemaData = async () =>
     await sendRequest(urlFromPages, {schema: "get"});

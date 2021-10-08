@@ -200,6 +200,20 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         return setAPIData(fetchData);
       }
 
+      if (pathnameWithoutSlash === "errorLog") {
+        const fetchData = FetchData(
+          pathname,
+          "isysevents",
+          "logdb"
+        ).usersFetchData;
+
+        setAllowAdding(false);
+        setAllowDeleting(false);
+        setAllowUpdating(false);
+
+        return setAPIData(fetchData);
+      }
+
       const fetchData = FetchData(
         pathname,
         pathnameWithoutSlash,
@@ -266,6 +280,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         "orgUnits",
         "employees",
         "recordLog",
+        "errorLog",
       ],
       pathnameWithoutSlash
     ) && (murkupCollection = columnsSchemaData);
@@ -418,10 +433,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
-  // function handleOptionChange(e) {
-  //   e.fullName === "focusedRowKey" && setUserID(e.value);
-  // }
-
   function editorCustomMarkup() {
     return userID ? (
       <Editing
@@ -494,6 +505,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     );
   }
 
+  // function handleOptionChange(e) {
+  //   e.fullName === "focusedRowKey" && setUserID(e.value);
+  // }
+
   // const errorMessage = errorStatus ? (
   //   <ErrorPopup
   //     errorState={errorStatus}
@@ -523,7 +538,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // rowAlternationEnabled={true}
         // focusedRowIndex={0}
         // columns
-        showColumnLines={false}
+        showColumnLines={true}
         // columnMinWidth={130}
         columnAutoWidth={true}
         columnHidingEnabled={false}

@@ -20,6 +20,7 @@ const dataGridPagesPath = [
   "legals",
   "recordLog",
   "fieldLog",
+  "errorLog",
 ];
 
 const treeListPagesPath = [
