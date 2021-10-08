@@ -133,13 +133,6 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
     );
   }
 
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={`#${pathnameWithoutSlash}`}
-  //   />
-  // ) : null;
-
   return (
     <TreeList
       id={pathnameWithoutSlash}

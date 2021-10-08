@@ -16,25 +16,27 @@ import DataGrid, {
   LoadPanel,
 } from "devextreme-react/data-grid";
 import TreeList from "devextreme-react/tree-list";
-// import {Button} from "devextreme-react/button";
+import {Template} from "devextreme-react/core/template";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {getLookupParamsForURL} from "../../helpers/functions";
+import {IconsCellRenderTemplate} from "..";
 
 import grant from "./icons/grant.svg";
 import deny from "./icons/deny.svg";
 import inherite from "./icons/inherite.svg";
+import object from "./icons/object.svg";
+import group from "./icons/group.svg";
+import role from "./icons/role.svg";
+import system from "./icons/system.svg";
 import spinner from "../Spinner/icons/spinner.svg";
 import "./UserDetailTab.scss";
-// import {ErrorPopup} from "..";
 
 const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
-
-  // const [errorStatus, setErrorStatus] = useState(null);
 
   const {formatMessage} = useLocalization();
 
@@ -177,6 +179,13 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
               ? formatMessage("msgStatusDeactivated")
               : formatMessage("msgNo")
           }
+          cellTemplate={
+            dataField === "aName"
+              ? "objPermissionsOTypeTemplate"
+              : dataField === "InheritedName"
+              ? "objPermissionsInhTypeTemplate"
+              : null
+          }
           {...params}
         >
           {required && <RequiredRule />}
@@ -211,7 +220,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
     fetchName !== "ObjectPermissions" && (e.data.UGID = GID);
   }
 
-  function renderBtn(e, value) {
+  function onClickHandlerCustomBtn(e, value) {
     const result = FetchData(
       pathname,
       `ObjectPermissions`,
@@ -230,6 +239,35 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           },
         ]);
     });
+  }
+
+  function inheritedNameCellRenderTemplate(props) {
+    const {
+      data: {InhType, InheritedName},
+    } = props;
+
+    const icons =
+      (InhType === 0 && object) ||
+      (InhType === 1 && group) ||
+      (InhType === 3 && system) ||
+      (InhType === 2 && role);
+
+    const styles = {
+      bgIcon: {
+        display: "inline-block",
+        width: "20px",
+        height: "16px",
+        background: `url("${icons}") 0% 0% / 100% no-repeat`,
+      },
+    };
+
+    return (
+      <>
+        <div className="img" style={styles.bgIcon} />
+        &nbsp;&nbsp;
+        <span className="name">{InheritedName}</span>
+      </>
+    );
   }
 
   const TreeListMarkup = () => (
@@ -251,7 +289,8 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       showColumnLines={true}
       // columnMinWidth={80}
       columnAutoWidth={true}
-      columnHidingEnabled={true}
+      // columnHidingEnabled={true}
+      columnHidingEnabled={false}
       allowColumnResizing={true}
       allowColumnReordering={true}
       // appearance
@@ -280,7 +319,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         popup={popupOpt}
         allowAdding={false}
         allowDeleting={false}
-        allowUpdating={true}
+        allowUpdating={false}
         useIcons={true}
         startEditAction="dblClick"
       />
@@ -289,20 +328,20 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       <Column type="buttons">
         <Button
-          icon={inherite}
-          cssClass={"btn-icon"}
-          name="inherite"
-          hint={"inherite btn"}
-          onClick={(e) => renderBtn(e, 2)}
-          visible={(e) => e.row.data.OType !== 6}
-        />
-
-        <Button
           icon={deny}
           cssClass={"btn-icon"}
           name="deny"
           hint={"deny btn"}
-          onClick={(e) => renderBtn(e, 0)}
+          onClick={(e) => onClickHandlerCustomBtn(e, 0)}
+          visible={(e) => e.row.data.OType !== 6}
+        />
+
+        <Button
+          icon={inherite}
+          cssClass={"btn-icon"}
+          name="inherite"
+          hint={"inherite btn"}
+          onClick={(e) => onClickHandlerCustomBtn(e, 2)}
           visible={(e) => e.row.data.OType !== 6}
         />
 
@@ -311,10 +350,20 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           cssClass={"btn-icon"}
           name="grant"
           hint={"grant btn"}
-          onClick={(e) => renderBtn(e, 1)}
+          onClick={(e) => onClickHandlerCustomBtn(e, 1)}
           visible={(e) => e.row.data.OType !== 6}
         />
       </Column>
+
+      <Template
+        name="objPermissionsInhTypeTemplate"
+        render={inheritedNameCellRenderTemplate}
+      />
+
+      <Template
+        name="objPermissionsOTypeTemplate"
+        render={IconsCellRenderTemplate}
+      />
 
       <Paging defaultPageSize={10} enabled={true} />
       <Pager
