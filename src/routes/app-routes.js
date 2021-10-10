@@ -1,10 +1,10 @@
-import {withNavigationWatcher} from "./contexts/Navigation";
+import {withNavigationWatcher} from "../contexts/Navigation";
 import {
   HomePage,
   ProfilePage,
   DataGridTypePage,
   TreeListTypePage,
-} from "./pages";
+} from "../pages";
 
 const dataGridPagesPath = [
   "countries",

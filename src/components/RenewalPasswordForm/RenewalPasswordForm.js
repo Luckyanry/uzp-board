@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
+import {useHistory} from "react-router-dom";
 
 import Form, {CustomRule, Item, Label} from "devextreme-react/form";
 import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
@@ -9,12 +10,13 @@ import {
   StringLengthRule,
 } from "devextreme-react/validator";
 import Button from "devextreme-react/button";
-// import ValidationSummary from "devextreme-react/validation-summary";
+import notify from "devextreme/ui/notify";
 
-import {useLocalization} from "../../contexts/LocalizationContext";
+import {renewalPassword} from "../../api/auth";
 import {FetchData} from "../../api/pages-fetch";
+import {useLocalization} from "../../contexts/LocalizationContext";
+import {setToSessionStorege} from "../../helpers/functions";
 import {
-  // ColumnPwdGeneratorField,
   // ErrorPopup,
   Spinner,
 } from "..";
@@ -22,13 +24,14 @@ import {
 import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
-import "./PasswordGenerator.scss";
+import "./RenewalPasswordForm.scss";
 
-const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
+const RenewalPasswordForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
 
-  const [passwordState, setPasswordState] = useState("");
+  const [password, setPassword] = useState("");
+  const [oldPwd, setOldPwd] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
@@ -38,6 +41,8 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const [minCharacterGroups, setMinCharacterGroups] = useState(4);
 
   const {formatMessage} = useLocalization();
+  const history = useHistory();
+  const formData = useRef({});
 
   useEffect(() => {
     let ignore = false;
@@ -74,6 +79,55 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
       getPasswordPolicies();
     };
   }, [minLength, maxLength, minCharacterGroups]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const getRenewalPassword = async () => {
+      setLoading(true);
+
+      const result = await renewalPassword(password);
+      const {
+        isOk,
+        // message,
+        errorAPIMsg,
+      } = result;
+
+      setToSessionStorege("error", errorAPIMsg);
+      setLoading(false);
+
+      // if (isOk) {
+      //   notify(
+      //     {
+      //       message: formatMessage("msgSuccessPassChange"),
+      //       position: {
+      //         my: "center",
+      //         at: "center",
+      //         of: "#login-start-form-container",
+      //         offset: "0 36",
+      //       },
+      //       width: 426,
+      //       height: 80,
+      //       shading: true,
+      //     },
+      //     "success",
+      //     3000
+      //   );
+
+      // return history.push("/login");
+      // }
+
+      setErrorStatus(true);
+      // setErrorTitle(formatMessage(message));
+    };
+
+    password && !ignore && getRenewalPassword();
+
+    return () => {
+      ignore = true;
+      getRenewalPassword();
+    };
+  }, [password, history, formatMessage]);
 
   const passwordEditorOptions = {
     stylingMode: "filled",
@@ -126,9 +180,14 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
     symbol: getRandomSymbol,
   };
 
-  function onPasswordChanged(e) {
-    setPasswordState(e.value);
-    formData.password = e.value;
+  function onNewPwdChanged(e) {
+    setPassword(e.value);
+    formData.current.password = e.value;
+  }
+
+  function onOldPwdChanged(e) {
+    setOldPwd(e.value);
+    // formData.current.password = e.value;
   }
 
   function onConfirmPasswordChanged(e) {
@@ -182,7 +241,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
     }
     const finalPassword = generatedPassword.slice(0, length);
 
-    setPasswordState(finalPassword);
+    setPassword(finalPassword);
     formData.password = finalPassword;
     return finalPassword;
   }
@@ -247,13 +306,60 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
     [formData.password]
   );
 
+  const onSubmit = () => {
+    const {password} = formData.current;
+
+    setPassword(password);
+  };
+
   const View = () => (
     <Form
       formData={formData}
-      disabled={loadingState}
+      disabled={loading}
       showColonAfterLabel={false}
       showRequiredMark={false}
     >
+      <Item
+        dataField={formatMessage("msgEnterOldPassword")}
+        editorType={"dxTextBox"}
+        editorOptions={passwordEditorOptions}
+        cssClass={"input"}
+      >
+        <TextBox
+          mode={passwordMode}
+          placeholder={formatMessage("msgEnterOldPassword")}
+          stylingMode="filled"
+          defaultValue={oldPwd}
+          value={oldPwd}
+          onValueChanged={onOldPwdChanged}
+        >
+          <TextBoxButton
+            name={formatMessage("msgShowPassword")}
+            hint={formatMessage("msgShowPassword")}
+            location="after"
+            options={passwordButton}
+          />
+
+          <Validator>
+            <RequiredRule message={formatMessage("msgRequiredPassword")} />
+
+            <StringLengthRule
+              message={formatMessage(
+                "msgPwdStringLengthRuleErrMsg",
+                minLength,
+                maxLength
+              )}
+              min={minLength}
+              max={maxLength}
+            />
+
+            <PatternRule message={patternRuleErrMsg} pattern={regExp} />
+          </Validator>
+        </TextBox>
+
+        <Label visible={true} />
+      </Item>
+
       <Item
         dataField={formatMessage("msgEnterPassword")}
         editorType={"dxTextBox"}
@@ -264,9 +370,9 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
           mode={passwordMode}
           placeholder={formatMessage("msgEnterPassword")}
           stylingMode="filled"
-          defaultValue={passwordState}
-          value={passwordState}
-          onValueChanged={onPasswordChanged}
+          defaultValue={password}
+          value={password}
+          onValueChanged={onNewPwdChanged}
         >
           <TextBoxButton
             name="msgGenerateStrongPassword"
@@ -328,7 +434,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
 
             {/* <CompareRule
                 message={formatMessage("msgPasswordNotMatch")}
-                comparisonTarget={passwordState}
+                comparisonTarget={password}
               /> */}
             <CustomRule
               message={formatMessage("msgPasswordNotMatch")}
@@ -340,8 +446,6 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
         <Label visible={true} />
       </Item>
 
-      {/* <ColumnPwdGeneratorField /> */}
-
       <Item>
         <Button
           id="button"
@@ -349,19 +453,11 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
           type="default"
           useSubmitBehavior={true}
         />
-        {/* <ValidationSummary id="summary" /> */}
       </Item>
     </Form>
   );
 
   const content = !(loading || errorStatus) ? <View /> : null;
-
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={"#change-password-form-container"}
-  //   />
-  // ) : null;
 
   const spinner = loading ? (
     <Spinner
@@ -376,11 +472,10 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
       className={"change-password-form"}
       onSubmit={onSubmit}
     >
-      {/* {errorMessage} */}
       {spinner}
       {content}
     </form>
   );
 };
 
-export default PasswordGenerator;
+export default RenewalPasswordForm;

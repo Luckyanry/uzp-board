@@ -8,10 +8,10 @@ import loginBgHD from "./img/loginBgHD.jpeg";
 import {ReactComponent as Logo} from "./icons/logo.svg";
 import {ReactComponent as AngleIcon} from "./icons/angleIcon.svg";
 
-import "./SignInPage.scss";
+import "./AuthorizationLayout.scss";
 import {setToSessionStorege} from "../../helpers/functions";
 
-const SignInPage = ({
+const AuthorizationLayout = ({
   title,
   description,
   prevPage = false,
@@ -86,4 +86,4 @@ const SignInPage = ({
   );
 };
 
-export default SignInPage;
+export default AuthorizationLayout;

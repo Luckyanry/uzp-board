@@ -1,15 +1,16 @@
 import React from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
-import {SignInPage} from "./pages";
+import {AuthorizationLayout} from "../layouts";
 import {
   LoginForm,
   ResetPasswordForm,
-  LoginStartForm,
+  LoginTypes,
   ChangePasswordForm,
-  DigitalKeyForm,
-} from "./components";
+  LoginDigitalKeyForm,
+  RenewalPasswordForm,
+} from "../components";
 
-import {useLocalization} from "./contexts/LocalizationContext";
+import {useLocalization} from "../contexts/LocalizationContext";
 
 export default function UnauthenticatedContent() {
   const {formatMessage} = useLocalization();
@@ -17,16 +18,16 @@ export default function UnauthenticatedContent() {
   return (
     <Switch>
       <Route exact path="/login">
-        <SignInPage
+        <AuthorizationLayout
           title={formatMessage("msgLoginStartFormTitle")}
           description={formatMessage("msgLoginStartFormDesc")}
         >
-          <LoginStartForm />
-        </SignInPage>
+          <LoginTypes />
+        </AuthorizationLayout>
       </Route>
 
       <Route exact path="/login-form">
-        <SignInPage
+        <AuthorizationLayout
           title={formatMessage("msgLoginFormTitle")}
           description={formatMessage("msgLoginFormDesc")}
           prevPage={true}
@@ -34,11 +35,11 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <LoginForm />
-        </SignInPage>
+        </AuthorizationLayout>
       </Route>
 
       <Route exact path="/reset-password">
-        <SignInPage
+        <AuthorizationLayout
           title={formatMessage("msgResetPasswordFormTitle")}
           description={formatMessage("msgResetPasswordFormDesc")}
           prevPage={true}
@@ -46,23 +47,23 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <ResetPasswordForm />
-        </SignInPage>
+        </AuthorizationLayout>
       </Route>
 
       <Route exact path="/digital-key">
-        <SignInPage
+        <AuthorizationLayout
           title={formatMessage("msgDigitalKeyFormTitle")}
           description={formatMessage("msgDigitalKeyFormDesc")}
           prevPage={true}
           footerTitle={formatMessage("msgDigitalKeyFormFooterTitle")}
           pageStep="02"
         >
-          <DigitalKeyForm />
-        </SignInPage>
+          <LoginDigitalKeyForm />
+        </AuthorizationLayout>
       </Route>
 
-      <Route exact path="/change-password/">
-        <SignInPage
+      <Route exact path="/change-password">
+        <AuthorizationLayout
           title={formatMessage("msgChangePasswordFormTitle")}
           description={formatMessage("msgChangePasswordFormDesc")}
           prevPage={true}
@@ -70,7 +71,19 @@ export default function UnauthenticatedContent() {
           pageStep="02"
         >
           <ChangePasswordForm />
-        </SignInPage>
+        </AuthorizationLayout>
+      </Route>
+
+      <Route exact path="/renewal-password">
+        <AuthorizationLayout
+          title={formatMessage("msgRenewalPasswordFormTitle")}
+          description={formatMessage("msgRenewalPasswordFormDesc")}
+          prevPage={true}
+          footerTitle={formatMessage("msgRenewalPasswordFormFooterTitle")}
+          pageStep="02"
+        >
+          <RenewalPasswordForm />
+        </AuthorizationLayout>
       </Route>
 
       <Redirect to={"/login"} />

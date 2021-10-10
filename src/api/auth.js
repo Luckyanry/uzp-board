@@ -115,3 +115,24 @@ export async function changePassword(password, resetToken) {
     };
   }
 }
+
+export async function renewalPassword(oldPwd, newPwd, UGID) {
+  try {
+    await FetchData(
+      "/renewal-password",
+      "w_ChangePasswordByUGID",
+      "wisdb",
+      urlAnonymous
+    ).signInUserData({"@old": oldPwd, "@new": newPwd, "@UGID": UGID}, "POST");
+
+    return {
+      isOk: true,
+    };
+  } catch (err) {
+    return {
+      isOk: false,
+      message: "msgErrFaildToResetPass",
+      errorAPIMsg: err,
+    };
+  }
+}

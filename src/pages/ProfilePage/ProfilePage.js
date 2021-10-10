@@ -1,15 +1,22 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 
 import Form, {SimpleItem, Label, Item} from "devextreme-react/form";
+// import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {PasswordGenerator} from "../../components";
+import {
+  // ColumnPwdGeneratorField,
+  PasswordGenerator,
+} from "../../components";
 
 import "./ProfilePage.scss";
 
 export const ProfilePage = () => {
   const [notes, setNotes] = useState("Ivan has been our designer since 2010.");
+  // const [loading, setLoading] = useState(false);
+  // const [password, setPassword] = useState(null);
 
+  const formData = useRef({});
   const {formatMessage} = useLocalization();
 
   const employee = {
@@ -24,6 +31,14 @@ export const ProfilePage = () => {
     Notes: notes,
     Address: "04112, Kyiv, Ukraine",
   };
+
+  // const onSubmit = () => {
+  //   setLoading(true);
+  //   const {password} = formData.current;
+
+  //   setPassword(password);
+  //   setLoading(false);
+  // };
 
   return (
     <>
@@ -76,9 +91,14 @@ export const ProfilePage = () => {
           <Item dataField="Notes">
             <Label text={formatMessage("msgNotes")} />
           </Item>
+          {/* <ColumnPwdGeneratorField /> */}
         </Form>
         <div className={"passwors-generator"}>
-          <PasswordGenerator />
+          <PasswordGenerator
+            // onSubmit={onSubmit}
+            // loadingState={loading}
+            formData={formData.current}
+          />
         </div>
       </div>
     </>

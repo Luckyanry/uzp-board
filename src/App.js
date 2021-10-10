@@ -7,8 +7,8 @@ import {NavigationProvider} from "./contexts/Navigation";
 import {AuthProvider, useAuth} from "./contexts/Auth";
 import {LocalizationProvider} from "./contexts/LocalizationContext";
 import {useScreenSizeClass} from "./utils/media-query";
-import Content from "./Content";
-import UnauthenticatedContent from "./UnauthenticatedContent";
+import Content from "./routes/Content";
+import UnauthenticatedContent from "./routes/UnauthenticatedContent";
 
 import "devextreme/dist/css/dx.common.css";
 import "./themes/generated/theme.base.css";

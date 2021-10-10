@@ -4,9 +4,9 @@ import Form, {ButtonItem, ButtonOptions} from "devextreme-react/form";
 import {useLocalization} from "../../contexts/LocalizationContext";
 
 import {ReactComponent as SecureIcon} from "./icons/secureIcon.svg";
-import "./DigitalKeyForm.scss";
+import "./LoginDigitalKeyForm.scss";
 
-const DigitalKeyForm = () => {
+const LoginDigitalKeyForm = () => {
   const {formatMessage} = useLocalization();
 
   const submitButtonAttributes = {class: "submit-button"};
@@ -39,4 +39,4 @@ const DigitalKeyForm = () => {
   );
 };
 
-export default DigitalKeyForm;
+export default LoginDigitalKeyForm;

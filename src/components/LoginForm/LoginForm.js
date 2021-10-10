@@ -1,5 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+
 import Form, {
   Item,
   Label,
@@ -30,6 +31,7 @@ export default function LoginForm() {
   const {signIn} = useAuth();
   const formData = useRef({});
   const {formatMessage} = useLocalization();
+  const history = useHistory();
 
   const loginEditorOptions = {
     stylingMode: "filled",
@@ -68,14 +70,14 @@ export default function LoginForm() {
           // setErrorTitle(formatMessage(message));
 
           setLoading(false);
-          return;
+          // return history.push("/login");
         }
       })();
 
     return () => {
       ignore = true;
     };
-  }, [login, password, signIn, formatMessage]);
+  }, [login, password, signIn, formatMessage, history]);
 
   const onFormSubmit = (e) => {
     e.preventDefault();

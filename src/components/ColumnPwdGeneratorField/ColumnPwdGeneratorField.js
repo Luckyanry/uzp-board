@@ -1,6 +1,6 @@
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useEffect, useState} from "react";
 
-import Form, {CustomRule, Item, Label} from "devextreme-react/form";
+import {Item, Label} from "devextreme-react/form";
 import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
 import {
   Validator,
@@ -8,28 +8,18 @@ import {
   PatternRule,
   StringLengthRule,
 } from "devextreme-react/validator";
-import Button from "devextreme-react/button";
 // import ValidationSummary from "devextreme-react/validation-summary";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
-import {
-  // ColumnPwdGeneratorField,
-  // ErrorPopup,
-  Spinner,
-} from "..";
 
 import visibilityOff from "./icons/visibilityOff.svg";
 import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
-import "./PasswordGenerator.scss";
+import "./ColumnPwdGeneratorField.scss";
 
-const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
-  const [loading, setLoading] = useState(false);
-  const [errorStatus, setErrorStatus] = useState(false);
-
+const ColumnPwdGeneratorField = ({formData}) => {
   const [passwordState, setPasswordState] = useState("");
-  const [confirmPasswordState, setConfirmPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
 
@@ -41,7 +31,6 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
 
   useEffect(() => {
     let ignore = false;
-    setLoading(true);
 
     const getPasswordPolicies = async () => {
       const dictionaryByName = FetchData(
@@ -56,11 +45,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
           setMinLength(arr[0].jvson.MinPasswordLength);
           setMaxLength(arr[0].jvson.MaxPasswordLength);
           setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
-        })
-        .catch((err) => setErrorStatus(err));
-
-      setLoading(false);
-      return;
+        });
     };
 
     minLength &&
@@ -83,15 +68,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
     height: 64,
   };
 
-  const confirmedPasswordEditorOptions = {
-    stylingMode: "filled",
-    placeholder: formatMessage("msgConfirmPassword"),
-    mode: "password",
-    elementAttr: {class: "form-input"},
-    height: 64,
-  };
-
-  const passwordButton = {
+  const pwdBtnIcon = {
     icon: passwordVisibility,
     type: "button",
     onClick: () => {
@@ -102,20 +79,13 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
     },
   };
 
-  const passwordGeneratorBtn = {
+  const pwdGeneratorBtn = {
     icon: enhancedEncryption,
     type: "button",
     onClick: () => {
       const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
 
-      const newPassword = passwordGenerator(
-        setLower,
-        setUpper,
-        setNumber,
-        setSymbol,
-        minLength
-      );
-      setConfirmPasswordState(newPassword);
+      passwordGenerator(setLower, setUpper, setNumber, setSymbol, minLength);
     },
   };
 
@@ -129,10 +99,6 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   function onPasswordChanged(e) {
     setPasswordState(e.value);
     formData.password = e.value;
-  }
-
-  function onConfirmPasswordChanged(e) {
-    setConfirmPasswordState(e.value);
   }
 
   function getRandomLower() {
@@ -241,146 +207,55 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
 
   const {regExp, patternRuleErrMsg} = inputValidation();
 
-  const confirmPassword = useCallback(
-    ({value}) => value === formData.password,
-
-    [formData.password]
-  );
-
-  const View = () => (
-    <Form
-      formData={formData}
-      disabled={loadingState}
-      showColonAfterLabel={false}
-      showRequiredMark={false}
-    >
-      <Item
-        dataField={formatMessage("msgEnterPassword")}
-        editorType={"dxTextBox"}
-        editorOptions={passwordEditorOptions}
-        cssClass={"input"}
-      >
-        <TextBox
-          mode={passwordMode}
-          placeholder={formatMessage("msgEnterPassword")}
-          stylingMode="filled"
-          defaultValue={passwordState}
-          value={passwordState}
-          onValueChanged={onPasswordChanged}
-        >
-          <TextBoxButton
-            name="msgGenerateStrongPassword"
-            hint={formatMessage("msgGeneratePassword")}
-            location="after"
-            options={passwordGeneratorBtn}
-          />
-
-          <TextBoxButton
-            name={formatMessage("msgShowPassword")}
-            hint={formatMessage("msgShowPassword")}
-            location="after"
-            options={passwordButton}
-          />
-
-          <Validator>
-            <RequiredRule message={formatMessage("msgRequiredPassword")} />
-
-            <StringLengthRule
-              message={formatMessage(
-                "msgPwdStringLengthRuleErrMsg",
-                minLength,
-                maxLength
-              )}
-              min={minLength}
-              max={maxLength}
-            />
-
-            <PatternRule message={patternRuleErrMsg} pattern={regExp} />
-          </Validator>
-        </TextBox>
-
-        <Label visible={true} />
-      </Item>
-
-      <Item
-        dataField={formatMessage("msgConfirmPassword")}
-        editorType={"dxTextBox"}
-        editorOptions={confirmedPasswordEditorOptions}
-        ssClass={"input"}
-      >
-        <TextBox
-          mode={passwordMode}
-          placeholder={formatMessage("msgConfirmPassword")}
-          stylingMode="filled"
-          value={confirmPasswordState}
-          onValueChanged={onConfirmPasswordChanged}
-        >
-          <TextBoxButton
-            name={formatMessage("msgShowConfirmedPassword")}
-            location="after"
-            options={passwordButton}
-          />
-
-          <Validator>
-            <RequiredRule
-              message={formatMessage("msgConfirmRequiredPassword")}
-            />
-
-            {/* <CompareRule
-                message={formatMessage("msgPasswordNotMatch")}
-                comparisonTarget={passwordState}
-              /> */}
-            <CustomRule
-              message={formatMessage("msgPasswordNotMatch")}
-              validationCallback={confirmPassword}
-            />
-          </Validator>
-        </TextBox>
-
-        <Label visible={true} />
-      </Item>
-
-      {/* <ColumnPwdGeneratorField /> */}
-
-      <Item>
-        <Button
-          id="button"
-          text={formatMessage("msgContinue")}
-          type="default"
-          useSubmitBehavior={true}
-        />
-        {/* <ValidationSummary id="summary" /> */}
-      </Item>
-    </Form>
-  );
-
-  const content = !(loading || errorStatus) ? <View /> : null;
-
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={"#change-password-form-container"}
-  //   />
-  // ) : null;
-
-  const spinner = loading ? (
-    <Spinner
-      loadingState={loading}
-      positionOf={"#change-password-form-container"}
-    />
-  ) : null;
-
   return (
-    <form
-      id="change-password-form-container"
-      className={"change-password-form"}
-      onSubmit={onSubmit}
+    <Item
+      dataField={"password"}
+      editorType={"dxTextBox"}
+      editorOptions={passwordEditorOptions}
+      cssClass={"input"}
     >
-      {/* {errorMessage} */}
-      {spinner}
-      {content}
-    </form>
+      <TextBox
+        mode={passwordMode}
+        placeholder={formatMessage("msgEnterPassword")}
+        stylingMode="filled"
+        defaultValue={passwordState}
+        value={passwordState}
+        onValueChanged={onPasswordChanged}
+      >
+        <TextBoxButton
+          name="msgGenerateStrongPassword"
+          hint={formatMessage("msgGeneratePassword")}
+          location="after"
+          options={pwdGeneratorBtn}
+        />
+
+        <TextBoxButton
+          name={formatMessage("msgShowPassword")}
+          hint={formatMessage("msgShowPassword")}
+          location="after"
+          options={pwdBtnIcon}
+        />
+
+        <Validator>
+          <RequiredRule message={formatMessage("msgRequiredPassword")} />
+
+          <StringLengthRule
+            message={formatMessage(
+              "msgPwdStringLengthRuleErrMsg",
+              minLength,
+              maxLength
+            )}
+            min={minLength}
+            max={maxLength}
+          />
+
+          <PatternRule message={patternRuleErrMsg} pattern={regExp} />
+        </Validator>
+      </TextBox>
+
+      <Label visible={true} />
+    </Item>
   );
 };
 
-export default PasswordGenerator;
+export default ColumnPwdGeneratorField;

@@ -44,67 +44,67 @@ export default function ResetPasswordForm() {
   useEffect(() => {
     let ignore = false;
 
-    email &&
-      (async () => {
-        setLoading(true);
+    const getResetPassword = async () => {
+      setLoading(true);
 
-        const result = await resetPassword(email);
-        const {isOk, message, errorAPIMsg} = result;
+      const result = await resetPassword(email);
+      const {isOk, message, errorAPIMsg} = result;
 
-        if (!ignore) {
-          setToSessionStorege("error", errorAPIMsg);
-          setLoading(false);
-        }
+      setToSessionStorege("error", errorAPIMsg);
+      setLoading(false);
 
-        if (!isOk && errorAPIMsg && !ignore) {
-          setLoading(false);
-          setErrorStatus(true);
-          // setErrorTitle(formatMessage(message));
+      if (!isOk && errorAPIMsg) {
+        setLoading(false);
+        setErrorStatus(true);
+        // setErrorTitle(formatMessage(message));
 
-          return;
-        }
+        return;
+      }
 
-        if (!isOk && !errorAPIMsg) {
-          return notify(
-            {
-              message: formatMessage(message),
-              position: {
-                my: "center",
-                at: "center",
-                of: "#reset-password-form-container",
-                offset: "0 0",
-              },
-              width: 426,
-              height: 64,
-              shading: true,
-            },
-            "error",
-            3000
-          );
-        }
-
-        history.push("/login");
-
-        notify(
+      if (!isOk && !errorAPIMsg) {
+        return notify(
           {
-            message: formatMessage("msgResetNotificationText"),
+            message: formatMessage(message),
             position: {
               my: "center",
               at: "center",
-              of: "#login-start-form-container",
+              of: "#reset-password-form-container",
               offset: "0 0",
             },
-            width: 428,
+            width: 426,
             height: 64,
             shading: true,
           },
-          "success",
-          4000
+          "error",
+          3000
         );
-      })();
+      }
+
+      history.push("/login");
+
+      notify(
+        {
+          message: formatMessage("msgResetNotificationText"),
+          position: {
+            my: "center",
+            at: "center",
+            of: "#login-start-form-container",
+            offset: "0 0",
+          },
+          width: 428,
+          height: 64,
+          shading: true,
+        },
+        "success",
+        4000
+      );
+    };
+
+    email && !ignore && getResetPassword();
 
     return () => {
       ignore = true;
+      getResetPassword();
     };
   }, [email, history, formatMessage]);
 

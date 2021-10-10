@@ -15,7 +15,7 @@ import {ReactComponent as UserIcon} from "./icons/userIconGreen.svg";
 import {ReactComponent as FlashCardIcon} from "./icons/flashIconGreen.svg";
 import {ReactComponent as WindowIcon} from "./icons/windowIconGreen.svg";
 
-import "./LoginStartForm.scss";
+import "./LoginTypes.scss";
 
 const buttonOptions = [
   {
@@ -38,7 +38,7 @@ const buttonOptions = [
   },
 ];
 
-const LoginStartForm = () => {
+const LoginTypes = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   // const [errorTitle, setErrorTitle] = useState();
@@ -65,7 +65,6 @@ const LoginStartForm = () => {
         } = result;
 
         if (!isOk && !ignore) {
-          console.log("LoginStartForm err ");
           setToSessionStorege("error", errorAPIMsg);
           setLoading(false);
           setErrorStatus(true);
@@ -114,7 +113,7 @@ const LoginStartForm = () => {
   );
 };
 
-export default LoginStartForm;
+export default LoginTypes;
 
 // notify(
 //   {

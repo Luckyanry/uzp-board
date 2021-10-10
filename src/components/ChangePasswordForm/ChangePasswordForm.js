@@ -30,11 +30,10 @@ export default function ChangePasswordForm() {
   useEffect(() => {
     let ignore = false;
 
-    // password &&
-    const test = async () => {
+    const getChangePassword = async () => {
       setLoading(true);
 
-      if (token && !ignore) {
+      if (token) {
         const result = await changePassword(password, token);
         const {
           isOk,
@@ -45,7 +44,7 @@ export default function ChangePasswordForm() {
         setToSessionStorege("error", errorAPIMsg);
         setLoading(false);
 
-        if (isOk && !ignore) {
+        if (isOk) {
           notifyPopup(
             "msgSuccessPassChange",
             "#login-start-form-container",
@@ -61,11 +60,11 @@ export default function ChangePasswordForm() {
       }
     };
 
-    password && test();
+    password && !ignore && getChangePassword();
 
     return () => {
       ignore = true;
-      test();
+      getChangePassword();
     };
   }, [token, password, history]);
 

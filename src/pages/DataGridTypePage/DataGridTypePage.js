@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 
 import "devextreme/data/odata/store";
 import DataGrid, {
@@ -21,7 +21,7 @@ import DataGrid, {
   StateStoring,
 } from "devextreme-react/data-grid";
 import {
-  SimpleItem,
+  Item,
   GroupItem,
   TabbedItem,
   TabPanelOptions,
@@ -43,6 +43,7 @@ import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
+  // ColumnPwdGeneratorField,
   // DetailTreeListTab,
 } from "../../components";
 // import {ErrorPopup} from "../../components";
@@ -263,6 +264,27 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     setUserID("");
   }
 
+  function onFocusedCellChanging(e) {
+    if (
+      checkIfArrIncludesValue(
+        ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
+        pathnameWithoutSlash
+      )
+    ) {
+      const userFormData = e.rows[e.newRowIndex].data;
+      const rowId = userFormData.GID;
+      const groupItemCaption = userFormData.UserName;
+
+      setUserID(rowId);
+      setUserFormData(userFormData);
+      setUserGroupItemCaption(groupItemCaption);
+    }
+  }
+
+  // function handleOptionChange(e) {
+  //   e.fullName === "focusedRowKey" && setUserID(e.value);
+  // }
+
   function customMarkupRender() {
     let murkupCollection = [];
 
@@ -359,6 +381,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               ? formatMessage("msgStatusDeactivated")
               : formatMessage("msgNo")
           }
+          // cellRender={renderPwdGridCell}
           {...params}
         >
           {required && <RequiredRule />}
@@ -406,30 +429,28 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
-  function onFocusedCellChanging(e) {
-    if (
-      checkIfArrIncludesValue(
-        ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
-        pathnameWithoutSlash
-      )
-    ) {
-      const userFormData = e.rows[e.newRowIndex].data;
-      const rowId = userFormData.GID;
-      const groupItemCaption = userFormData.UserName;
+  // function renderPwdGridCell(data) {
+  //   console.log(`data `, data.data.Password);
+  //   return <div style={{color: "blue"}}>{data.displayValue}</div>;
+  // }
 
-      setUserID(rowId);
-      setUserFormData(userFormData);
-      setUserGroupItemCaption(groupItemCaption);
-    }
-  }
-
-  function customSimpleItemMarkup(formData) {
+  function customItemMarkup(formData) {
     if (!formData) {
       return;
     }
 
     return Object.keys(formData).map((item, idx) => {
-      return <SimpleItem key={idx} dataField={item} />;
+      console.log(`item`, item);
+      return <Item key={idx} dataField={item} />;
+      // return (
+      //   <Fragment key={idx}>
+      //     {item !== "Password" ? (
+      //       <Item dataField={item} />
+      //     ) : (
+      //       <ColumnPwdGeneratorField />
+      //     )}
+      //   </Fragment>
+      // );
     });
   }
 
@@ -448,7 +469,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             <TabbedItem>
               <TabPanelOptions deferRendering={false} />
               <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
-                {customSimpleItemMarkup(userFormData)}
+                {customItemMarkup(userFormData)}
               </Tab>
 
               {checkIfArrIncludesValue(
@@ -504,18 +525,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       />
     );
   }
-
-  // function handleOptionChange(e) {
-  //   e.fullName === "focusedRowKey" && setUserID(e.value);
-  // }
-
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={`#${pathnameWithoutSlash}}`}
-  //     // popupPositionOf={`#${pathnameWithoutSlash}`}
-  //   />
-  // ) : null;
 
   return (
     <>
