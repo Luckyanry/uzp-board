@@ -238,7 +238,8 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
   const confirmPassword = useCallback(
     ({value}) => value === formData.password,
 
-    [formData.password]
+    // eslint-disable-next-line
+    []
   );
 
   const View = () => (

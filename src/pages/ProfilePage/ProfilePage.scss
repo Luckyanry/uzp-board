@@ -1,8 +1,10 @@
 .form-avatar {
   float: left;
+  margin-right: 20px;
+
   height: 120px;
   width: 120px;
-  margin-right: 20px;
+
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-size: contain;
   background-repeat: no-repeat;
@@ -11,19 +13,27 @@
   overflow: hidden;
 
   img {
-    height: 120px;
     display: block;
     margin: 0 auto;
+
+    width: fit-content;
+    height: 120px;
   }
 }
 
 .passwors-generator {
+  margin-left: -42px;
+
   width: 426px;
   height: 300px;
-  margin-left: -42px;
+
   transform: scale(0.8);
 }
 
 // .dx-placeholder {
 //   padding-left: 20px;
 // }
+
+.content-block.dx-card.responsive-paddings {
+  height: 620px;
+}

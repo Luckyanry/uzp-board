@@ -31,7 +31,7 @@ export const ProfilePage = () => {
         {formatMessage("msgProfileMenuTitle")}
       </h2>
 
-      <div className={"content-block dx-card responsive-paddings"}>
+      {/* <div className={"content-block dx-card responsive-paddings"}>
         <div className={"form-avatar"}>
           <img
             alt={""}
@@ -39,7 +39,7 @@ export const ProfilePage = () => {
           />
         </div>
         <span>{notes}</span>
-      </div>
+      </div> */}
 
       <div className={"content-block dx-card responsive-paddings"}>
         <Form
