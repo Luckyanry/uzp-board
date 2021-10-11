@@ -19,6 +19,7 @@ import {
 } from "..";
 
 import "./LoginForm.scss";
+import notify from "devextreme/ui/notify";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -54,23 +55,41 @@ export default function LoginForm() {
 
     login &&
       password &&
+      !ignore &&
       (async () => {
         setLoading(true);
 
         const result = await signIn(login, password);
-        const {
-          isOk,
-          // message,
-          errorAPIMsg,
-        } = result;
+        const {isOk, Alert, NativeError, errorAPIMsg} = result;
 
-        if (!isOk && !ignore) {
-          setToSessionStorege("error", errorAPIMsg);
+        if (!isOk && Alert && NativeError === 153649 && !errorAPIMsg) {
           setErrorStatus(true);
-          // setErrorTitle(formatMessage(message));
-
           setLoading(false);
-          // return history.push("/login");
+
+          notify(
+            {
+              message: Alert,
+              position: {
+                my: "center",
+                at: "center",
+                of: "#content",
+                offset: "0 36",
+              },
+              width: 426,
+              height: 80,
+              shading: true,
+            },
+            "error",
+            3000
+          );
+
+          return history.push("/renewal-password");
+        }
+
+        if (!isOk && errorAPIMsg) {
+          setErrorStatus(true);
+          setLoading(false);
+          return history.push("/login");
         }
       })();
 
@@ -81,11 +100,16 @@ export default function LoginForm() {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    console.log(`e LoginForm `, e);
     const {login, password} = formData.current;
 
     setLogin(login);
     setPassword(password);
   };
+
+  // function test(e) {
+  //   console.log(`e `, e);
+  // }
 
   const View = () => (
     <Form
@@ -128,6 +152,7 @@ export default function LoginForm() {
           height={64}
           type={"default"}
           useSubmitBehavior={true}
+          // onClick={test}
         >
           <span className="dx-button-text">{formatMessage("msgSignIn")}</span>
         </ButtonOptions>
@@ -136,14 +161,6 @@ export default function LoginForm() {
   );
 
   const content = !(loading || errorStatus) ? <View /> : null;
-
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={"#login-form-container"}
-  //     errorTitle={errorTitle}
-  //   />
-  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -155,7 +172,6 @@ export default function LoginForm() {
       className={"login-form"}
       onSubmit={onFormSubmit}
     >
-      {/* {errorMessage} */}
       {spinner}
       {content}
     </form>

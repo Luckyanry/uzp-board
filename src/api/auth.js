@@ -2,6 +2,8 @@ import {getFromSessionStorege, setToSessionStorege} from "../helpers/functions";
 import {FetchData} from "./pages-fetch";
 import {urlAnonymous, urlADauth} from "./url-config";
 
+let getUserUGID = null;
+
 export async function signIn(login = null, password = null) {
   const url = login && password ? urlAnonymous : urlADauth;
   sessionStorage.setItem("sessionURL", url);
@@ -22,6 +24,20 @@ export async function signIn(login = null, password = null) {
     });
 
     const result = await signInUserData;
+
+    if (typeof result === "object") {
+      const checkForUGID = Object.keys(result).includes("UGID");
+      const checkForErrorNum = Object.values(result).includes(153649);
+
+      getUserUGID = checkForErrorNum && checkForUGID ? result.UGID : null;
+      console.log(` getUserUGID `, getUserUGID);
+
+      return {
+        isOk: false,
+        Alert: result.Alert,
+        NativeError: result.NativeError,
+      };
+    }
 
     setToSessionStorege("user", result.data[0]);
 
@@ -116,14 +132,20 @@ export async function changePassword(password, resetToken) {
   }
 }
 
-export async function renewalPassword(oldPwd, newPwd, UGID) {
+export async function renewalPassword(oldPwd, newPwd) {
+  if (!getUserUGID) return;
+  console.log(`UGID`, getUserUGID);
+
   try {
     await FetchData(
       "/renewal-password",
       "w_ChangePasswordByUGID",
       "wisdb",
       urlAnonymous
-    ).signInUserData({"@old": oldPwd, "@new": newPwd, "@UGID": UGID}, "POST");
+    ).signInUserData(
+      {"@old": oldPwd, "@new": newPwd, "@UGID": getUserUGID},
+      "POST"
+    );
 
     return {
       isOk: true,

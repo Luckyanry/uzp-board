@@ -15,7 +15,6 @@ import notify from "devextreme/ui/notify";
 import {renewalPassword} from "../../api/auth";
 import {FetchData} from "../../api/pages-fetch";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {setToSessionStorege} from "../../helpers/functions";
 import {
   // ErrorPopup,
   Spinner,
@@ -30,9 +29,11 @@ const RenewalPasswordForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
 
-  const [password, setPassword] = useState("");
+  const [pwd, setPwd] = useState("");
   const [oldPwd, setOldPwd] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
+  const [formSubmited, setFormSubmited] = useState(false);
+
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
 
@@ -86,48 +87,54 @@ const RenewalPasswordForm = () => {
     const getRenewalPassword = async () => {
       setLoading(true);
 
-      const result = await renewalPassword(password);
+      const {oldPassword, password} = formData.current;
+      if (!oldPassword && !password) return;
+
+      const result = await renewalPassword(oldPassword, password);
       const {
         isOk,
         // message,
-        errorAPIMsg,
+        // errorAPIMsg,
       } = result;
 
-      setToSessionStorege("error", errorAPIMsg);
+      // setToSessionStorege("error", errorAPIMsg);
       setLoading(false);
 
-      // if (isOk) {
-      //   notify(
-      //     {
-      //       message: formatMessage("msgSuccessPassChange"),
-      //       position: {
-      //         my: "center",
-      //         at: "center",
-      //         of: "#login-start-form-container",
-      //         offset: "0 36",
-      //       },
-      //       width: 426,
-      //       height: 80,
-      //       shading: true,
-      //     },
-      //     "success",
-      //     3000
-      //   );
+      if (isOk) {
+        notify(
+          {
+            message: formatMessage("msgSuccessPassChange"),
+            position: {
+              my: "center",
+              at: "center",
+              of: "#login-start-form-container",
+              // of: "#content",
+              offset: "0 36",
+            },
+            width: 426,
+            height: 80,
+            shading: true,
+          },
+          "success",
+          3000
+        );
 
-      // return history.push("/login");
-      // }
+        return history.push("/login");
+      }
 
       setErrorStatus(true);
       // setErrorTitle(formatMessage(message));
     };
 
-    password && !ignore && getRenewalPassword();
+    pwd && !ignore && getRenewalPassword();
 
     return () => {
       ignore = true;
       getRenewalPassword();
     };
-  }, [password, history, formatMessage]);
+
+    // eslint-disable-next-line
+  }, [formSubmited]);
 
   const passwordEditorOptions = {
     stylingMode: "filled",
@@ -180,20 +187,6 @@ const RenewalPasswordForm = () => {
     symbol: getRandomSymbol,
   };
 
-  function onNewPwdChanged(e) {
-    setPassword(e.value);
-    formData.current.password = e.value;
-  }
-
-  function onOldPwdChanged(e) {
-    setOldPwd(e.value);
-    // formData.current.password = e.value;
-  }
-
-  function onConfirmPasswordChanged(e) {
-    setConfirmPasswordState(e.value);
-  }
-
   function getRandomLower() {
     return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
   }
@@ -241,8 +234,8 @@ const RenewalPasswordForm = () => {
     }
     const finalPassword = generatedPassword.slice(0, length);
 
-    setPassword(finalPassword);
-    formData.password = finalPassword;
+    setPwd(finalPassword);
+    formData.current.password = finalPassword;
     return finalPassword;
   }
 
@@ -298,29 +291,45 @@ const RenewalPasswordForm = () => {
     }
   }
 
-  const {regExp, patternRuleErrMsg} = inputValidation();
+  function onNewPwdChanged(e) {
+    setPwd(e.value);
+    formData.current.password = e.value;
+  }
+
+  function onOldPwdChanged(e) {
+    setOldPwd(e.value);
+    formData.current.oldPassword = e.value;
+  }
+
+  function onConfirmPasswordChanged(e) {
+    setConfirmPasswordState(e.value);
+  }
 
   const confirmPassword = useCallback(
-    ({value}) => value === formData.password,
+    ({value}) => {
+      const {password} = formData.current;
+      return value === password;
+    },
 
-    [formData.password]
+    []
   );
 
-  const onSubmit = () => {
-    const {password} = formData.current;
-
-    setPassword(password);
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    setFormSubmited(true);
   };
+
+  const {regExp, patternRuleErrMsg} = inputValidation();
 
   const View = () => (
     <Form
-      formData={formData}
+      formData={formData.current}
       disabled={loading}
       showColonAfterLabel={false}
       showRequiredMark={false}
     >
       <Item
-        dataField={formatMessage("msgEnterOldPassword")}
+        dataField={"oldPassword"}
         editorType={"dxTextBox"}
         editorOptions={passwordEditorOptions}
         cssClass={"input"}
@@ -339,29 +348,13 @@ const RenewalPasswordForm = () => {
             location="after"
             options={passwordButton}
           />
-
-          <Validator>
-            <RequiredRule message={formatMessage("msgRequiredPassword")} />
-
-            <StringLengthRule
-              message={formatMessage(
-                "msgPwdStringLengthRuleErrMsg",
-                minLength,
-                maxLength
-              )}
-              min={minLength}
-              max={maxLength}
-            />
-
-            <PatternRule message={patternRuleErrMsg} pattern={regExp} />
-          </Validator>
         </TextBox>
 
         <Label visible={true} />
       </Item>
 
       <Item
-        dataField={formatMessage("msgEnterPassword")}
+        dataField={"password"}
         editorType={"dxTextBox"}
         editorOptions={passwordEditorOptions}
         cssClass={"input"}
@@ -370,22 +363,22 @@ const RenewalPasswordForm = () => {
           mode={passwordMode}
           placeholder={formatMessage("msgEnterPassword")}
           stylingMode="filled"
-          defaultValue={password}
-          value={password}
+          defaultValue={pwd}
+          value={pwd}
           onValueChanged={onNewPwdChanged}
         >
-          <TextBoxButton
-            name="msgGenerateStrongPassword"
-            hint={formatMessage("msgGeneratePassword")}
-            location="after"
-            options={passwordGeneratorBtn}
-          />
-
           <TextBoxButton
             name={formatMessage("msgShowPassword")}
             hint={formatMessage("msgShowPassword")}
             location="after"
             options={passwordButton}
+          />
+
+          <TextBoxButton
+            name="msgGenerateStrongPassword"
+            hint={formatMessage("msgGeneratePassword")}
+            location="after"
+            options={passwordGeneratorBtn}
           />
 
           <Validator>
@@ -460,17 +453,14 @@ const RenewalPasswordForm = () => {
   const content = !(loading || errorStatus) ? <View /> : null;
 
   const spinner = loading ? (
-    <Spinner
-      loadingState={loading}
-      positionOf={"#change-password-form-container"}
-    />
+    <Spinner loadingState={loading} positionOf={"#content"} />
   ) : null;
 
   return (
     <form
-      id="change-password-form-container"
-      className={"change-password-form"}
-      onSubmit={onSubmit}
+      id="renewal-password-form-container"
+      className={"renewal-password-form"}
+      onSubmit={onFormSubmit}
     >
       {spinner}
       {content}

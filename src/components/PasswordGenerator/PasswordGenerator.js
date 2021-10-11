@@ -255,7 +255,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
       showRequiredMark={false}
     >
       <Item
-        dataField={formatMessage("msgEnterPassword")}
+        dataField={"password"}
         editorType={"dxTextBox"}
         editorOptions={passwordEditorOptions}
         cssClass={"input"}
@@ -303,7 +303,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
       </Item>
 
       <Item
-        dataField={formatMessage("msgConfirmPassword")}
+        dataField={"confirmPassword"}
         editorType={"dxTextBox"}
         editorOptions={confirmedPasswordEditorOptions}
         ssClass={"input"}
