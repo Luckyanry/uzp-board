@@ -199,6 +199,10 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
               ? "objPermissionsInhTypeTemplate"
               : null
           }
+          calculateCellValue={
+            dataField === "aName" ? (rowData) => rowData.OType : null
+          }
+          calculateDisplayValue={dataField === "aName" ? "aName" : null}
           {...params}
         >
           {required && <RequiredRule />}
@@ -408,7 +412,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       <Column type="buttons">
         <Button
-          icon={deny}
+          icon={Math.random() && deny}
           cssClass={"btn-icon"}
           name="deny"
           hint={"deny btn"}
@@ -417,7 +421,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         />
 
         <Button
-          icon={inherite}
+          icon={Math.random() && inherite}
           cssClass={"btn-icon"}
           name="inherite"
           hint={"inherite btn"}
@@ -426,7 +430,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         />
 
         <Button
-          icon={grant}
+          icon={Math.random() && grant}
           cssClass={"btn-icon"}
           name="grant"
           hint={"grant btn"}

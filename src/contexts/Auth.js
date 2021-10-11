@@ -47,7 +47,7 @@ function AuthProvider(props) {
     sessionStorage.clear();
     history.push("/login");
 
-    // window.location.reload();
+    window.location.reload();
   }, [history]);
 
   return <AuthContext.Provider value={{user, signIn, signOut}} {...props} />;
