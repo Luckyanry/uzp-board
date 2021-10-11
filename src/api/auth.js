@@ -25,12 +25,11 @@ export async function signIn(login = null, password = null) {
 
     const result = await signInUserData;
 
-    if (typeof result === "object") {
+    if (result.UGID) {
       const checkForUGID = Object.keys(result).includes("UGID");
       const checkForErrorNum = Object.values(result).includes(153649);
 
       getUserUGID = checkForErrorNum && checkForUGID ? result.UGID : null;
-      console.log(` getUserUGID `, getUserUGID);
 
       return {
         isOk: false,
@@ -134,7 +133,6 @@ export async function changePassword(password, resetToken) {
 
 export async function renewalPassword(oldPwd, newPwd) {
   if (!getUserUGID) return;
-  console.log(`UGID`, getUserUGID);
 
   try {
     await FetchData(

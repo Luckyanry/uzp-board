@@ -32,7 +32,9 @@ const RenewalPasswordForm = () => {
   const [pwd, setPwd] = useState("");
   const [oldPwd, setOldPwd] = useState("");
   const [confirmPasswordState, setConfirmPasswordState] = useState("");
-  const [formSubmited, setFormSubmited] = useState(false);
+
+  const [oldPasswordValue, setOldPasswordValue] = useState("");
+  const [newPasswordValue, setNewPasswordValue] = useState("");
 
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
@@ -87,10 +89,9 @@ const RenewalPasswordForm = () => {
     const getRenewalPassword = async () => {
       setLoading(true);
 
-      const {oldPassword, password} = formData.current;
-      if (!oldPassword && !password) return;
+      if (!oldPasswordValue && !newPasswordValue) return;
 
-      const result = await renewalPassword(oldPassword, password);
+      const result = await renewalPassword(oldPasswordValue, newPasswordValue);
       const {
         isOk,
         // message,
@@ -126,15 +127,15 @@ const RenewalPasswordForm = () => {
       // setErrorTitle(formatMessage(message));
     };
 
-    pwd && !ignore && getRenewalPassword();
+    newPasswordValue && oldPasswordValue && !ignore && getRenewalPassword();
 
     return () => {
       ignore = true;
       getRenewalPassword();
     };
 
-    // eslint-disable-next-line
-  }, [formSubmited]);
+    //// eslint-disable-next-line
+  }, [oldPasswordValue, newPasswordValue, history, formatMessage]);
 
   const passwordEditorOptions = {
     stylingMode: "filled",
@@ -316,7 +317,10 @@ const RenewalPasswordForm = () => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    setFormSubmited(true);
+    const {oldPassword, password} = formData.current;
+
+    setOldPasswordValue(oldPassword);
+    setNewPasswordValue(password);
   };
 
   const {regExp, patternRuleErrMsg} = inputValidation();

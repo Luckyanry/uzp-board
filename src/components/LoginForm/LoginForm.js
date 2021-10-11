@@ -8,18 +8,17 @@ import Form, {
   ButtonOptions,
   RequiredRule,
 } from "devextreme-react/form";
+import notify from "devextreme/ui/notify";
 // import notify from "devextreme/ui/notify";
 
 import {useAuth} from "../../contexts/Auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {setToSessionStorege} from "../../helpers/functions";
 import {
   // ErrorPopup,
   Spinner,
 } from "..";
 
 import "./LoginForm.scss";
-import notify from "devextreme/ui/notify";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -33,22 +32,6 @@ export default function LoginForm() {
   const formData = useRef({});
   const {formatMessage} = useLocalization();
   const history = useHistory();
-
-  const loginEditorOptions = {
-    stylingMode: "filled",
-    placeholder: formatMessage("msgEnterLogin"),
-    mode: "text",
-    elementAttr: {class: "form-input"},
-    height: 64,
-  };
-
-  const passwordEditorOptions = {
-    stylingMode: "filled",
-    placeholder: formatMessage("msgEnterPassword"),
-    mode: "password",
-    elementAttr: {class: "form-input"},
-    height: 64,
-  };
 
   useEffect(() => {
     let ignore = false;
@@ -98,9 +81,24 @@ export default function LoginForm() {
     };
   }, [login, password, signIn, formatMessage, history]);
 
+  const loginEditorOptions = {
+    stylingMode: "filled",
+    placeholder: formatMessage("msgEnterLogin"),
+    mode: "text",
+    elementAttr: {class: "form-input"},
+    height: 64,
+  };
+
+  const passwordEditorOptions = {
+    stylingMode: "filled",
+    placeholder: formatMessage("msgEnterPassword"),
+    mode: "password",
+    elementAttr: {class: "form-input"},
+    height: 64,
+  };
+
   const onFormSubmit = (e) => {
     e.preventDefault();
-    console.log(`e LoginForm `, e);
     const {login, password} = formData.current;
 
     setLogin(login);
