@@ -202,7 +202,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           calculateCellValue={
             dataField === "aName" ? (rowData) => rowData.OType : null
           }
-          calculateDisplayValue={dataField === "aName" ? "aName" : null}
+          // calculateDisplayValue={dataField === "aName" ? "aName" : null}
           {...params}
         >
           {required && <RequiredRule />}
@@ -412,7 +412,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       <Column type="buttons">
         <Button
-          icon={Math.random() && deny}
+          icon={deny}
           cssClass={"btn-icon"}
           name="deny"
           hint={"deny btn"}
@@ -421,7 +421,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         />
 
         <Button
-          icon={Math.random() && inherite}
+          icon={inherite}
           cssClass={"btn-icon"}
           name="inherite"
           hint={"inherite btn"}
@@ -430,7 +430,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         />
 
         <Button
-          icon={Math.random() && grant}
+          icon={grant}
           cssClass={"btn-icon"}
           name="grant"
           hint={"grant btn"}
