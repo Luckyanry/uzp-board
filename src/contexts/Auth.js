@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import {useHistory} from "react-router-dom";
 
-import {getUser, signIn as sendSignInRequest} from "../api/auth";
+import {getUser, logOff, signIn as sendSignInRequest} from "../api/auth";
 
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
@@ -40,11 +40,14 @@ function AuthProvider(props) {
     return result;
   }, []);
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
+    await logOff();
+
     setUser();
     sessionStorage.clear();
     history.push("/login");
-    window.location.reload();
+
+    // window.location.reload();
   }, [history]);
 
   return <AuthContext.Provider value={{user, signIn, signOut}} {...props} />;

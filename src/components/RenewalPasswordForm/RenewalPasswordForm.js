@@ -84,24 +84,43 @@ const RenewalPasswordForm = () => {
   }, [minLength, maxLength, minCharacterGroups]);
 
   useEffect(() => {
-    let ignore = false;
-
     const getRenewalPassword = async () => {
       setLoading(true);
 
       if (!oldPasswordValue && !newPasswordValue) return;
 
       const result = await renewalPassword(oldPasswordValue, newPasswordValue);
-      const {
-        isOk,
-        // message,
-        // errorAPIMsg,
-      } = result;
+
+      if (!result) {
+        setLoading(false);
+
+        notify(
+          {
+            message: "Your token is not active? pleasw return into login page!",
+            position: {
+              my: "center",
+              at: "center",
+              of: "#login-start-form-container",
+              // of: "#content",
+              offset: "0 36",
+            },
+            width: 426,
+            height: 80,
+            shading: true,
+          },
+          "error",
+          3000
+        );
+        return;
+      }
+
+      const {isOk, message} = result;
 
       // setToSessionStorege("error", errorAPIMsg);
-      setLoading(false);
 
       if (isOk) {
+        setLoading(false);
+
         notify(
           {
             message: formatMessage("msgSuccessPassChange"),
@@ -124,18 +143,32 @@ const RenewalPasswordForm = () => {
       }
 
       setErrorStatus(true);
-      // setErrorTitle(formatMessage(message));
+
+      notify(
+        {
+          message: formatMessage(message),
+          position: {
+            my: "center",
+            at: "center",
+            of: "#login-start-form-container",
+            // of: "#content",
+            offset: "0 36",
+          },
+          width: 426,
+          height: 80,
+          shading: true,
+        },
+        "error",
+        3000
+      );
+
+      setLoading(false);
     };
 
-    newPasswordValue && oldPasswordValue && !ignore && getRenewalPassword();
+    newPasswordValue && oldPasswordValue && getRenewalPassword();
 
-    return () => {
-      ignore = true;
-      getRenewalPassword();
-    };
-
-    //// eslint-disable-next-line
-  }, [oldPasswordValue, newPasswordValue, history, formatMessage]);
+    // eslint-disable-next-line
+  }, [oldPasswordValue, newPasswordValue]);
 
   const passwordEditorOptions = {
     stylingMode: "filled",

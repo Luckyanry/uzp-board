@@ -156,3 +156,23 @@ export async function renewalPassword(oldPwd, newPwd) {
     };
   }
 }
+
+export async function logOff() {
+  try {
+    await FetchData(
+      "/log-off",
+      "w_LogOff",
+      "wisdb",
+      urlAnonymous
+    ).signInUserData();
+
+    return {
+      isOk: true,
+    };
+  } catch (err) {
+    return {
+      isOk: false,
+      errorAPIMsg: err,
+    };
+  }
+}
