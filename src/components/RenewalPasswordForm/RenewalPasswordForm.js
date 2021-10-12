@@ -79,7 +79,7 @@ const RenewalPasswordForm = () => {
 
     return () => {
       ignore = true;
-      getPasswordPolicies();
+      // getPasswordPolicies();
     };
   }, [minLength, maxLength, minCharacterGroups]);
 
@@ -96,7 +96,7 @@ const RenewalPasswordForm = () => {
 
         notify(
           {
-            message: "Your token is not active? pleasw return into login page!",
+            message: formatMessage("msgErrFaildToResetPass"),
             position: {
               my: "center",
               at: "center",
@@ -115,8 +115,6 @@ const RenewalPasswordForm = () => {
       }
 
       const {isOk, message} = result;
-
-      // setToSessionStorege("error", errorAPIMsg);
 
       if (isOk) {
         setLoading(false);
@@ -387,7 +385,7 @@ const RenewalPasswordForm = () => {
           />
         </TextBox>
 
-        <Label visible={true} />
+        <Label visible={true} text={formatMessage("msgEnterOldPassword")} />
       </Item>
 
       <Item
@@ -398,7 +396,7 @@ const RenewalPasswordForm = () => {
       >
         <TextBox
           mode={passwordMode}
-          placeholder={formatMessage("msgEnterPassword")}
+          placeholder={formatMessage("msgEnterNewPassword")}
           stylingMode="filled"
           defaultValue={pwd}
           value={pwd}
@@ -435,11 +433,11 @@ const RenewalPasswordForm = () => {
           </Validator>
         </TextBox>
 
-        <Label visible={true} />
+        <Label visible={true} text={formatMessage("msgEnterNewPassword")} />
       </Item>
 
       <Item
-        dataField={formatMessage("msgConfirmPassword")}
+        dataField={"confirmPassword"}
         editorType={"dxTextBox"}
         editorOptions={confirmedPasswordEditorOptions}
         ssClass={"input"}
@@ -473,7 +471,7 @@ const RenewalPasswordForm = () => {
           </Validator>
         </TextBox>
 
-        <Label visible={true} />
+        <Label visible={true} text={formatMessage("msgConfirmPassword")} />
       </Item>
 
       <Item>

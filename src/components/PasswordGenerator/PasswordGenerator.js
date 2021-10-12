@@ -71,7 +71,7 @@ const PasswordGenerator = ({formData, onSubmit, loadingState}) => {
 
     return () => {
       ignore = true;
-      getPasswordPolicies();
+      // getPasswordPolicies();
     };
   }, [minLength, maxLength, minCharacterGroups]);
 

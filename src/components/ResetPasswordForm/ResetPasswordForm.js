@@ -104,7 +104,6 @@ export default function ResetPasswordForm() {
 
     return () => {
       ignore = true;
-      getResetPassword();
     };
   }, [email, history, formatMessage]);
 

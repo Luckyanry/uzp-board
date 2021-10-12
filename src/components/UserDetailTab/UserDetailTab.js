@@ -14,6 +14,7 @@ import DataGrid, {
   StateStoring,
   Scrolling,
   LoadPanel,
+  ColumnFixing,
 } from "devextreme-react/data-grid";
 import TreeList from "devextreme-react/tree-list";
 import {Template} from "devextreme-react/core/template";
@@ -71,7 +72,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         `ShortDicsRecordsFlat&@name=${fetchName}ColumnSchema`,
         "hbdb"
       ).fetchColumnsSchemaData;
-
       const result = await fetchColumnsSchemaData
         ._loadFunc()
         .then((res) => res.data);
@@ -124,6 +124,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       ).detailUserTemplateData;
 
       setAPIData(usersFetchData);
+      console.log(`usersFetchData `, usersFetchData);
     }
 
     async function getLookDataState(
@@ -202,7 +203,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           calculateCellValue={
             dataField === "aName" ? (rowData) => rowData.OType : null
           }
-          // calculateDisplayValue={dataField === "aName" ? "aName" : null}
+          calculateDisplayValue={dataField === "aName" ? "aName" : null}
           {...params}
         >
           {required && <RequiredRule />}
@@ -396,6 +397,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         title={formatMessage("msgColomnChooser")}
         emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
       />
+      <ColumnFixing enabled={true} />
 
       <Editing
         mode="batch"
@@ -410,7 +412,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       {customMarkupRender()}
 
-      <Column type="buttons">
+      <Column type="buttons" width={100}>
         <Button
           icon={deny}
           cssClass={"btn-icon"}
@@ -506,6 +508,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       />
       <Scrolling mode="standard" useNative="true" />
       <StateStoring enabled={false} type="localStorage" storageKey="storage" />
+      <ColumnFixing enabled={true} />
 
       <Editing
         mode="batch"
@@ -520,7 +523,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       {customMarkupRender()}
 
-      <Column type="buttons">
+      <Column type="buttons" width={100}>
         <Button
           name="delete"
           hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}

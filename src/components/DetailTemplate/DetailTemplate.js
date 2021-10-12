@@ -8,6 +8,7 @@ import DataGrid, {
   Pager,
   StateStoring,
   LoadPanel,
+  ColumnFixing,
 } from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
@@ -15,10 +16,6 @@ import {FetchData} from "../../api/pages-fetch";
 // import {ErrorPopup} from "..";
 
 import "./DetailTemplate.scss";
-import {
-  // getFromSessionStorege,
-  setToSessionStorege,
-} from "../../helpers/functions";
 import spinnerIcon from "../Spinner/icons/spinner.svg";
 
 const DetailTemplate = ({data: {data, component}}) => {
@@ -70,14 +67,7 @@ const DetailTemplate = ({data: {data, component}}) => {
         "hbdb"
       ).fetchColumnsSchemaData;
 
-      detailFieldLogShcema
-        ._loadFunc()
-        .then(({data}) => setAPIData(data))
-        .catch((error) => {
-          setToSessionStorege("error", error);
-          // setErrorStatus(error);
-          // setErrorTitle(formatMessage("msgErrServerFetch"));
-        });
+      detailFieldLogShcema._loadFunc().then(({data}) => setAPIData(data));
 
       const fieldLog = FetchData(
         "/fieldLog",
@@ -138,6 +128,8 @@ const DetailTemplate = ({data: {data, component}}) => {
           type="localStorage"
           storageKey="storage"
         />
+
+        <ColumnFixing enabled={true} />
 
         <Editing
           mode="batch"

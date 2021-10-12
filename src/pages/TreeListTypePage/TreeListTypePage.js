@@ -39,6 +39,7 @@ import {
 
 import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./TreeListTypePage.scss";
+import {ColumnFixing} from "devextreme-react/data-grid";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -394,6 +395,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           storageKey="storage"
         />
 
+        <ColumnFixing enabled={true} />
+
         {pathnameWithoutSlash === "auditSettingsMaster" ? (
           editorCustomMarkup()
         ) : pathnameWithoutSlash === "soato" ? (
@@ -419,7 +422,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
         {customMarkupRender()}
 
-        <Column type="buttons" width={110}>
+        {/* <Column type="buttons" width={110}>
           <TreeListButton
             name="add"
             hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
@@ -432,7 +435,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             name="delete"
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
-        </Column>
+        </Column> */}
 
         <Paging defaultPageSize={10} enabled={true} />
         <Pager

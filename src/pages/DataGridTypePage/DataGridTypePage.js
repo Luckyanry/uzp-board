@@ -19,6 +19,7 @@ import DataGrid, {
   Form,
   LoadPanel,
   StateStoring,
+  ColumnFixing,
 } from "devextreme-react/data-grid";
 import {
   Item,
@@ -43,7 +44,7 @@ import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
-  // ColumnPwdGeneratorField,
+  ColumnPwdGeneratorField,
   // DetailTreeListTab,
 } from "../../components";
 // import {ErrorPopup} from "../../components";
@@ -159,11 +160,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           "wisdb"
         ).usersFetchData;
 
-        // const res = getFromSessionStorege("error", "");
-        // if (res.JSONErrorMessage) {
-        //   setErrorStatus(true);
-        // }
-
         return setAPIData(usersFetchData);
       }
 
@@ -192,11 +188,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         setAllowAdding(false);
         setAllowDeleting(false);
         setAllowUpdating(false);
-
-        // const res = getFromSessionStorege("error", "");
-        // if (res.JSONErrorMessage) {
-        //   setErrorStatus(true);
-        // }
 
         return setAPIData(fetchData);
       }
@@ -351,7 +342,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowEditing = true,
         ...params
       } = item;
-
+      console.log(`columns item`, item);
       return (
         <Column
           key={idx}
@@ -470,6 +461,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               <TabPanelOptions deferRendering={false} />
               <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
                 {customItemMarkup(userFormData)}
+                {/* <ColumnPwdGeneratorField /> */}
               </Tab>
 
               {checkIfArrIncludesValue(
@@ -541,22 +533,22 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         repaintChangesOnly={true}
         remoteOperations={false}
         showBorders={false}
-        // rows
+        // === rows ===
         focusedRowEnabled={true}
         showRowLines={true}
         // rowAlternationEnabled={true}
         // focusedRowIndex={0}
-        // columns
+        // === columns ===
         showColumnLines={true}
-        // columnMinWidth={130}
         columnAutoWidth={true}
         columnHidingEnabled={false}
         allowColumnResizing={true}
         allowColumnReordering={true}
-        // appearance
+        // columnFixing={false}
+        // === appearance ===
         hoverStateEnabled={true}
         wordWrapEnabled={true}
-        // functions
+        // === functions ===
         onInitNewRow={initNewRow}
         onFocusedCellChanging={onFocusedCellChanging}
         // onContentReady={selectFirstRow}
@@ -580,6 +572,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         />
 
         <FilterRow visible={true} />
+        <ColumnFixing enabled={true} />
 
         {checkIfArrIncludesValue(
           ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
@@ -619,7 +612,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
 
-        <Column type="buttons" width={110}>
+        {/* <Column type="buttons" width={110}>
           <Button
             name="edit"
             hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
@@ -628,7 +621,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             name="delete"
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
-        </Column>
+        </Column> */}
 
         <Paging defaultPageSize={10} enabled={true} />
         <Pager
@@ -654,3 +647,10 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     </>
   );
 };
+
+// allowFixing={false}
+// fixed={true}
+// fixedPosition="right"
+
+// <ColumnFixing enabled={true} />
+// columnFixing={true}

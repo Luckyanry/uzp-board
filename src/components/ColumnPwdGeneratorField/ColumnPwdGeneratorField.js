@@ -18,7 +18,7 @@ import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
 import "./ColumnPwdGeneratorField.scss";
 
-const ColumnPwdGeneratorField = ({formData}) => {
+const ColumnPwdGeneratorField = () => {
   const [passwordState, setPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
@@ -56,7 +56,6 @@ const ColumnPwdGeneratorField = ({formData}) => {
 
     return () => {
       ignore = true;
-      getPasswordPolicies();
     };
   }, [minLength, maxLength, minCharacterGroups]);
 
@@ -98,7 +97,7 @@ const ColumnPwdGeneratorField = ({formData}) => {
 
   function onPasswordChanged(e) {
     setPasswordState(e.value);
-    formData.password = e.value;
+    // formData.password = e.value;
   }
 
   function getRandomLower() {
@@ -149,7 +148,7 @@ const ColumnPwdGeneratorField = ({formData}) => {
     const finalPassword = generatedPassword.slice(0, length);
 
     setPasswordState(finalPassword);
-    formData.password = finalPassword;
+    // formData.password = finalPassword;
     return finalPassword;
   }
 

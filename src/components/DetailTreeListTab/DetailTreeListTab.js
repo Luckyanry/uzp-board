@@ -22,6 +22,7 @@ import {IconsCellRenderTemplate} from "..";
 
 import spinner from "../Spinner/icons/spinner.svg";
 import "./DetailTreeListTab.scss";
+import {ColumnFixing} from "devextreme-react/data-grid";
 
 const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -173,6 +174,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         title={formatMessage("msgColomnChooser")}
         emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
       />
+      <ColumnFixing enabled={true} />
 
       <Editing
         mode="batch"
