@@ -85,7 +85,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         allowEditing = false,
         ...params
       } = item;
-
+      console.log(`item DetailTreeListTab =>`, item);
       return (
         <Column
           key={idx}
@@ -134,6 +134,31 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
     );
   }
 
+  function onEditorPreparing(e) {
+    switch (e.row.data.ObjType) {
+      case 0: //database  block editor always
+        e.cancel = true;
+        break;
+      case 1: // table block execs
+        if (e.dataField === "auExecFail" || e.dataField === "auExecSuccess") {
+          e.cancel = true;
+        }
+        break;
+      case 2: // procedure block ins, upd, del
+        if (
+          e.dataField === "auInsert" ||
+          e.dataField === "auUpdate" ||
+          e.dataField === "auDelete"
+        ) {
+          e.cancel = true;
+        }
+        break;
+      // other unknown future type block editor  always
+      default:
+        e.cancel = true;
+    }
+  }
+
   return (
     <TreeList
       id={pathnameWithoutSlash}
@@ -164,6 +189,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       autoExpandAll={false}
       // functions
       onRowUpdating={updateRow}
+      onEditorPreparing={onEditorPreparing}
     >
       <Scrolling mode="standard" useNative="true" />
       <StateStoring enabled={false} type="localStorage" storageKey="storage" />
