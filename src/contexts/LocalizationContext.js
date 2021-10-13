@@ -43,7 +43,7 @@ const LocalizationProvider = ({children}) => {
         ).fetchColumnsSchemaData;
 
         const result = await loadLangsData
-          ._loadFunc()
+          .load()
           .then((res) => res.data)
           .catch((err) => {
             // console.log(`islang err `, err);

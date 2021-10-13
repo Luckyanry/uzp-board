@@ -81,7 +81,41 @@ export const FetchData = (
   ) => {
     return new CustomStore({
       key: storeKey,
-      load: () => sendRequest(urlType, {schema: "get"}),
+      load: (loadOptions) => {
+        let mergedOpts = {};
+
+        if (loadOptions !== undefined) {
+          [
+            "skip",
+            "take",
+            "requireTotalCount",
+            //"sort", "filter", "totalSummary"
+          ].forEach(function (i) {
+            if (
+              loadOptions[i] !== undefined &&
+              loadOptions[i] !== null &&
+              i in loadOptions &&
+              loadOptions[i] !== ""
+            ) {
+              mergedOpts["@" + i] = JSON.stringify(loadOptions[i]);
+            }
+          });
+        }
+
+        mergedOpts["schema"] = "get";
+
+        return sendRequest(urlType, mergedOpts).then((response) => {
+          if (loadOptions && loadOptions.requireTotalCount === true) {
+            return {
+              data: response.data,
+              totalCount: response.totalCount,
+            };
+          } else {
+            return response;
+          }
+        });
+      },
+      // load: () => sendRequest(urlType, {schema: "get"}, "GET"),
       insert: (values) =>
         sendRequest(
           urlType,
@@ -126,9 +160,6 @@ export const FetchData = (
       onBeforeSend: function (method, ajaxOptions) {
         ajaxOptions.credentials = "include";
       },
-      // errorHandler: (error) => {
-      //   console.log("CustomStore error ", error);
-      // },
     });
   };
 
@@ -171,6 +202,8 @@ export const FetchData = (
     paginate: true,
     pageSize: 20,
   };
+
+  const errorLogData = fetchDataConstructor("EventId", urlFromPages);
 
   const signInUserData = async (params, method = "GET") =>
     await sendRequest(urlFromPages, {schema: "dbo", ...params}, method);
@@ -224,26 +257,23 @@ export const FetchData = (
 
     const getOptions = {
       method,
-      // cache: false,
       credentials: "include",
     };
 
-    if (method) {
-      const response = await fetch(`${url}&${params}`, getOptions);
+    const response = await fetch(`${url}&${params}`, getOptions);
 
-      if (response.ok) {
-        return await response
-          .json()
-          .then((data) => responseData(data))
-          .catch((err) => {
-            isJSONBrokeError(err);
-            consoleError(err, "GET");
-          });
-      } else {
-        return await response.json().then((error) => {
-          isServerError(error, response.status);
+    if (response.ok) {
+      return await response
+        .json()
+        .then((data) => responseData(data))
+        .catch((err) => {
+          isJSONBrokeError(err);
+          consoleError(err, "GET");
         });
-      }
+    } else {
+      return await response.json().then((error) => {
+        isServerError(error, response.status);
+      });
     }
   }
 
@@ -423,6 +453,7 @@ export const FetchData = (
     usersFetchData,
     personFetchData,
     detailUserTemplateData,
+    errorLogData,
     passwordPolicies,
     signInUserData,
     loadCustumMessageData,
@@ -530,3 +561,46 @@ export const FetchData = (
 //     )
 //   );
 // }
+
+// ===========================================
+// console.log(`errorLogData`, errorLogData);
+// const errorLogData = new CustomStore({
+//   key: "EventId",
+//   loadMode: "processed",
+//   load: (loadOptions) => {
+//     console.log(`loadOptions `, loadOptions);
+
+//     let mergedOpts = {};
+
+//     [
+//       "skip",
+//       "take",
+//       "requireTotalCount",
+//       "sort",
+//       //"filter",
+//       // "totalSummary",
+//     ].forEach(function (i) {
+//       if (
+//         i in loadOptions &&
+//         loadOptions[i] !== undefined &&
+//         loadOptions[i] !== null &&
+//         loadOptions[i] !== ""
+//       ) {
+//         mergedOpts["@" + i] = JSON.stringify(loadOptions[i]);
+//       }
+//     });
+
+//     mergedOpts["schema"] = "get";
+
+//     return sendRequest(urlFromPages, mergedOpts).then((response) => {
+//       if (loadOptions.requireTotalCount === true) {
+//         return {
+//           data: response.data,
+//           totalCount: response.totalCount,
+//         };
+//       } else {
+//         return response;
+//       }
+//     });
+//   },
+// });

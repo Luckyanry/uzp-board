@@ -114,11 +114,6 @@ export async function changePassword(password, resetToken) {
       urlAnonymous
     ).signInUserData({"@resetToken": resetToken, "@pwd": password}, "POST");
 
-    // await changePasswordData._loadFunc(
-    //   {"@resetToken": resetToken, "@pwd": password},
-    //   "POST"
-    // );
-
     return {
       isOk: true,
     };

@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import "devextreme/data/odata/store";
 import DataGrid, {
@@ -13,7 +13,7 @@ import DataGrid, {
   RequiredRule,
   FormItem,
   Lookup,
-  Button,
+  // Button,
   Paging,
   Pager,
   Form,
@@ -44,7 +44,7 @@ import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
-  ColumnPwdGeneratorField,
+  // ColumnPwdGeneratorField,
   // DetailTreeListTab,
 } from "../../components";
 // import {ErrorPopup} from "../../components";
@@ -110,7 +110,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       ).fetchData;
 
       const columns = await fetchColumnsSchemaData
-        ._loadFunc()
+        .load()
         .then((res) => res.data);
       // .catch((err) => setErrorStatus(err));
 
@@ -197,7 +197,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           pathname,
           "isysevents",
           "logdb"
-        ).usersFetchData;
+        ).errorLogData;
+        // ).usersFetchData;
 
         setAllowAdding(false);
         setAllowDeleting(false);
@@ -342,7 +343,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowEditing = true,
         ...params
       } = item;
-      console.log(`columns item`, item);
+      // console.log(`columns item`, item);
       return (
         <Column
           key={idx}
@@ -350,7 +351,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           dataType={dataType}
           // caption={caption}
           caption={
-            checkIfArrIncludesValue(["ShortDics"], pathnameWithoutSlash)
+            pathnameWithoutSlash === "ShortDics"
               ? formatMessage(caption)
               : caption
           }
@@ -523,28 +524,29 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       <h2 className={"content-block"}>
         {formatMessage(`${localPathname}HeaderTitle`, localPageAbbreviation)}
       </h2>
-      {/* {errorMessage}
 
-      {!errorMessage && ( */}
       <DataGrid
         id={pathnameWithoutSlash}
         dataSource={APIData}
-        // keyExpr="id"
+        // keyExpr="Received"
         repaintChangesOnly={true}
-        remoteOperations={false}
         showBorders={false}
+        remoteOperations={
+          checkIfArrIncludesValue(["errorLog", "mahalla"], pathnameWithoutSlash)
+            ? {paging: true, sorting: true}
+            : false
+        }
+        sorting={{mode: "multiple"}}
         // === rows ===
+        // focusedRowEnabled={pathnameWithoutSlash !== "errorLog" ? true : false}
         focusedRowEnabled={true}
         showRowLines={true}
-        // rowAlternationEnabled={true}
-        // focusedRowIndex={0}
         // === columns ===
         showColumnLines={true}
         columnAutoWidth={true}
         columnHidingEnabled={false}
         allowColumnResizing={true}
         allowColumnReordering={true}
-        // columnFixing={false}
         // === appearance ===
         hoverStateEnabled={true}
         wordWrapEnabled={true}
@@ -554,9 +556,16 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // onContentReady={selectFirstRow}
         // onOptionChanged={handleOptionChange}
       >
-        <Scrolling mode="standard" useNative="true" />
-        <SearchPanel visible={true} width={250} />
-        {/* <HeaderFilter visible={true} allowSearch={true} /> */}
+        {/* <RemoteOperations paging={true} sorting={true} /> */}
+        {/* <RemoteOperations
+          paging={true}
+          sorting={true}
+          groupPaging={false}
+          grouping={false}
+          summary={false}
+          filtering={false}
+        /> */}
+
         <ColumnChooser
           enabled={true}
           allowSearch={true}
@@ -565,12 +574,15 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           title={formatMessage("msgColomnChooser")}
           emptyPanelText={formatMessage("msgColomnChooserTextIfEmpty")}
         />
+
         <StateStoring
           enabled={false}
           type="localStorage"
           storageKey="storage"
         />
 
+        <Scrolling mode="standard" useNative="true" />
+        <SearchPanel visible={true} width={250} />
         <FilterRow visible={true} />
         <ColumnFixing enabled={true} />
 
@@ -624,6 +636,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         </Column> */}
 
         <Paging defaultPageSize={10} enabled={true} />
+
         <Pager
           showPageSizeSelector={true}
           showNavigationButtons={true}
@@ -632,6 +645,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           allowedPageSizes={[10, 20, 50, 100, "all"]}
           showAllItem={true}
         />
+
         <LoadPanel
           deferRendering={true}
           enabled="true"
@@ -643,7 +657,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           indicatorSrc={spinner}
         />
       </DataGrid>
-      {/* )} */}
     </>
   );
 };

@@ -97,7 +97,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
       ).fetchData;
 
       const result = await fetchColumnsSchemaData
-        ._loadFunc()
+        .load()
         .then((res) => res.data);
       // .catch((err) => setErrorStatus(err));
 
@@ -422,7 +422,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
         {customMarkupRender()}
 
-        {/* <Column type="buttons" width={110}>
+        <Column type="buttons" width={110}>
           <TreeListButton
             name="add"
             hint={formatMessage("msgAddNewItem", localPageAbbreviation)}
@@ -435,7 +435,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             name="delete"
             hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
-        </Column> */}
+        </Column>
 
         <Paging defaultPageSize={10} enabled={true} />
         <Pager
@@ -693,7 +693,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 //     const fetchColumnsSchemaData = fetchDataConstructor("hbdb").fetchData;
 
 //     const result = await fetchColumnsSchemaData
-//       ._loadFunc()
+//       .load()
 //       .then((res) => res.data);
 
 //     setColumnsSchemaData(result);

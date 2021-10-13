@@ -73,7 +73,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         "hbdb"
       ).fetchColumnsSchemaData;
       const result = await fetchColumnsSchemaData
-        ._loadFunc()
+        .load()
         .then((res) => res.data);
       // .catch((err) => setErrorStatus(err));
 
