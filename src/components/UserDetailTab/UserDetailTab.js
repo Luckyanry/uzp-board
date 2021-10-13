@@ -124,7 +124,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       ).detailUserTemplateData;
 
       setAPIData(usersFetchData);
-      console.log(`usersFetchData `, usersFetchData);
     }
 
     async function getLookDataState(
@@ -160,7 +159,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         visible = false,
         disabled = false,
         required = false,
-        width = "100%",
+        // width = "100%",
         minWidth = 80,
         alignment = "left",
         formItem = false,
@@ -177,7 +176,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           caption={caption}
           visible={visible}
           disabled={disabled}
-          width={width}
+          // width={width}
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
@@ -486,7 +485,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       focusedRowEnabled={true}
       showRowLines={true}
       // columns
-      showColumnLines={false}
+      showColumnLines={true}
       columnMinWidth={80}
       columnAutoWidth={true}
       columnHidingEnabled={false}

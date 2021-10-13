@@ -184,7 +184,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         visible = false,
         disabled = false,
         required = false,
-        width = "100%",
+        // width = "100%",
         minWidth = 250,
         alignment = "left",
         formItem = false,
@@ -201,7 +201,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           caption={caption}
           visible={visible}
           disabled={disabled}
-          width={width}
+          // width={width}
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
@@ -358,7 +358,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         focusedRowEnabled={true}
         rowAlternationEnabled={false}
         // columns
-        showColumnLines={false}
+        showColumnLines={true}
         columnMinWidth={60}
         columnAutoWidth={true}
         columnHidingEnabled={false}

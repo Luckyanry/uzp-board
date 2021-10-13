@@ -78,7 +78,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         visible = false,
         disabled = false,
         required = false,
-        width = "100%",
+        // width = "100%",
         minWidth = 80,
         alignment = "left",
         formItem = false,
@@ -94,7 +94,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
           caption={caption}
           visible={visible}
           disabled={disabled}
-          width={width}
+          // width={width}
           alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}

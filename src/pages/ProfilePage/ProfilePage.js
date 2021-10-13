@@ -1,13 +1,17 @@
-import React, {useRef, useState} from "react";
+import React, {
+  // useRef,
+  useState,
+} from "react";
 
 import Form, {SimpleItem, Label, Item} from "devextreme-react/form";
 // import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {
-  // ColumnPwdGeneratorField,
-  PasswordGenerator,
-} from "../../components";
+import // ColumnPwdGeneratorField,
+// ColumnPwdGeneratorField,
+// PasswordGenerator,
+"../../components";
+import ColumnPwdGeneratorField from "../../components/ColumnPwdGeneratorField/ColumnPwdGeneratorField";
 
 import "./ProfilePage.scss";
 
@@ -16,7 +20,7 @@ export const ProfilePage = () => {
   // const [loading, setLoading] = useState(false);
   // const [password, setPassword] = useState(null);
 
-  const formData = useRef({});
+  // const formData = useRef({});
   const {formatMessage} = useLocalization();
 
   const employee = {
@@ -90,16 +94,18 @@ export const ProfilePage = () => {
           </SimpleItem>
           <Item dataField="Notes">
             <Label text={formatMessage("msgNotes")} />
+            <ColumnPwdGeneratorField />
           </Item>
-          {/* <ColumnPwdGeneratorField /> */}
+
+          {/* {console.log(<ColumnPwdGeneratorField />)} */}
         </Form>
-        <div className={"passwors-generator"}>
+        {/* <div className={"passwors-generator"}>
           <PasswordGenerator
             // onSubmit={onSubmit}
             // loadingState={loading}
             formData={formData.current}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

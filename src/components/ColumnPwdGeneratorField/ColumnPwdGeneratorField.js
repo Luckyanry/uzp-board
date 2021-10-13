@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {Item, Label} from "devextreme-react/form";
+import {Label} from "devextreme-react/form";
 import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
 import {
   Validator,
@@ -8,7 +8,6 @@ import {
   PatternRule,
   StringLengthRule,
 } from "devextreme-react/validator";
-// import ValidationSummary from "devextreme-react/validation-summary";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -59,14 +58,6 @@ const ColumnPwdGeneratorField = () => {
     };
   }, [minLength, maxLength, minCharacterGroups]);
 
-  const passwordEditorOptions = {
-    stylingMode: "filled",
-    placeholder: formatMessage("msgEnterPassword"),
-    mode: "password",
-    elementAttr: {class: "form-input"},
-    height: 64,
-  };
-
   const pwdBtnIcon = {
     icon: passwordVisibility,
     type: "button",
@@ -97,7 +88,6 @@ const ColumnPwdGeneratorField = () => {
 
   function onPasswordChanged(e) {
     setPasswordState(e.value);
-    // formData.password = e.value;
   }
 
   function getRandomLower() {
@@ -148,7 +138,6 @@ const ColumnPwdGeneratorField = () => {
     const finalPassword = generatedPassword.slice(0, length);
 
     setPasswordState(finalPassword);
-    // formData.password = finalPassword;
     return finalPassword;
   }
 
@@ -207,16 +196,11 @@ const ColumnPwdGeneratorField = () => {
   const {regExp, patternRuleErrMsg} = inputValidation();
 
   return (
-    <Item
-      dataField={"password"}
-      editorType={"dxTextBox"}
-      editorOptions={passwordEditorOptions}
-      cssClass={"input"}
-    >
+    <>
       <TextBox
         mode={passwordMode}
-        placeholder={formatMessage("msgEnterPassword")}
-        stylingMode="filled"
+        // placeholder={formatMessage("msgEnterPassword")}
+        stylingMode="outlined"
         defaultValue={passwordState}
         value={passwordState}
         onValueChanged={onPasswordChanged}
@@ -253,7 +237,7 @@ const ColumnPwdGeneratorField = () => {
       </TextBox>
 
       <Label visible={true} />
-    </Item>
+    </>
   );
 };
 

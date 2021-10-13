@@ -44,7 +44,7 @@ import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
-  // ColumnPwdGeneratorField,
+  ColumnPwdGeneratorField,
   // DetailTreeListTab,
 } from "../../components";
 // import {ErrorPopup} from "../../components";
@@ -77,29 +77,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   );
 
   const statusToggler = StatusLangToggler().statusToggler();
-
-  const popupGeneralOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
-    showTitle: true,
-    width: 1200,
-    height: 800,
-    // fullScreen: true,
-  };
-
-  const popupPersonAndLegalOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
-    showTitle: true,
-    width: 1300,
-    height: 800,
-    fullScreen: true,
-  };
-
-  const popupUsersPageOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
-    showTitle: false,
-    width: 1200,
-    height: 850,
-  };
 
   useEffect(() => {
     async function getColumnsSchemaData() {
@@ -198,7 +175,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           "isysevents",
           "logdb"
         ).errorLogData;
-        // ).usersFetchData;
 
         setAllowAdding(false);
         setAllowDeleting(false);
@@ -212,11 +188,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         pathnameWithoutSlash,
         "hbdb"
       ).fetchColumnsSchemaData;
-
-      // const res = getFromSessionStorege("error", "");
-      // if (res.JSONErrorMessage) {
-      //   setErrorStatus(true);
-      // }
 
       return setAPIData(fetchData);
     }
@@ -250,8 +221,31 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     }
   }, [pathname, pathnameWithoutSlash]);
 
+  const popupGeneralOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: true,
+    width: 1200,
+    height: 800,
+    // fullScreen: true,
+  };
+
+  const popupPersonAndLegalOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: true,
+    width: 1300,
+    height: 800,
+    fullScreen: true,
+  };
+
+  const popupUsersPageOptions = {
+    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    showTitle: false,
+    width: 1200,
+    height: 850,
+  };
+
   function initNewRow(e) {
-    // e.data.pid = 1;
+    // console.log(`e `, e.component.getDataSource());
     e.data.status = statusToggler[0];
     setUserID("");
   }
@@ -343,13 +337,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowEditing = true,
         ...params
       } = item;
-      // console.log(`columns item`, item);
+
       return (
         <Column
           key={idx}
           dataField={dataField}
           dataType={dataType}
-          // caption={caption}
           caption={
             pathnameWithoutSlash === "ShortDics"
               ? formatMessage(caption)
@@ -395,7 +388,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;
 
-              // dataSource={{...item[dataField], ...lookup.dataSource}}
               return (
                 <Lookup
                   searchMode={"startswith"}
@@ -409,21 +401,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           {dataField === "status" && (
             <Lookup searchMode={"startswith"} dataSource={statusToggler} />
           )}
-
-          {/* {dataField === "code" && (
-            <PatternRule
-              message={formatMessage(message, localPageAbbreviation)}
-              pattern={new RegExp(pattern)}
-            />
-          )} */}
         </Column>
       );
     });
   }
 
   // function renderPwdGridCell(data) {
-  //   console.log(`data `, data.data.Password);
-  //   return <div style={{color: "blue"}}>{data.displayValue}</div>;
+  //   console.log(`data `, data);
+  //   // return <div style={{color: "blue"}}>{data.displayValue}</div>;
   // }
 
   function customItemMarkup(formData) {
@@ -431,19 +416,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       return;
     }
 
-    return Object.keys(formData).map((item, idx) => {
-      console.log(`item`, item);
-      return <Item key={idx} dataField={item} />;
-      // return (
-      //   <Fragment key={idx}>
-      //     {item !== "Password" ? (
-      //       <Item dataField={item} />
-      //     ) : (
-      //       <ColumnPwdGeneratorField />
-      //     )}
-      //   </Fragment>
-      // );
-    });
+    return Object.keys(formData).map((item, idx) => (
+      <Item key={idx} dataField={item}>
+        {item === "Password" ? <ColumnPwdGeneratorField /> : null}
+      </Item>
+    ));
   }
 
   function editorCustomMarkup() {
@@ -462,7 +439,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               <TabPanelOptions deferRendering={false} />
               <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
                 {customItemMarkup(userFormData)}
-                {/* <ColumnPwdGeneratorField /> */}
+                {console.log(userFormData)}
               </Tab>
 
               {checkIfArrIncludesValue(
@@ -513,7 +490,20 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowDeleting={true}
         allowUpdating={true}
         useIcons={true}
-      />
+      >
+        <Form>
+          {columnsSchemaData.map(({dataField}, idx) => {
+            // eslint-disable-next-line
+            if (!dataField) return;
+
+            return (
+              <Item key={idx} dataField={dataField}>
+                {dataField === "Password" ? <ColumnPwdGeneratorField /> : null}
+              </Item>
+            );
+          })}
+        </Form>
+      </Editing>
     );
   }
 

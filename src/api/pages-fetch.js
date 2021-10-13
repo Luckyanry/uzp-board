@@ -82,7 +82,6 @@ export const FetchData = (
     return new CustomStore({
       key: storeKey,
       load: (loadOptions) => {
-        console.log(`loadOptions `, loadOptions);
         let mergedOpts = {};
 
         if (loadOptions !== undefined) {
