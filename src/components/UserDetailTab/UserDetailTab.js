@@ -376,8 +376,9 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       columnAutoWidth={true}
       // columnHidingEnabled={true}
       columnHidingEnabled={false}
-      allowColumnResizing={true}
       allowColumnReordering={true}
+      allowColumnResizing={true}
+      columnResizingMode={"widget"}
       // appearance
       hoverStateEnabled={true}
       wordWrapEnabled={true}
@@ -489,8 +490,9 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       columnMinWidth={80}
       columnAutoWidth={true}
       columnHidingEnabled={false}
-      allowColumnResizing={true}
       allowColumnReordering={true}
+      allowColumnResizing={true}
+      columnResizingMode={"widget"}
       // appearance
       hoverStateEnabled={true}
       wordWrapEnabled={true}

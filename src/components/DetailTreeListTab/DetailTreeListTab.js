@@ -154,8 +154,9 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       // columnMinWidth={80}
       columnAutoWidth={true}
       columnHidingEnabled={false}
-      allowColumnResizing={true}
       allowColumnReordering={true}
+      allowColumnResizing={true}
+      columnResizingMode={"widget"}
       // appearance
       hoverStateEnabled={true}
       wordWrapEnabled={true}

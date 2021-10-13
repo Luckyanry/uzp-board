@@ -335,8 +335,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         visible = true,
         disabled = false,
         required = false,
-        width = "100%",
-        minWidth = 80,
+        // width = "100%",
+        // minWidth = 80,
         alignment,
         formItem = false,
         lookup = false,
@@ -358,9 +358,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
           visible={visible}
           disabled={disabled}
           // width={width}
-          width={dataField !== "id" ? width : 80}
+          // width={dataField !== "id" ? width : 80}
           alignment={alignment}
-          minWidth={minWidth}
+          // minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
           trueText={
@@ -495,14 +495,12 @@ export const DataGridTypePage = ({location: {pathname}}) => {
                 </Tab>
               )}
 
-              {pathnameWithoutSlash === "roleObjects" && (
-                <Tab title={formatMessage("msgPermissionsTab")} colCount={2}>
-                  <UserDetailTab
-                    user={userFormData}
-                    fetchName={"ObjectPermissions"}
-                  />
-                </Tab>
-              )}
+              <Tab title={formatMessage("msgPermissionsTab")} colCount={2}>
+                <UserDetailTab
+                  user={userFormData}
+                  fetchName={"ObjectPermissions"}
+                />
+              </Tab>
             </TabbedItem>
           </GroupItem>
         </Form>
@@ -529,16 +527,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         id={pathnameWithoutSlash}
         dataSource={APIData}
         // keyExpr="Received"
-        repaintChangesOnly={true}
+        // repaintChangesOnly={true}
         showBorders={false}
         remoteOperations={
-          checkIfArrIncludesValue(["errorLog", "mahalla"], pathnameWithoutSlash)
+          checkIfArrIncludesValue(
+            ["errorLog", "mahalla", "recordLog"],
+            pathnameWithoutSlash
+          )
             ? {paging: true, sorting: true}
             : false
         }
         sorting={{mode: "multiple"}}
         // === rows ===
-        // focusedRowEnabled={pathnameWithoutSlash !== "errorLog" ? true : false}
         focusedRowEnabled={true}
         showRowLines={true}
         // === columns ===
@@ -547,6 +547,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         columnHidingEnabled={false}
         allowColumnResizing={true}
         allowColumnReordering={true}
+        columnResizingMode={"widget"}
         // === appearance ===
         hoverStateEnabled={true}
         wordWrapEnabled={true}
@@ -556,16 +557,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // onContentReady={selectFirstRow}
         // onOptionChanged={handleOptionChange}
       >
-        {/* <RemoteOperations paging={true} sorting={true} /> */}
-        {/* <RemoteOperations
-          paging={true}
-          sorting={true}
-          groupPaging={false}
-          grouping={false}
-          summary={false}
-          filtering={false}
-        /> */}
-
         <ColumnChooser
           enabled={true}
           allowSearch={true}

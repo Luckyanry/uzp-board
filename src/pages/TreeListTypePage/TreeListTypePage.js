@@ -362,8 +362,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         columnMinWidth={60}
         columnAutoWidth={true}
         columnHidingEnabled={false}
-        allowColumnResizing={true}
         allowColumnReordering={true}
+        allowColumnResizing={true}
+        columnResizingMode={"widget"}
         // appearance
         hoverStateEnabled={true}
         wordWrapEnabled={true}
