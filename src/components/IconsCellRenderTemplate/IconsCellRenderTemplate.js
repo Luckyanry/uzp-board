@@ -12,8 +12,8 @@ const IconsCellRenderTemplate = (props) => {
   const styles = (icon) => ({
     bgIcon: {
       display: "inline-block",
-      width: "16px",
-      height: "16px",
+      width: "20px",
+      height: "20px",
       background: `url("${icon}") 0% 0% / 100% no-repeat`,
     },
   });

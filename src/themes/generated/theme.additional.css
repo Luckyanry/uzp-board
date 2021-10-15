@@ -1634,7 +1634,7 @@
   color-adjust: exact;
   color: #333;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   font-family: InterFallback, "Helvetica Neue", "Segoe UI", helvetica, verdana,
     sans-serif;
   line-height: 1.35715;
@@ -2591,14 +2591,14 @@
   padding: 8px;
 }
 .dx-swatch-additional .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -2617,14 +2617,14 @@
   padding: 8px;
 }
 .dx-swatch-additional .dx-button-has-icon .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -2646,14 +2646,14 @@
   padding: 7px 18px 8px;
 }
 .dx-swatch-additional .dx-button-has-text .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 9px;
   margin-left: 0;
 }
@@ -2672,14 +2672,14 @@
   padding: 8px;
 }
 .dx-swatch-additional .dx-button-back .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -4572,14 +4572,14 @@
   color: #333;
   display: inline-block;
   vertical-align: middle;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-swatch-additional .dx-tab-content {
   display: inline-block;
@@ -6119,14 +6119,14 @@
   vertical-align: top;
 }
 .dx-swatch-additional .dx-list-item-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-swatch-additional .dx-list-search {
   margin-bottom: 5px;
@@ -6340,14 +6340,14 @@
   padding: 7px 18px 8px;
 }
 .dx-swatch-additional .dx-list-next-button .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 9px;
   margin-left: 0;
 }
@@ -6787,14 +6787,14 @@
   .dx-list-next-button
   .dx-button
   .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 9px;
   margin-left: 0;
 }
@@ -8445,14 +8445,14 @@
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-swatch-additional .dx-treeview-item.dx-state-hover {
   background-color: rgba(0, 0, 0, 0.04);
@@ -8628,14 +8628,14 @@
   outline: 0;
 }
 .dx-swatch-additional .dx-menu-base .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-swatch-additional .dx-menu-base .dx-menu-item-content {
   padding: 3px 5px 7px;
@@ -9383,14 +9383,14 @@
   padding: 8px;
 }
 .dx-swatch-additional .dx-toolbar-text-auto-hide .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -11723,14 +11723,14 @@
   border-top-color: rgba(0, 0, 0, 0.04);
 }
 .dx-swatch-additional .dx-accordion-item-title .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   display: inline-block;
   color: #343a40;
 }

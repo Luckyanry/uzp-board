@@ -180,7 +180,7 @@
   background-color: #fff;
   color: #333;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   font-family: InterFallback, "Helvetica Neue", "Segoe UI", helvetica, verdana,
     sans-serif;
   line-height: 1.35715;
@@ -1635,7 +1635,7 @@
   color-adjust: exact;
   color: #333;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   font-family: InterFallback, "Helvetica Neue", "Segoe UI", helvetica, verdana,
     sans-serif;
   line-height: 1.35715;
@@ -2474,7 +2474,7 @@
   -ms-flex-direction: column;
   flex-direction: column;
   max-width: 100%;
-  font-size: 14px;
+  font-size: 16px;
 }
 .dx-button-disabled {
   cursor: default;
@@ -2541,14 +2541,14 @@
   padding: 8px;
 }
 .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -2567,14 +2567,14 @@
   padding: 8px;
 }
 .dx-button-has-icon .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -2596,14 +2596,14 @@
   padding: 7px 18px 8px;
 }
 .dx-button-has-text .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 9px;
   margin-left: 0;
 }
@@ -2622,14 +2622,14 @@
   padding: 8px;
 }
 .dx-button-back .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -4263,14 +4263,14 @@
   color: #333;
   display: inline-block;
   vertical-align: middle;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-tab-content {
   display: inline-block;
@@ -5629,14 +5629,14 @@
   vertical-align: top;
 }
 .dx-list-item-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-list-search {
   margin-bottom: 5px;
@@ -5817,14 +5817,14 @@
   padding: 7px 18px 8px;
 }
 .dx-list-next-button .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 9px;
   margin-left: 0;
 }
@@ -6177,14 +6177,14 @@
   padding: 7px 18px 8px;
 }
 .dx-device-mobile .dx-list-next-button .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 9px;
   margin-left: 0;
 }
@@ -6883,7 +6883,7 @@
   min-height: 50px;
 }
 .dx-timeview-field .dx-numberbox {
-  width: 70px;
+  width: 74px;
 }
 .dx-timeview-field .dx-numberbox.dx-numberbox-spin-touch-friendly {
   width: 110px;
@@ -7607,14 +7607,14 @@
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-treeview-item.dx-state-hover {
   background-color: rgba(0, 0, 0, 0.04);
@@ -7778,14 +7778,14 @@
   outline: 0;
 }
 .dx-menu-base .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }
 .dx-menu-base .dx-menu-item-content {
   padding: 3px 5px 7px;
@@ -8411,14 +8411,14 @@
   padding: 8px;
 }
 .dx-toolbar-text-auto-hide .dx-button .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -10418,14 +10418,14 @@
   border-top-color: rgba(0, 0, 0, 0.04);
 }
 .dx-accordion-item-title .dx-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   display: inline-block;
   color: #343a40;
 }
@@ -12710,14 +12710,14 @@
   .dx-row
   .dx-command-edit-with-icons
   .dx-link {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-position: 0 0;
-  background-size: 18px 18px;
+  background-size: 20px 20px;
   padding: 0;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
   margin: 0 3px;
 }
 .dx-datagrid
@@ -12802,11 +12802,11 @@
   line-height: 1em;
 }
 .dx-datagrid-checkbox-size.dx-checkbox-checked .dx-checkbox-icon {
-  font-size: 12px;
+  font-size: 16px;
 }
 .dx-datagrid-checkbox-size .dx-checkbox-icon {
-  height: 16px;
-  width: 16px;
+  height: 20px;
+  width: 20px;
 }
 .dx-datagrid-checkbox-size.dx-checkbox-indeterminate .dx-checkbox-icon::before {
   height: 6px;
@@ -14119,6 +14119,7 @@ input.dx-hidden {
   .dx-row
   .dx-command-edit.dx-command-edit-with-icons {
   width: 80px;
+  height: 37px;
   min-width: 80px;
 }
 .dx-treelist-content

@@ -38,7 +38,8 @@
 
       // ## Arrow customization
       .dx-treeview-node {
-        padding: 0 0 !important;
+        // padding: 0 0 !important;
+        padding-left: 0;
       }
 
       .dx-treeview-toggle-item-visibility {
@@ -57,12 +58,25 @@
       // ## Item levels customization
       .dx-treeview-node {
         &[aria-level="1"] {
-          font-weight: bold;
+          font-weight: 700;
+        }
+
+        &[aria-level="1"] .dx-treeview-item-content span {
+          margin-right: 25px;
         }
 
         &[aria-level="2"] .dx-treeview-item-content {
           font-weight: normal;
-          padding: 0 $side-panel-min-width;
+          // padding: 0 $side-panel-min-width;
+          padding-right: 30px;
+        }
+
+        &[aria-level="3"] .dx-treeview-item-content {
+          padding-left: 100px;
+        }
+
+        &[aria-level="3"] .dx-treeview-item-content .dx-icon {
+          padding-left: 60px;
         }
       }
       // ##

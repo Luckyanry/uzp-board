@@ -126,16 +126,16 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   overflow: hidden;
 }
 
-.dx-texteditor-input,
-.dx-datagrid-input {
-  padding: 10px 8px;
-}
+// .dx-texteditor-input,
+// .dx-datagrid-input {
+//   padding: 10px 8px;
+// }
 
 .dx-popup-bottom .dx-button {
   min-width: 211px;
   height: 40px;
 
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: #fff;
 
@@ -168,9 +168,9 @@ label.dx-field-item-label.dx-field-item-label-location-left {
   overflow: visible;
 }
 
-.dx-placeholder::before {
-  padding: 12px 16px;
-}
+// .dx-placeholder::before {
+//   padding: 12px 16px;
+// }
 
 .dx-field-item-content.dx-field-item-content-location-right {
   position: relative;
@@ -292,7 +292,7 @@ td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid
 }
 
 .dx-toolbar-text-auto-hide .dx-button .dx-button-content {
-  padding: 9px;
+  padding: 8px;
 }
 
 .dx-pager .dx-pages .dx-page {
@@ -320,11 +320,11 @@ td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid
 }
 
 .dx-dropdowneditor-icon {
-  width: 40px;
+  width: 38px;
 }
 
 .dx-datebox-calendar .dx-dropdowneditor-icon {
-  width: 40px;
+  width: 38px;
 }
 
 .dx-datagrid-rowsview
@@ -426,7 +426,7 @@ td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid
 .side-navigation-menu .menu-container .dx-treeview .dx-treeview-item .dx-icon {
   position: absolute;
   left: 0px;
-  top: 3px;
+  // top: 3px;
   width: 60px !important;
   margin: 0 !important;
 }
@@ -451,4 +451,17 @@ tr.dx-row.dx-header-row {
 
 .dx-datagrid-headers {
   background-color: #fff;
+}
+
+.dx-calendar-cell {
+  padding: 2px 8px;
+}
+
+.dx-icon {
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
+  font-size: 20px;
+  line-height: 20px;
 }

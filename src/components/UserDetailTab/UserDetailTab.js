@@ -263,11 +263,11 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       data: {InhType, InheritedName},
     } = props;
 
-    const styles = (icon) => ({
+    const styles = (icon, width = "20px") => ({
       bgIcon: {
         display: "inline-block",
-        width: "20px",
-        height: "16px",
+        width,
+        height: "20px",
         background: `url("${icon}") 0% 0% / 100% no-repeat`,
       },
     });
@@ -277,7 +277,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         case 0:
           return styles(object).bgIcon;
         case 1:
-          return styles(group).bgIcon;
+          return styles(group, "27px").bgIcon;
         case 2:
           return styles(system).bgIcon;
         case 3:
@@ -302,11 +302,11 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       data: {OType, aName},
     } = props;
 
-    const styles = (icon) => ({
+    const styles = (icon, width = "20px") => ({
       bgIcon: {
         display: "inline-block",
-        width: "16px",
-        height: "16px",
+        width,
+        height: "20px",
         background: `url("${icon}") 0% 0% / 100% no-repeat`,
       },
     });
@@ -334,11 +334,11 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         case 9:
           return styles(roleEmpty9).bgIcon;
         case 10:
-          return styles(groupOff10).bgIcon;
+          return styles(groupOff10, "27px").bgIcon;
         case 11:
-          return styles(groupOn11).bgIcon;
+          return styles(groupOn11, "27px").bgIcon;
         case 12:
-          return styles(groupEmpty12).bgIcon;
+          return styles(groupEmpty12, "27px").bgIcon;
 
         default:
           return;
@@ -368,7 +368,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       focusedRowEnabled={true}
       showRowLines={true}
       rowAlternationEnabled={false}
-      showBorders={true}
+      showBorders={false}
       // columns
       showColumnLines={true}
       // columnMinWidth={80}
