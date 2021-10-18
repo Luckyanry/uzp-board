@@ -239,7 +239,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: false,
     width: 1200,
-    height: 850,
+    height: 900,
   };
 
   function initNewRow(e) {

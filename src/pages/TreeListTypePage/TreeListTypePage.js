@@ -75,14 +75,14 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: false,
     width: 1200,
-    height: 800,
+    height: 900,
   };
 
   const popupOpt = {
     title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: true,
     width: 950,
-    height: 780,
+    height: 800,
   };
 
   useEffect(() => {
