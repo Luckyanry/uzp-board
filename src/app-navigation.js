@@ -1,4 +1,10 @@
 import {useLocalization} from "./contexts/LocalizationContext";
+import homeIcon from "./icons/home.svg";
+import legalsIcon from "./icons/legals.svg";
+import staffIcon from "./icons/staff.svg";
+import userACIcon from "./icons/userAC.svg";
+import administrationACIcon from "./icons/administration.svg";
+import dictionariesIcon from "./icons/dictionaries.svg";
 
 export const AppNavigation = () => {
   const {formatMessage} = useLocalization();
@@ -41,26 +47,26 @@ export const AppNavigation = () => {
     {
       text: formatMessage("msgHomeMenuTitle"),
       path: "/home",
-      icon: "home",
+      icon: homeIcon,
     },
     {
       text: formatMessage("msgDirectoryILEMenuTitle"),
-      icon: "toolbox",
+      icon: legalsIcon,
       items: pathCreator(individualsAndLegalDir),
     },
     {
       text: formatMessage("msgStaffDirMenuTitle"),
-      icon: "group",
+      icon: staffIcon,
       items: pathCreator(staffDir),
     },
     {
       text: formatMessage("msgUsersDirMenuTitle"),
-      icon: "key",
+      icon: userACIcon,
       items: pathCreator(userAccessControlDir),
     },
     {
       text: formatMessage("msgAdministrationDirMenuTitle"),
-      icon: "paste",
+      icon: administrationACIcon,
       items: [
         // {
         //   text: formatMessage("msgPortalStructureEditor"),
@@ -74,12 +80,12 @@ export const AppNavigation = () => {
           text: formatMessage("msgAuditingAndLoggingUserActions"),
           items: [
             {
-              icon: "tips",
+              // icon: "tips",
               text: formatMessage("msgAuditSettings"),
               path: "/auditSettingsMaster",
             },
             {
-              icon: "tips",
+              // icon: "tips",
               text: formatMessage("msgLogUserActions"),
               path: "/recordLog",
             },
@@ -93,7 +99,7 @@ export const AppNavigation = () => {
     }, // pathCreator(administrationDir)
     {
       text: formatMessage("msgDictionariesDirMenuTitle"),
-      icon: "folder",
+      icon: dictionariesIcon,
       items: pathCreator(dictionariesDir),
     },
   ];

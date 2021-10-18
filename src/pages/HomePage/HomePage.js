@@ -19,7 +19,6 @@ import {ReactComponent as RoadObjectIcon} from "./icons/RoadObjectIcon.svg";
 import {ReactComponent as StaffIcon} from "./icons/StaffIcon.svg";
 import {ReactComponent as PersonnelAssessmentIcon} from "./icons/PersonnelAssessmentIcon.svg";
 import {ReactComponent as MonitoringIcon} from "./icons/MonitoringIcon.svg";
-// import {ReactComponent as Logo} from "./logo.svg";
 
 import "./HomePage.scss";
 
