@@ -13,7 +13,6 @@ import DataGrid, {
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
-// import {ErrorPopup} from "..";
 
 import "./DetailTemplate.scss";
 import spinnerIcon from "../Spinner/icons/spinner.svg";
@@ -26,15 +25,13 @@ const DetailTemplate = ({data: {data, component}}) => {
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
-
-  // const [errorStatus, setErrorStatus] = useState(false);
-  // const [errorTitle, setErrorTitle] = useState();
+  const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
   const focusedRowTitle = data.name;
 
   const popupOpt = {
-    title: formatMessage("msgCreateNewItem", focusedRowTitle),
+    title: formatMessage(popupTitle, focusedRowTitle),
     showTitle: true,
     width: 950,
     height: 780,
@@ -84,13 +81,13 @@ const DetailTemplate = ({data: {data, component}}) => {
     // eslint-disable-next-line
   }, []);
 
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup
-  //     errorState={errorStatus}
-  //     popupPositionOf={`#detail-template-grid`}
-  //     errorTitle={errorTitle}
-  //   />
-  // ) : null;
+  function initNewRow() {
+    setPopupTitle("msgAddNewItem");
+  }
+
+  function onEditingStart() {
+    setPopupTitle("msgEditNewItem");
+  }
 
   return (
     <div id={"detail-template"}>
@@ -100,9 +97,9 @@ const DetailTemplate = ({data: {data, component}}) => {
         dataSource={shortDicsRecordsDataState}
         repaintChangesOnly={true}
         remoteOperations={false}
-        // rows
+        // === rows ===
         focusedRowEnabled={true}
-        // columns
+        // === columns ===
         showColumnLines={true}
         columnMinWidth={60}
         columnAutoWidth={true}
@@ -110,10 +107,12 @@ const DetailTemplate = ({data: {data, component}}) => {
         allowColumnReordering={true}
         allowColumnResizing={true}
         columnResizingMode={"widget"}
-        // appearance
+        // === appearance ===
         hoverStateEnabled={true}
         wordWrapEnabled={true}
-        // functions
+        // === functions ===
+        onInitNewRow={initNewRow}
+        onEditingStart={onEditingStart}
       >
         <ColumnChooser
           enabled={true}

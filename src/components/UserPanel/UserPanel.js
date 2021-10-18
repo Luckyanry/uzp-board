@@ -8,6 +8,8 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import {useAuth} from "../../contexts/Auth";
 import {firstLetterToUpper} from "../../helpers/functions";
 
+import userIcon from "./icons/object.svg";
+import exitIcon from "./icons/exit.svg";
 import "./UserPanel.scss";
 
 export default function UserPanel({menuMode}) {
@@ -23,12 +25,12 @@ export default function UserPanel({menuMode}) {
   const menuItems = () => [
     {
       text: formatMessage("msgProfileMenuTitle"),
-      icon: "user",
+      icon: userIcon,
       onClick: navigateToProfile,
     },
     {
       text: formatMessage("msgLogout"),
-      icon: "runner",
+      icon: exitIcon,
       onClick: signOut,
     },
   ];

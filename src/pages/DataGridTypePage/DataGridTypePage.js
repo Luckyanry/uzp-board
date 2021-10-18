@@ -13,13 +13,13 @@ import DataGrid, {
   RequiredRule,
   FormItem,
   Lookup,
-  // Button,
   Paging,
   Pager,
   Form,
   LoadPanel,
   StateStoring,
   ColumnFixing,
+  // Button,
 } from "devextreme-react/data-grid";
 import {
   Item,
@@ -65,6 +65,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
+  const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   // const [errorStatus, setErrorStatus] = useState(null);
 
@@ -222,32 +223,34 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   }, [pathname, pathnameWithoutSlash]);
 
   const popupGeneralOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: true,
     width: 1200,
     height: 800,
-    // fullScreen: true,
   };
 
   const popupPersonAndLegalOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: true,
-    width: 1300,
-    height: 800,
     fullScreen: true,
   };
 
   const popupUsersPageOptions = {
-    title: formatMessage("msgCreateNewItem", localPageAbbreviation),
+    title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: false,
     width: 1200,
     height: 850,
   };
 
   function initNewRow(e) {
-    // console.log(`e `, e.component.getDataSource());
     e.data.status = statusToggler[0];
+
     setUserID("");
+    setPopupTitle("msgAddNewItem");
+  }
+
+  function onEditingStart() {
+    setPopupTitle("msgEditNewItem");
   }
 
   function onFocusedCellChanging(e) {
@@ -266,10 +269,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       setUserGroupItemCaption(groupItemCaption);
     }
   }
-
-  // function handleOptionChange(e) {
-  //   e.fullName === "focusedRowKey" && setUserID(e.value);
-  // }
 
   function customMarkupRender() {
     let murkupCollection = [];
@@ -406,11 +405,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     });
   }
 
-  // function renderPwdGridCell(data) {
-  //   console.log(`data `, data);
-  //   // return <div style={{color: "blue"}}>{data.displayValue}</div>;
-  // }
-
   function customItemMarkup(formData) {
     if (!formData) {
       return;
@@ -439,7 +433,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
               <TabPanelOptions deferRendering={false} />
               <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
                 {customItemMarkup(userFormData)}
-                {console.log(userFormData)}
               </Tab>
 
               {checkIfArrIncludesValue(
@@ -543,9 +536,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         wordWrapEnabled={true}
         // === functions ===
         onInitNewRow={initNewRow}
+        onEditingStart={onEditingStart}
         onFocusedCellChanging={onFocusedCellChanging}
-        // onContentReady={selectFirstRow}
-        // onOptionChanged={handleOptionChange}
       >
         <ColumnChooser
           enabled={true}

@@ -14,28 +14,31 @@ import TreeList, {
   LoadPanel,
 } from "devextreme-react/tree-list";
 import {Template} from "devextreme-react/core/template";
+import {ColumnFixing} from "devextreme-react/data-grid";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
 import {IconsCellRenderTemplate} from "..";
-// import {ErrorPopup} from "..";
+import {customPageAbbreviationMsg} from "../../helpers/functions";
 
 import spinner from "../Spinner/icons/spinner.svg";
 import "./DetailTreeListTab.scss";
-import {ColumnFixing} from "devextreme-react/data-grid";
 
 const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
-  // const [errorStatus, setErrorStatus] = useState(null);
+  const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
 
   const pathname = `/${DetailTreeListPath}`;
   const pathnameWithoutSlash = pathname.split("/")[1];
+  const localPageAbbreviation = formatMessage(
+    customPageAbbreviationMsg(pathnameWithoutSlash)
+  );
 
   const popupOpt = {
-    title: formatMessage("msgCreateNewItem"),
+    title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: true,
     width: 950,
     height: 800,
@@ -85,7 +88,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         allowEditing = false,
         ...params
       } = item;
-      console.log(`item DetailTreeListTab =>`, item);
+
       return (
         <Column
           key={idx}
@@ -136,7 +139,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
 
   function onEditorPreparing(e) {
     switch (e.row.data.ObjType) {
-      case 0: //database  block editor always
+      case 0: // database block editor always
         e.cancel = true;
         break;
       case 1: // table block execs
@@ -153,10 +156,18 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
           e.cancel = true;
         }
         break;
-      // other unknown future type block editor  always
+      // other unknown future type block editor always
       default:
         e.cancel = true;
     }
+  }
+
+  function initNewRow() {
+    setPopupTitle("msgAddNewItem");
+  }
+
+  function onEditingStart() {
+    setPopupTitle("msgEditNewItem");
   }
 
   return (
@@ -169,12 +180,12 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       parentIdExpr="PObjId"
       repaintChangesOnly={true}
       // remoteOperations={false}
-      // rows
+      // === rows ===
       focusedRowEnabled={true}
       showRowLines={true}
       rowAlternationEnabled={false}
       showBorders={true}
-      // columns
+      // === columns ===
       showColumnLines={true}
       // columnMinWidth={80}
       columnAutoWidth={true}
@@ -182,14 +193,16 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
       allowColumnReordering={true}
       allowColumnResizing={true}
       columnResizingMode={"widget"}
-      // appearance
+      // === appearance ===
       hoverStateEnabled={true}
       wordWrapEnabled={true}
       virtualModeEnabled={true}
       autoExpandAll={false}
-      // functions
+      // === functions ===
       onRowUpdating={updateRow}
       onEditorPreparing={onEditorPreparing}
+      onInitNewRow={initNewRow}
+      onEditingStart={onEditingStart}
     >
       <Scrolling mode="standard" useNative="true" />
       <StateStoring enabled={false} type="localStorage" storageKey="storage" />

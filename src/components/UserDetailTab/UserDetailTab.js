@@ -52,6 +52,8 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
+  const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
+
   const {formatMessage} = useLocalization();
 
   const pathname = `/${fetchName}`;
@@ -59,7 +61,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   const focusedRowTitle = UserName;
 
   const popupOpt = {
-    title: formatMessage("msgCreateNewItem", focusedRowTitle),
+    title: formatMessage(popupTitle, focusedRowTitle),
     showTitle: true,
     width: 1100,
     height: 850,
@@ -88,13 +90,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         );
       }
     }
-
-    // const usersFetchData =
-    // fetchName === "ISGroupObjectMembers"
-    //   ? FetchData(pathname, `ObjectMembers&@GID=${GID}`, "wisdb")
-    //       .detailUserTemplateData
-    //   : FetchData(pathname, `${fetchName}&@GID=${GID}`, "wisdb")
-    //       .detailUserTemplateData;
 
     async function getAPIData() {
       if (fetchName === "ISGroupObjectMembers") {
@@ -229,12 +224,18 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   }
 
   function initNewRow(e) {
+    setPopupTitle("msgAddNewItem");
+
     if (fetchName === "ISGroupObjectMembers") {
       e.data.RGID = GID;
       return;
     }
 
     fetchName !== "ObjectPermissions" && (e.data.UGID = GID);
+  }
+
+  function onEditingStart() {
+    setPopupTitle("msgEditNewItem");
   }
 
   function onClickHandlerCustomBtn(e, value) {
@@ -364,12 +365,12 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       parentIdExpr="PObjId"
       repaintChangesOnly={true}
       // remoteOperations={false}
-      // rows
+      // === rows ===
       focusedRowEnabled={true}
       showRowLines={true}
       rowAlternationEnabled={false}
       showBorders={false}
-      // columns
+      // === columns ===
       showColumnLines={true}
       // columnMinWidth={80}
       columnAutoWidth={true}
@@ -378,14 +379,14 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       allowColumnReordering={true}
       allowColumnResizing={true}
       columnResizingMode={"widget"}
-      // appearance
+      // === appearance ===
       hoverStateEnabled={true}
       wordWrapEnabled={true}
       virtualModeEnabled={true}
       autoExpandAll={false}
-      // functions
-      // onRowUpdating={updateRow}
-      // onFocusedCellChanging={onFocusedCellChanging}
+      // === functions ===
+      onInitNewRow={initNewRow}
+      onEditingStart={onEditingStart}
     >
       <Scrolling mode="standard" useNative="true" />
       <StateStoring enabled={false} type="localStorage" storageKey="storage" />
@@ -401,7 +402,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
 
       <Editing
         mode="batch"
-        // mode="popup"
         popup={popupOpt}
         allowAdding={false}
         allowDeleting={false}
@@ -481,10 +481,10 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       repaintChangesOnly={true}
       remoteOperations={false}
       // showBorders={true}
-      // rows
+      // === rows ===
       focusedRowEnabled={true}
       showRowLines={true}
-      // columns
+      // === columns ===
       showColumnLines={true}
       columnMinWidth={80}
       columnAutoWidth={true}
@@ -492,12 +492,13 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       allowColumnReordering={true}
       allowColumnResizing={true}
       columnResizingMode={"widget"}
-      // appearance
+      // === appearance ===
       hoverStateEnabled={true}
       wordWrapEnabled={true}
       showBorders={true}
-      // functions
+      // === functions ===
       onInitNewRow={initNewRow}
+      onEditingStart={onEditingStart}
     >
       <ColumnChooser
         enabled={true}
