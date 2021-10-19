@@ -81,13 +81,13 @@ const DetailTemplate = ({data: {data, component}}) => {
     // eslint-disable-next-line
   }, []);
 
-  function initNewRow() {
-    setPopupTitle("msgAddNewItem");
-  }
+  // function initNewRow() {
+  //   setPopupTitle("msgAddNewItem");
+  // }
 
-  function onEditingStart() {
-    setPopupTitle("msgEditNewItem");
-  }
+  // function onEditingStart() {
+  //   setPopupTitle("msgEditNewItem");
+  // }
 
   return (
     <div id={"detail-template"}>
@@ -111,8 +111,8 @@ const DetailTemplate = ({data: {data, component}}) => {
         hoverStateEnabled={true}
         wordWrapEnabled={true}
         // === functions ===
-        onInitNewRow={initNewRow}
-        onEditingStart={onEditingStart}
+        // onInitNewRow={initNewRow}
+        // onEditingStart={onEditingStart}
       >
         <ColumnChooser
           enabled={true}

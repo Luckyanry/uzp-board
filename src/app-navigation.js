@@ -1,6 +1,6 @@
 import {useLocalization} from "./contexts/LocalizationContext";
 import homeIcon from "./icons/home.svg";
-import legalsIcon from "./icons/legals.svg";
+import legalsIcon from "./icons/briefcase.svg";
 import staffIcon from "./icons/staff.svg";
 import userACIcon from "./icons/userAC.svg";
 import administrationACIcon from "./icons/administration.svg";
@@ -12,8 +12,6 @@ export const AppNavigation = () => {
   const individualsAndLegalDir = ["personObjects", "legals"];
   const staffDir = ["employees", "orgUnits"];
   const userAccessControlDir = ["userObjects", "roleObjects", "groupObjects"];
-  // const administrationDir = [];
-  // const auditSubDir = ["auditSettings", "logUserActions"];
   const dictionariesDir = [
     "countries",
     "soato",
@@ -80,12 +78,10 @@ export const AppNavigation = () => {
           text: formatMessage("msgAuditingAndLoggingUserActions"),
           items: [
             {
-              // icon: "tips",
               text: formatMessage("msgAuditSettings"),
               path: "/auditSettingsMaster",
             },
             {
-              // icon: "tips",
               text: formatMessage("msgLogUserActions"),
               path: "/recordLog",
             },
@@ -96,7 +92,7 @@ export const AppNavigation = () => {
           path: "/errorLog",
         },
       ],
-    }, // pathCreator(administrationDir)
+    },
     {
       text: formatMessage("msgDictionariesDirMenuTitle"),
       icon: dictionariesIcon,

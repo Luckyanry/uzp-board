@@ -27,9 +27,17 @@ import {
   TabbedItem,
   TabPanelOptions,
   Tab,
+  Label,
 } from "devextreme-react/form";
 // eslint-disable-next-line
 import TextArea from "devextreme-react/text-area";
+// import {TextBox, Button} from "devextreme-react/text-box";
+// import {
+//   Validator,
+//   RequiredRule,
+//   PatternRule,
+//   StringLengthRule,
+// } from "devextreme-react/validator";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -44,13 +52,225 @@ import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
-  ColumnPwdGeneratorField,
+  // ColumnPwdGeneratorField,
   // DetailTreeListTab,
 } from "../../components";
 // import {ErrorPopup} from "../../components";
 
+import visibilityOff from "../../icons/visibilityOff.svg";
+import visibility from "../../icons/visibility.svg";
+import enhancedEncryption from "../../icons/enhancedEncryption.svg";
 import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./DataGridTypePage.scss";
+
+const ColumnPwdGeneratorField = ({dataField}) => {
+  const [passwordState, setPasswordState] = useState("");
+  const [passwordMode, setPasswordMode] = useState("password");
+  const [passwordVisibility, setPasswordVisibility] = useState(visibility);
+
+  const [minLength, setMinLength] = useState(8);
+  const [maxLength, setMaxLength] = useState(128);
+  const [minCharacterGroups, setMinCharacterGroups] = useState(4);
+
+  const {formatMessage} = useLocalization();
+
+  useEffect(() => {
+    let ignore = false;
+
+    const getPasswordPolicies = async () => {
+      const dictionaryByName = FetchData(
+        "/DictionaryByName",
+        "ShortDicsRecords&@name=PasswordPolicies",
+        "hbdb"
+      ).passwordPolicies();
+
+      await dictionaryByName
+        .then((res) => res.data)
+        .then((arr) => {
+          setMinLength(arr[0].jvson.MinPasswordLength);
+          setMaxLength(arr[0].jvson.MaxPasswordLength);
+          setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
+        });
+    };
+
+    minLength &&
+      maxLength &&
+      minCharacterGroups &&
+      !ignore &&
+      getPasswordPolicies();
+
+    return () => {
+      ignore = true;
+    };
+  }, [minLength, maxLength, minCharacterGroups]);
+
+  const pwdBtnIcon = {
+    icon: passwordVisibility,
+    type: "button",
+    onClick: () => {
+      setPasswordVisibility(() =>
+        passwordVisibility === visibility ? visibilityOff : visibility
+      );
+      setPasswordMode(() => (passwordMode === "text" ? "password" : "text"));
+    },
+  };
+
+  const pwdGeneratorBtn = {
+    icon: enhancedEncryption,
+    type: "button",
+    onClick: () => {
+      const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
+
+      passwordGenerator(setLower, setUpper, setNumber, setSymbol, minLength);
+    },
+  };
+
+  const randomFunc = {
+    lower: getRandomLower,
+    upper: getRandomUpper,
+    number: getRandomNumber,
+    symbol: getRandomSymbol,
+  };
+
+  function onPasswordChanged(e) {
+    setPasswordState(e.value);
+  }
+
+  function getRandomLower() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+  }
+
+  function getRandomUpper() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+  }
+
+  function getRandomNumber() {
+    return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+  }
+
+  function getRandomSymbol() {
+    const symbols = `ˆ"'.:;!#$%&()*+-/<=>?@[]_{|}~`;
+    return symbols[Math.floor(Math.random() * symbols.length)];
+  }
+
+  function passwordGenerator(
+    lower = true,
+    upper = false,
+    number = false,
+    symbol = false,
+    length
+  ) {
+    let generatedPassword = "";
+
+    const typesCount = lower + upper + number + symbol;
+
+    const typeArr = [{lower}, {upper}, {number}, {symbol}]
+      .map((i) => [Math.random(), i])
+      .sort()
+      .map((i) => i[1])
+      .filter((item) => Object.values(item)[0]);
+
+    if (typesCount === 0) {
+      return "";
+    }
+
+    for (let i = 0; i < length; i += typesCount) {
+      // eslint-disable-next-line no-loop-func
+      typeArr.forEach((type) => {
+        const funcName = Object.keys(type)[0];
+        generatedPassword += randomFunc[funcName]();
+      });
+    }
+    const finalPassword = generatedPassword.slice(0, length);
+
+    setPasswordState(finalPassword);
+    return finalPassword;
+  }
+
+  function inputValidation() {
+    const digitsRule = "0-9";
+    const symbolRule = String.raw`\ˆ\"\'\.\:\;\!\#\$\%\&\(\)\*\+\-\/\<\=\>\?\@\[\]\_\{\|\}\~`;
+    const lowerLetterRule = "a-z";
+    const upperLetterRule = "A-Z";
+
+    switch (minCharacterGroups) {
+      case 1:
+        return {
+          setLower: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgOneGroup"),
+          regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
+        };
+      case 2:
+        return {
+          setLower: true,
+          setUpper: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgTwoGroups"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
+        };
+      case 3:
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          patternRuleErrMsg: formatMessage(
+            "msgPwdPatternRuleErrMsgThreeGroups"
+          ),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
+        };
+      case 4:
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          setSymbol: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+        };
+
+      default:
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          setSymbol: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+        };
+    }
+  }
+
+  // const {regExp, patternRuleErrMsg} = inputValidation();
+
+  const pwdItemEditorOptions = {
+    mode: passwordMode,
+    stylingMode: "outlined",
+    defaultValue: passwordState,
+    value: passwordState,
+    onValueChanged: onPasswordChanged,
+    placeholder: formatMessage("msgEnterPassword"),
+
+    buttons: [
+      {
+        name: "lookpassword",
+        location: "after",
+        options: pwdBtnIcon,
+      },
+      {
+        name: "msgGenerateStrongPassword",
+        location: "after",
+        options: pwdGeneratorBtn,
+      },
+    ],
+  };
+
+  return (
+    <Item
+      dataField={dataField}
+      editorType="dxTextBox"
+      editorOptions={pwdItemEditorOptions}
+    />
+  );
+};
 
 export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -236,7 +456,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   };
 
   const popupUsersPageOptions = {
-    title: formatMessage(popupTitle, localPageAbbreviation),
+    title: formatMessage(popupTitle, localPathname),
     showTitle: false,
     width: 1200,
     height: 900,
@@ -336,7 +556,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         allowEditing = true,
         ...params
       } = item;
-
+      // console.log(`item`, item.buttons);
       return (
         <Column
           key={idx}
@@ -417,6 +637,207 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     ));
   }
 
+  // const [passwordState, setPasswordState] = useState("");
+  // const [passwordMode, setPasswordMode] = useState("password");
+  // const [passwordVisibility, setPasswordVisibility] = useState(visibility);
+
+  // const [minLength, setMinLength] = useState(8);
+  // const [maxLength, setMaxLength] = useState(128);
+  // const [minCharacterGroups, setMinCharacterGroups] = useState(4);
+
+  // // const {formatMessage} = useLocalization();
+
+  // useEffect(() => {
+  //   let ignore = false;
+
+  //   const getPasswordPolicies = async () => {
+  //     const dictionaryByName = FetchData(
+  //       "/DictionaryByName",
+  //       "ShortDicsRecords&@name=PasswordPolicies",
+  //       "hbdb"
+  //     ).passwordPolicies();
+
+  //     await dictionaryByName
+  //       .then((res) => res.data)
+  //       .then((arr) => {
+  //         setMinLength(arr[0].jvson.MinPasswordLength);
+  //         setMaxLength(arr[0].jvson.MaxPasswordLength);
+  //         setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
+  //       });
+  //   };
+
+  //   minLength &&
+  //     maxLength &&
+  //     minCharacterGroups &&
+  //     !ignore &&
+  //     getPasswordPolicies();
+
+  //   return () => {
+  //     ignore = true;
+  //   };
+  // }, [minLength, maxLength, minCharacterGroups]);
+
+  // const pwdBtnIcon = {
+  //   icon: passwordVisibility,
+  //   type: "button",
+  //   onClick: () => {
+  //     setPasswordVisibility(() =>
+  //       passwordVisibility === visibility ? visibilityOff : visibility
+  //     );
+  //     setPasswordMode(() => (passwordMode === "text" ? "password" : "text"));
+  //   },
+  // };
+
+  // const pwdGeneratorBtn = {
+  //   icon: enhancedEncryption,
+  //   type: "button",
+  //   onClick: (e) => {
+  //     e.event.preventDefault();
+  //     console.log(`e `, e);
+  //     const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
+
+  //     passwordGenerator(setLower, setUpper, setNumber, setSymbol, minLength);
+  //   },
+  // };
+
+  // const randomFunc = {
+  //   lower: getRandomLower,
+  //   upper: getRandomUpper,
+  //   number: getRandomNumber,
+  //   symbol: getRandomSymbol,
+  // };
+
+  // function onPasswordChanged(e) {
+  //   setPasswordState(e.value);
+  // }
+
+  // function getRandomLower() {
+  //   return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+  // }
+
+  // function getRandomUpper() {
+  //   return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+  // }
+
+  // function getRandomNumber() {
+  //   return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+  // }
+
+  // function getRandomSymbol() {
+  //   const symbols = `ˆ"'.:;!#$%&()*+-/<=>?@[]_{|}~`;
+  //   return symbols[Math.floor(Math.random() * symbols.length)];
+  // }
+
+  // function passwordGenerator(
+  //   lower = true,
+  //   upper = false,
+  //   number = false,
+  //   symbol = false,
+  //   length
+  // ) {
+  //   let generatedPassword = "";
+
+  //   const typesCount = lower + upper + number + symbol;
+
+  //   const typeArr = [{lower}, {upper}, {number}, {symbol}]
+  //     .map((i) => [Math.random(), i])
+  //     .sort()
+  //     .map((i) => i[1])
+  //     .filter((item) => Object.values(item)[0]);
+
+  //   if (typesCount === 0) {
+  //     return "";
+  //   }
+
+  //   for (let i = 0; i < length; i += typesCount) {
+  //     // eslint-disable-next-line no-loop-func
+  //     typeArr.forEach((type) => {
+  //       const funcName = Object.keys(type)[0];
+  //       generatedPassword += randomFunc[funcName]();
+  //     });
+  //   }
+  //   const finalPassword = generatedPassword.slice(0, length);
+
+  //   setPasswordState(finalPassword);
+  //   return finalPassword;
+  // }
+
+  // function inputValidation() {
+  //   const digitsRule = "0-9";
+  //   const symbolRule = String.raw`\ˆ\"\'\.\:\;\!\#\$\%\&\(\)\*\+\-\/\<\=\>\?\@\[\]\_\{\|\}\~`;
+  //   const lowerLetterRule = "a-z";
+  //   const upperLetterRule = "A-Z";
+
+  //   switch (minCharacterGroups) {
+  //     case 1:
+  //       return {
+  //         setLower: true,
+  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgOneGroup"),
+  //         regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
+  //       };
+  //     case 2:
+  //       return {
+  //         setLower: true,
+  //         setUpper: true,
+  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgTwoGroups"),
+  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
+  //       };
+  //     case 3:
+  //       return {
+  //         setLower: true,
+  //         setUpper: true,
+  //         setNumber: true,
+  //         patternRuleErrMsg: formatMessage(
+  //           "msgPwdPatternRuleErrMsgThreeGroups"
+  //         ),
+  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
+  //       };
+  //     case 4:
+  //       return {
+  //         setLower: true,
+  //         setUpper: true,
+  //         setNumber: true,
+  //         setSymbol: true,
+  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
+  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+  //       };
+
+  //     default:
+  //       return {
+  //         setLower: true,
+  //         setUpper: true,
+  //         setNumber: true,
+  //         setSymbol: true,
+  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
+  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+  //       };
+  //   }
+  // }
+
+  // // const {regExp, patternRuleErrMsg} = inputValidation();
+
+  // const pwdItemEditorOptions = {
+  //   mode: passwordMode,
+  //   stylingMode: "outlined",
+  //   defaultValue: passwordState,
+  //   value: passwordState,
+  //   onValueChanged: onPasswordChanged,
+  //   placeholder: formatMessage("msgEnterPassword"),
+
+  //   buttons: [
+  //     {
+  //       name: "lookpassword",
+  //       location: "after",
+  //       options: pwdBtnIcon,
+  //     },
+  //     {
+  //       name: "msgGenerateStrongPassword",
+  //       location: "after",
+  //       options: pwdGeneratorBtn,
+  //     },
+  //   ],
+  // };
+
   function editorCustomMarkup() {
     return userID ? (
       <Editing
@@ -489,16 +910,22 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             // eslint-disable-next-line
             if (!dataField) return;
 
-            return (
-              <Item key={idx} dataField={dataField}>
-                {dataField === "Password" ? <ColumnPwdGeneratorField /> : null}
-              </Item>
+            return dataField !== "Password" ? (
+              <Item key={idx} dataField={dataField} />
+            ) : (
+              <ColumnPwdGeneratorField key={idx} dataField="Password" />
             );
           })}
         </Form>
       </Editing>
     );
   }
+  // <Item
+  //   key={idx}
+  //   dataField={dataField}
+  //   editorType="dxTextBox"
+  //   editorOptions={pwdItemEditorOptions}
+  // />
 
   return (
     <>
@@ -600,11 +1027,11 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         {/* <Column type="buttons" width={110}>
           <Button
             name="edit"
-            hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
+            // hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
           />
           <Button
             name="delete"
-            hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
+            // hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
           />
         </Column> */}
 

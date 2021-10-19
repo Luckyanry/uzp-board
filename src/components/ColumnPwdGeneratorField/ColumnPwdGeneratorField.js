@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 
-import {Label} from "devextreme-react/form";
-import {TextBox, Button as TextBoxButton} from "devextreme-react/text-box";
+import Form, {Label, Item} from "devextreme-react/form";
+import {TextBox, Button} from "devextreme-react/text-box";
 import {
   Validator,
   RequiredRule,
@@ -17,7 +17,7 @@ import visibility from "./icons/visibility.svg";
 import enhancedEncryption from "./icons/enhancedEncryption.svg";
 import "./ColumnPwdGeneratorField.scss";
 
-const ColumnPwdGeneratorField = () => {
+const ColumnPwdGeneratorField = ({dataField}) => {
   const [passwordState, setPasswordState] = useState("");
   const [passwordMode, setPasswordMode] = useState("password");
   const [passwordVisibility, setPasswordVisibility] = useState(visibility);
@@ -195,50 +195,82 @@ const ColumnPwdGeneratorField = () => {
 
   const {regExp, patternRuleErrMsg} = inputValidation();
 
+  const pwdItemEditorOptions = {
+    mode: passwordMode,
+    stylingMode: "outlined",
+    defaultValue: passwordState,
+    value: passwordState,
+    onValueChanged: onPasswordChanged,
+    placeholder: formatMessage("msgEnterPassword"),
+
+    buttons: [
+      {
+        name: "lookpassword",
+        location: "after",
+        options: pwdBtnIcon,
+      },
+      {
+        name: "msgGenerateStrongPassword",
+        location: "after",
+        options: pwdGeneratorBtn,
+      },
+    ],
+  };
+
   return (
-    <>
-      <TextBox
-        mode={passwordMode}
-        // placeholder={formatMessage("msgEnterPassword")}
-        stylingMode="outlined"
-        defaultValue={passwordState}
-        value={passwordState}
-        onValueChanged={onPasswordChanged}
-      >
-        <TextBoxButton
-          name="msgGenerateStrongPassword"
-          hint={formatMessage("msgGeneratePassword")}
-          location="after"
-          options={pwdGeneratorBtn}
-        />
-
-        <TextBoxButton
-          name={formatMessage("msgShowPassword")}
-          hint={formatMessage("msgShowPassword")}
-          location="after"
-          options={pwdBtnIcon}
-        />
-
-        <Validator>
-          <RequiredRule message={formatMessage("msgRequiredPassword")} />
-
-          <StringLengthRule
-            message={formatMessage(
-              "msgPwdStringLengthRuleErrMsg",
-              minLength,
-              maxLength
-            )}
-            min={minLength}
-            max={maxLength}
-          />
-
-          <PatternRule message={patternRuleErrMsg} pattern={regExp} />
-        </Validator>
-      </TextBox>
-
+    <Item
+      dataField={dataField}
+      editorType="dxTextBox"
+      editorOptions={pwdItemEditorOptions}
+    >
       <Label visible={true} />
-    </>
+    </Item>
   );
+
+  // return (
+  // <>
+  //   <TextBox
+  //     mode={passwordMode}
+  //     // placeholder={formatMessage("msgEnterPassword")}
+  //     stylingMode="outlined"
+  //     defaultValue={passwordState}
+  //     value={passwordState}
+  //     onValueChanged={onPasswordChanged}
+  //   >
+  //     <Button
+  //       name="msgGenerateStrongPassword"
+  //       hint={formatMessage("msgGeneratePassword")}
+  //       location="after"
+  //       options={pwdGeneratorBtn}
+  //     />
+
+  //     <Button
+  //       name={formatMessage("msgShowPassword")}
+  //       hint={formatMessage("msgShowPassword")}
+  //       location="after"
+  //       options={pwdBtnIcon}
+  //     />
+
+  //     <Validator>
+  //       <RequiredRule message={formatMessage("msgRequiredPassword")} />
+
+  //       <StringLengthRule
+  //         message={formatMessage(
+  //           "msgPwdStringLengthRuleErrMsg",
+  //           minLength,
+  //           maxLength
+  //         )}
+  //         min={minLength}
+  //         max={maxLength}
+  //       />
+
+  //       <PatternRule message={patternRuleErrMsg} pattern={regExp} />
+  //     </Validator>
+  //   </TextBox>
+
+  //   <Label visible={true} />
+  // </>
+  // );
 };
 
 export default ColumnPwdGeneratorField;

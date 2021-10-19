@@ -81,9 +81,7 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
         visible = false,
         disabled = false,
         required = false,
-        // width = "100%",
         minWidth = 80,
-        alignment = "left",
         formItem = false,
         allowEditing = false,
         ...params
@@ -98,10 +96,8 @@ const DetailTreeListTab = ({DetailTreeListPath, masterId}) => {
           visible={visible}
           disabled={disabled}
           // width={width}
-          alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
-          showEditorAlways={false}
           fixed={dataField === "objName" ? true : false}
           trueText={
             dataField === "status"

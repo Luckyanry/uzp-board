@@ -52,7 +52,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
-  const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
+  // const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
 
@@ -61,7 +61,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   const focusedRowTitle = UserName;
 
   const popupOpt = {
-    title: formatMessage(popupTitle, focusedRowTitle),
+    title: formatMessage("msgCreateNewItem", focusedRowTitle),
     showTitle: true,
     width: 1100,
     height: 850,
@@ -156,7 +156,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         required = false,
         // width = "100%",
         minWidth = 80,
-        alignment = "left",
         formItem = false,
         lookup = false,
         allowEditing = false,
@@ -172,10 +171,8 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
           visible={visible}
           disabled={disabled}
           // width={width}
-          alignment={alignment}
           minWidth={minWidth}
           allowEditing={allowEditing}
-          showEditorAlways={false}
           hidingPriority={dataField === "Description" ? 0 : null}
           trueText={
             dataField === "status"
@@ -224,7 +221,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   }
 
   function initNewRow(e) {
-    setPopupTitle("msgAddNewItem");
+    // setPopupTitle("msgAddNewItem");
 
     if (fetchName === "ISGroupObjectMembers") {
       e.data.RGID = GID;
@@ -234,9 +231,9 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
     fetchName !== "ObjectPermissions" && (e.data.UGID = GID);
   }
 
-  function onEditingStart() {
-    setPopupTitle("msgEditNewItem");
-  }
+  // function onEditingStart() {
+  //   setPopupTitle("msgEditNewItem");
+  // }
 
   function onClickHandlerCustomBtn(e, value) {
     const result = FetchData(
@@ -386,7 +383,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       autoExpandAll={false}
       // === functions ===
       onInitNewRow={initNewRow}
-      onEditingStart={onEditingStart}
+      // onEditingStart={onEditingStart}
     >
       <Scrolling mode="standard" useNative="true" />
       <StateStoring enabled={false} type="localStorage" storageKey="storage" />
@@ -498,7 +495,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
       showBorders={true}
       // === functions ===
       onInitNewRow={initNewRow}
-      onEditingStart={onEditingStart}
+      // onEditingStart={onEditingStart}
     >
       <ColumnChooser
         enabled={true}
