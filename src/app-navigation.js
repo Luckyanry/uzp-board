@@ -70,10 +70,10 @@ export const AppNavigation = () => {
         //   text: formatMessage("msgPortalStructureEditor"),
         //   path: "/portalStructureEditor",
         // },
-        // {
-        //   text: formatMessage("msgRightsEditor"),
-        //   path: "/objectPermissions",
-        // },
+        {
+          text: formatMessage("msgRightsEditor"),
+          path: "/rights",
+        },
         {
           text: formatMessage("msgAuditingAndLoggingUserActions"),
           items: [

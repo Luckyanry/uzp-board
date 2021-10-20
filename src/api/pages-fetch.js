@@ -56,6 +56,8 @@ export const FetchData = (
       case "/legals":
         return `LegalObjectColumnSchema`;
 
+      case "/rights":
+        return `RightsColumnSchema`;
       case "/auditSettingsMaster":
         return `AuditSettingsMasterColumnSchema`;
       case "/recordLog":
@@ -187,6 +189,13 @@ export const FetchData = (
 
   const detailUserTemplateData = fetchDataConstructor(
     ["RGID", "UGID", "IFC"],
+    urlFromPages,
+    "values",
+    "values"
+  );
+
+  const rightsColumnsSchemaData = fetchDataConstructor(
+    "RIdx",
     urlFromPages,
     "values",
     "values"
@@ -453,6 +462,7 @@ export const FetchData = (
     personFetchData,
     detailUserTemplateData,
     errorLogData,
+    rightsColumnsSchemaData,
     passwordPolicies,
     signInUserData,
     loadCustumMessageData,

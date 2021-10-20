@@ -144,6 +144,16 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         return setAPIData(fetchData);
       }
 
+      if (pathnameWithoutSlash === "rights") {
+        const fetchData = FetchData(
+          pathname,
+          pathnameWithoutSlash,
+          "wisdb"
+        ).rightsColumnsSchemaData;
+
+        return setAPIData(fetchData);
+      }
+
       const fetchData = FetchData(
         pathname,
         pathnameWithoutSlash,
@@ -164,7 +174,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     setPopupTitle("msgEditNewItem");
   }
 
-  function clickHandler(e) {
+  function clickHandler() {
     setExpandRowsBtnText(() =>
       expandRowsBtnText === "msgMinimisedAllRows"
         ? "msgExpandAllRows"
@@ -344,8 +354,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         id={pathnameWithoutSlash}
         dataSource={APIData}
         rootValue={0}
-        keyExpr="id"
-        parentIdExpr="pid"
+        keyExpr={pathnameWithoutSlash === "rights" ? "RIdx" : "id"}
+        parentIdExpr={pathnameWithoutSlash === "rights" ? "RCIdx" : "pid"}
         // === rows ===
         showRowLines={true}
         focusedRowEnabled={true}
