@@ -198,7 +198,7 @@ export const FetchData = (
     "RIdx",
     urlFromPages,
     "values",
-    "values"
+    "@RIdx"
   );
 
   const lookData = {
