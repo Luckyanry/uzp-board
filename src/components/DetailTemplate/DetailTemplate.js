@@ -25,13 +25,13 @@ const DetailTemplate = ({data: {data, component}}) => {
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
-  const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
+  // const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
   const focusedRowTitle = data.name;
 
   const popupOpt = {
-    title: formatMessage(popupTitle, focusedRowTitle),
+    title: formatMessage("msgCreateNewItem", focusedRowTitle),
     showTitle: true,
     width: 950,
     height: 780,

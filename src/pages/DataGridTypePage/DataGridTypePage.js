@@ -23,21 +23,15 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import {
   Item,
+  // SimpleItem,
   GroupItem,
   TabbedItem,
   TabPanelOptions,
   Tab,
-  Label,
 } from "devextreme-react/form";
 // eslint-disable-next-line
 import TextArea from "devextreme-react/text-area";
 // import {TextBox, Button} from "devextreme-react/text-box";
-// import {
-//   Validator,
-//   RequiredRule,
-//   PatternRule,
-//   StringLengthRule,
-// } from "devextreme-react/validator";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -57,220 +51,11 @@ import {
 } from "../../components";
 // import {ErrorPopup} from "../../components";
 
-import visibilityOff from "../../icons/visibilityOff.svg";
-import visibility from "../../icons/visibility.svg";
+import unvisible from "../../icons/visibilityOff.svg";
+import visible from "../../icons/visibility.svg";
 import enhancedEncryption from "../../icons/enhancedEncryption.svg";
 import spinner from "../../components/Spinner/icons/spinner.svg";
 import "./DataGridTypePage.scss";
-
-const ColumnPwdGeneratorField = ({dataField}) => {
-  const [passwordState, setPasswordState] = useState("");
-  const [passwordMode, setPasswordMode] = useState("password");
-  const [passwordVisibility, setPasswordVisibility] = useState(visibility);
-
-  const [minLength, setMinLength] = useState(8);
-  const [maxLength, setMaxLength] = useState(128);
-  const [minCharacterGroups, setMinCharacterGroups] = useState(4);
-
-  const {formatMessage} = useLocalization();
-
-  useEffect(() => {
-    let ignore = false;
-
-    const getPasswordPolicies = async () => {
-      const dictionaryByName = FetchData(
-        "/DictionaryByName",
-        "ShortDicsRecords&@name=PasswordPolicies",
-        "hbdb"
-      ).passwordPolicies();
-
-      await dictionaryByName
-        .then((res) => res.data)
-        .then((arr) => {
-          setMinLength(arr[0].jvson.MinPasswordLength);
-          setMaxLength(arr[0].jvson.MaxPasswordLength);
-          setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
-        });
-    };
-
-    minLength &&
-      maxLength &&
-      minCharacterGroups &&
-      !ignore &&
-      getPasswordPolicies();
-
-    return () => {
-      ignore = true;
-    };
-  }, [minLength, maxLength, minCharacterGroups]);
-
-  const pwdBtnIcon = {
-    icon: passwordVisibility,
-    type: "button",
-    onClick: () => {
-      setPasswordVisibility(() =>
-        passwordVisibility === visibility ? visibilityOff : visibility
-      );
-      setPasswordMode(() => (passwordMode === "text" ? "password" : "text"));
-    },
-  };
-
-  const pwdGeneratorBtn = {
-    icon: enhancedEncryption,
-    type: "button",
-    onClick: () => {
-      const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
-
-      passwordGenerator(setLower, setUpper, setNumber, setSymbol, minLength);
-    },
-  };
-
-  const randomFunc = {
-    lower: getRandomLower,
-    upper: getRandomUpper,
-    number: getRandomNumber,
-    symbol: getRandomSymbol,
-  };
-
-  function onPasswordChanged(e) {
-    setPasswordState(e.value);
-  }
-
-  function getRandomLower() {
-    return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
-  }
-
-  function getRandomUpper() {
-    return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
-  }
-
-  function getRandomNumber() {
-    return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
-  }
-
-  function getRandomSymbol() {
-    const symbols = `ˆ"'.:;!#$%&()*+-/<=>?@[]_{|}~`;
-    return symbols[Math.floor(Math.random() * symbols.length)];
-  }
-
-  function passwordGenerator(
-    lower = true,
-    upper = false,
-    number = false,
-    symbol = false,
-    length
-  ) {
-    let generatedPassword = "";
-
-    const typesCount = lower + upper + number + symbol;
-
-    const typeArr = [{lower}, {upper}, {number}, {symbol}]
-      .map((i) => [Math.random(), i])
-      .sort()
-      .map((i) => i[1])
-      .filter((item) => Object.values(item)[0]);
-
-    if (typesCount === 0) {
-      return "";
-    }
-
-    for (let i = 0; i < length; i += typesCount) {
-      // eslint-disable-next-line no-loop-func
-      typeArr.forEach((type) => {
-        const funcName = Object.keys(type)[0];
-        generatedPassword += randomFunc[funcName]();
-      });
-    }
-    const finalPassword = generatedPassword.slice(0, length);
-
-    setPasswordState(finalPassword);
-    return finalPassword;
-  }
-
-  function inputValidation() {
-    const digitsRule = "0-9";
-    const symbolRule = String.raw`\ˆ\"\'\.\:\;\!\#\$\%\&\(\)\*\+\-\/\<\=\>\?\@\[\]\_\{\|\}\~`;
-    const lowerLetterRule = "a-z";
-    const upperLetterRule = "A-Z";
-
-    switch (minCharacterGroups) {
-      case 1:
-        return {
-          setLower: true,
-          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgOneGroup"),
-          regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
-        };
-      case 2:
-        return {
-          setLower: true,
-          setUpper: true,
-          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgTwoGroups"),
-          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
-        };
-      case 3:
-        return {
-          setLower: true,
-          setUpper: true,
-          setNumber: true,
-          patternRuleErrMsg: formatMessage(
-            "msgPwdPatternRuleErrMsgThreeGroups"
-          ),
-          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
-        };
-      case 4:
-        return {
-          setLower: true,
-          setUpper: true,
-          setNumber: true,
-          setSymbol: true,
-          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
-          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
-        };
-
-      default:
-        return {
-          setLower: true,
-          setUpper: true,
-          setNumber: true,
-          setSymbol: true,
-          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
-          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
-        };
-    }
-  }
-
-  // const {regExp, patternRuleErrMsg} = inputValidation();
-
-  const pwdItemEditorOptions = {
-    mode: passwordMode,
-    stylingMode: "outlined",
-    defaultValue: passwordState,
-    value: passwordState,
-    onValueChanged: onPasswordChanged,
-    placeholder: formatMessage("msgEnterPassword"),
-
-    buttons: [
-      {
-        name: "lookpassword",
-        location: "after",
-        options: pwdBtnIcon,
-      },
-      {
-        name: "msgGenerateStrongPassword",
-        location: "after",
-        options: pwdGeneratorBtn,
-      },
-    ],
-  };
-
-  return (
-    <Item
-      dataField={dataField}
-      editorType="dxTextBox"
-      editorOptions={pwdItemEditorOptions}
-    />
-  );
-};
 
 export const DataGridTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -287,7 +72,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   const [allowUpdating, setAllowUpdating] = useState(true);
   const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
-  // const [errorStatus, setErrorStatus] = useState(null);
+  const [minLength, setMinLength] = useState(8);
+  const [maxLength, setMaxLength] = useState(128);
+  const [minCharacterGroups, setMinCharacterGroups] = useState(4);
 
   const {formatMessage} = useLocalization();
 
@@ -442,6 +229,36 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     }
   }, [pathname, pathnameWithoutSlash]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    const getPasswordPolicies = async () => {
+      const dictionaryByName = FetchData(
+        "/DictionaryByName",
+        "ShortDicsRecords&@name=PasswordPolicies",
+        "hbdb"
+      ).passwordPolicies();
+
+      await dictionaryByName
+        .then((res) => res.data)
+        .then((arr) => {
+          setMinLength(arr[0].jvson.MinPasswordLength);
+          setMaxLength(arr[0].jvson.MaxPasswordLength);
+          setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
+        });
+    };
+
+    minLength &&
+      maxLength &&
+      minCharacterGroups &&
+      !ignore &&
+      getPasswordPolicies();
+
+    return () => {
+      ignore = true;
+    };
+  }, [minLength, maxLength, minCharacterGroups]);
+
   const popupGeneralOptions = {
     title: formatMessage(popupTitle, localPageAbbreviation),
     showTitle: true,
@@ -487,6 +304,174 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       setUserID(rowId);
       setUserFormData(userFormData);
       setUserGroupItemCaption(groupItemCaption);
+    }
+  }
+
+  let textBoxInstance = undefined;
+
+  const btnEyeOpts = {
+    icon: visible,
+    type: "button",
+    onClick: () => {
+      const btnIcon = textBoxInstance.option("buttons[0].options.icon");
+
+      btnIcon === visible
+        ? textBoxInstance.option("buttons[0].options.icon", unvisible)
+        : textBoxInstance.option("buttons[0].options.icon", visible);
+
+      const boxMode = textBoxInstance.option("mode");
+
+      boxMode === "password"
+        ? textBoxInstance.option("mode", "text")
+        : textBoxInstance.option("mode", "password");
+    },
+  };
+
+  const btnGenerateOpt = {
+    icon: enhancedEncryption,
+    type: "button",
+    onClick: () => {
+      const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
+
+      textBoxInstance.option(
+        "value",
+        passwordGenerator(setLower, setUpper, setNumber, setSymbol, minLength)
+      );
+    },
+  };
+
+  function saveTextBoxInstance(e) {
+    textBoxInstance = e.component;
+  }
+
+  const pwdItemEditorOptions = {
+    mode: "password",
+    stylingMode: "outlined",
+    onInitialized: saveTextBoxInstance,
+
+    buttons: [
+      {
+        name: "msgShowPassword",
+        location: "after",
+        options: btnEyeOpts,
+      },
+      {
+        name: "msgGenerateStrongPassword",
+        location: "after",
+        options: btnGenerateOpt,
+      },
+    ],
+  };
+
+  const randomFunc = {
+    lower: getRandomLower,
+    upper: getRandomUpper,
+    number: getRandomNumber,
+    symbol: getRandomSymbol,
+  };
+
+  function getRandomLower() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+  }
+
+  function getRandomUpper() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+  }
+
+  function getRandomNumber() {
+    return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+  }
+
+  function getRandomSymbol() {
+    const symbols = `ˆ"'.:;!#$%&()*+-/<=>?@[]_{|}~`;
+    return symbols[Math.floor(Math.random() * symbols.length)];
+  }
+
+  function passwordGenerator(
+    lower = true,
+    upper = false,
+    number = false,
+    symbol = false,
+    length
+  ) {
+    let generatedPassword = "";
+
+    const typesCount = lower + upper + number + symbol;
+
+    const typeArr = [{lower}, {upper}, {number}, {symbol}]
+      .map((i) => [Math.random(), i])
+      .sort()
+      .map((i) => i[1])
+      .filter((item) => Object.values(item)[0]);
+
+    if (typesCount === 0) {
+      return "";
+    }
+
+    for (let i = 0; i < length; i += typesCount) {
+      // eslint-disable-next-line no-loop-func
+      typeArr.forEach((type) => {
+        const funcName = Object.keys(type)[0];
+        generatedPassword += randomFunc[funcName]();
+      });
+    }
+    const finalPassword = generatedPassword.slice(0, length);
+
+    // setPasswordState(finalPassword);
+    // formData.current.password = finalPassword;
+    // console.log(`passwordGenerator formData `, formData.current.password);
+    return finalPassword;
+  }
+
+  function inputValidation() {
+    const digitsRule = "0-9";
+    const symbolRule = String.raw`\ˆ\"\'\.\:\;\!\#\$\%\&\(\)\*\+\-\/\<\=\>\?\@\[\]\_\{\|\}\~`;
+    const lowerLetterRule = "a-z";
+    const upperLetterRule = "A-Z";
+
+    switch (minCharacterGroups) {
+      case 1:
+        return {
+          setLower: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgOneGroup"),
+          regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
+        };
+      case 2:
+        return {
+          setLower: true,
+          setUpper: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgTwoGroups"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
+        };
+      case 3:
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          patternRuleErrMsg: formatMessage(
+            "msgPwdPatternRuleErrMsgThreeGroups"
+          ),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
+        };
+      case 4:
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          setSymbol: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+        };
+
+      default:
+        return {
+          setLower: true,
+          setUpper: true,
+          setNumber: true,
+          setSymbol: true,
+          patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
+          regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
+        };
     }
   }
 
@@ -630,213 +615,19 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       return;
     }
 
-    return Object.keys(formData).map((item, idx) => (
-      <Item key={idx} dataField={item}>
-        {item === "Password" ? <ColumnPwdGeneratorField /> : null}
-      </Item>
-    ));
+    return Object.keys(formData).map((item, idx) =>
+      item !== "Password" ? (
+        <Item key={idx} dataField={item} />
+      ) : (
+        <Item
+          key={idx}
+          dataField={"Password"}
+          editorType={"dxTextBox"}
+          editorOptions={pwdItemEditorOptions}
+        />
+      )
+    );
   }
-
-  // const [passwordState, setPasswordState] = useState("");
-  // const [passwordMode, setPasswordMode] = useState("password");
-  // const [passwordVisibility, setPasswordVisibility] = useState(visibility);
-
-  // const [minLength, setMinLength] = useState(8);
-  // const [maxLength, setMaxLength] = useState(128);
-  // const [minCharacterGroups, setMinCharacterGroups] = useState(4);
-
-  // // const {formatMessage} = useLocalization();
-
-  // useEffect(() => {
-  //   let ignore = false;
-
-  //   const getPasswordPolicies = async () => {
-  //     const dictionaryByName = FetchData(
-  //       "/DictionaryByName",
-  //       "ShortDicsRecords&@name=PasswordPolicies",
-  //       "hbdb"
-  //     ).passwordPolicies();
-
-  //     await dictionaryByName
-  //       .then((res) => res.data)
-  //       .then((arr) => {
-  //         setMinLength(arr[0].jvson.MinPasswordLength);
-  //         setMaxLength(arr[0].jvson.MaxPasswordLength);
-  //         setMinCharacterGroups(arr[0].jvson.MinCharacterGroups);
-  //       });
-  //   };
-
-  //   minLength &&
-  //     maxLength &&
-  //     minCharacterGroups &&
-  //     !ignore &&
-  //     getPasswordPolicies();
-
-  //   return () => {
-  //     ignore = true;
-  //   };
-  // }, [minLength, maxLength, minCharacterGroups]);
-
-  // const pwdBtnIcon = {
-  //   icon: passwordVisibility,
-  //   type: "button",
-  //   onClick: () => {
-  //     setPasswordVisibility(() =>
-  //       passwordVisibility === visibility ? visibilityOff : visibility
-  //     );
-  //     setPasswordMode(() => (passwordMode === "text" ? "password" : "text"));
-  //   },
-  // };
-
-  // const pwdGeneratorBtn = {
-  //   icon: enhancedEncryption,
-  //   type: "button",
-  //   onClick: (e) => {
-  //     e.event.preventDefault();
-  //     console.log(`e `, e);
-  //     const {setLower, setUpper, setNumber, setSymbol} = inputValidation();
-
-  //     passwordGenerator(setLower, setUpper, setNumber, setSymbol, minLength);
-  //   },
-  // };
-
-  // const randomFunc = {
-  //   lower: getRandomLower,
-  //   upper: getRandomUpper,
-  //   number: getRandomNumber,
-  //   symbol: getRandomSymbol,
-  // };
-
-  // function onPasswordChanged(e) {
-  //   setPasswordState(e.value);
-  // }
-
-  // function getRandomLower() {
-  //   return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
-  // }
-
-  // function getRandomUpper() {
-  //   return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
-  // }
-
-  // function getRandomNumber() {
-  //   return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
-  // }
-
-  // function getRandomSymbol() {
-  //   const symbols = `ˆ"'.:;!#$%&()*+-/<=>?@[]_{|}~`;
-  //   return symbols[Math.floor(Math.random() * symbols.length)];
-  // }
-
-  // function passwordGenerator(
-  //   lower = true,
-  //   upper = false,
-  //   number = false,
-  //   symbol = false,
-  //   length
-  // ) {
-  //   let generatedPassword = "";
-
-  //   const typesCount = lower + upper + number + symbol;
-
-  //   const typeArr = [{lower}, {upper}, {number}, {symbol}]
-  //     .map((i) => [Math.random(), i])
-  //     .sort()
-  //     .map((i) => i[1])
-  //     .filter((item) => Object.values(item)[0]);
-
-  //   if (typesCount === 0) {
-  //     return "";
-  //   }
-
-  //   for (let i = 0; i < length; i += typesCount) {
-  //     // eslint-disable-next-line no-loop-func
-  //     typeArr.forEach((type) => {
-  //       const funcName = Object.keys(type)[0];
-  //       generatedPassword += randomFunc[funcName]();
-  //     });
-  //   }
-  //   const finalPassword = generatedPassword.slice(0, length);
-
-  //   setPasswordState(finalPassword);
-  //   return finalPassword;
-  // }
-
-  // function inputValidation() {
-  //   const digitsRule = "0-9";
-  //   const symbolRule = String.raw`\ˆ\"\'\.\:\;\!\#\$\%\&\(\)\*\+\-\/\<\=\>\?\@\[\]\_\{\|\}\~`;
-  //   const lowerLetterRule = "a-z";
-  //   const upperLetterRule = "A-Z";
-
-  //   switch (minCharacterGroups) {
-  //     case 1:
-  //       return {
-  //         setLower: true,
-  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgOneGroup"),
-  //         regExp: `^(?=.*[${lowerLetterRule}])[${lowerLetterRule}]{${minLength},${maxLength}}$`,
-  //       };
-  //     case 2:
-  //       return {
-  //         setLower: true,
-  //         setUpper: true,
-  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgTwoGroups"),
-  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])[${lowerLetterRule}${upperLetterRule}]{${minLength},${maxLength}}$`,
-  //       };
-  //     case 3:
-  //       return {
-  //         setLower: true,
-  //         setUpper: true,
-  //         setNumber: true,
-  //         patternRuleErrMsg: formatMessage(
-  //           "msgPwdPatternRuleErrMsgThreeGroups"
-  //         ),
-  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}]{${minLength},${maxLength}}$`,
-  //       };
-  //     case 4:
-  //       return {
-  //         setLower: true,
-  //         setUpper: true,
-  //         setNumber: true,
-  //         setSymbol: true,
-  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
-  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
-  //       };
-
-  //     default:
-  //       return {
-  //         setLower: true,
-  //         setUpper: true,
-  //         setNumber: true,
-  //         setSymbol: true,
-  //         patternRuleErrMsg: formatMessage("msgPwdPatternRuleErrMsgFourGroups"),
-  //         regExp: `^(?=.*[${lowerLetterRule}])(?=.*[${upperLetterRule}])(?=.*[${digitsRule}])(?=.*[${symbolRule}])[${lowerLetterRule}${upperLetterRule}${digitsRule}${symbolRule}]{${minLength},${maxLength}}$`,
-  //       };
-  //   }
-  // }
-
-  // // const {regExp, patternRuleErrMsg} = inputValidation();
-
-  // const pwdItemEditorOptions = {
-  //   mode: passwordMode,
-  //   stylingMode: "outlined",
-  //   defaultValue: passwordState,
-  //   value: passwordState,
-  //   onValueChanged: onPasswordChanged,
-  //   placeholder: formatMessage("msgEnterPassword"),
-
-  //   buttons: [
-  //     {
-  //       name: "lookpassword",
-  //       location: "after",
-  //       options: pwdBtnIcon,
-  //     },
-  //     {
-  //       name: "msgGenerateStrongPassword",
-  //       location: "after",
-  //       options: pwdGeneratorBtn,
-  //     },
-  //   ],
-  // };
 
   function editorCustomMarkup() {
     return userID ? (
@@ -913,19 +704,18 @@ export const DataGridTypePage = ({location: {pathname}}) => {
             return dataField !== "Password" ? (
               <Item key={idx} dataField={dataField} />
             ) : (
-              <ColumnPwdGeneratorField key={idx} dataField="Password" />
+              <Item
+                key={idx}
+                dataField={"Password"}
+                editorType={"dxTextBox"}
+                editorOptions={pwdItemEditorOptions}
+              />
             );
           })}
         </Form>
       </Editing>
     );
   }
-  // <Item
-  //   key={idx}
-  //   dataField={dataField}
-  //   editorType="dxTextBox"
-  //   editorOptions={pwdItemEditorOptions}
-  // />
 
   return (
     <>

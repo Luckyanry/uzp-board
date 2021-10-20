@@ -125,7 +125,7 @@ const RenewalPasswordForm = () => {
             position: {
               my: "center",
               at: "center",
-              of: "#login-start-form-container",
+              of: "#content",
               // of: "#content",
               offset: "0 36",
             },
