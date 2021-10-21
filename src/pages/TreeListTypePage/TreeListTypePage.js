@@ -52,9 +52,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   const [expandRowsBtnText, setExpandRowsBtnText] =
     useState("msgExpandAllRows");
 
-  const [masterId, setMasterId] = useState("");
   const [formData, setFormData] = useState(null);
-  const [groupItemCaption, setGroupItemCaption] = useState("");
   const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
@@ -173,7 +171,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     setPopupTitle("msgAddNewItem");
   }
 
-  function onEditingStart() {
+  function onEditingStart(e) {
+    const formData = e.data;
+    setFormData(formData);
+
     setPopupTitle("msgEditNewItem");
   }
 
@@ -264,14 +265,10 @@ export const TreeListTypePage = ({location: {pathname}}) => {
     });
   }
 
-  function onFocusedCellChanging(e) {
-    const formData = e.rows[e.newRowIndex].data;
-    const rowId = formData.id;
-
-    setMasterId(rowId);
-    setFormData(formData);
-    setGroupItemCaption(groupItemCaption);
-  }
+  // function onFocusedCellChanging(e) {
+  //   const formData = e.rows[e.newRowIndex].data;
+  //   setFormData(formData);
+  // }
 
   function customSimpleItemMarkup(formData) {
     if (!formData) {
@@ -284,7 +281,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function editorCustomMarkup() {
-    return masterId ? (
+    return formData ? (
       <Editing
         mode="popup"
         popup={popupDetailTreeListTabOptions}
@@ -294,7 +291,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         useIcons={true}
       >
         <Form id="form" formData={formData} colCount={1} width={"100%"}>
-          <GroupItem caption={groupItemCaption}>
+          <GroupItem>
             <TabbedItem>
               <TabPanelOptions deferRendering={true} />
 
@@ -304,7 +301,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
 
               <Tab title={formatMessage("msgTabAuditObjDB")} colCount={2}>
                 <DatailTreeListTab
-                  masterId={masterId}
+                  masterId={formData.id}
                   DetailTreeListPath={"auditSettings"}
                   formData={formData}
                 />
@@ -339,7 +336,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
   }
 
   function rightsNameTemplate(props) {
-    console.log(`props`, props);
     const {
       data: {Used, RightName_eng},
     } = props;
@@ -406,7 +402,7 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         autoExpandAll={toggler}
         onInitNewRow={initNewRow}
         onEditingStart={onEditingStart}
-        onFocusedCellChanging={onFocusedCellChanging}
+        // onFocusedCellChanging={onFocusedCellChanging}
         onToolbarPreparing={onToolbarPreparing}
       >
         <Scrolling mode="standard" />

@@ -65,7 +65,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   const [userID, setUserID] = useState("");
   const [userFormData, setUserFormData] = useState(null);
-  const [userGroupItemCaption, setUserGroupItemCaption] = useState("");
+  // const [userGroupItemCaption, setUserGroupItemCaption] = useState("");
 
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
@@ -286,26 +286,39 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     setPopupTitle("msgAddNewItem");
   }
 
-  function onEditingStart() {
+  function onEditingStart(e) {
     setPopupTitle("msgEditNewItem");
-  }
 
-  function onFocusedCellChanging(e) {
     if (
       checkIfArrIncludesValue(
         ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
         pathnameWithoutSlash
       )
     ) {
-      const userFormData = e.rows[e.newRowIndex].data;
+      const userFormData = e.data;
       const rowId = userFormData.GID;
-      const groupItemCaption = userFormData.UserName;
 
-      setUserID(rowId);
       setUserFormData(userFormData);
-      setUserGroupItemCaption(groupItemCaption);
+      setUserID(rowId);
     }
   }
+
+  // function onFocusedCellChanging(e) {
+  //   if (
+  //     checkIfArrIncludesValue(
+  //       ["userObjects", "roleObjects", "groupObjects", "objectMembers"],
+  //       pathnameWithoutSlash
+  //     )
+  //   ) {
+  //     const userFormData = e.rows[e.newRowIndex].data;
+  //     // const rowId = userFormData.GID;
+  //     // const groupItemCaption = userFormData.UserName;
+
+  //     // setUserID(rowId);
+  //     setUserFormData(userFormData);
+  //     // setUserGroupItemCaption(groupItemCaption);
+  //   }
+  // }
 
   let textBoxInstance = undefined;
 
@@ -640,7 +653,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         useIcons={true}
       >
         <Form id="form" formData={userFormData} colCount={1} width={"100%"}>
-          <GroupItem caption={userGroupItemCaption}>
+          <GroupItem caption={userFormData.UserName}>
             <TabbedItem>
               <TabPanelOptions deferRendering={false} />
               <Tab title={formatMessage("msgInfoAboutUser")} colCount={2}>
@@ -754,7 +767,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         // === functions ===
         onInitNewRow={initNewRow}
         onEditingStart={onEditingStart}
-        onFocusedCellChanging={onFocusedCellChanging}
+        // onFocusedCellChanging={onFocusedCellChanging}
       >
         <ColumnChooser
           enabled={true}
