@@ -38,7 +38,10 @@ import {
 } from "../../helpers/functions";
 
 import spinner from "../../components/Spinner/icons/spinner.svg";
+import folderIcon from "./icons/folder.svg";
+import keyIcon from "./icons/key.svg";
 import "./TreeListTypePage.scss";
+import {Template} from "devextreme-react/core/template";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -229,6 +232,9 @@ export const TreeListTypePage = ({location: {pathname}}) => {
               ? formatMessage("msgStatusDeactivated")
               : formatMessage("msgNo")
           }
+          cellTemplate={
+            dataField === "RightName_eng" ? "rightsPageTemplate" : null
+          }
           {...params}
         >
           {required && <RequiredRule />}
@@ -239,12 +245,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
             lookDataState.map((item, i) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;
-
-              //const dataSourceWithStoreParams = {
-              //  ...item[dataField],
-              //  ...lookup.dataSource,
-              //};
-              // dataSource={{...item[dataField], ...lookup.dataSource}}
 
               return (
                 <Lookup
@@ -259,12 +259,6 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           {dataField === "status" && (
             <Lookup searchMode={"startswith"} dataSource={statusToggler} />
           )}
-          {/* {dataField === "code" && (
-            <PatternRule
-              message={formatMessage(message, localPageAbbreviation)}
-              pattern={new RegExp(pattern)}
-            />
-          )} */}
         </Column>
       );
     });
@@ -342,6 +336,42 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         onClick: clickHandler,
       },
     });
+  }
+
+  function rightsNameTemplate(props) {
+    console.log(`props`, props);
+    const {
+      data: {Used, RightName_eng},
+    } = props;
+
+    const styles = (icon, width = "20px") => ({
+      bgIcon: {
+        display: "inline-block",
+        width,
+        height: "20px",
+        background: `url("${icon}") 0% 0% / 100% no-repeat`,
+      },
+    });
+
+    const icon = () => {
+      switch (Used) {
+        case true:
+          return styles(keyIcon).bgIcon;
+        case false:
+          return styles(folderIcon).bgIcon;
+
+        default:
+          return;
+      }
+    };
+
+    return (
+      <>
+        <div className="img" style={icon()} />
+        &nbsp;&nbsp;
+        <span className="name">{RightName_eng}</span>
+      </>
+    );
   }
 
   return (
@@ -423,6 +453,8 @@ export const TreeListTypePage = ({location: {pathname}}) => {
         )}
 
         {customMarkupRender()}
+
+        <Template name="rightsPageTemplate" render={rightsNameTemplate} />
 
         <Column type="buttons" width={110}>
           <TreeListButton
