@@ -296,7 +296,8 @@ td.dx-command-edit.dx-command-edit-with-icons.dx-cell-focus-disabled.dx-datagrid
 }
 
 .dx-pager .dx-pages .dx-page {
-  width: 30px;
+  // width: 30px;
+  width: max-content;
   padding: 7px 10px;
   // color: #fff;
 }

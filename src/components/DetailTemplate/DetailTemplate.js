@@ -37,9 +37,9 @@ const DetailTemplate = ({data: {data, component}}) => {
     height: 780,
   };
 
-  useEffect(() => {
-    const idTriger = component._$element[0].id;
+  const idTriger = component._$element[0].id;
 
+  useEffect(() => {
     if (idTriger === "ShortDics") {
       const shortDicsRecords = FetchData(
         "/ShortDicsRecords",
@@ -96,7 +96,10 @@ const DetailTemplate = ({data: {data, component}}) => {
         columns={APIData}
         dataSource={shortDicsRecordsDataState}
         repaintChangesOnly={true}
-        remoteOperations={false}
+        // remoteOperations={false}
+        remoteOperations={
+          idTriger === "recordLog" ? {paging: true, sorting: true} : false
+        }
         // === rows ===
         focusedRowEnabled={true}
         // === columns ===
