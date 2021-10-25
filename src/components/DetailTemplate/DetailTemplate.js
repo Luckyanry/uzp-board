@@ -18,7 +18,7 @@ import "./DetailTemplate.scss";
 import spinnerIcon from "../Spinner/icons/spinner.svg";
 
 const DetailTemplate = ({data: {data, component}}) => {
-  const [APIData, setAPIData] = useState(null);
+  const [columnsSchemaData, setColumnsSchemaData] = useState(null);
   const [shortDicsRecordsDataState, setShortDicsRecordsDataState] =
     useState(null);
 
@@ -46,18 +46,14 @@ const DetailTemplate = ({data: {data, component}}) => {
         "hbdb"
       ).fetchColumnsSchemaData;
 
-      setAPIData(data.columnsjson.columns);
+      setColumnsSchemaData(data.columnsjson.columns);
       setShortDicsRecordsDataState(shortDicsRecords);
     }
 
     if (idTriger === "recordLog") {
-      const detailFieldLogShcema = FetchData(
-        "/recordLog",
-        `ShortDicsRecordsFlat&@name=FieldLogColumnSchema`,
-        "hbdb"
-      ).fetchColumnsSchemaData;
+      const detailFieldLogShcema = FetchData("/fieldLog").fetchData;
 
-      detailFieldLogShcema._loadFunc().then(({data}) => setAPIData(data));
+      detailFieldLogShcema.load().then(({data}) => setColumnsSchemaData(data));
 
       const fieldLog = FetchData(
         "/fieldLog",
@@ -79,8 +75,8 @@ const DetailTemplate = ({data: {data, component}}) => {
     <div id={"detail-template"}>
       <DataGrid
         id={"detail-template-grid"}
-        columns={APIData}
         dataSource={shortDicsRecordsDataState}
+        columns={columnsSchemaData}
         repaintChangesOnly={true}
         // remoteOperations={false}
         remoteOperations={
