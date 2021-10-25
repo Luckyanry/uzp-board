@@ -67,6 +67,9 @@ export const FetchData = (
       case "/errorLog":
         return `isyseventsColumnSchema`;
 
+      case "/ShortDics":
+        return `ShortDicsColumnSchema`;
+
       default:
         return "/home";
     }
@@ -105,7 +108,7 @@ export const FetchData = (
         }
 
         mergedOpts["schema"] = "get";
-
+        console.log(`fetchDataConstructor`);
         return sendRequest(urlType, mergedOpts).then((response) => {
           if (loadOptions && loadOptions.requireTotalCount === true) {
             return {
@@ -117,6 +120,7 @@ export const FetchData = (
           }
         });
       },
+
       insert: (values) =>
         sendRequest(
           urlType,
@@ -127,6 +131,7 @@ export const FetchData = (
           },
           "POST"
         ),
+
       update: (key, values) =>
         sendRequest(
           urlType,
@@ -138,6 +143,7 @@ export const FetchData = (
           },
           "POST"
         ),
+
       remove: (key) => {
         // const newKey =
         return sendRequest(
@@ -149,6 +155,7 @@ export const FetchData = (
           "POST"
         );
       },
+
       byKey: (key) =>
         sendRequest(
           urlType,
@@ -158,6 +165,7 @@ export const FetchData = (
           },
           "POST"
         ),
+
       onBeforeSend: function (method, ajaxOptions) {
         ajaxOptions.credentials = "include";
       },

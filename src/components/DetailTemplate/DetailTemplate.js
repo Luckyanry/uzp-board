@@ -25,7 +25,6 @@ const DetailTemplate = ({data: {data, component}}) => {
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
   const [allowUpdating, setAllowUpdating] = useState(true);
-  // const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
   const focusedRowTitle = data.name;
@@ -49,12 +48,6 @@ const DetailTemplate = ({data: {data, component}}) => {
 
       setAPIData(data.columnsjson.columns);
       setShortDicsRecordsDataState(shortDicsRecords);
-
-      // const res = getFromSessionStorege("error", "");
-      // if (res.JSONErrorMessage) {
-      //   setErrorStatus(true);
-      //   setErrorTitle(formatMessage("msgErrServerFetch"));
-      // }
     }
 
     if (idTriger === "recordLog") {
@@ -77,17 +70,10 @@ const DetailTemplate = ({data: {data, component}}) => {
       setAllowUpdating(false);
 
       setShortDicsRecordsDataState(fieldLog);
+      console.log(`useEffect`);
     }
     // eslint-disable-next-line
   }, []);
-
-  // function initNewRow() {
-  //   setPopupTitle("msgAddNewItem");
-  // }
-
-  // function onEditingStart() {
-  //   setPopupTitle("msgEditNewItem");
-  // }
 
   return (
     <div id={"detail-template"}>
@@ -114,8 +100,6 @@ const DetailTemplate = ({data: {data, component}}) => {
         hoverStateEnabled={true}
         wordWrapEnabled={true}
         // === functions ===
-        // onInitNewRow={initNewRow}
-        // onEditingStart={onEditingStart}
       >
         <ColumnChooser
           enabled={true}

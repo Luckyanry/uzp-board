@@ -174,7 +174,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         setAllowDeleting(false);
         setAllowUpdating(false);
 
-        return setAPIData(fetchData);
+        setAPIData(fetchData);
+        console.log(`recordLog fetch`);
+        return;
       }
 
       if (pathnameWithoutSlash === "errorLog") {
@@ -221,12 +223,14 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       );
     }
 
-    pathnameWithoutSlash !== "ShortDics" && getColumnsSchemaData();
+    getColumnsSchemaData();
 
-    if (pathnameWithoutSlash === "ShortDics") {
-      getAPIData();
-      getLookDataState(pathnameWithoutSlash);
-    }
+    // pathnameWithoutSlash !== "ShortDics" && getColumnsSchemaData();
+
+    // if (pathnameWithoutSlash === "ShortDics") {
+    //   getAPIData();
+    //   getLookDataState(pathnameWithoutSlash);
+    // }
   }, [pathname, pathnameWithoutSlash]);
 
   useEffect(() => {
@@ -248,7 +252,8 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         });
     };
 
-    minLength &&
+    pathnameWithoutSlash === "userObjects" &&
+      minLength &&
       maxLength &&
       minCharacterGroups &&
       !ignore &&
@@ -257,7 +262,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     return () => {
       ignore = true;
     };
-  }, [minLength, maxLength, minCharacterGroups]);
+  }, [minLength, maxLength, minCharacterGroups, pathnameWithoutSlash]);
 
   const popupGeneralOptions = {
     title: formatMessage(popupTitle, localPageAbbreviation),
@@ -489,56 +494,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
   }
 
   function customMarkupRender() {
-    let murkupCollection = [];
-
-    checkIfArrIncludesValue(
-      [
-        "countries",
-        "mahalla",
-        "soogu",
-        "userObjects",
-        "roleObjects",
-        "groupObjects",
-        "objectMembers",
-        "personObjects",
-        "legals",
-        "orgUnits",
-        "employees",
-        "recordLog",
-        "errorLog",
-      ],
-      pathnameWithoutSlash
-    ) && (murkupCollection = columnsSchemaData);
-
-    if (pathnameWithoutSlash === "ShortDics") {
-      const pageTitleCollection = [
-        {
-          dataField: "id",
-          caption: "msgId",
-          visible: false,
-          disabled: true,
-          width: 60,
-          alignment: "right",
-          formItem: true,
-        },
-        {
-          dataField: "name",
-          caption: "msgMetaName",
-          required: true,
-          width: "100%",
-        },
-        {
-          dataField: "metaid",
-          caption: "msgAsChildOf",
-          lookup: true,
-          width: "100%",
-        },
-      ];
-
-      murkupCollection = [...pageTitleCollection];
-    }
-
-    return murkupCollection.map((item, idx) => {
+    return columnsSchemaData.map((item, idx) => {
       const {
         dataField,
         dataType = "string",
@@ -546,31 +502,22 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         visible = true,
         disabled = false,
         required = false,
-        // width = "100%",
-        // minWidth = 80,
         alignment,
         formItem = false,
         lookup = false,
         allowEditing = true,
         ...params
       } = item;
-      // console.log(`item`, item.buttons);
+
       return (
         <Column
           key={idx}
           dataField={dataField}
           dataType={dataType}
-          caption={
-            pathnameWithoutSlash === "ShortDics"
-              ? formatMessage(caption)
-              : caption
-          }
+          caption={caption}
           visible={visible}
           disabled={disabled}
-          // width={width}
-          // width={dataField !== "id" ? width : 80}
           alignment={alignment}
-          // minWidth={minWidth}
           allowEditing={allowEditing}
           showEditorAlways={false}
           trueText={
@@ -590,17 +537,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
           <FormItem {...formItem} />
 
-          {lookup && pathnameWithoutSlash === "ShortDics" && (
-            <Lookup
-              searchMode={"startswith"}
-              dataSource={lookDataState}
-              valueExpr="id"
-              displayExpr="className"
-            />
-          )}
-
           {lookup &&
-            pathnameWithoutSlash !== "ShortDics" &&
             lookDataState.map((item, i) => {
               // eslint-disable-next-line
               if (!item[dataField]) return;
@@ -739,7 +676,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
       <DataGrid
         id={pathnameWithoutSlash}
         dataSource={APIData}
-        // keyExpr="Received"
         // repaintChangesOnly={true}
         showBorders={false}
         remoteOperations={
