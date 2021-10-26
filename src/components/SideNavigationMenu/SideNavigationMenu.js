@@ -1,21 +1,29 @@
-import React, {useEffect, useRef, useCallback} from "react";
+import React, {useEffect, useRef, useCallback, useState} from "react";
 import TreeView from "devextreme-react/tree-view";
-import {AppNavigation} from "../../app-navigation";
+
+import {FetchData} from "../../api/pages-fetch";
+// import {AppNavigation} from "../../app-navigation";
 import {useNavigation} from "../../contexts/Navigation";
 import {useScreenSize} from "../../utils/media-query";
+
 import "./SideNavigationMenu.scss";
 
 import * as events from "devextreme/events";
 
 export default function SideNavigationMenu(props) {
+  const [appNav, setAppNav] = useState([]);
+
   const {children, selectedItemChanged, openMenu, compactMode, onMenuReady} =
     props;
 
   const {isLarge} = useScreenSize();
-  const navigationPathsArr = AppNavigation();
-
+  // const navigationPathsArr = AppNavigation();
   function normalizePath() {
-    return navigationPathsArr.map((item) => {
+    if (!appNav) {
+      return;
+    }
+    // return navigationPathsArr.map((item) => {
+    return appNav.map((item) => {
       if (item.path && !/^\//.test(item.path)) {
         item.path = `/${item.path}`;
       }
@@ -60,6 +68,23 @@ export default function SideNavigationMenu(props) {
     }
   }, [currentPath, compactMode]);
 
+  useEffect(() => {
+    if (!appNav) {
+      return;
+    }
+
+    const fetchData = FetchData(
+      "/siteStructure",
+      "ShortDicsRecordsFlat&@name=SiteStructure",
+      "hbdb"
+    ).fetchColumnsSchemaData;
+
+    fetchData.load().then(({data}) => setAppNav(data));
+    // eslint-disable-next-line
+  }, []);
+
+  // console.log(`normalizePath()`, normalizePath());
+
   return (
     <div
       className={"dx-swatch-additional side-navigation-menu"}
@@ -70,6 +95,9 @@ export default function SideNavigationMenu(props) {
         <TreeView
           ref={treeViewRef}
           items={normalizePath()}
+          dataStructure="plain"
+          displayExpr={"name"}
+          parentIdExpr={"pid"}
           keyExpr={"path"}
           selectionMode={"single"}
           focusStateEnabled={true}

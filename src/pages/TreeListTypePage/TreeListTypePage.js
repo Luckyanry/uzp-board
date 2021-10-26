@@ -25,6 +25,7 @@ import {
   GroupItem,
 } from "devextreme-react/form";
 import {ColumnFixing} from "devextreme-react/data-grid";
+import {Template} from "devextreme-react/core/template";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -41,7 +42,6 @@ import spinner from "../../components/Spinner/icons/spinner.svg";
 import folderIcon from "./icons/folder.svg";
 import keyIcon from "./icons/key.svg";
 import "./TreeListTypePage.scss";
-import {Template} from "devextreme-react/core/template";
 
 export const TreeListTypePage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
@@ -151,6 +151,16 @@ export const TreeListTypePage = ({location: {pathname}}) => {
           pathnameWithoutSlash,
           "wisdb"
         ).rightsColumnsSchemaData;
+
+        return setAPIData(fetchData);
+      }
+
+      if (pathnameWithoutSlash === "siteStructure") {
+        const fetchData = FetchData(
+          pathname,
+          "ShortDicsRecordsFlat&@name=SiteStructure",
+          "hbdb"
+        ).fetchColumnsSchemaData;
 
         return setAPIData(fetchData);
       }

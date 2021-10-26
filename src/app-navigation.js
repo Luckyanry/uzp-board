@@ -1,4 +1,8 @@
+import {useEffect, useState} from "react";
+
 import {useLocalization} from "./contexts/LocalizationContext";
+import {FetchData} from "./api/pages-fetch";
+
 import homeIcon from "./icons/home.svg";
 import legalsIcon from "./icons/briefcase.svg";
 import staffIcon from "./icons/staff.svg";
@@ -7,6 +11,7 @@ import administrationACIcon from "./icons/administration.svg";
 import dictionariesIcon from "./icons/dictionaries.svg";
 
 export const AppNavigation = () => {
+  const [appNav, setAppNav] = useState([]);
   const {formatMessage} = useLocalization();
 
   const individualsAndLegalDir = ["personObjects", "legals"];
@@ -21,9 +26,25 @@ export const AppNavigation = () => {
     "oked",
     "kfs",
     "kopf",
-    "ShortDics",
+    "shortDics",
   ];
   // "profile",
+
+  useEffect(() => {
+    if (!appNav) return;
+
+    const fetchData = FetchData(
+      "/siteStructure",
+      "ShortDicsRecordsFlat&@name=SiteStructure",
+      "hbdb"
+    ).fetchColumnsSchemaData;
+
+    fetchData.load().then(({data}) => {
+      console.log(`app-navigation fetchData`, data);
+      return setAppNav(data);
+    });
+    // eslint-disable-next-line
+  }, []);
 
   function pathCreator(pathTitle) {
     return pathTitle.map((item) => {
@@ -40,6 +61,10 @@ export const AppNavigation = () => {
     )}`;
     return `msg${changeFirstLetterToUpper}MenuTitle`;
   }
+
+  const menu = appNav;
+  console.log(`menu`, menu);
+  // return menu;
 
   return [
     {
@@ -66,10 +91,10 @@ export const AppNavigation = () => {
       text: formatMessage("msgAdministrationDirMenuTitle"),
       icon: administrationACIcon,
       items: [
-        // {
-        //   text: formatMessage("msgPortalStructureEditor"),
-        //   path: "/portalStructureEditor",
-        // },
+        {
+          text: formatMessage("msgPortalStructureEditor"),
+          path: "/siteStructure",
+        },
         {
           text: formatMessage("msgRightsEditor"),
           path: "/rights",

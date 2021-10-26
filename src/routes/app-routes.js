@@ -9,7 +9,7 @@ import {
 const dataGridPagesPath = [
   "countries",
   "soogu",
-  "ShortDics",
+  "shortDics",
   "userObjects",
   "roleObjects",
   "groupObjects",
@@ -19,7 +19,7 @@ const dataGridPagesPath = [
   "employees",
   "legals",
   "recordLog",
-  "fieldLog",
+  // "fieldLog",
   "errorLog",
 ];
 
@@ -30,8 +30,9 @@ const treeListPagesPath = [
   "kopf",
   "oked",
   "auditSettingsMaster",
-  "auditSettings",
+  // "auditSettings",
   "rights",
+  "siteStructure",
 ];
 
 const routes = [

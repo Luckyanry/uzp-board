@@ -56,6 +56,8 @@ export const FetchData = (
       case "/legals":
         return `LegalObjectColumnSchema`;
 
+      case "/siteStructure":
+        return `SiteStructureColumnSchema`;
       case "/rights":
         return `RightsColumnSchema`;
       case "/auditSettingsMaster":
@@ -67,7 +69,7 @@ export const FetchData = (
       case "/errorLog":
         return `isyseventsColumnSchema`;
 
-      case "/ShortDics":
+      case "/shortDics":
         return `ShortDicsColumnSchema`;
 
       default:
@@ -108,7 +110,7 @@ export const FetchData = (
         }
 
         mergedOpts["schema"] = "get";
-        console.log(`fetchDataConstructor`);
+        // console.log(`fetchDataConstructor`);
         return sendRequest(urlType, mergedOpts).then((response) => {
           if (loadOptions && loadOptions.requireTotalCount === true) {
             return {

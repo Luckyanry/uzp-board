@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import "devextreme/data/odata/store";
 import DataGrid, {
   SearchPanel,
-  // HeaderFilter,
   FilterRow,
   Scrolling,
   ColumnChooser,
@@ -23,7 +22,6 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import {
   Item,
-  // SimpleItem,
   GroupItem,
   TabbedItem,
   TabPanelOptions,
@@ -31,7 +29,6 @@ import {
 } from "devextreme-react/form";
 // eslint-disable-next-line
 import TextArea from "devextreme-react/text-area";
-// import {TextBox, Button} from "devextreme-react/text-box";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
 import {FetchData} from "../../api/pages-fetch";
@@ -39,17 +36,13 @@ import {
   checkIfArrIncludesValue,
   createCustomMsg,
   customPageAbbreviationMsg,
-  // getFromSessionStorege,
   getLookupParamsForURL,
 } from "../../helpers/functions";
 import {
   StatusLangToggler,
   DetailTemplate,
   UserDetailTab,
-  // ColumnPwdGeneratorField,
-  // DetailTreeListTab,
 } from "../../components";
-// import {ErrorPopup} from "../../components";
 
 import unvisible from "../../icons/visibilityOff.svg";
 import visible from "../../icons/visibility.svg";
@@ -65,7 +58,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
   const [userID, setUserID] = useState("");
   const [userFormData, setUserFormData] = useState(null);
-  // const [userGroupItemCaption, setUserGroupItemCaption] = useState("");
 
   const [allowAdding, setAllowAdding] = useState(true);
   const [allowDeleting, setAllowDeleting] = useState(true);
@@ -175,7 +167,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         setAllowUpdating(false);
 
         setAPIData(fetchData);
-        console.log(`recordLog fetch`);
+        // console.log(`recordLog fetch`);
         return;
       }
 
@@ -224,13 +216,6 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     }
 
     getColumnsSchemaData();
-
-    // pathnameWithoutSlash !== "ShortDics" && getColumnsSchemaData();
-
-    // if (pathnameWithoutSlash === "ShortDics") {
-    //   getAPIData();
-    //   getLookDataState(pathnameWithoutSlash);
-    // }
   }, [pathname, pathnameWithoutSlash]);
 
   useEffect(() => {
@@ -433,11 +418,9 @@ export const DataGridTypePage = ({location: {pathname}}) => {
         generatedPassword += randomFunc[funcName]();
       });
     }
+
     const finalPassword = generatedPassword.slice(0, length);
 
-    // setPasswordState(finalPassword);
-    // formData.current.password = finalPassword;
-    // console.log(`passwordGenerator formData `, formData.current.password);
     return finalPassword;
   }
 
@@ -758,7 +741,7 @@ export const DataGridTypePage = ({location: {pathname}}) => {
 
         {customMarkupRender()}
 
-        {(pathnameWithoutSlash === "ShortDics" ||
+        {(pathnameWithoutSlash === "shortDics" ||
           pathnameWithoutSlash === "recordLog") && (
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
@@ -799,10 +782,3 @@ export const DataGridTypePage = ({location: {pathname}}) => {
     </>
   );
 };
-
-// allowFixing={false}
-// fixed={true}
-// fixedPosition="right"
-
-// <ColumnFixing enabled={true} />
-// columnFixing={true}

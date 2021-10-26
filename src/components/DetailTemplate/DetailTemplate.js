@@ -39,7 +39,7 @@ const DetailTemplate = ({data: {data, component}}) => {
   const idTriger = component._$element[0].id;
 
   useEffect(() => {
-    if (idTriger === "ShortDics") {
+    if (idTriger === "shortDics") {
       const shortDicsRecords = FetchData(
         "/ShortDicsRecords",
         `ShortDicsRecords&@tid=${data.id}`,
@@ -66,7 +66,6 @@ const DetailTemplate = ({data: {data, component}}) => {
       setAllowUpdating(false);
 
       setShortDicsRecordsDataState(fieldLog);
-      console.log(`useEffect`);
     }
     // eslint-disable-next-line
   }, []);
