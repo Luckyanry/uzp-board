@@ -6,6 +6,12 @@ import {FetchData} from "../../api/pages-fetch";
 import {useNavigation} from "../../contexts/Navigation";
 import {useScreenSize} from "../../utils/media-query";
 
+import homeIcon from "../../icons/home.svg";
+import legalsIcon from "../../icons/briefcase.svg";
+import staffIcon from "../../icons/staff.svg";
+import userACIcon from "../../icons/userAC.svg";
+import administrationACIcon from "../../icons/administration.svg";
+import dictionariesIcon from "../../icons/dictionaries.svg";
 import "./SideNavigationMenu.scss";
 
 import * as events from "devextreme/events";
