@@ -1,35 +1,38 @@
-import React, {useEffect, useRef, useCallback, useState} from "react";
+import React, {useEffect, useRef, useCallback} from "react";
 import TreeView from "devextreme-react/tree-view";
 
-import {FetchData} from "../../api/pages-fetch";
-// import {AppNavigation} from "../../app-navigation";
 import {useNavigation} from "../../contexts/Navigation";
 import {useScreenSize} from "../../utils/media-query";
 
+// eslint-disable-next-line
 import homeIcon from "../../icons/home.svg";
+// eslint-disable-next-line
 import legalsIcon from "../../icons/briefcase.svg";
+// eslint-disable-next-line
 import staffIcon from "../../icons/staff.svg";
+// eslint-disable-next-line
 import userACIcon from "../../icons/userAC.svg";
+// eslint-disable-next-line
 import administrationACIcon from "../../icons/administration.svg";
+// eslint-disable-next-line
 import dictionariesIcon from "../../icons/dictionaries.svg";
 import "./SideNavigationMenu.scss";
 
 import * as events from "devextreme/events";
 
 export default function SideNavigationMenu(props) {
-  const [appNav, setAppNav] = useState([]);
-
   const {children, selectedItemChanged, openMenu, compactMode, onMenuReady} =
     props;
 
+  const appNavStructure = JSON.parse(localStorage.getItem("siteStructure"));
   const {isLarge} = useScreenSize();
-  // const navigationPathsArr = AppNavigation();
+
   function normalizePath() {
-    if (!appNav) {
+    if (!appNavStructure) {
       return;
     }
-    // return navigationPathsArr.map((item) => {
-    return appNav.map((item) => {
+
+    return appNavStructure.map((item) => {
       if (item.path && !/^\//.test(item.path)) {
         item.path = `/${item.path}`;
       }
@@ -43,6 +46,7 @@ export default function SideNavigationMenu(props) {
 
   const treeViewRef = useRef();
   const wrapperRef = useRef();
+
   const getWrapperRef = useCallback(
     (element) => {
       const prevElement = wrapperRef.current;
@@ -74,23 +78,6 @@ export default function SideNavigationMenu(props) {
     }
   }, [currentPath, compactMode]);
 
-  useEffect(() => {
-    if (!appNav) {
-      return;
-    }
-
-    const fetchData = FetchData(
-      "/siteStructure",
-      "ShortDicsRecordsFlat&@name=SiteStructure",
-      "hbdb"
-    ).fetchColumnsSchemaData;
-
-    fetchData.load().then(({data}) => setAppNav(data));
-    // eslint-disable-next-line
-  }, []);
-
-  // console.log(`normalizePath()`, normalizePath());
-
   return (
     <div
       className={"dx-swatch-additional side-navigation-menu"}
@@ -113,7 +100,6 @@ export default function SideNavigationMenu(props) {
           width={"100%"}
           wordWrapEnabled={true}
           rowAlternationEnabled={false}
-          // columnAutoWidth={true}
           virtualModeEnabled={true}
         />
       </div>

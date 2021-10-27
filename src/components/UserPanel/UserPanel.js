@@ -1,5 +1,5 @@
 import React from "react";
-import {useHistory} from "react-router-dom";
+// import {useHistory} from "react-router-dom";
 
 import ContextMenu, {Position} from "devextreme-react/context-menu";
 import List from "devextreme-react/list";
@@ -8,7 +8,7 @@ import {useLocalization} from "../../contexts/LocalizationContext";
 import {useAuth} from "../../contexts/Auth";
 import {firstLetterToUpper} from "../../helpers/functions";
 
-import userIcon from "./icons/object.svg";
+// import userIcon from "./icons/object.svg";
 import exitIcon from "./icons/exit.svg";
 import "./UserPanel.scss";
 
@@ -16,18 +16,18 @@ export default function UserPanel({menuMode}) {
   const {user, signOut} = useAuth();
   const {formatMessage} = useLocalization();
 
-  const history = useHistory();
+  // const history = useHistory();
 
-  function navigateToProfile() {
-    history.push("/profile");
-  }
+  // function navigateToProfile() {
+  //   history.push("/profile");
+  // }
 
   const menuItems = () => [
-    {
-      text: formatMessage("msgProfileMenuTitle"),
-      icon: userIcon,
-      onClick: navigateToProfile,
-    },
+    // {
+    //   text: formatMessage("msgProfileMenuTitle"),
+    //   icon: userIcon,
+    //   onClick: navigateToProfile,
+    // },
     {
       text: formatMessage("msgLogout"),
       icon: exitIcon,

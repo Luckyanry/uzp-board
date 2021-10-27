@@ -41,9 +41,9 @@ import {
 import spinner from "../../components/Spinner/icons/spinner.svg";
 import folderIcon from "./icons/folder.svg";
 import keyIcon from "./icons/key.svg";
-import "./TreeListTypePage.scss";
+import "./TreeListPage.scss";
 
-export const TreeListTypePage = ({location: {pathname}}) => {
+export const TreeListPage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState([]);
   const [lookDataState, setLookDataState] = useState([]);

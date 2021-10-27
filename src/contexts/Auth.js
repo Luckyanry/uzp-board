@@ -8,12 +8,14 @@ import React, {
 import {useHistory} from "react-router-dom";
 
 import {getUser, logOff, signIn as sendSignInRequest} from "../api/auth";
+import {FetchData} from "../api/pages-fetch";
 
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
+  const [appNav, setAppNav] = useState([]);
 
   const history = useHistory();
 
@@ -26,6 +28,25 @@ function AuthProvider(props) {
         setUser(() => data);
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    if (!appNav && !user) {
+      return;
+    }
+
+    const fetchData = FetchData(
+      "/siteStructure",
+      "ShortDicsRecordsFlat&@name=SiteStructure",
+      "hbdb"
+    ).fetchColumnsSchemaData;
+
+    fetchData.load().then(({data}) => {
+      localStorage.setItem("siteStructure", JSON.stringify(data));
+      return setAppNav(data);
+    });
+
+    // eslint-disable-next-line
   }, []);
 
   const signIn = useCallback(async (login, password) => {

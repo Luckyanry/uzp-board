@@ -1,63 +1,28 @@
 import {withNavigationWatcher} from "../contexts/Navigation";
-import {
-  HomePage,
-  ProfilePage,
-  DataGridTypePage,
-  TreeListTypePage,
-} from "../pages";
+import {HomePage, DataGridPage, TreeListPage} from "../pages";
 
-const dataGridPagesPath = [
-  "countries",
-  "soogu",
-  "shortDics",
-  "userObjects",
-  "roleObjects",
-  "groupObjects",
-  "mahalla",
-  "personObjects",
-  "orgUnits",
-  "employees",
-  "legals",
-  "recordLog",
-  // "fieldLog",
-  "errorLog",
-];
+const siteStructureArr = JSON.parse(localStorage.getItem("siteStructure"));
 
-const treeListPagesPath = [
-  "soato",
-  "kspd",
-  "kfs",
-  "kopf",
-  "oked",
-  "auditSettingsMaster",
-  // "auditSettings",
-  "rights",
-  "siteStructure",
-];
+const routes =
+  siteStructureArr &&
+  siteStructureArr
+    .map(({path, uiComponents}) => ({
+      path,
+      component:
+        (uiComponents === "HomePage" && HomePage) ||
+        (uiComponents === "DataGridPage" && DataGridPage) ||
+        (uiComponents === "TreeListPage" && TreeListPage),
+    }))
+    .filter(
+      ({path, component}) =>
+        path && {
+          path,
+          component: withNavigationWatcher(component),
+        }
+    );
 
-const routes = [
-  {
-    path: "/home",
-    component: HomePage,
-  },
-  {
-    path: "/profile",
-    component: ProfilePage,
-  },
-  ...pathCreator(dataGridPagesPath, DataGridTypePage),
-  ...pathCreator(treeListPagesPath, TreeListTypePage),
-];
-
-function pathCreator(pathTitle, component) {
-  return pathTitle.map((item) => {
-    return {
-      path: `/${item}`,
-      component,
-    };
-  });
-}
-
-export default routes.map((route) => ({
-  ...route,
-  component: withNavigationWatcher(route.component),
-}));
+export default routes &&
+  routes.map((route) => ({
+    ...route,
+    component: withNavigationWatcher(route.component),
+  }));

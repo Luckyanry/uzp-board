@@ -1,5 +1,5 @@
 export {HomePage} from "./HomePage/HomePage";
 export {ProfilePage} from "./ProfilePage/ProfilePage";
 
-export {DataGridTypePage} from "./DataGridTypePage/DataGridTypePage";
-export {TreeListTypePage} from "./TreeListTypePage/TreeListTypePage";
+export {DataGridPage} from "./DataGridPage/DataGridPage";
+export {TreeListPage} from "./TreeListPage/TreeListPage";

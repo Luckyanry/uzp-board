@@ -48,9 +48,8 @@ import unvisible from "../../icons/visibilityOff.svg";
 import visible from "../../icons/visibility.svg";
 import enhancedEncryption from "../../icons/enhancedEncryption.svg";
 import spinner from "../../components/Spinner/icons/spinner.svg";
-import "./DataGridTypePage.scss";
 
-export const DataGridTypePage = ({location: {pathname}}) => {
+export const DataGridPage = ({location: {pathname}}) => {
   const [columnsSchemaData, setColumnsSchemaData] = useState([]);
   const [APIData, setAPIData] = useState(null);
   const [formSchemaData, setFormSchemaData] = useState(null);
