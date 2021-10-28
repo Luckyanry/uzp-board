@@ -17,11 +17,14 @@ export async function signIn(login = null, password = null) {
       "wisdb",
       url,
       "login"
-    ).signInUserData({
-      "@uname": login,
-      "@old": password,
-      "@prefLocale": getPrefLocaleFromStorage,
-    });
+    ).signInUserData(
+      {
+        "@uname": login,
+        "@old": password,
+        "@prefLocale": getPrefLocaleFromStorage,
+      },
+      "POST"
+    );
 
     const result = await signInUserData;
 

@@ -1,7 +1,7 @@
 import {withNavigationWatcher} from "../contexts/Navigation";
 import {HomePage, DataGridPage, TreeListPage} from "../pages";
 
-const siteStructureArr = JSON.parse(localStorage.getItem("siteStructure"));
+const siteStructureArr = JSON.parse(sessionStorage.getItem("siteStructure"));
 
 const routes =
   siteStructureArr &&
@@ -17,12 +17,15 @@ const routes =
       ({path, component}) =>
         path && {
           path,
-          component: withNavigationWatcher(component),
+          component,
         }
     );
 
 export default routes &&
-  routes.map((route) => ({
-    ...route,
-    component: withNavigationWatcher(route.component),
-  }));
+  routes.map((route) => {
+    console.log(`route`, route);
+    return {
+      ...route,
+      component: withNavigationWatcher(route.component),
+    };
+  });
