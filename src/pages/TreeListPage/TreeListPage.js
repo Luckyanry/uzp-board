@@ -156,13 +156,17 @@ export const TreeListPage = ({location: {pathname}}) => {
       }
 
       if (pathnameWithoutSlash === "siteStructure") {
-        const fetchData = FetchData(
-          pathname,
-          "ShortDicsRecordsFlat&@name=SiteStructure",
-          "hbdb"
-        ).fetchColumnsSchemaData;
+        const siteStructureArr = JSON.parse(
+          sessionStorage.getItem("siteStructure")
+        );
 
-        return setAPIData(fetchData);
+        // const fetchData = FetchData(
+        //   pathname,
+        //   "wwwSiteStructure",
+        //   "wisdb"
+        // ).fetchColumnsSchemaData;
+
+        return setAPIData(siteStructureArr);
       }
 
       const fetchData = FetchData(

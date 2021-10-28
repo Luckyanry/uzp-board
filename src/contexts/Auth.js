@@ -9,13 +9,13 @@ import {useHistory} from "react-router-dom";
 
 import {getUser, logOff, signIn as sendSignInRequest} from "../api/auth";
 import {FetchData} from "../api/pages-fetch";
+import {siteStructureArr} from "../routes/app-routes";
 
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
-  const [appNav, setAppNav] = useState([]);
 
   const history = useHistory();
 
@@ -31,27 +31,30 @@ function AuthProvider(props) {
   }, []);
 
   useEffect(() => {
-    if (!appNav && !user) {
+    if (!user) {
       return;
     }
-
+    console.log("Auth useEffect");
     const fetchData = FetchData(
       "/siteStructure",
-      "ShortDicsRecordsFlat&@name=SiteStructure",
-      "hbdb"
+      // "ShortDicsRecordsFlat&@name=SiteStructure",
+      // "hbdb"
+      "wwwSiteStructure",
+      "wisdb"
     ).fetchColumnsSchemaData;
 
-    fetchData.load().then(({data}) => {
-      localStorage.setItem("siteStructure", JSON.stringify(data));
-      return setAppNav(data);
-    });
+    fetchData
+      .load()
+      .then(({data}) =>
+        sessionStorage.setItem("siteStructure", JSON.stringify(data))
+      );
 
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   const signIn = useCallback(async (login, password) => {
     const result = await sendSignInRequest(login, password);
-
+    console.log("Auth");
     const {isOk, data} = result;
 
     if (isOk) {
