@@ -223,7 +223,7 @@ export const FetchData = (
 
   const errorLogData = fetchDataConstructor("EventId", urlFromPages);
 
-  const signInUserData = async (params, method = "GET") =>
+  const signInUserData = async (params, method = "POST") =>
     await sendRequest(urlFromPages, {schema: "dbo", ...params}, method);
 
   const loadCustumMessageData = async () =>
@@ -278,7 +278,19 @@ export const FetchData = (
       credentials: "include",
     };
 
-    const response = await fetch(`${url}&${params}`, getOptions);
+    const postOptions = {
+      method,
+      body: params,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+      credentials: "include",
+    };
+
+    const response = await fetch(
+      method === "GET" ? `${url}&${params}` : url,
+      method === "GET" ? getOptions : postOptions
+    );
 
     if (response.ok) {
       return await response
@@ -416,7 +428,7 @@ export const FetchData = (
     );
   }
 
-  function JSONErrorMessage({JSONErrorMessage, VBErr, ADOErrors}) {
+  function JSONErrorMessage({JSONErrorMessage, VBErr, ADOErrors, hint}) {
     return alert(
       `
         <font color='red'><b>${JSONErrorMessage}</b></font>
@@ -428,7 +440,7 @@ export const FetchData = (
             : `<font color='red'><b>Description:</b></font> ${ADOErrors[0].Description}`
         }
         <br>
-        <font color='red'><b>Fetch into url:</b></font> ${url}
+        <font color='red'><b>Fetch into url:</b></font> ${urlFromPages}
         <br>
         <font color='red'><b>Method:</b></font> GET
         <br>
@@ -443,6 +455,8 @@ export const FetchData = (
             ? `<font color='red'><b>Source:</b></font> ${VBErr.Source}`
             : ""
         }
+        <br>
+        ${hint ? `<font color='red'><b>Hint:</b></font> ${hint}` : ""}
       `,
       `${
         formatMessage("msgError")
