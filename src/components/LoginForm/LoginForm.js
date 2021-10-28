@@ -9,21 +9,16 @@ import Form, {
   RequiredRule,
 } from "devextreme-react/form";
 import notify from "devextreme/ui/notify";
-// import notify from "devextreme/ui/notify";
 
 import {useAuth} from "../../contexts/Auth";
 import {useLocalization} from "../../contexts/LocalizationContext";
-import {
-  // ErrorPopup,
-  Spinner,
-} from "..";
+import {Spinner} from "..";
 
 import "./LoginForm.scss";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
-  // const [errorTitle, setErrorTitle] = useState();
 
   const [login, setLogin] = useState(null);
   const [password, setPassword] = useState(null);
@@ -105,10 +100,6 @@ export default function LoginForm() {
     setPassword(password);
   };
 
-  // function test(e) {
-  //   console.log(`e `, e);
-  // }
-
   const View = () => (
     <Form
       formData={formData.current}
@@ -150,7 +141,6 @@ export default function LoginForm() {
           height={64}
           type={"default"}
           useSubmitBehavior={true}
-          // onClick={test}
         >
           <span className="dx-button-text">{formatMessage("msgSignIn")}</span>
         </ButtonOptions>
@@ -175,20 +165,3 @@ export default function LoginForm() {
     </form>
   );
 }
-
-// notify(
-//   {
-//     message: result.message,
-//     position: {
-//       my: "center",
-//       at: "center",
-//       of: "#login-form-container",
-//       offset: "0 0",
-//     },
-//     width: 426,
-//     height: 64,
-//     shading: true,
-//   },
-//   "error",
-//   3000
-// );
