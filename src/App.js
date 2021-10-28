@@ -18,7 +18,7 @@ import "./themes/generated/theme.additional.css";
 import "./dx-styles.scss";
 
 function AppWrapper() {
-  const {user, loading} = useAuth();
+  const {user, siteStructure, loading} = useAuth();
 
   if (loading) {
     return (
@@ -36,7 +36,7 @@ function AppWrapper() {
   }
 
   if (user) {
-    return <Content />;
+    return <Content siteStructure={siteStructure} />;
   }
 
   return <UnauthenticatedContent />;
