@@ -35,8 +35,6 @@ function AuthProvider(props) {
       return;
     }
 
-    console.log("Auth useEffect");
-
     const fetchData = FetchData(
       "/siteStructure",
       "wwwSiteStructure",

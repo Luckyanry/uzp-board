@@ -1,7 +1,6 @@
 import React from "react";
 import {Switch, Route, Redirect} from "react-router-dom";
 
-import {AppInfo} from "../app-info";
 import {SideNavInnerToolbar as SideNavBarLayout} from "../layouts";
 import {useLocalization} from "../contexts/LocalizationContext";
 import {withNavigationWatcher} from "../contexts/Navigation";
@@ -31,7 +30,7 @@ export default function Content({siteStructure}) {
       }));
 
   return (
-    <SideNavBarLayout title={formatMessage(AppInfo.title)}>
+    <SideNavBarLayout title={formatMessage("msgProjectTitle")}>
       <Switch>
         {routes &&
           routes.map(({path, component}) => (
@@ -40,7 +39,7 @@ export default function Content({siteStructure}) {
         <Redirect to={getFromSessionStorege("currentPath", "/home")} />
       </Switch>
       <Footer>
-        © {formatMessage(AppInfo.title)} Inc., {new Date().getFullYear()}
+        © {formatMessage("msgProjectTitle")} Inc., {new Date().getFullYear()}
       </Footer>
     </SideNavBarLayout>
   );

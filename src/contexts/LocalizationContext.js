@@ -5,13 +5,9 @@ import * as ruMessages from "devextreme/localization/messages/ru.json";
 import * as uzLatnMessages from "devextreme/localization/messages/uz-Latn.json";
 import * as uzCyrlMessages from "devextreme/localization/messages/uz-Cyrl.json";
 
-// import {getSystemDictionary} from "../app-localization";
 import {FetchData} from "../api/pages-fetch";
 import {urlAnonymous} from "../api/url-config";
-import {
-  // ErrorPopup,
-  Spinner,
-} from "../components";
+import {Spinner} from "../components";
 
 const LocalizationContext = createContext();
 const useLocalization = () => useContext(LocalizationContext);
@@ -46,7 +42,6 @@ const LocalizationProvider = ({children}) => {
           .load()
           .then((res) => res.data)
           .catch((err) => {
-            // console.log(`islang err `, err);
             setErrorStatus(err);
           });
 
@@ -112,7 +107,6 @@ const LocalizationProvider = ({children}) => {
         customMessages
           .then((res) => setCustomMessagesData(() => ({[lang]: res})))
           .catch((err) => {
-            // console.log(`CustomMessages err `, err);
             setErrorStatus(err);
           });
       })();
@@ -169,16 +163,11 @@ const LocalizationProvider = ({children}) => {
   }
 
   function initMessages() {
-    // loadMessages(getSystemDictionary());
     loadMessages(customMessagesData);
     loadMessages(ruMessages);
     loadMessages(uzLatnMessages);
     loadMessages(uzCyrlMessages);
   }
-
-  // const errorMessage = errorStatus ? (
-  //   <ErrorPopup errorState={errorStatus} popupPositionOf={"#root"} />
-  // ) : null;
 
   const spinner = loading ? (
     <Spinner loadingState={loading} positionOf={"#content"} />
@@ -186,7 +175,6 @@ const LocalizationProvider = ({children}) => {
 
   return (
     <>
-      {/* {errorMessage} */}
       {spinner}
       {!(loading || errorStatus) && (
         <LocalizationContext.Provider
