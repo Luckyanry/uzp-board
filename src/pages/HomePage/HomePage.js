@@ -1,3 +1,4 @@
+// import {useEffect, useState} from "react";
 import {formatMessage} from "devextreme/localization";
 
 import {CustomButton} from "../../components";
@@ -27,100 +28,100 @@ const buttonOptions = [
     pathTo: "/personObjects",
     btnTitle: "msgHomeBtnTitleEmployees",
     btnDesc: "msgHomeBtnDescEmployees",
-    Icon: UserIcon,
+    icon: UserIcon,
   },
   {
     pathTo: "/legals",
     btnTitle: "msgHomeBtnTitleLegals",
     btnDesc: "msgHomeBtnDescLegals",
-    Icon: LegalsIcon,
+    icon: LegalsIcon,
   },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleRegistrationVehicles",
   //   btnDesc: "msgHomeBtnDescRegistrationVehicles",
   //   Icon: RegistrationVehiclesIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleTVInspection",
   //   btnDesc: "msgHomeBtnDescTVInspection",
   //   Icon: TVInspectionIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleAdmpractic",
   //   btnDesc: "msgHomeBtnDescAdmpractic",
   //   Icon: AdmpracticIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleArrestControlSearch",
   //   btnDesc: "msgHomeBtnDescArrestControlSearch",
   //   Icon: ArrestControlSearchIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleTVStealing",
   //   btnDesc: "msgHomeBtnDescTVStealing",
   //   Icon: TVStealingIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleDriver",
   //   btnDesc: "msgHomeBtnDescDriver",
   //   Icon: DriverIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleExamClass",
   //   btnDesc: "msgHomeBtnDescExamClass",
   //   Icon: ExamClassIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleSpecialProducts",
   //   btnDesc: "msgHomeBtnDescSpecialProducts",
   //   Icon: SpecialProductsIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleTrafficAccidents",
   //   btnDesc: "msgHomeBtnDescTrafficAccidents",
   //   Icon: TrafficAccidentsIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitlePenaltyArea",
   //   btnDesc: "msgHomeBtnDescPenaltyArea",
   //   Icon: PenaltyAreaIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleFactura",
   //   btnDesc: "msgHomeBtnDescFactura",
   //   Icon: FacturaIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleRoadObject",
   //   btnDesc: "msgHomeBtnDescRoadObject",
   //   Icon: RoadObjectIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleStaff",
   //   btnDesc: "msgHomeBtnDescStaff",
   //   Icon: StaffIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitlePersonnelAssessment",
   //   btnDesc: "msgHomeBtnDescPersonnelAssessment",
   //   Icon: PersonnelAssessmentIcon,
   // },
   // {
-  //   pathTo: "#",
+  //   pathTo: "",
   //   btnTitle: "msgHomeBtnTitleMonitoring",
   //   btnDesc: "msgHomeBtnDescMonitoring",
   //   Icon: MonitoringIcon,
@@ -130,7 +131,7 @@ const buttonOptions = [
 export const HomePage = () => {
   const elements = buttonOptions.map((item, idx) => (
     <li className="item" key={idx}>
-      <CustomButton key={idx} {...item} />
+      <CustomButton key={idx} Icon={item.icon} {...item} />
     </li>
   ));
 
