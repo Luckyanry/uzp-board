@@ -4,7 +4,7 @@ const NavigationContext = createContext({});
 const useNavigation = () => useContext(NavigationContext);
 
 function NavigationProvider(props) {
-  const [navigationData, setNavigationData] = useState();
+  const [navigationData, setNavigationData] = useState({currentPath: "/home"});
 
   return (
     <NavigationContext.Provider
