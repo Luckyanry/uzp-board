@@ -28,6 +28,7 @@ import {ColumnFixing} from "devextreme-react/data-grid";
 import {Template} from "devextreme-react/core/template";
 
 import {useLocalization} from "../../contexts/LocalizationContext";
+import {useAuth} from "../../contexts/Auth";
 import {FetchData} from "../../api/pages-fetch";
 import {StatusLangToggler} from "../../components/StatusLangToggler/StatusLangToggler";
 import DatailTreeListTab from "../../components/DetailTreeListTab/DetailTreeListTab";
@@ -56,6 +57,7 @@ export const TreeListPage = ({location: {pathname}}) => {
   const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
 
   const {formatMessage} = useLocalization();
+  const {siteStructure} = useAuth();
 
   const pathnameWithoutSlash = pathname.split("/")[1];
   const localPathname = createCustomMsg(pathnameWithoutSlash);
@@ -156,17 +158,13 @@ export const TreeListPage = ({location: {pathname}}) => {
       }
 
       if (pathnameWithoutSlash === "siteStructure") {
-        const siteStructureArr = JSON.parse(
-          sessionStorage.getItem("siteStructure")
-        );
-
         // const fetchData = FetchData(
         //   pathname,
         //   "wwwSiteStructure",
         //   "wisdb"
         // ).fetchColumnsSchemaData;
 
-        return setAPIData(siteStructureArr);
+        return setAPIData(siteStructure);
       }
 
       const fetchData = FetchData(
@@ -177,7 +175,7 @@ export const TreeListPage = ({location: {pathname}}) => {
 
       setAPIData(fetchData);
     }
-  }, [pathname, pathnameWithoutSlash]);
+  }, [pathname, pathnameWithoutSlash, siteStructure]);
 
   function initNewRow(e) {
     e.data.status = statusToggler[0];
@@ -442,15 +440,6 @@ export const TreeListPage = ({location: {pathname}}) => {
 
         {pathnameWithoutSlash === "auditSettingsMaster" ? (
           editorCustomMarkup()
-        ) : pathnameWithoutSlash === "soato" ? (
-          <Editing
-            mode="batch"
-            allowAdding={true}
-            allowUpdating={true}
-            allowDeleting={true}
-            useIcons={true}
-            startEditAction="dblClick"
-          />
         ) : (
           <Editing
             mode="popup"

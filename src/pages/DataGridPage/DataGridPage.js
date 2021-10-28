@@ -745,17 +745,6 @@ export const DataGridPage = ({location: {pathname}}) => {
           <MasterDetail enabled={true} component={DetailTemplate} />
         )}
 
-        {/* <Column type="buttons" width={110}>
-          <Button
-            name="edit"
-            // hint={formatMessage("msgEditNewItem", localPageAbbreviation)}
-          />
-          <Button
-            name="delete"
-            // hint={formatMessage("msgDeleteNewItem", localPageAbbreviation)}
-          />
-        </Column> */}
-
         <Paging defaultPageSize={10} enabled={true} />
 
         <Pager
