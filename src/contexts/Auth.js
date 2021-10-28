@@ -9,13 +9,13 @@ import {useHistory} from "react-router-dom";
 
 import {getUser, logOff, signIn as sendSignInRequest} from "../api/auth";
 import {FetchData} from "../api/pages-fetch";
-import {siteStructureArr} from "../routes/app-routes";
 
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
+  const [siteStructure, setSiteStructure] = useState();
 
   const history = useHistory();
 
@@ -34,27 +34,25 @@ function AuthProvider(props) {
     if (!user) {
       return;
     }
+
     console.log("Auth useEffect");
+
     const fetchData = FetchData(
       "/siteStructure",
-      // "ShortDicsRecordsFlat&@name=SiteStructure",
-      // "hbdb"
       "wwwSiteStructure",
       "wisdb"
     ).fetchColumnsSchemaData;
 
-    fetchData
-      .load()
-      .then(({data}) =>
-        sessionStorage.setItem("siteStructure", JSON.stringify(data))
-      );
+    fetchData.load().then(({data}) => {
+      setSiteStructure(() => data);
+    });
 
     // eslint-disable-next-line
   }, [user]);
 
   const signIn = useCallback(async (login, password) => {
     const result = await sendSignInRequest(login, password);
-    console.log("Auth");
+
     const {isOk, data} = result;
 
     if (isOk) {
@@ -74,7 +72,12 @@ function AuthProvider(props) {
     window.location.reload();
   }, [history]);
 
-  return <AuthContext.Provider value={{user, signIn, signOut}} {...props} />;
+  return (
+    <AuthContext.Provider
+      value={{user, siteStructure, signIn, signOut}}
+      {...props}
+    />
+  );
 }
 
 export {AuthProvider, useAuth};

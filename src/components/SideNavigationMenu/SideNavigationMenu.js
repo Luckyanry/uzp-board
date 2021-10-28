@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useCallback} from "react";
 import TreeView from "devextreme-react/tree-view";
 
 import {useNavigation} from "../../contexts/Navigation";
+import {useAuth} from "../../contexts/Auth";
 import {useScreenSize} from "../../utils/media-query";
 
 // eslint-disable-next-line
@@ -24,15 +25,15 @@ export default function SideNavigationMenu(props) {
   const {children, selectedItemChanged, openMenu, compactMode, onMenuReady} =
     props;
 
-  const appNavStructure = JSON.parse(localStorage.getItem("siteStructure"));
+  const {siteStructure} = useAuth();
   const {isLarge} = useScreenSize();
 
   function normalizePath() {
-    if (!appNavStructure) {
+    if (!siteStructure) {
       return;
     }
 
-    return appNavStructure.map((item) => {
+    return siteStructure.map((item) => {
       if (item.path && !/^\//.test(item.path)) {
         item.path = `/${item.path}`;
       }
