@@ -77,6 +77,99 @@ export const DataGridPage = ({location: {pathname}}) => {
 
   const statusToggler = StatusLangToggler().statusToggler();
 
+  class jprocessor {
+    res = {};
+    constructor(/*alv,*/ ares) {
+      this.res = ares;
+    }
+    init() {}
+    format(object) {
+      let lastProperty, i;
+      lastProperty = null;
+      if (typeof object === "object" && !Array.isArray(object)) {
+        for (i in object) {
+          // eslint-disable-next-line
+          lastProperty = i;
+        }
+      }
+      for (i in object) {
+        this.res[i] = this.formatObject(object[i], i, object[i]);
+      }
+      return this.res;
+    }
+
+    formatObject(obj, name, last) {
+      // eslint-disable-next-line
+      let type, expandable, text, type2, i;
+      type =
+        typeof obj === "object"
+          ? !obj
+            ? "null"
+            : Array.isArray(obj)
+            ? "array"
+            : typeof obj
+          : typeof obj;
+
+      switch (type) {
+        case "null":
+          break;
+
+        case "object":
+          for (i in obj) {
+            type2 =
+              typeof obj[i] === "object"
+                ? !obj[i]
+                  ? "null"
+                  : Array.isArray(obj[i])
+                  ? "array"
+                  : typeof obj[i]
+                : typeof obj[i];
+            if (type2 === "object") {
+              if (i !== "data") {
+                if (obj[i]["function"]) {
+                  // eslint-disable-next-line
+                  last[i] = new Function(obj[i].arguments, obj[i].body);
+                } else {
+                  last[i] = this.formatObject(obj[i], i, last[i]);
+                }
+              }
+            }
+
+            if (type2 === "array") {
+              if (i !== "data") {
+                last[i] = this.formatObject(obj[i], i, last[i]);
+              }
+            }
+            /*switch ( i ) {
+                      case "lookupid":    
+                          last["data"]=this.findLookup(obj[i]);
+                          break;
+                      case "data":
+                          break;
+                      default: 
+                          break;
+                      };*/
+          }
+          break;
+
+        case "array":
+          if (obj) {
+            for (i in obj) {
+              last[i] = this.formatObject(obj[i], i, last[i]);
+            }
+          }
+          break;
+
+        case "function":
+          break;
+
+        default:
+          break;
+      }
+      return last;
+    }
+  }
+
   useEffect(() => {
     async function getColumnsSchemaData() {
       const fetchColumnsSchemaData = FetchData(
@@ -85,10 +178,11 @@ export const DataGridPage = ({location: {pathname}}) => {
         "hbdb"
       ).fetchData;
 
-      const columns = await fetchColumnsSchemaData
-        .load()
-        .then((res) => res.data);
+      let columns = await fetchColumnsSchemaData.load().then((res) => res.data);
       // .catch((err) => setErrorStatus(err));
+
+      const jp = new jprocessor(columns);
+      columns = jp.format(columns);
 
       setColumnsSchemaData(columns);
 
@@ -108,7 +202,12 @@ export const DataGridPage = ({location: {pathname}}) => {
           `ShortDicsRecordsFlat&@name=${checkSpParam}FormSchema`
         ).fetchFormSchemaData();
 
-        await fetchFormSchemaData.then((res) => setFormSchemaData(res.data[0]));
+        await fetchFormSchemaData.then(({data}) => {
+          const jp = new jprocessor(data[0]);
+          const items = jp.format(data[0]);
+
+          setFormSchemaData(items);
+        });
         // .catch((err) => setErrorStatus(err));
       }
 
@@ -215,6 +314,7 @@ export const DataGridPage = ({location: {pathname}}) => {
     }
 
     getColumnsSchemaData();
+    // eslint-disable-next-line
   }, [pathname, pathnameWithoutSlash]);
 
   useEffect(() => {
@@ -479,15 +579,9 @@ export const DataGridPage = ({location: {pathname}}) => {
     return columnsSchemaData.map((item, idx) => {
       const {
         dataField,
-        dataType = "string",
-        caption = dataField,
-        visible = true,
-        disabled = false,
         required = false,
-        alignment,
         formItem = false,
         lookup = false,
-        allowEditing = true,
         ...params
       } = item;
 
@@ -495,12 +589,6 @@ export const DataGridPage = ({location: {pathname}}) => {
         <Column
           key={idx}
           dataField={dataField}
-          dataType={dataType}
-          caption={caption}
-          visible={visible}
-          disabled={disabled}
-          alignment={alignment}
-          allowEditing={allowEditing}
           showEditorAlways={false}
           trueText={
             dataField === "status"

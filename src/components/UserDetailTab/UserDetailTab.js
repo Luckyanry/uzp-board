@@ -52,8 +52,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
   const [APIData, setAPIData] = useState(null);
   const [lookDataState, setLookDataState] = useState([]);
 
-  // const [popupTitle, setPopupTitle] = useState("msgCreateNewItem");
-
   const {formatMessage} = useLocalization();
 
   const pathname = `/${fetchName}`;
@@ -74,6 +72,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         `ShortDicsRecordsFlat&@name=${fetchName}ColumnSchema`,
         "hbdb"
       ).fetchColumnsSchemaData;
+
       const result = await fetchColumnsSchemaData
         .load()
         .then((res) => res.data);
@@ -112,6 +111,16 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         return setAPIData(usersFetchData.data);
       }
 
+      if (fetchName === "UserGroups") {
+        const usersFetchData = FetchData(
+          pathname,
+          `UserGroups&@GID=${GID}`,
+          "wisdb"
+        ).detailUserTemplateData;
+
+        return setAPIData(usersFetchData);
+      } // UserGroups, UserRoles
+
       const usersFetchData = FetchData(
         pathname,
         `${fetchName}&@GID=${GID}`,
@@ -145,20 +154,13 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
     getColumnsSchemaData();
   }, [pathname, fetchName, GID]);
 
-  function customMarkupRender() {
+  function customDataGridMarkup() {
     return columnsSchemaData.map((item, idx) => {
       const {
         dataField,
-        dataType = "string",
-        caption = dataField,
-        visible = false,
-        disabled = false,
         required = false,
-        // width = "100%",
-        minWidth = 80,
         formItem = false,
         lookup = false,
-        allowEditing = false,
         ...params
       } = item;
 
@@ -166,13 +168,56 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         <Column
           key={idx}
           dataField={dataField}
-          dataType={dataType}
-          caption={caption}
-          visible={visible}
-          disabled={disabled}
-          // width={width}
-          minWidth={minWidth}
-          allowEditing={allowEditing}
+          hidingPriority={dataField === "Description" ? 0 : null}
+          trueText={
+            dataField === "status"
+              ? formatMessage("msgStatusActive")
+              : formatMessage("msgYes")
+          }
+          falseText={
+            dataField === "status"
+              ? formatMessage("msgStatusDeactivated")
+              : formatMessage("msgNo")
+          }
+          {...params}
+        >
+          {required && <RequiredRule />}
+
+          <FormItem {...formItem} />
+
+          {lookup &&
+            lookDataState.map((item, i) => {
+              // eslint-disable-next-line
+              if (!item[dataField]) return;
+
+              return (
+                <Lookup
+                  searchMode={"startswith"}
+                  key={i + dataField}
+                  {...lookup}
+                  dataSource={item[dataField]}
+                />
+              );
+            })}
+        </Column>
+      );
+    });
+  }
+
+  function customTreeListMarkup(path) {
+    return columnsSchemaData.map((item, idx) => {
+      const {
+        dataField,
+        required = false,
+        formItem = false,
+        lookup = false,
+        ...params
+      } = item;
+
+      return (
+        <Column
+          key={idx}
+          dataField={dataField}
           hidingPriority={dataField === "Description" ? 0 : null}
           trueText={
             dataField === "status"
@@ -185,16 +230,22 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
               : formatMessage("msgNo")
           }
           cellTemplate={
-            dataField === "aName"
+            path === "ObjectPermissions" && dataField === "aName"
               ? "objPermissionsOTypeTemplate"
               : dataField === "InheritedName"
               ? "objPermissionsInhTypeTemplate"
               : null
           }
-          calculateCellValue={
-            dataField === "aName" ? (rowData) => rowData.OType : null
+          calculateCellValue={(rowData) =>
+            path === "ObjectPermissions" &&
+            dataField === "aName" &&
+            rowData.OType
           }
-          calculateDisplayValue={dataField === "aName" ? "aName" : null}
+          calculateDisplayValue={
+            path === "ObjectPermissions" && dataField === "aName"
+              ? "aName"
+              : null
+          }
           {...params}
         >
           {required && <RequiredRule />}
@@ -407,7 +458,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         startEditAction="dblClick"
       />
 
-      {customMarkupRender()}
+      {customTreeListMarkup(pathnameWithoutSlash)}
 
       <Column type="buttons" width={100}>
         <Button
@@ -520,14 +571,7 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         startEditAction="dblClick"
       />
 
-      {customMarkupRender()}
-
-      <Column type="buttons" width={100}>
-        <Button
-          name="delete"
-          hint={formatMessage("msgDeleteNewItem", focusedRowTitle)}
-        />
-      </Column>
+      {customDataGridMarkup()}
 
       <Paging defaultPageSize={10} enabled={true} />
       <Pager
