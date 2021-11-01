@@ -111,16 +111,6 @@ const UserDetailTab = ({user: {GID, UserName}, fetchName}) => {
         return setAPIData(usersFetchData.data);
       }
 
-      if (fetchName === "UserGroups") {
-        const usersFetchData = FetchData(
-          pathname,
-          `UserGroups&@GID=${GID}`,
-          "wisdb"
-        ).detailUserTemplateData;
-
-        return setAPIData(usersFetchData);
-      } // UserGroups, UserRoles
-
       const usersFetchData = FetchData(
         pathname,
         `${fetchName}&@GID=${GID}`,

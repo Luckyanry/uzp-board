@@ -22,16 +22,6 @@ const AuthorizationLayout = ({
   const {formatMessage} = useLocalization();
   setToSessionStorege("error", "");
 
-  const styles = {
-    bgImgContainer: {
-      display: "inline-block",
-      maxWidth: "40%",
-      minHeight: "100vh",
-      background: `url("${loginBgHD}") 50% 0% / 212vh no-repeat, rgb(1, 68, 58)`,
-      backgroundBlendMode: "overlay",
-    },
-  };
-
   return (
     <ScrollView
       height={"100%"}
@@ -39,7 +29,14 @@ const AuthorizationLayout = ({
       className={"with-footer single-card"}
     >
       <div className={"container"}>
-        <div style={styles.bgImgContainer}>
+        <div
+          className={"bgImgContainer"}
+          style={{
+            background: `rgb(1, 68, 58) url('${loginBgHD}') 50% 0% no-repeat`,
+            backgroundSize: "cover",
+            backgroundBlendMode: "overlay",
+          }}
+        >
           <div className={"left-content-wrapper"}>
             <Logo className={"logo"} />
 
